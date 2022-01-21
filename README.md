@@ -1,49 +1,159 @@
-# RBtrust RB 全自动npc副本(序列模式)
+# [RBtrust][0]
+
+[![Download][1]][2]
+[![Discord][3]][4]
+
+🌎 **English** • [中文][-2]
+
+**RBtrust** is a Trust plugin + OrderBot scripts for [RebornBuddy][5]. It automatically runs Trust dungeons.
 
 
-从目前测试表现看，T0桑克瑞德、阿莉塞、阿尔菲诺；T1琳；板凳-雅修特拉、于里昂热
+[-2]: ./README.zh.md "中文"
+[-1]: ./README.md "English"
+[0]: https://github.com/TheManta/RBtrust "RBtrust on GitHub"
+[1]: https://img.shields.io/badge/-Download-brightgreen
+[2]: #installation "Download"
+[3]: https://img.shields.io/badge/Discord-7389D8?logo=discord&logoColor=ffffff&labelColor=6A7EC2
+[4]: https://discord.gg/bmgCq39 "Discord"
+[5]: https://www.rebornbuddy.com/ "RebornBuddy"
 
-Plugins 放RB Plugins里(每次更新覆盖前需先删干净Trust文件夹里东西再覆盖，之后重启1次RB，插件列表里有显示“亲信战友”即读取成功）
+## Supported Dungeons
 
-唯一指定食物水牛奶，各主城素材商有卖，多备点货，没这东西序列不运行，运行前最好先点掉自身已存在的其他食物BUFF
+### 5.0 Shadowbringers
 
-闪避插件SideStep会根据进度自动开关，某些BOSS你如果手动开了反而要死
+  ✔️ Lv. 71: Holminster Switch\
+  ✔️ Lv. 73: Dohn Mheg\
+  ✔️ Lv. 75: The Qitana Ravel\
+  ✔️ Lv. 77: Malikah's Well\
+  ✔️ Lv. 79: Mt. Gulg\
+  ⚠️ Lv. 80.1: Amaurot\
+  ❌ Lv. 80.2: The Grand Cosmos\
+  ❌ Lv. 80.3: Anamnesis Anyder\
+  ❌ Lv. 80.4: The Heroes' Gauntlet\
+  ❌ Lv. 80.5: Matoya's Relict\
+  ❌ Lv. 80.6: Paglth'an
 
-【关于战斗模块的选择，建议T用神罗；读条职业用magi；治疗用magi需要精调“职业设置”；远程近战随意用】
+### 6.0 Endwalker
 
-71本 已更新最新版，尾王GA100、紫圈炸NPC问题解决。      
+  ❌ Lv. 81: The Tower of Zot\
+  ❌ Lv. 83: The Tower of Babil\
+  ❌ Lv. 85: Vanaspati\
+  ❌ Lv. 87: Ktisis Hyperboreia\
+  ❌ Lv. 89.1: The Aitiascope\
+  ❌ Lv. 89.2: The Mothercrystal\
+  ❌ Lv. 90.1 The Dead Ends
 
------T要过本战斗模块不可用Magitek,会穿BOSS吃技能。
+## Installation
 
------H要过本需要调整战斗模块，否则会遇到奶的不勤快，先奶NPC不奶自己等问题。
+### Prerequisites
 
-73本 比较稳定,还有很多地方需要优化   推荐带阿莉塞、琳，最好别带雅修特拉(2王击杀荆棘太慢)
-     
------偶尔会卡死的地方是去3王路上，停留在滑坡上会卡死
-     
------偶尔会猝死的地方是尾王前的最后一波怪
-     
-75本 T战斗模块最好用神罗，推荐带阿莉塞、阿尔菲诺。
+- [RebornBuddy][5] with active license (paid)
+- (Optional) Better combat routine, such as [Magitek][100] (free)
+- (Optional) Self-repair plugin, such as [AutoRepairLisbeth][101]
+- (Optional) Better food plugin, such as [Gluttony][102] (free)
 
------瀑布下去之后，如果不幸死了，脚本会卡死
+[100]: https://discord.gg/rDsFbKr "Magitek Discord"
+[101]: https://github.com/nt153133/LlamaPlugins "AutoRepairLisbeth"
+[102]: https://github.com/domesticwarlord86/Gluttony "Gluttony"
 
------二王石柱，琳和于里昂热两个傻子经常会自己吃，建议别带
+### Automatic Setup (recommended)
 
-77本 已放出，欢迎测试
+Want **automatic installation and updates**, including prerequisites?
 
-结束
+Install the [RepoBuddy][103] plugin -- `RBtrust` is configured by default!
 
-等船新版本 抛弃序列
+[103]: https://github.com/Zimgineering/repoBuddy "repoBuddy"
 
-Tips:
+#### Adding `RBtrust` to RepoBuddy
 
-1) 一开始在国际服测试的,后来回国服测试,国际服5.1 可能会出问题 还没测试过
+ℹ️ New RepoBuddy users can skip this step.
 
-2) 有自带修理 Agil 可能会影响,推荐关闭 或者 在xml 修理那里输入2 不使用修理
+⚠️ Older RepoBuddy users may need to update the `RBtrust` URL!
 
 
-有问题联系 QQ:250717291
+In case your repoBuddy config is too old or otherwise missing `RBtrust`, you can add it via repoBuddy's settings menu:
 
-discord: https://discord.gg/WqxpkqG
+- **Name:** RBtrust
+- **Type:** Plugin
+- **URL:** `https://github.com/TheManta/RBtrust.git/trunk`
 
-QQ群: 938170067 
+![repBuddy Settings](https://i.imgur.com/q53jzEX.png)
+
+OR by first closing the bot, then editing `RebornBuddy\Plugins\repoBuddy\repoBuddyRepos.xml`:
+
+```xml
+<Repo>
+  <Name>RBtrust</Name>
+  <Type>Plugin</Type>
+  <URL>https://github.com/TheManta/RBtrust.git/trunk</URL>
+</Repo>
+```
+
+### Manual Setup
+
+0. Fully delete old versions of RBtrust in the `RebornBuddy\Plugins\` folder.
+1. Download the [latest version][104].
+2. On the `.zip` file, right click > `Properties` > `Unblock` > `Apply`.
+3. Unzip all contents into `RebornBuddy\Plugins\` so it looks like this:
+
+```
+RebornBuddy
+└── Plugins
+    └── RBtrust
+        ├── Plugins\
+        ├── Profiles\
+        ├── Quest Behaviors\
+        ├── RBtrust.sln
+        ├── README.md
+        └── ...
+```
+
+4. Start RebornBuddy as normal.
+5. In the Plugins tab, enable the `Trust` plugin.
+
+[104]: https://github.com/TheManta/RBtrust/archive/refs/heads/master.zip "RBtrust.zip"
+
+## Usage
+
+⚠️ Some classes may not survive certain bosses. ⚠️ If you can't clear even after tuning combat routine settings, try running the previous dungeon until you out-level and can skip the "difficult" one.
+
+Each dungeon is handled by a separate OrderBot script that repeats the dungeon infinitely. Graduating to the next dungeon must be done manually by changing scripts.
+
+To load a dungeon script:
+
+1. Start RebornBuddy and set the BotBase dropdown to `Order Bot`.
+2. Click `Load Profile` and navigate to `RebornBuddy\Plugins\RBtrust\Profiles`.
+3. Select the `.xml` script for the desired dungeon.
+4. Back in RebornBuddy, click `Start`.
+
+## Troubleshooting
+
+For live volunteer support, join the [Project BR Discord][4] channel `#rbtrust-issues`.
+
+When asking for help, always include:
+
+- which `.xml` script you loaded,
+- your class + Trust NPC list + scenario vs. avatar mode,
+- what you tried to do,
+- what went wrong,
+- **logs from the `RebornBuddy\Logs\` folder.**
+
+No need to ask if anyone's around or for permission to ask -- just go for it!
+
+### How can I stop dying to a certain boss?
+
+Maybe you can, maybe you can't.
+
+RBtrust has limited combat abilities, so some classes struggle with certain bosses. Some things to try:
+
+- Upgrade your gear and food to better survive big hits.
+- Adjust your combat routine to better use damage mitigation, heals, life steal, etc.
+- Change class (not a real solution)
+
+Worst case scenario: out-level and skip that dungeon by grinding the previous one, or kill the boss manually if needed for MSQ progression.
+
+### When starting a script, why does it says the "Trust" plugin isn't installed?
+
+The RBtrust folder might not have been fully extracted or put in the correct place.
+
+Check your Plugins tab to see if the "Trust" plugin is listed and enable if it is. If the plugin isn't there, try closing RebornBuddy and cleanly [reinstalling](#installation) RBtrust.

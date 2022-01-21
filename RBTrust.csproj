@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5459F0C3-4FB6-44A4-AE1E-8CE9CBCA67F4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RBTrust</RootNamespace>
+    <AssemblyName>RBTrust</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\x64\Debug\RBTrust.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GreyMagic, Version=1.0.60.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=AMD64">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.464\lib\net461\GreyMagic.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="RebornBuddy, Version=1.0.464.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=AMD64">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.464\lib\net461\RebornBuddy.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\AbstractDungeon.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\Amaurot.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\DohnMheg.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\DungeonManager.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\HolminsterSwitch.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\MalikahsWell.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\MtGulg.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheGrandCosmos.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheQitanaRavel.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheTowerOfBabil.cs" />
+    <Compile Include="Plugins\Trust\Data\ZoneId.cs" />
+    <Compile Include="Plugins\Trust\Extensions\Extensions.cs" />
+    <Compile Include="Plugins\Trust\Helpers\FoodHelpers.cs" />
+    <Compile Include="Plugins\Trust\Helpers\LocalizationHelpers.cs" />
+    <Compile Include="Plugins\Trust\Helpers\MovementHelpers.cs" />
+    <Compile Include="Plugins\Trust\Helpers\PluginHelpers.cs" />
+    <Compile Include="Plugins\Trust\Settings.cs" />
+    <Compile Include="Plugins\Trust\Trust.cs" />
+    <Compile Include="Plugins\Trust\TrustSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Plugins\Trust\TrustSettings.Designer.cs">
+      <DependentUpon>TrustSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quest Behaviors\AbstractTaskTag.cs" />
+    <Compile Include="Quest Behaviors\CheckPluginsTag.cs" />
+    <Compile Include="Quest Behaviors\CommenceDutyTag.cs" />
+    <Compile Include="Plugins\Trust\Data\DungeonId.cs" />
+    <Compile Include="Quest Behaviors\JoinDutyFinderTag.cs" />
+    <Compile Include="Quest Behaviors\LoadProfileTag.cs" />
+    <Compile Include="Quest Behaviors\InstanceFlags.cs" />
+    <Compile Include="Windows\ExtendedContentsFinder.cs" />
+    <Compile Include="Quest Behaviors\LeaveDutyTag.cs" />
+    <Compile Include="Quest Behaviors\LootTreasureTag.cs" />
+    <Compile Include="Quest Behaviors\QueueTrustTag.cs" />
+    <Compile Include="Quest Behaviors\EquipRecommendedTag.cs" />
+    <Compile Include="Quest Behaviors\SetPluginsTag.cs" />
+    <Compile Include="Quest Behaviors\WaitForLoadingTag.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Profiles\[O][RBTrust] 71 Holminster Switch.xml" />
+    <Content Include="Profiles\[O][RBTrust] 73 Dohn Mheg.xml" />
+    <Content Include="Profiles\[O][RBTrust] 75 The Qitana Ravel.xml" />
+    <Content Include="Profiles\[O][RBTrust] 77 Malikah%27s Well.xml" />
+    <Content Include="Profiles\[O][RBTrust] 79 Mt. Gulg.xml" />
+    <Content Include="Profiles\[O][RBTrust] 80.1 Amaurot.xml" />
+    <Content Include="Profiles\[O][RBTrust] 83 The Tower of Babil.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Plugins\Trust\TrustSettings.resx">
+      <DependentUpon>TrustSettings.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.376\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.376\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="CopyMarkdownFiles" AfterTargets="AfterBuild">
+    <!-- Copy selected solution items to project build output directory -->
+    <CreateItem Include="$(SolutionDir)\*.md">
+      <Output TaskParameter="Include" ItemName="MarkdownFiles" />
+    </CreateItem>
+    <Copy SourceFiles="@(MarkdownFiles)" DestinationFiles="@(MarkdownFiles->'$(OutDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>
