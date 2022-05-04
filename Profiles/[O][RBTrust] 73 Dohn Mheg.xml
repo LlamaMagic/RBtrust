@@ -8,10 +8,10 @@
 
     <While Condition="True">
       <If Condition="not IsOnMap(821)">
-
+        <SetPlugins PluginNames="AutoRepairLisbeth" IsEnabled="true"/>
         <EquipRecommended/>
         <JoinSupportDuty DutyId="649"/>
-        
+        <SetPlugins PluginNames="AutoRepairLisbeth" IsEnabled="false"/>
       </If>
 
       <If Condition="IsOnMap(821)">

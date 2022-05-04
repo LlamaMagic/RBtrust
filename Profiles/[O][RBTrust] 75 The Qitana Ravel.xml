@@ -10,10 +10,10 @@
       <WaitForLoading/>
 
       <If Condition="not IsOnMap(823)">
-
+        <SetPlugins PluginNames="AutoRepairLisbeth" IsEnabled="true"/>
         <EquipRecommended/>
         <JoinSupportDuty DutyId="651"/>
-        
+        <SetPlugins PluginNames="AutoRepairLisbeth" IsEnabled="false"/>
       </If>
 
       <If Condition="IsOnMap(823)">
