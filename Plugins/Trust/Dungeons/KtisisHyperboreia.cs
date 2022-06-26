@@ -145,7 +145,7 @@ namespace Trust.Dungeons
                         {
                             stopwatch.Reset();
                             // the second one the npc move a little bit slower :(
-                            await Coroutine.Sleep(10000);
+                            await Coroutine.Sleep(10_000);
                         }
 
                         await MovementHelpers.GetClosestAlly.Follow();
@@ -214,7 +214,7 @@ namespace Trust.Dungeons
                 sidestepPlugin.Enabled = true;
             }
 
-            if (trueAeroII.IsCasting() || (HermesTrueAeroIITimer.ElapsedMilliseconds >= 142000 && HermesTrueAeroIITimer.ElapsedMilliseconds <= 150000))
+            if (trueAeroII.IsCasting() || (HermesTrueAeroIITimer.ElapsedMilliseconds >= 142_000 && HermesTrueAeroIITimer.ElapsedMilliseconds <= 150_000))
             {
                 sidestepPlugin.Enabled = false;
                 Vector3 location = new Vector3(-8f, 1f, -50.0f);

@@ -159,7 +159,7 @@ namespace Trust.Dungeons
                     await Coroutine.Sleep(1000);
                     await MovementHelpers.GetFurthestAlly.Follow();
 
-                    while (amonTimerTwo.ElapsedMilliseconds <= 14000)
+                    while (amonTimerTwo.ElapsedMilliseconds <= 14_000)
                     {
                         await Coroutine.Sleep(500);
                         await MovementHelpers.GetFurthestAlly.Follow();
@@ -178,7 +178,7 @@ namespace Trust.Dungeons
                     }
 
                     // Logging.Write(Colors.Red, "stopwatchPassed: " + amonTimerOne.ElapsedMilliseconds);
-                    if (amonTimerOne.ElapsedMilliseconds >= 20000)
+                    if (amonTimerOne.ElapsedMilliseconds >= 20_000)
                     {
                         sidestepPlugin.Enabled = false;
                         AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
