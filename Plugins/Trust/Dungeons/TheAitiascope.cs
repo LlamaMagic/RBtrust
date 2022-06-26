@@ -182,6 +182,7 @@ namespace Trust.Dungeons
                     {
                         sidestepPlugin.Enabled = false;
                         AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                        CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, "Get behind mummy shiva ice for protection");
                         Vector3 location = new Vector3(11.26893f, -236f, -482.5912f);
                         await CommonTasks.MoveTo(location);
                     }

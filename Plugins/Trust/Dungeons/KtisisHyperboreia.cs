@@ -195,8 +195,8 @@ namespace Trust.Dungeons
                             break;
                         }
 
-                        await Coroutine.Sleep(500);
                         await MovementHelpers.GetClosestAlly.Follow();
+                        await Coroutine.Yield();
                     }
                 }
 
@@ -208,6 +208,7 @@ namespace Trust.Dungeons
             {
                 sidestepPlugin.Enabled = false;
                 Vector3 location = new Vector3(-8f, 1f, -50.0f);
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5000, "Need to spread for True Aero");
                 await CommonTasks.MoveTo(location);
                 await Coroutine.Sleep(500);
                 sidestepPlugin.Enabled = true;
@@ -217,6 +218,7 @@ namespace Trust.Dungeons
             {
                 sidestepPlugin.Enabled = false;
                 Vector3 location = new Vector3(-8f, 1f, -50.0f);
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5000, "Need to spread for True Aero");
                 await CommonTasks.MoveTo(location);
                 await Coroutine.Sleep(500);
                 sidestepPlugin.Enabled = true;
@@ -225,6 +227,7 @@ namespace Trust.Dungeons
             if (meteor.IsCasting())
             {
                 sidestepPlugin.Enabled = false;
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5000, "Need to get to the middle to avoid meteor");
                 Vector3 location = new Vector3(0.0f, 0.0f, -50.0f);
                 await CommonTasks.MoveTo(location);
             }
