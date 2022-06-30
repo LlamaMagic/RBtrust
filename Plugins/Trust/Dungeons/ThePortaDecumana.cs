@@ -1,35 +1,28 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Buddy.Coroutines;
-using ff14bot;
 using ff14bot.Managers;
-using ff14bot.Objects;
-using LlamaLibrary.Helpers;
-using Buddy.Coroutines;
-using Clio.Utilities;
-using ff14bot;
-using ff14bot.Behavior;
-using ff14bot.Managers;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Linq;
-using ff14bot.Helpers;
-using System.Windows.Media;
-using ff14bot.NeoProfiles;
 using RBTrust.Plugins.Trust.Extensions;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
 
 namespace Trust.Dungeons
 {
+    /// <summary>
+    /// Lv. 50.3 The Porta Decumana dungeon logic.
+    /// </summary>
     public class ThePortaDecumana : AbstractDungeon
     {
-        static PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
+        /// <summary>
+        /// Gets zone ID for this dungeon.
+        /// </summary>
+        public new const ZoneId ZoneId = Data.ZoneId.ThePortaDecumana;
 
-        static HashSet<uint> Spells = new HashSet<uint>()
+        /// <inheritdoc/>
+        public override DungeonId DungeonId => DungeonId.ThePortaDecumana;
+
+        private static readonly HashSet<uint> Spells = new HashSet<uint>()
         {
             28991,
             28999,
@@ -42,6 +35,7 @@ namespace Trust.Dungeons
             29021
         };
 
+        /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
 
@@ -71,7 +65,7 @@ namespace Trust.Dungeons
             //Ultima Weapon
 
             // Geocrush [CastType][Id: 28999][Omen: 27][RawCastType: 2][ObjId: 1073895042]
-            HashSet<uint> Geocrush = new HashSet<uint>() {28999};
+            HashSet<uint> Geocrush = new HashSet<uint>() { 28999 };
             if (Geocrush.IsCasting())
             {
                 //sidestepPlugin.Enabled = false;
@@ -80,7 +74,7 @@ namespace Trust.Dungeons
             }
 
             // Vulcan Burst [CastType][Id: 29003][Omen: 141][RawCastType: 2][ObjId: 1073895041]
-            HashSet<uint> VulcanBurst = new HashSet<uint>() {29003};
+            HashSet<uint> VulcanBurst = new HashSet<uint>() { 29003 };
             if (VulcanBurst.IsCasting())
             {
                 //sidestepPlugin.Enabled = false;
@@ -89,14 +83,14 @@ namespace Trust.Dungeons
             }
 
             // Radiant Blaze [CastType][Id: 28991][Omen: 7][RawCastType: 2][ObjId: 1073895054]
-            HashSet<uint> RadiantBlaze = new HashSet<uint>() {28991};
+            HashSet<uint> RadiantBlaze = new HashSet<uint>() { 28991 };
             if (RadiantBlaze.IsCasting())
             {
-                sidestepPlugin.Enabled = false;
+                SidestepPlugin.Enabled = false;
             }
 
             // Explosion [CastType][Id: 29021][Omen: 27][RawCastType: 2][ObjId: 1073750976]
-            HashSet<uint> Explosion = new HashSet<uint>() {29021};
+            HashSet<uint> Explosion = new HashSet<uint>() { 29021 };
             if (Explosion.IsCasting())
             {
                 //sidestepPlugin.Enabled = false;
@@ -105,7 +99,7 @@ namespace Trust.Dungeons
             }
 
             // Laser Focus 29013, 29014
-            HashSet<uint> LaserFocus = new HashSet<uint>() {29013, 29014};
+            HashSet<uint> LaserFocus = new HashSet<uint>() { 29013, 29014 };
             if (LaserFocus.IsCasting())
             {
                 //sidestepPlugin.Enabled = false;
@@ -114,7 +108,7 @@ namespace Trust.Dungeons
             }
 
             // Homing Ray 29011, 29012
-            HashSet<uint> HomingRay = new HashSet<uint>() {29011, 29012};
+            HashSet<uint> HomingRay = new HashSet<uint>() { 29011, 29012 };
             if (HomingRay.IsCasting())
             {
                 //sidestepPlugin.Enabled = false;
@@ -142,16 +136,12 @@ namespace Trust.Dungeons
 
             if (!Spells.IsCasting())
             {
-                if (!sidestepPlugin.Enabled)
-                {
-                    sidestepPlugin.Enabled = true;
-                }
+                SidestepPlugin.Enabled = true;
             }
 
             await Coroutine.Yield();
+
             return false;
         }
-
-        public override DungeonId DungeonId { get; }
     }
 }

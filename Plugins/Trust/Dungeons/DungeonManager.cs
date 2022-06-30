@@ -19,19 +19,23 @@ namespace Trust.Dungeons
         {
             availableDungeons = new Dictionary<ZoneId, AbstractDungeon>()
             {
-                // 2.0 ARR
+                // 2.0 - A Realm Reborn
                 {ZoneId.TheNavel, new TheNavel()},
                 {ZoneId.TheHowlingEye, new TheHowlingEye()},
                 {ZoneId.Halatali, new Halatali()},
-                {ZoneId.AurumVale, new AurumVale()},
-                {ZoneId.HallofNoviceArena, new HallofNoviceArena()},
-                {ZoneId.HallofNoviceWestLA, new HallofNoviceWestLA()},
+                {ZoneId.TheAurumVale, new AurumVale()},
+                {ZoneId.HallOfTheNoviceArena, new HallofNoviceArena()},
+                {ZoneId.HallOfTheNoticeWesternLa, new HallofNoviceWestLA()},
                 {ZoneId.TheStoneVigil, new TheStoneVigil()},
                 {ZoneId.CastrumMeridianum, new CastrumMeridianum()},
                 {ZoneId.ThePortaDecumana, new ThePortaDecumana()},
                 {ZoneId.SyrcusTower, new SyrcusTower()},
 
-                // 5.0 Shadowbringers
+                // 3.0 - Heavensward
+
+                // 4.0 - Stormblood
+
+                // 5.0 - Shadowbringers
                 {ZoneId.HellsLid, new HellsLid()},
                 {ZoneId.HolminsterSwitch, new HolminsterSwitch()},
                 {ZoneId.DohnMheg, new DohnMheg()},
@@ -45,7 +49,7 @@ namespace Trust.Dungeons
                 {ZoneId.MatoyasRelict, new MatoyasRelict()},
                 {ZoneId.Paglthan, new Paglthan()},
 
-                // 6.0 Endwalker
+                // 6.0 - Endwalker
                 {ZoneId.TheTowerOfZot, new TheTowerOfZot()},
                 {ZoneId.TheTowerOfBabil, new TheTowerOfBabil()},
                 {ZoneId.Vanaspati, new Vanaspati()},

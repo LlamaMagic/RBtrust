@@ -1,11 +1,76 @@
 ﻿namespace Trust.Data
 {
     /// <summary>
-    /// Static map of dungeon names to Trust IDs.
+    /// Static map of dungeon names to Trust IDs. See DawnContent table in game client.
     /// </summary>
     public enum DungeonId : uint
     {
 #pragma warning disable SA1629 // Documentation text should end with a period
+        /// <summary>
+        /// Lv. 15.1: Sastasha
+        /// </summary>
+        Sastasha = 200,
+
+        /// <summary>
+        /// Lv. 16: The Tam-Tara Deepcroft
+        /// </summary>
+        TheTamTaraDeepcroft = 201,
+
+        /// <summary>
+        /// Lv. 17: Copperbell Mines
+        /// </summary>
+        CopperbellMines = 202,
+
+        /// <summary>
+        /// Lv. 20.1: The Bowl of Embers
+        /// </summary>
+        TheBowlOfEmbers = 203,
+
+        /// <summary>
+        /// Lv. 24: The Thousand Maws of Toto-Rak
+        /// </summary>
+        TheThousandMawsOfTotoRak = 204,
+
+        /// <summary>
+        /// Lv. 28: Haukke Manor
+        /// </summary>
+        HaukkeManor = 205,
+
+        /// <summary>
+        /// Lv. 32: Brayflox's Longstop
+        /// </summary>
+        BrayfloxsLongstop = 206,
+
+        /// <summary>
+        /// Lv. 34: The Navel
+        /// </summary>
+        TheNavel = 207,
+
+        /// <summary>
+        /// Lv. 41: The Stone Vigil
+        /// </summary>
+        TheStoneVigil = 208,
+
+        /// <summary>
+        /// Lv. 44: The Howling Eye
+        /// </summary>
+        TheHowlingEye = 209,
+
+        /// <summary>
+        /// Lv. 50: Castrum Meridianum
+        /// </summary>
+        CastrumMeridianum = 210,
+
+        /// <summary>
+        /// Lv. 50: The Praetorium
+        /// </summary>
+        ThePraetorium = 211,
+
+        /// <summary>
+        /// Lv. 50: The Porta Decumana
+        /// </summary>
+        ThePortaDecumana = 212,
+
         /// <summary>
         /// Lv. 71: Holminster Switch
         /// </summary>
@@ -100,12 +165,6 @@
         /// Lv. 90.2: Alzadaal's Legacy
         /// </summary>
         AlzadaalsLegacy = 19,
-
-        /// <summary>
-        /// Lv. 90.2: Alzadaal's Legacy
-        /// </summary>
-        TheStoneVigil = 20,
-
 #pragma warning restore SA1629 // Documentation text should end with a period
     }
 }
