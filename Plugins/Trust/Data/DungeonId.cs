@@ -101,6 +101,11 @@
         /// </summary>
         AlzadaalsLegacy = 19,
 
+        /// <summary>
+        /// Lv. 90.2: Alzadaal's Legacy
+        /// </summary>
+        TheStoneVigil = 20,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
     }
 }

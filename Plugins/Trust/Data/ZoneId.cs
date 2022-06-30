@@ -102,6 +102,11 @@
         TheDeadEnds = 973,
 
         /// <summary>
+        /// Lv. 41: The Stone Vigil
+        /// </summary>
+        TheStoneVigil = 1042,
+
+        /// <summary>
         /// Lv. 90.2: Alzadaal's Legacy
         /// </summary>
         AlzadaalsLegacy = 1050,

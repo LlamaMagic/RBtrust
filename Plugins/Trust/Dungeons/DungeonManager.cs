@@ -19,28 +19,31 @@ namespace Trust.Dungeons
         {
             availableDungeons = new Dictionary<ZoneId, AbstractDungeon>()
             {
+                // 2.0 ARR
+                {ZoneId.TheStoneVigil, new TheStoneVigil()},
+
                 // 5.0 Shadowbringers
-                { ZoneId.HolminsterSwitch, new HolminsterSwitch() },
-                { ZoneId.DohnMheg, new DohnMheg() },
-                { ZoneId.TheQitanaRavel, new TheQitanaRavel() },
-                { ZoneId.MalikahsWell, new MalikahsWell() },
-                { ZoneId.MtGulg, new MtGulg() },
-                { ZoneId.Amaurot, new Amaurot() },
-                { ZoneId.TheGrandCosmos, new TheGrandCosmos() },
-                { ZoneId.AnamnesisAnyder, new AnamnesisAnyder() },
-                { ZoneId.TheHeroesGauntlet, new TheHeroesGauntlet() },
-                { ZoneId.MatoyasRelict, new MatoyasRelict() },
-                { ZoneId.Paglthan, new Paglthan() },
+                {ZoneId.HolminsterSwitch, new HolminsterSwitch()},
+                {ZoneId.DohnMheg, new DohnMheg()},
+                {ZoneId.TheQitanaRavel, new TheQitanaRavel()},
+                {ZoneId.MalikahsWell, new MalikahsWell()},
+                {ZoneId.MtGulg, new MtGulg()},
+                {ZoneId.Amaurot, new Amaurot()},
+                {ZoneId.TheGrandCosmos, new TheGrandCosmos()},
+                {ZoneId.AnamnesisAnyder, new AnamnesisAnyder()},
+                {ZoneId.TheHeroesGauntlet, new TheHeroesGauntlet()},
+                {ZoneId.MatoyasRelict, new MatoyasRelict()},
+                {ZoneId.Paglthan, new Paglthan()},
 
                 // 6.0 Endwalker
-                { ZoneId.TheTowerOfZot, new TheTowerOfZot() },
-                { ZoneId.TheTowerOfBabil, new TheTowerOfBabil() },
-                { ZoneId.Vanaspati, new Vanaspati() },
-                { ZoneId.KtisisHyperboreia, new KtisisHyperboreia() },
-                { ZoneId.TheAitiascope, new TheAitiascope() },
-                { ZoneId.TheMothercrystal, new TheMothercrystal() },
-                { ZoneId.TheDeadEnds, new TheDeadEnds() },
-                { ZoneId.AlzadaalsLegacy, new AlzadaalsLegacy() },
+                {ZoneId.TheTowerOfZot, new TheTowerOfZot()},
+                {ZoneId.TheTowerOfBabil, new TheTowerOfBabil()},
+                {ZoneId.Vanaspati, new Vanaspati()},
+                {ZoneId.KtisisHyperboreia, new KtisisHyperboreia()},
+                {ZoneId.TheAitiascope, new TheAitiascope()},
+                {ZoneId.TheMothercrystal, new TheMothercrystal()},
+                {ZoneId.TheDeadEnds, new TheDeadEnds()},
+                {ZoneId.AlzadaalsLegacy, new AlzadaalsLegacy()},
             };
         }
 
