@@ -1,4 +1,5 @@
 ﻿using ff14bot.Helpers;
+using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 
@@ -29,5 +30,22 @@ namespace Trust
         /// </summary>
         [Setting]
         public uint FoodId { get; set; }
+
+
+        private bool _eatFoodEnabled;
+
+        [DefaultValue(false)]
+        public bool EatFoodEnabled
+        {
+            get => _eatFoodEnabled;
+            set
+            {
+                if (_eatFoodEnabled != value)
+                {
+                    _eatFoodEnabled = value;
+                    //Save();
+                }
+            }
+        }
     }
 }

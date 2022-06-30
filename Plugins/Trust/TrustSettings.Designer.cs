@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrustSettings));
             this.foodDropBox = new System.Windows.Forms.ComboBox();
             this.foodLabel = new System.Windows.Forms.Label();
+            this.enableFood = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // foodDropBox
@@ -46,13 +47,22 @@
             resources.ApplyResources(this.foodLabel, "foodLabel");
             this.foodLabel.Name = "foodLabel";
             // 
+            // enableFood
+            // 
+            resources.ApplyResources(this.enableFood, "enableFood");
+            this.enableFood.Name = "enableFood";
+            this.enableFood.UseVisualStyleBackColor = true;
+            this.enableFood.CheckedChanged += new System.EventHandler(this.enableFood_CheckedChanged);
+            // 
             // TrustSettings
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.enableFood);
             this.Controls.Add(this.foodLabel);
             this.Controls.Add(this.foodDropBox);
             this.Name = "TrustSettings";
+            this.Load += new System.EventHandler(this.TrustSettings_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -62,5 +72,6 @@
 
         private System.Windows.Forms.ComboBox foodDropBox;
         private System.Windows.Forms.Label foodLabel;
+        private System.Windows.Forms.CheckBox enableFood;
     }
 }

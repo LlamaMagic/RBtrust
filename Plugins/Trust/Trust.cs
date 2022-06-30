@@ -132,7 +132,7 @@ namespace Trust
                 await Coroutine.Wait(1000, () => !ActionManager.IsSprintReady);
             }
 
-            if (!Core.Player.HasAura(FoodHelpers.FoodBuff))
+            if (!Core.Player.HasAura(FoodHelpers.FoodBuff) && Settings.Instance.EatFoodEnabled)
             {
                 await FoodHelpers.EatFood();
             }

@@ -12,6 +12,36 @@
         NONE = 0,
 
         /// <summary>
+        /// Lv. 15: Hall of Novice
+        /// </summary>
+        HallofNoviceArena = 138,
+
+        /// <summary>
+        /// Lv. 15: Hall of Novice
+        /// </summary>
+        HallofNoviceWestLA = 543,
+
+        /// <summary>
+        /// Lv. 20: Halatali
+        /// </summary>
+        Halatali = 162,
+
+        /// <summary>
+        /// Lv. 47: AurumVale
+        /// </summary>
+        AurumVale = 172,
+
+        /// <summary>
+        /// Lv. 50: Srycus Tower
+        /// </summary>
+        SyrcusTower = 372,
+
+        /// <summary>
+        /// Lv. 70: Hell's Lid
+        /// </summary>
+        HellsLid = 742,
+
+        /// <summary>
         /// Lv. 71: Holminster Switch
         /// </summary>
         HolminsterSwitch = 837,
@@ -105,6 +135,26 @@
         /// Lv. 41: The Stone Vigil
         /// </summary>
         TheStoneVigil = 1042,
+
+        /// <summary>
+        /// Lv. 41: Castrum Meridianum
+        /// </summary>
+        CastrumMeridianum = 1043,
+
+        /// <summary>
+        /// Lv. 34: The Navel
+        /// </summary>
+        TheNavel = 1046,
+
+        /// <summary>
+        /// Lv. 44: The Howling Eye
+        /// </summary>
+        TheHowlingEye = 1047,
+
+        /// <summary>
+        /// Lv. 44: The Porta Decumana
+        /// </summary>
+        ThePortaDecumana = 1048,
 
         /// <summary>
         /// Lv. 90.2: Alzadaal's Legacy

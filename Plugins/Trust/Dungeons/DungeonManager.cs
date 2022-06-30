@@ -20,9 +20,19 @@ namespace Trust.Dungeons
             availableDungeons = new Dictionary<ZoneId, AbstractDungeon>()
             {
                 // 2.0 ARR
+                {ZoneId.TheNavel, new TheNavel()},
+                {ZoneId.TheHowlingEye, new TheHowlingEye()},
+                {ZoneId.Halatali, new Halatali()},
+                {ZoneId.AurumVale, new AurumVale()},
+                {ZoneId.HallofNoviceArena, new HallofNoviceArena()},
+                {ZoneId.HallofNoviceWestLA, new HallofNoviceWestLA()},
                 {ZoneId.TheStoneVigil, new TheStoneVigil()},
+                {ZoneId.CastrumMeridianum, new CastrumMeridianum()},
+                {ZoneId.ThePortaDecumana, new ThePortaDecumana()},
+                {ZoneId.SyrcusTower, new SyrcusTower()},
 
                 // 5.0 Shadowbringers
+                {ZoneId.HellsLid, new HellsLid()},
                 {ZoneId.HolminsterSwitch, new HolminsterSwitch()},
                 {ZoneId.DohnMheg, new DohnMheg()},
                 {ZoneId.TheQitanaRavel, new TheQitanaRavel()},

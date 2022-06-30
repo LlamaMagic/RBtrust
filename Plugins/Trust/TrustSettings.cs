@@ -52,5 +52,16 @@ namespace Trust
             foodDropBox.DisplayMember = "Value";
             foodDropBox.ValueMember = "Key";
         }
+
+        private void TrustSettings_Load(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void enableFood_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Instance.EatFoodEnabled = enableFood.Checked;
+            Settings.Instance.Save();
+        }
     }
 }
