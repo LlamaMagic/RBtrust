@@ -75,7 +75,9 @@
         /// <summary>
         /// Estinien's Avatar: DPS, DRG.
         /// </summary>
-        EstiniensAvatar = 0,
+        EstiniensAvatar = 11270,
+
+        // There's also an "Estinien's Image" 10014, but unsure if Trusts related.
 
         /// <summary>
         /// G'raha Tia's Avatar: All-Rounder.
