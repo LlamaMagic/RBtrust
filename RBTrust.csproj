@@ -52,6 +52,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Plugins\Trust\Data\ClassJobRoles.cs" />
     <Compile Include="Plugins\Trust\Data\DungeonId.cs" />
+    <Compile Include="Plugins\Trust\Data\PartyMemberId.cs" />
     <Compile Include="Plugins\Trust\Data\PartyMembers.cs" />
     <Compile Include="Plugins\Trust\Data\SubZoneId.cs" />
     <Compile Include="Plugins\Trust\Data\ZoneId.cs" />
