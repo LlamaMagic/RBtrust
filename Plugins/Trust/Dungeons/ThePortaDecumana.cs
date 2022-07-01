@@ -1,6 +1,10 @@
 using Buddy.Coroutines;
 using ff14bot.Managers;
+using ff14bot.Objects;
+using RBTrust.Plugins.Trust.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
@@ -18,26 +22,21 @@ namespace Trust.Dungeons
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.ThePortaDecumana;
 
-        private static readonly HashSet<uint> Spells = new HashSet<uint>()
-        {
-            28991,
-            28999,
-            29003,
-            29011,
-            29012,
-            29013,
-            29014,
-            29020,
-            29021,
-        };
+        private const uint TheUltimaWeapon = 2137;
+        private static readonly HashSet<uint> Spells = new HashSet<uint>() { 28991, 28999, 29003, 29011, 29012, 29013, 29014, 29021, };
 
         private static readonly HashSet<uint> Geocrush = new HashSet<uint>() { 28999 };
         private static readonly HashSet<uint> VulcanBurst = new HashSet<uint>() { 29003 };
         private static readonly HashSet<uint> RadiantBlaze = new HashSet<uint>() { 28991 };
         private static readonly HashSet<uint> Explosion = new HashSet<uint>() { 29021 };
         private static readonly HashSet<uint> LaserFocus = new HashSet<uint>() { 29013, 29014 };
+
         private static readonly HashSet<uint> HomingRay = new HashSet<uint>() { 29011, 29012 };
-        private static readonly HashSet<uint> CitadelBuster = new HashSet<uint>() { 29020, 6554, 6935, 7579, 7595, 10130, 10149, };
+        private static readonly int HomingRayDuration = 5_000;
+
+        private static readonly HashSet<uint> CitadelBuster = new HashSet<uint>() { 29020 };
+        private static readonly int CitadelBusterDuration = 5_000;
+        private static DateTime citadelBusterTimestamp = DateTime.MinValue;
 
         /// <inheritdoc/>
         public override DungeonId DungeonId => DungeonId.ThePortaDecumana;
@@ -104,13 +103,16 @@ namespace Trust.Dungeons
             if (HomingRay.IsCasting())
             {
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.Spread(10000);
+                await MovementHelpers.Spread(HomingRayDuration);
             }
 
-            if (CitadelBuster.IsCasting())
+            if (CitadelBuster.IsCasting() && citadelBusterTimestamp < DateTime.Now)
             {
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestAlly.Follow();
+                BattleCharacter ultimaWeaponNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(TheUltimaWeapon)
+                    .FirstOrDefault(bc => bc.IsTargetable);
+
+                AvoidanceHelpers.AddAvoidRectangle(ultimaWeaponNpc, 12.0f, 40.0f);
+                citadelBusterTimestamp = DateTime.Now.AddMilliseconds(CitadelBusterDuration);
             }
 
             if (!Spells.IsCasting())
