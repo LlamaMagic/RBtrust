@@ -20,44 +20,44 @@ namespace Trust.Dungeons
             availableDungeons = new Dictionary<ZoneId, AbstractDungeon>()
             {
                 // 2.0 - A Realm Reborn
-                {ZoneId.TheNavel, new TheNavel()},
-                {ZoneId.TheHowlingEye, new TheHowlingEye()},
-                {ZoneId.Halatali, new Halatali()},
-                {ZoneId.TheAurumVale, new AurumVale()},
-                {ZoneId.HallOfTheNoviceArena, new HallofNoviceArena()},
-                {ZoneId.HallOfTheNoticeWesternLa, new HallofNoviceWestLA()},
-                {ZoneId.TheStoneVigil, new TheStoneVigil()},
-                {ZoneId.CastrumMeridianum, new CastrumMeridianum()},
-                {ZoneId.ThePortaDecumana, new ThePortaDecumana()},
-                {ZoneId.SyrcusTower, new SyrcusTower()},
+                { ZoneId.TheNavel, new TheNavel() },
+                { ZoneId.TheHowlingEye, new TheHowlingEye() },
+                { ZoneId.Halatali, new Halatali() },
+                { ZoneId.TheAurumVale, new TheAurumVale() },
+                { ZoneId.HallOfTheNoviceArena, new HallOfTheNoviceArena() },
+                { ZoneId.HallOfTheNoticeWesternLa, new HallOfTheNoviceWesternLa() },
+                { ZoneId.TheStoneVigil, new TheStoneVigil() },
+                { ZoneId.CastrumMeridianum, new CastrumMeridianum() },
+                { ZoneId.ThePortaDecumana, new ThePortaDecumana() },
+                { ZoneId.SyrcusTower, new SyrcusTower() },
 
                 // 3.0 - Heavensward
 
                 // 4.0 - Stormblood
 
                 // 5.0 - Shadowbringers
-                {ZoneId.HellsLid, new HellsLid()},
-                {ZoneId.HolminsterSwitch, new HolminsterSwitch()},
-                {ZoneId.DohnMheg, new DohnMheg()},
-                {ZoneId.TheQitanaRavel, new TheQitanaRavel()},
-                {ZoneId.MalikahsWell, new MalikahsWell()},
-                {ZoneId.MtGulg, new MtGulg()},
-                {ZoneId.Amaurot, new Amaurot()},
-                {ZoneId.TheGrandCosmos, new TheGrandCosmos()},
-                {ZoneId.AnamnesisAnyder, new AnamnesisAnyder()},
-                {ZoneId.TheHeroesGauntlet, new TheHeroesGauntlet()},
-                {ZoneId.MatoyasRelict, new MatoyasRelict()},
-                {ZoneId.Paglthan, new Paglthan()},
+                { ZoneId.HellsLid, new HellsLid() },
+                { ZoneId.HolminsterSwitch, new HolminsterSwitch() },
+                { ZoneId.DohnMheg, new DohnMheg() },
+                { ZoneId.TheQitanaRavel, new TheQitanaRavel() },
+                { ZoneId.MalikahsWell, new MalikahsWell() },
+                { ZoneId.MtGulg, new MtGulg() },
+                { ZoneId.Amaurot, new Amaurot() },
+                { ZoneId.TheGrandCosmos, new TheGrandCosmos() },
+                { ZoneId.AnamnesisAnyder, new AnamnesisAnyder() },
+                { ZoneId.TheHeroesGauntlet, new TheHeroesGauntlet() },
+                { ZoneId.MatoyasRelict, new MatoyasRelict() },
+                { ZoneId.Paglthan, new Paglthan() },
 
                 // 6.0 - Endwalker
-                {ZoneId.TheTowerOfZot, new TheTowerOfZot()},
-                {ZoneId.TheTowerOfBabil, new TheTowerOfBabil()},
-                {ZoneId.Vanaspati, new Vanaspati()},
-                {ZoneId.KtisisHyperboreia, new KtisisHyperboreia()},
-                {ZoneId.TheAitiascope, new TheAitiascope()},
-                {ZoneId.TheMothercrystal, new TheMothercrystal()},
-                {ZoneId.TheDeadEnds, new TheDeadEnds()},
-                {ZoneId.AlzadaalsLegacy, new AlzadaalsLegacy()},
+                { ZoneId.TheTowerOfZot, new TheTowerOfZot() },
+                { ZoneId.TheTowerOfBabil, new TheTowerOfBabil() },
+                { ZoneId.Vanaspati, new Vanaspati() },
+                { ZoneId.KtisisHyperboreia, new KtisisHyperboreia() },
+                { ZoneId.TheAitiascope, new TheAitiascope() },
+                { ZoneId.TheMothercrystal, new TheMothercrystal() },
+                { ZoneId.TheDeadEnds, new TheDeadEnds() },
+                { ZoneId.AlzadaalsLegacy, new AlzadaalsLegacy() },
             };
         }
 

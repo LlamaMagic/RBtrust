@@ -1,6 +1,5 @@
 using Buddy.Coroutines;
 using ff14bot.Managers;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -19,9 +18,6 @@ namespace Trust.Dungeons
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.ThePortaDecumana;
 
-        /// <inheritdoc/>
-        public override DungeonId DungeonId => DungeonId.ThePortaDecumana;
-
         private static readonly HashSet<uint> Spells = new HashSet<uint>()
         {
             28991,
@@ -32,13 +28,23 @@ namespace Trust.Dungeons
             29013,
             29014,
             29020,
-            29021
+            29021,
         };
+
+        private static readonly HashSet<uint> Geocrush = new HashSet<uint>() { 28999 };
+        private static readonly HashSet<uint> VulcanBurst = new HashSet<uint>() { 29003 };
+        private static readonly HashSet<uint> RadiantBlaze = new HashSet<uint>() { 28991 };
+        private static readonly HashSet<uint> Explosion = new HashSet<uint>() { 29021 };
+        private static readonly HashSet<uint> LaserFocus = new HashSet<uint>() { 29013, 29014 };
+        private static readonly HashSet<uint> HomingRay = new HashSet<uint>() { 29011, 29012 };
+        private static readonly HashSet<uint> CitadelBuster = new HashSet<uint>() { 29020, 6554, 6935, 7579, 7595, 10130, 10149, };
+
+        /// <inheritdoc/>
+        public override DungeonId DungeonId => DungeonId.ThePortaDecumana;
 
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-
             /*
             [18:58:25.925 V] [SideStep] Geocrush [CastType][Id: 28999][Omen: 27][RawCastType: 2][ObjId: 1073895042]
                     Move to Ally
@@ -62,74 +68,47 @@ namespace Trust.Dungeons
 
              */
 
-            //Ultima Weapon
-
+            // Ultima Weapon
             // Geocrush [CastType][Id: 28999][Omen: 27][RawCastType: 2][ObjId: 1073895042]
-            HashSet<uint> Geocrush = new HashSet<uint>() { 28999 };
             if (Geocrush.IsCasting())
             {
-                //sidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 
             // Vulcan Burst [CastType][Id: 29003][Omen: 141][RawCastType: 2][ObjId: 1073895041]
-            HashSet<uint> VulcanBurst = new HashSet<uint>() { 29003 };
             if (VulcanBurst.IsCasting())
             {
-                //sidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 
             // Radiant Blaze [CastType][Id: 28991][Omen: 7][RawCastType: 2][ObjId: 1073895054]
-            HashSet<uint> RadiantBlaze = new HashSet<uint>() { 28991 };
             if (RadiantBlaze.IsCasting())
             {
                 SidestepPlugin.Enabled = false;
             }
 
-            // Explosion [CastType][Id: 29021][Omen: 27][RawCastType: 2][ObjId: 1073750976]
-            HashSet<uint> Explosion = new HashSet<uint>() { 29021 };
             if (Explosion.IsCasting())
             {
-                //sidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 
-            // Laser Focus 29013, 29014
-            HashSet<uint> LaserFocus = new HashSet<uint>() { 29013, 29014 };
             if (LaserFocus.IsCasting())
             {
-                //sidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 
-            // Homing Ray 29011, 29012
-            HashSet<uint> HomingRay = new HashSet<uint>() { 29011, 29012 };
             if (HomingRay.IsCasting())
             {
-                //sidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.Spread(10000);
             }
 
-            // Citadel Buster 29020, 6554, 6935, 7579, 7595, 10130, 10149
-            HashSet<uint> CitadelBuster = new HashSet<uint>()
-            {
-                29020,
-                6554,
-                6935,
-                7579,
-                7595,
-                10130,
-                10149
-            };
             if (CitadelBuster.IsCasting())
             {
-                //sidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
             }

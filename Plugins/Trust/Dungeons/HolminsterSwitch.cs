@@ -5,7 +5,6 @@ using ff14bot.Behavior;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
-using RBTrust.Plugins.Trust.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,23 +21,25 @@ namespace Trust.Dungeons
     /// </summary>
     public class HolminsterSwitch : AbstractDungeon
     {
-        static PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
-
-
         /// <summary>
         /// Gets zone ID for this dungeon.
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.HolminsterSwitch;
+
+        private const int ForgivenDissonance = 8299;
+        private const int TesleenTheForgiven = 8300;
+        private const int Philia = 8301;
+        private const int IronChainObj = 8570;
 
         /// <summary>
         /// Set of boss-related monster IDs.
         /// </summary>
         private static readonly HashSet<uint> BossIds = new HashSet<uint>
         {
-            8299, // Forgiven Dissonance
-            8300, // Tesleen, the Forgiven :: 得到宽恕的泰丝琳
-            8301, // Philia                :: 斐利亚
-            8570, // Iron Chain            :: 锁链
+            ForgivenDissonance,
+            TesleenTheForgiven,
+            Philia,
+            IronChainObj,
         };
 
         /// <summary>
@@ -91,11 +92,20 @@ namespace Trust.Dungeons
             17552,
         };
 
+        private static readonly HashSet<uint> Thumbscrew = new HashSet<uint>() { 15814, 16850 };
+        private static readonly HashSet<uint> BrazenBull = new HashSet<uint>() { 15817, 15820 };
+        private static readonly HashSet<uint> Exorcise = new HashSet<uint>() { 15826, 15827 };
+        private static readonly HashSet<uint> FeveredFlagellation = new HashSet<uint>() { 15829, 15830, 17440 };
+        private static readonly HashSet<uint> RightKnout = new HashSet<uint>() { 15846 };
+        private static readonly HashSet<uint> LeftKnout = new HashSet<uint>() { 15847 };
+        private static readonly HashSet<uint> IntotheLight = new HashSet<uint>() { 15847, 17232 };
+        private static readonly HashSet<uint> Taphephobia = new HashSet<uint>() { 15842, 16769 };
+        private static readonly HashSet<uint> FierceBeating = new HashSet<uint>() { 15834, 15835, 15836, 15837, 15838, 15839, };
 
         private static readonly Vector3 ExorciseStackLoc = new Vector3("79.35034, 0, -81.01664");
         private static readonly int ExorciseDuration = 25_000;
 
-
+        private static readonly HashSet<uint> Pendulum = new HashSet<uint>() { 15833, 15842, 16769, 16777, 16790, };
         private static readonly Vector3 PendulumDodgeLoc = new Vector3("117.1188,23,-474.0881");
 
         private static readonly int FierceBeatingDuration = 32_000;
@@ -107,42 +117,30 @@ namespace Trust.Dungeons
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-            IEnumerable<BattleCharacter> ForgivenDissonance = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-                .Where(
-                    r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8299); // Forgiven Dissonance
+            BattleCharacter forgivenDissonanceNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenDissonance)
+                .FirstOrDefault(bc => bc.Distance() < 50);
 
-            IEnumerable<BattleCharacter> TesleentheForgiven = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-                .Where(
-                    r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8300); // Tesleen, the Forgiven
-
-            IEnumerable<BattleCharacter> Philia = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8301); // Philia
-
-            // Forgiven Dissonance  8299
-            if (ForgivenDissonance.Any())
+            if (forgivenDissonanceNpc != null && forgivenDissonanceNpc.IsValid)
             {
-                HashSet<uint> Thumbscrew = new HashSet<uint>() {15814, 16850};
                 if (Thumbscrew.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> BrazenBull = new HashSet<uint>() {15817, 15820};
                 if (BrazenBull.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
             }
 
+            BattleCharacter tesleenNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: TesleenTheForgiven)
+                .FirstOrDefault(bc => bc.Distance() < 50);
 
-            // Tesleen, the Forgiven 8300
-            if (TesleentheForgiven.Any())
+            if (tesleenNpc != null && tesleenNpc.IsValid)
             {
-                HashSet<uint> Exorcise = new HashSet<uint>() {15826, 15827};
                 if (Exorcise.IsCasting())
                 {
                     if (Core.Me.Distance(ExorciseStackLoc) > 1f && Core.Me.IsCasting)
@@ -158,7 +156,7 @@ namespace Trust.Dungeons
 
                     // Wait in-place for stack marker to go off
                     Navigator.PlayerMover.MoveStop();
-                    await Coroutine.Sleep(5000);
+                    await Coroutine.Sleep(5_000);
 
                     Stopwatch exorciseTimer = new Stopwatch();
                     exorciseTimer.Restart();
@@ -172,7 +170,7 @@ namespace Trust.Dungeons
                     // Non-targetable but technically .IsVisible copies of Tesleen with the same .NpcId are used to place the outer ice puddles
                     // Create AOE avoids on top of them since SideStep doesn't do this automatically
                     IEnumerable<GameObject> fakeTesleens =
-                        GameObjectManager.GetObjectsByNPCId(8300).Where(obj => !obj.IsTargetable);
+                        GameObjectManager.GetObjectsByNPCId(TesleenTheForgiven).Where(obj => !obj.IsTargetable);
                     foreach (GameObject fake in fakeTesleens)
                     {
                         Vector3 location = fake.Location;
@@ -184,10 +182,8 @@ namespace Trust.Dungeons
                     }
                 }
 
-                HashSet<uint> FeveredFlagellation = new HashSet<uint>() {15829, 15830, 17440};
                 if (FeveredFlagellation.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.Spread(10000, 10);
                 }
@@ -199,52 +195,38 @@ namespace Trust.Dungeons
                 }
             }
 
-            // Philia (斐利亚)
-            // 15833, 16777, 16790 :: Pendulum    :: 钟摆
-            // 15842, 16769        :: Taphephobia :: 恐惧症
-            // Philia 8301
-            if (Philia.Any())
+            BattleCharacter philiaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Philia)
+                .FirstOrDefault(bc => bc.Distance() < 50);
+
+            if (philiaNpc != null && philiaNpc.IsValid)
             {
-                HashSet<uint> RightKnout = new HashSet<uint>() {15846};
                 if (RightKnout.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> LeftKnout = new HashSet<uint>() {15847};
                 if (LeftKnout.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> IntotheLight = new HashSet<uint>() {15847, 17232};
                 if (IntotheLight.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> Taphephobia = new HashSet<uint>() {15842, 16769};
                 if (Taphephobia.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.Spread(10000, 9);
+                    await MovementHelpers.Spread(10_000, 9.0f);
                 }
 
-                HashSet<uint> Pendulum = new HashSet<uint>()
-                {
-                    15833,
-                    15842,
-                    16769,
-                    16777,
-                    16790
-                };
                 if (Pendulum.IsCasting())
                 {
                     if (Core.Me.Distance(PendulumDodgeLoc) > 1 && Core.Me.IsCasting)
@@ -252,7 +234,7 @@ namespace Trust.Dungeons
                         ActionManager.StopCasting();
                     }
 
-                    while (Core.Me.Distance(PendulumDodgeLoc) > 1f)
+                    while (Core.Me.Distance(PendulumDodgeLoc) > 1.0f)
                     {
                         CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 3000, "Pendulum Avoid");
                         await CommonTasks.MoveTo(PendulumDodgeLoc);
@@ -263,25 +245,13 @@ namespace Trust.Dungeons
                     await Coroutine.Sleep(100);
                 }
 
-                HashSet<uint> FierceBeating = new HashSet<uint>()
-                {
-                    15834,
-                    15835,
-                    15836,
-                    15837,
-                    15838,
-                    15839
-                };
                 if (FierceBeating.IsCasting() &&
                     fierceBeatingTimestamp.AddMilliseconds(FierceBeatingDuration) < DateTime.Now)
                 {
-                    GameObject philia = GameObjectManager.GetObjectsByNPCId(8301)
-                        .FirstOrDefault(obj => obj.IsTargetable);
-
-                    if (philia != null)
+                    if (philiaNpc != null)
                     {
-                        Vector3 location = philia.Location;
-                        uint objectId = philia.ObjectId;
+                        Vector3 location = philiaNpc.Location;
+                        uint objectId = philiaNpc.ObjectId;
 
                         fierceBeatingTimestamp = DateTime.Now;
                         Stopwatch fierceBeatingTimer = new Stopwatch();
@@ -312,14 +282,12 @@ namespace Trust.Dungeons
                 }
             }
 
-            // Default (缺省)
             if (SpellsDodgedViaClosest.IsCasting())
             {
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 1500, "Spells Avoid");
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 
-            // SideStep (回避)
             BossIds.ToggleSideStep();
 
             return false;

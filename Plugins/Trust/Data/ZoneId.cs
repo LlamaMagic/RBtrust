@@ -97,7 +97,7 @@
         SyrcusTower = 372,
 
         /// <summary>
-        /// Lv. 70: Hell's Lid
+        /// Lv. 70: Hells' Lid
         /// </summary>
         HellsLid = 742,
 

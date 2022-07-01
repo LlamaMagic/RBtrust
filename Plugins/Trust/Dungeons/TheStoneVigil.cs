@@ -1,22 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
-using ff14bot.Objects;
-using Clio.Utilities;
-using ff14bot.Helpers;
-using System.Diagnostics;
 using ff14bot.Navigation;
-using System.Windows.Media;
+using ff14bot.Objects;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
-using Trust.Helpers;
 
 namespace Trust.Dungeons
 {
+    /// <summary>
+    /// Lv. 41: The Stone Vigil dungeon logic.
+    /// </summary>
     public class TheStoneVigil : AbstractDungeon
     {
         /// <summary>
@@ -24,55 +24,47 @@ namespace Trust.Dungeons
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.TheStoneVigil;
 
+        private const int ChudoYudo = 1677;
+        private const int Koshchei = 1678;
+        private const int TyphoonObj = 9910;
+        private const int Isgebind = 1680;
+
+        private const int SwingeDuration = 15_000;
+        private const int LionsBreathDuration = 10_000;
+        private const int FrostBreathDuration = 3_000;
+
+        private static readonly HashSet<uint> Swinge = new HashSet<uint>() { 903 };
+        private static readonly HashSet<uint> LionsBreath = new HashSet<uint>() { 902 };
+        private static readonly HashSet<uint> Typhoon = new HashSet<uint>() { 28730 };
+        private static readonly HashSet<uint> Cauterize = new HashSet<uint>() { 1026 };
+        private static readonly HashSet<uint> FrostBreath = new HashSet<uint>() { 1022 };
+
+        private static readonly Vector3 CauterizeLocation = new Vector3("-0.0195615, 0.04040873, -247.211");
+
+        private static DateTime swingeTimestamp = DateTime.MinValue;
+        private static DateTime lionsBreathTimestamp = DateTime.MinValue;
+        private static DateTime frostBreathTimestamp = DateTime.MinValue;
+
         /// <inheritdoc/>
         public override DungeonId DungeonId => DungeonId.TheStoneVigil;
 
-        static PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
-
-        private static DateTime SwingeTimestamp = DateTime.MinValue;
-        private static readonly int SwingeDuration = 15_000;
-
-        private static DateTime lionsBreathTimestamp = DateTime.MinValue;
-        private static readonly int lionsBreathDuration = 10_000;
-
-        private static DateTime rimeWreathTimestamp = DateTime.MinValue;
-        private static readonly int rimeWreathgDuration = 5_000;
-
-        private static DateTime frostBreathTimestamp = DateTime.MinValue;
-        private static readonly int frostBreathDuration = 3_000;
-
+        /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-            IEnumerable<BattleCharacter> ChudoYudo = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 1677); // Chudo-Yudo
-
-            IEnumerable<BattleCharacter> Koshchei = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 1678); // Koshchei
-
-            IEnumerable<BattleCharacter> Isgebind = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 1680); // Isgebind 1680
-
-
-            // Chudo-Yudo  1677
-            if (ChudoYudo.Any())
+            BattleCharacter chudoYudoNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ChudoYudo).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+            if (chudoYudoNpc != null && chudoYudoNpc.IsValid)
             {
-                GameObject ChudoYudoObj =
-                    GameObjectManager.GetObjectsByNPCId(1677).FirstOrDefault(obj => obj.IsTargetable);
-
-
-                HashSet<uint> Swinge = new HashSet<uint>() {903};
-                if (Swinge.IsCasting() && SwingeTimestamp.AddMilliseconds(SwingeDuration) < DateTime.Now)
-
+                if (Swinge.IsCasting() && swingeTimestamp.AddMilliseconds(SwingeDuration) < DateTime.Now)
                 {
-                    Vector3 location = ChudoYudoObj.Location;
-                    uint objectId = ChudoYudoObj.ObjectId;
+                    Vector3 location = chudoYudoNpc.Location;
+                    uint objectId = chudoYudoNpc.ObjectId;
 
-                    SwingeTimestamp = DateTime.Now;
-                    Stopwatch SwingeTimer = new Stopwatch();
-                    SwingeTimer.Restart();
+                    swingeTimestamp = DateTime.Now;
+                    Stopwatch swingeTimer = new Stopwatch();
+                    swingeTimer.Restart();
 
                     AvoidanceManager.AddAvoidUnitCone<GameObject>(
-                        canRun: () => SwingeTimer.IsRunning && SwingeTimer.ElapsedMilliseconds < SwingeDuration,
+                        canRun: () => swingeTimer.IsRunning && swingeTimer.ElapsedMilliseconds < SwingeDuration,
                         objectSelector: (obj) => obj.ObjectId == objectId,
                         leashPointProducer: () => location,
                         leashRadius: 80f,
@@ -81,11 +73,10 @@ namespace Trust.Dungeons
                         arcDegrees: 60f);
                 }
 
-                HashSet<uint> lionsBreath = new HashSet<uint>() {902};
-                if (lionsBreath.IsCasting() && lionsBreathTimestamp.AddMilliseconds(lionsBreathDuration) < DateTime.Now)
+                if (LionsBreath.IsCasting() && lionsBreathTimestamp.AddMilliseconds(LionsBreathDuration) < DateTime.Now)
                 {
-                    Vector3 location = ChudoYudoObj.Location;
-                    uint objectId = ChudoYudoObj.ObjectId;
+                    Vector3 location = chudoYudoNpc.Location;
+                    uint objectId = chudoYudoNpc.ObjectId;
 
                     lionsBreathTimestamp = DateTime.Now;
                     Stopwatch lionsBreathTimer = new Stopwatch();
@@ -94,13 +85,13 @@ namespace Trust.Dungeons
                     // Create an AOE avoid for the frost wreath around the boss
                     AvoidanceManager.AddAvoidObject<GameObject>(
                         canRun: () =>
-                            lionsBreathTimer.IsRunning && lionsBreathTimer.ElapsedMilliseconds < lionsBreathDuration,
+                            lionsBreathTimer.IsRunning && lionsBreathTimer.ElapsedMilliseconds < LionsBreathDuration,
                         radius: 5f,
                         unitIds: objectId);
 
                     AvoidanceManager.AddAvoidUnitCone<GameObject>(
                         canRun: () =>
-                            lionsBreathTimer.IsRunning && lionsBreathTimer.ElapsedMilliseconds < lionsBreathDuration,
+                            lionsBreathTimer.IsRunning && lionsBreathTimer.ElapsedMilliseconds < LionsBreathDuration,
                         objectSelector: (obj) => obj.ObjectId == objectId,
                         leashPointProducer: () => location,
                         leashRadius: 40f,
@@ -109,50 +100,39 @@ namespace Trust.Dungeons
                         arcDegrees: 180f);
                 }
 
-                if (!Swinge.IsCasting() && !lionsBreath.IsCasting())
+                if (!Swinge.IsCasting() && !LionsBreath.IsCasting())
                 {
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 }
             }
 
-            // Koshchei 1678
-            if (Koshchei.Any())
+            BattleCharacter koshcheiNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Koshchei).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+            if (chudoYudoNpc != null && chudoYudoNpc.IsValid)
             {
-                HashSet<uint> Typhoon = new HashSet<uint>() {28730};
                 if (Typhoon.IsCasting())
                 {
-                    var ids = GameObjectManager.GetObjectsByNPCId(9910).Select(i => i.ObjectId).ToArray();
-                    AvoidanceManager.AddAvoidObject<GameObject>(() => true, 5.5f, ids);
+                    uint[] typhoonIds = GameObjectManager.GetObjectsByNPCId(TyphoonObj).Select(i => i.ObjectId).ToArray();
+                    AvoidanceManager.AddAvoidObject<GameObject>(() => Core.Player.InCombat, 5.5f, typhoonIds);
                 }
             }
 
-            // Isgebind 1680
-            if (Isgebind.Any())
+            BattleCharacter isgebindNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Isgebind).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+            if (isgebindNpc != null && isgebindNpc.IsValid)
             {
-                GameObject isgebind = GameObjectManager.GetObjectsByNPCId(1680).FirstOrDefault(obj => obj.IsTargetable);
-                IEnumerable<BattleCharacter> isgebindCast = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                    r => !r.IsMe && r.Distance() < 50 && r.NpcId == 1680 && r.IsCasting);
-
-                HashSet<uint> Cauterize = new HashSet<uint>() {1026};
                 if (Cauterize.IsCasting())
                 {
-                    //AvoidanceManager.AddAvoidObject<GameObject>(()=> true, 5f, isgebindCast);
-
-
-                    Vector3 location = new Vector3("-0.0195615, 0.04040873, -247.211");
-                    while (location.Distance2D(Core.Me.Location) > 1)
+                    while (CauterizeLocation.Distance2D(Core.Player.Location) > 1)
                     {
-                        Navigator.PlayerMover.MoveTowards(location);
+                        Navigator.PlayerMover.MoveTowards(CauterizeLocation);
                         await Coroutine.Sleep(30);
                         Navigator.PlayerMover.MoveStop();
                     }
                 }
 
-                HashSet<uint> FrostBreath = new HashSet<uint>() {1022};
-                if (FrostBreath.IsCasting() && frostBreathTimestamp.AddMilliseconds(frostBreathDuration) < DateTime.Now)
+                if (FrostBreath.IsCasting() && frostBreathTimestamp.AddMilliseconds(FrostBreathDuration) < DateTime.Now)
                 {
-                    Vector3 location = isgebind.Location;
-                    uint objectId = isgebind.ObjectId;
+                    Vector3 location = isgebindNpc.Location;
+                    uint objectId = isgebindNpc.ObjectId;
 
                     frostBreathTimestamp = DateTime.Now;
                     Stopwatch frostBreathTimer = new Stopwatch();
@@ -161,7 +141,7 @@ namespace Trust.Dungeons
                     // Create cone avoid to avoid the frost breath
                     AvoidanceManager.AddAvoidUnitCone<GameObject>(
                         canRun: () =>
-                            frostBreathTimer.IsRunning && frostBreathTimer.ElapsedMilliseconds < frostBreathDuration,
+                            frostBreathTimer.IsRunning && frostBreathTimer.ElapsedMilliseconds < FrostBreathDuration,
                         objectSelector: (obj) => obj.ObjectId == objectId,
                         leashPointProducer: () => location,
                         leashRadius: 40f,
@@ -170,26 +150,8 @@ namespace Trust.Dungeons
                         arcDegrees: 180f);
                 }
 
-                // It doesn't look like this is dodgeable. Even getting the whole room away you still take damage
-                /*
-                HashSet<uint> RimeWreath = new HashSet<uint>() {1025};
-                if (RimeWreath.IsCasting() && rimeWreathTimestamp.AddMilliseconds(rimeWreathgDuration) < DateTime.Now)
-                {
-                    Vector3 location = isgebind.Location;
-                    uint objectId = isgebind.ObjectId;
-
-                    rimeWreathTimestamp = DateTime.Now;
-                    Stopwatch rimeWreathTimer = new Stopwatch();
-                    rimeWreathTimer.Restart();
-
-                    // Create an AOE avoid for the frost wreath around the boss
-                    AvoidanceManager.AddAvoidObject<GameObject>(
-                        canRun: () => rimeWreathTimer.IsRunning && rimeWreathTimer.ElapsedMilliseconds < rimeWreathgDuration,
-                        radius: 30f,
-                        unitIds: objectId);
-                }*/
+                // Can't dodge Rime Wreath; raid-wide AOE.
             }
-
 
             return false;
         }

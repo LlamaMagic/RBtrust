@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace RBTrust.Plugins.Trust.Extensions
+namespace Trust.Extensions
 {
     /// <summary>
     /// Extension methods for <see cref="BattleCharacter"/>.

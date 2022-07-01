@@ -1,6 +1,5 @@
 using ff14bot.Managers;
 using ff14bot.Objects;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,51 +10,65 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 75 The Qitana Ravel dungeon logic.
+    /// Lv. 75: The Qitana Ravel dungeon logic.
     /// </summary>
     public class TheQitanaRavel : AbstractDungeon
     {
-        static PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
-
-        private readonly HashSet<uint> spellCastIds = new HashSet<uint>()
-        {
-            15918,
-            15916,
-            15917,
-            17223,
-            15498,
-            15500,
-            15725,
-            15501,
-            15503,
-            15504,
-            15509,
-            15510,
-            15511,
-            15512,
-            17213,
-            15570,
-            16263,
-            14730,
-            15514,
-            15516,
-            15517,
-            15518,
-            15519,
-            15520,
-            16923,
-            15523,
-            15527,
-            15522,
-            15526,
-            15525,
-            15524,
-        };
-
         /// <summary>
         /// Gets zone ID for this dungeon.
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.TheQitanaRavel;
+
+        private const int Lozatl = 8231;
+        private const int Batsquatch = 8232;
+        private const int Eros = 8233;
+
+        private static readonly HashSet<uint> BossIds = new HashSet<uint>
+        {
+            Lozatl, Batsquatch, Eros,
+        };
+
+        private static readonly HashSet<uint> SpellsDodgedFollowingClosest = new HashSet<uint>()
+        {
+            15918, 15916, 15917, 17223, 15498,
+            15500, 15725, 15501, 15503, 15504,
+            15509, 15510, 15511, 15512, 17213,
+            15570, 16263, 14730, 15514, 15516,
+            15517, 15518, 15519, 15520, 16923,
+            15523, 15527, 15522, 15526, 15525,
+            15524,
+        };
+
+        private static readonly HashSet<uint> ConfessionOfFaith = new HashSet<uint>()
+        {
+            15521, 15522, 15523, 15524, 15525,
+            15526, 15527,
+        };
+
+        private static readonly HashSet<uint> HeatUp = new HashSet<uint>()
+        {
+            15502, 15501,
+        };
+
+        private static readonly HashSet<uint> LozatlsScorn = new HashSet<uint>()
+        {
+            15499,
+        };
+
+        private static readonly HashSet<uint> LozatlsFury = new HashSet<uint>()
+        {
+            15503, 15504,
+        };
+
+        private static readonly HashSet<uint> RonkanLight = new HashSet<uint>()
+        {
+            15725, 15500,
+        };
+
+        private static readonly HashSet<uint> Soundwave = new HashSet<uint>()
+        {
+            15506,
+        };
 
         /// <inheritdoc/>
         public override DungeonId DungeonId => DungeonId.TheQitanaRavel;
@@ -73,94 +86,64 @@ namespace Trust.Dungeons
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-            IEnumerable<BattleCharacter> lozatl = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8231); // Lozatl
-            IEnumerable<BattleCharacter> batsquatch = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8232); // Batsquatch
-            IEnumerable<BattleCharacter> eros = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8233); // Eros
-
-            // Lozatl 8231
-            if (lozatl.Any())
+            BattleCharacter lozatlNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Lozatl).FirstOrDefault(bc => bc.Distance() < 50);
+            if (lozatlNpc != null && lozatlNpc.IsValid)
             {
-                HashSet<uint> HeatUp = new HashSet<uint>() {15502, 15501};
                 if (HeatUp.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> LozatlsScorn = new HashSet<uint>() {15499};
                 if (LozatlsScorn.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> LozatlsFury = new HashSet<uint>() {15503, 15504};
                 if (LozatlsFury.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                HashSet<uint> RonkanLight = new HashSet<uint>() {15725, 15500};
                 if (RonkanLight.IsCasting())
                 {
-                    //sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
             }
 
-            // Batsquatch 8232
-            if (batsquatch.Any())
+            BattleCharacter batsquatchNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Batsquatch).FirstOrDefault(bc => bc.Distance() < 50);
+            if (batsquatchNpc != null && batsquatchNpc.IsValid)
             {
-                HashSet<uint> Soundwave = new HashSet<uint>() {15506};
                 if (Soundwave.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
             }
 
-            // Eros 8233
-            if (eros.Any())
+            BattleCharacter erosNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Eros).FirstOrDefault(bc => bc.Distance() < 50);
+            if (erosNpc != null && erosNpc.IsValid)
             {
-                HashSet<uint> ConfessionofFaith = new HashSet<uint>()
+                if (ConfessionOfFaith.IsCasting())
                 {
-                    15521,
-                    15522,
-                    15523,
-                    15524,
-                    15525,
-                    15526,
-                    15527
-                };
-                if (ConfessionofFaith.IsCasting())
-                {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await MovementHelpers.GetClosestDps.Follow();
                 }
 
-                if (!spellCastIds.IsCasting())
+                if (!SpellsDodgedFollowingClosest.IsCasting())
                 {
-                    if (!sidestepPlugin.Enabled)
-                    {
-                        sidestepPlugin.Enabled = true;
-                    }
+                    SidestepPlugin.Enabled = true;
                 }
             }
 
-            if (spellCastIds.IsCasting())
+            if (SpellsDodgedFollowingClosest.IsCasting())
             {
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2500,
-                    "Follow/Stack Mechanic In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2500, "Follow/Stack Mechanic In Progress");
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 

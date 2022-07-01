@@ -1,7 +1,6 @@
 ﻿using Buddy.Coroutines;
 using Clio.Utilities;
 using ff14bot;
-using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
@@ -17,7 +16,6 @@ namespace Trust.Helpers
     /// </summary>
     internal static class MovementHelpers
     {
-
         /// <summary>
         /// Gets the nearest party member.
         /// </summary>
@@ -81,8 +79,7 @@ namespace Trust.Helpers
                 .FirstOrDefault();
         }
 
-        public static async Task<bool> Spread(double timeToSpread, float spreadDistance = 6.5f,
-            bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> Spread(double timeToSpread, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
         {
             if (isSpreading)
             {
@@ -119,8 +116,7 @@ namespace Trust.Helpers
             return true;
         }
 
-        public static async Task<bool> HalfSpread(double timeToSpread, float spreadDistance = 6.5f,
-            bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> HalfSpread(double timeToSpread, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
         {
             if (isSpreading)
             {
@@ -180,8 +176,7 @@ namespace Trust.Helpers
             return true;
         }
 
-        public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f,
-            bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
         {
             if (isSpreading)
             {
@@ -237,8 +232,7 @@ namespace Trust.Helpers
             return true;
         }
 
-        public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f,
-            bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
         {
             if (isSpreading)
             {
