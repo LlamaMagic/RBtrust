@@ -19,7 +19,32 @@ namespace Trust.Dungeons
         {
             availableDungeons = new Dictionary<ZoneId, AbstractDungeon>()
             {
-                // 5.0 Shadowbringers
+                // 2.0 - A Realm Reborn
+                { ZoneId.HallOfTheNoviceArena, new HallOfTheNoviceArena() },
+                { ZoneId.HallOfTheNoticeWesternLa, new HallOfTheNoviceWesternLa() },
+                { ZoneId.Sastaha, new Sastasha() },
+                { ZoneId.TheTamTaraDeepcroft, new TheTamTaraDeepcroft() },
+                { ZoneId.CopperbellMines, new CopperbellMines() },
+                { ZoneId.TheBowlOfEmbers, new TheBowlOfEmbers() },
+                { ZoneId.Halatali, new Halatali() },
+                { ZoneId.TheThousandMawsOfTotoRak, new TheThousandMawsOfTotoRak() },
+                { ZoneId.HaukkeManor, new HaukkeManor() },
+                { ZoneId.BrayfloxsLongstop, new BrayfloxsLongstop() },
+                { ZoneId.TheNavel, new TheNavel() },
+                { ZoneId.TheStoneVigil, new TheStoneVigil() },
+                { ZoneId.TheHowlingEye, new TheHowlingEye() },
+                { ZoneId.TheAurumVale, new TheAurumVale() },
+                { ZoneId.CastrumMeridianum, new CastrumMeridianum() },
+                { ZoneId.ThePraetorium, new ThePraetorium() },
+                { ZoneId.ThePortaDecumana, new ThePortaDecumana() },
+                { ZoneId.SyrcusTower, new SyrcusTower() },
+
+                // 3.0 - Heavensward
+
+                // 4.0 - Stormblood
+                { ZoneId.HellsLid, new HellsLid() },
+
+                // 5.0 - Shadowbringers
                 { ZoneId.HolminsterSwitch, new HolminsterSwitch() },
                 { ZoneId.DohnMheg, new DohnMheg() },
                 { ZoneId.TheQitanaRavel, new TheQitanaRavel() },
@@ -32,7 +57,7 @@ namespace Trust.Dungeons
                 { ZoneId.MatoyasRelict, new MatoyasRelict() },
                 { ZoneId.Paglthan, new Paglthan() },
 
-                // 6.0 Endwalker
+                // 6.0 - Endwalker
                 { ZoneId.TheTowerOfZot, new TheTowerOfZot() },
                 { ZoneId.TheTowerOfBabil, new TheTowerOfBabil() },
                 { ZoneId.Vanaspati, new Vanaspati() },

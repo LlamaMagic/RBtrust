@@ -20,15 +20,16 @@ namespace Trust.Helpers
         /// Gets the nearest party member.
         /// </summary>
         public static BattleCharacter GetClosestAlly => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .Where(obj => !obj.IsDead && PartyMembers.PartyMemberIds.Contains(obj.NpcId))
+            .Where(obj => !obj.IsDead && PartyMembers.SafePartyMemberIds.Contains((PartyMemberId)obj.NpcId))
             .OrderBy(r => r.Distance())
             .FirstOrDefault();
 
         /// <summary>
         /// Gets the furthest Ally from the Player.
         /// </summary>
-        public static BattleCharacter GetFurthestAlly => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .Where(obj => !obj.IsDead && PartyMembers.PartyMemberIds.Contains(obj.NpcId))
+        public static BattleCharacter GetFurthestAlly => GameObjectManager
+            .GetObjectsOfType<BattleCharacter>(true, false)
+            .Where(obj => !obj.IsDead && PartyMembers.SafePartyMemberIds.Contains((PartyMemberId)obj.NpcId))
             .OrderByDescending(r => r.Distance())
             .FirstOrDefault();
 
@@ -36,7 +37,8 @@ namespace Trust.Helpers
         /// Gets the nearest DPS party member.
         /// </summary>
         public static BattleCharacter GetClosestDps => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .Where(obj => !obj.IsDead && PartyMembers.AllPartyMemberIds.Contains(obj.NpcId) && ClassJobRoles.DPS.Contains(obj.CurrentJob))
+            .Where(obj => !obj.IsDead && PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId) &&
+                          ClassJobRoles.DPS.Contains(obj.CurrentJob))
             .OrderBy(r => r.Distance())
             .FirstOrDefault();
 
@@ -44,15 +46,18 @@ namespace Trust.Helpers
         /// Gets the nearest Tank party member.
         /// </summary>
         public static BattleCharacter GetClosestTank => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .Where(obj => !obj.IsDead && PartyMembers.AllPartyMemberIds.Contains(obj.NpcId) && ClassJobRoles.Tanks.Contains(obj.CurrentJob))
+            .Where(obj => !obj.IsDead && PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId) &&
+                          ClassJobRoles.Tanks.Contains(obj.CurrentJob))
             .OrderBy(r => r.Distance())
             .FirstOrDefault();
 
         /// <summary>
         /// Gets the nearest melee party member.
         /// </summary>
-        public static BattleCharacter GetClosestMelee => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .Where(obj => !obj.IsDead && PartyMembers.AllPartyMemberIds.Contains(obj.NpcId) && ClassJobRoles.Melee.Contains(obj.CurrentJob))
+        public static BattleCharacter GetClosestMelee => GameObjectManager
+            .GetObjectsOfType<BattleCharacter>(true, false)
+            .Where(obj => !obj.IsDead && PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId) &&
+                          ClassJobRoles.Melee.Contains(obj.CurrentJob))
             .OrderBy(r => r.Distance())
             .FirstOrDefault();
 
@@ -69,7 +74,7 @@ namespace Trust.Helpers
             }
 
             return GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                .Where(obj => !obj.IsDead && PartyMembers.PartyMemberIds.Contains(obj.NpcId))
+                .Where(obj => !obj.IsDead && PartyMembers.SafePartyMemberIds.Contains((PartyMemberId)obj.NpcId))
                 .OrderBy(r => r.Distance(location))
                 .FirstOrDefault();
         }
@@ -86,12 +91,13 @@ namespace Trust.Helpers
 
             if (spbc != 0)
             {
-                PartyMembers.AllPartyMemberIds.Add(spbc);
+                PartyMembers.AllPartyMemberIds.Add((PartyMemberId)spbc);
             }
 
             if (!AvoidanceManager.IsRunningOutOfAvoid)
             {
-                foreach (BattleCharacter npc in PartyManager.AllMembers.Select(p => p.BattleCharacter).OrderByDescending(obj => Core.Player.Distance(obj)))
+                foreach (BattleCharacter npc in PartyManager.AllMembers.Select(p => p.BattleCharacter)
+                             .OrderByDescending(obj => Core.Player.Distance(obj)))
                 {
                     AvoidanceManager.AddAvoidObject<BattleCharacter>(
                         () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS,
@@ -122,7 +128,8 @@ namespace Trust.Helpers
 
             if (spbc != 0)
             {
-                BattleCharacter nobj = PartyManager.AllMembers.Select(pm => pm.BattleCharacter).OrderBy(obj => obj.Distance(Core.Player)).FirstOrDefault(obj => !obj.IsMe);
+                BattleCharacter nobj = PartyManager.AllMembers.Select(pm => pm.BattleCharacter)
+                    .OrderBy(obj => obj.Distance(Core.Player)).FirstOrDefault(obj => !obj.IsMe);
 
                 GameObject st = Core.Player.CurrentTarget;
 
@@ -150,7 +157,8 @@ namespace Trust.Helpers
             }
 
             foreach (BattleCharacter npc in GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                                .Where(obj => PartyMembers.AllPartyMemberIds.Contains(obj.NpcId)).OrderByDescending(obj => Core.Player.Distance(obj)))
+                         .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
+                         .OrderByDescending(obj => Core.Player.Distance(obj)))
             {
                 AvoidanceManager.AddAvoidObject<BattleCharacter>(
                     () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS,
@@ -180,11 +188,12 @@ namespace Trust.Helpers
 
             if (spbc != 0)
             {
-                PartyMembers.AllPartyMemberIds.Add(spbc);
+                PartyMembers.AllPartyMemberIds.Add((PartyMemberId)spbc);
             }
 
             BattleCharacter nobj = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                                .Where(obj => PartyMembers.AllPartyMemberIds.Contains(obj.NpcId)).OrderBy(obj => obj.Distance(Core.Player)).FirstOrDefault();
+                .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
+                .OrderBy(obj => obj.Distance(Core.Player)).FirstOrDefault();
 
             Vector3 playerLoc = Core.Player.Location;
 
@@ -202,8 +211,8 @@ namespace Trust.Helpers
             }
 
             foreach (BattleCharacter npc in GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                .Where(obj => PartyMembers.AllPartyMemberIds.Contains(obj.NpcId))
-                .OrderByDescending(r => Core.Player.Distance()))
+                         .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
+                         .OrderByDescending(r => Core.Player.Distance()))
             {
                 AvoidanceManager.AddAvoidObject<BattleCharacter>(
                     () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS,
@@ -235,21 +244,21 @@ namespace Trust.Helpers
 
             if (spbc != 0)
             {
-                PartyMembers.AllPartyMemberIds.Add(spbc);
+                PartyMembers.AllPartyMemberIds.Add((PartyMemberId)spbc);
             }
 
             if (vector == null)
             {
                 vector = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                    .Where(obj => PartyMembers.AllPartyMemberIds.Contains(obj.NpcId))
+                    .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
                     .OrderBy(obj => obj.Distance(Core.Player))
                     .FirstOrDefault()
                     .Location;
             }
 
             foreach (BattleCharacter npc in GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                .Where(obj => PartyMembers.AllPartyMemberIds.Contains(obj.NpcId))
-                .OrderByDescending(r => Core.Player.Distance()))
+                         .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
+                         .OrderByDescending(r => Core.Player.Distance()))
             {
                 AvoidanceManager.AddAvoidObject<BattleCharacter>(
                     () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS,

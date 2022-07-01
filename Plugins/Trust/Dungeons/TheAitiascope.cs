@@ -4,7 +4,7 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 89.1 The Aitiascope dungeon logic.
+    /// Lv. 89.1: The Aitiascope dungeon logic.
     /// </summary>
     public class TheAitiascope : AbstractDungeon
     {

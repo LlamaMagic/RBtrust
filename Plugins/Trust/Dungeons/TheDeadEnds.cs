@@ -5,7 +5,6 @@ using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
-using RBTrust.Plugins.Trust.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +17,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 90.1 The Dead Ends dungeon logic.
+    /// Lv. 90.1: The Dead Ends dungeon logic.
     /// </summary>
     public class TheDeadEnds : AbstractDungeon
     {
@@ -629,12 +628,10 @@ namespace Trust.Dungeons
 
         private void HandleCausticGrebuloffMechanics()
         {
-
         }
 
         private void AvoidJudgmentDayTraps()
         {
-
         }
 
         private void HandlePeacekeeperMechanics()
@@ -695,7 +692,6 @@ namespace Trust.Dungeons
 
         private void HandleRalaMechanics()
         {
-
         }
 
         // the point of these functions is to take your location and a 2nd location, then calculate a point a distance

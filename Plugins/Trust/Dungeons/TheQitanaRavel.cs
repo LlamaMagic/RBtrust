@@ -1,6 +1,7 @@
 using ff14bot.Managers;
-using RBTrust.Plugins.Trust.Extensions;
+using ff14bot.Objects;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
@@ -9,7 +10,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 75 The Qitana Ravel dungeon logic.
+    /// Lv. 75: The Qitana Ravel dungeon logic.
     /// </summary>
     public class TheQitanaRavel : AbstractDungeon
     {
@@ -18,7 +19,16 @@ namespace Trust.Dungeons
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.TheQitanaRavel;
 
-        private readonly HashSet<uint> spellCastIds = new HashSet<uint>()
+        private const int Lozatl = 8231;
+        private const int Batsquatch = 8232;
+        private const int Eros = 8233;
+
+        private static readonly HashSet<uint> BossIds = new HashSet<uint>
+        {
+            Lozatl, Batsquatch, Eros,
+        };
+
+        private static readonly HashSet<uint> SpellsDodgedFollowingClosest = new HashSet<uint>()
         {
             15918, 15916, 15917, 17223, 15498,
             15500, 15725, 15501, 15503, 15504,
@@ -27,6 +37,37 @@ namespace Trust.Dungeons
             15517, 15518, 15519, 15520, 16923,
             15523, 15527, 15522, 15526, 15525,
             15524,
+        };
+
+        private static readonly HashSet<uint> ConfessionOfFaith = new HashSet<uint>()
+        {
+            15521, 15522, 15523, 15524, 15525,
+            15526, 15527,
+        };
+
+        private static readonly HashSet<uint> HeatUp = new HashSet<uint>()
+        {
+            15502, 15501,
+        };
+
+        private static readonly HashSet<uint> LozatlsScorn = new HashSet<uint>()
+        {
+            15499,
+        };
+
+        private static readonly HashSet<uint> LozatlsFury = new HashSet<uint>()
+        {
+            15503, 15504,
+        };
+
+        private static readonly HashSet<uint> RonkanLight = new HashSet<uint>()
+        {
+            15725, 15500,
+        };
+
+        private static readonly HashSet<uint> Soundwave = new HashSet<uint>()
+        {
+            15506,
         };
 
         /// <inheritdoc/>
@@ -45,7 +86,62 @@ namespace Trust.Dungeons
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-            if (spellCastIds.IsCasting())
+            BattleCharacter lozatlNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Lozatl).FirstOrDefault(bc => bc.Distance() < 50);
+            if (lozatlNpc != null && lozatlNpc.IsValid)
+            {
+                if (HeatUp.IsCasting())
+                {
+                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
+
+                if (LozatlsScorn.IsCasting())
+                {
+                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
+
+                if (LozatlsFury.IsCasting())
+                {
+                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
+
+                if (RonkanLight.IsCasting())
+                {
+                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
+            }
+
+            BattleCharacter batsquatchNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Batsquatch).FirstOrDefault(bc => bc.Distance() < 50);
+            if (batsquatchNpc != null && batsquatchNpc.IsValid)
+            {
+                if (Soundwave.IsCasting())
+                {
+                    SidestepPlugin.Enabled = false;
+                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
+            }
+
+            BattleCharacter erosNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Eros).FirstOrDefault(bc => bc.Distance() < 50);
+            if (erosNpc != null && erosNpc.IsValid)
+            {
+                if (ConfessionOfFaith.IsCasting())
+                {
+                    SidestepPlugin.Enabled = false;
+                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
+
+                if (!SpellsDodgedFollowingClosest.IsCasting())
+                {
+                    SidestepPlugin.Enabled = true;
+                }
+            }
+
+            if (SpellsDodgedFollowingClosest.IsCasting())
             {
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2500, "Follow/Stack Mechanic In Progress");
                 await MovementHelpers.GetClosestAlly.Follow();

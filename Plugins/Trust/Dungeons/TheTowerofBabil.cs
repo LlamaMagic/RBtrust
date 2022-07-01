@@ -2,7 +2,6 @@ using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 83 The Tower of Babil dungeon logic.
+    /// Lv. 83: The Tower of Babil dungeon logic.
     /// </summary>
     public class TheTowerOfBabil : AbstractDungeon
     {

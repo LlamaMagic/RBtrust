@@ -4,7 +4,7 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 87 Ktisis Hyperboreia dungeon logic.
+    /// Lv. 87: Ktisis Hyperboreia dungeon logic.
     /// </summary>
     public class KtisisHyperboreia : AbstractDungeon
     {

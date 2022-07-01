@@ -20,7 +20,6 @@ namespace Trust
     public class Trust : BotPlugin
     {
         private Composite root;
-        private TrustSettings settingsForm;
         private DungeonManager dungeonManager;
 
         /// <inheritdoc/>
@@ -38,7 +37,7 @@ namespace Trust
         public override Version Version => new Version(1, 2, 0);
 
         /// <inheritdoc/>
-        public override bool WantButton => true;
+        public override bool WantButton => false;
 
         /// <inheritdoc/>
         public override void OnInitialize()
@@ -84,12 +83,7 @@ namespace Trust
         /// <inheritdoc/>
         public override void OnButtonPress()
         {
-            if (settingsForm == null || settingsForm.IsDisposed || settingsForm.Disposing)
-            {
-                settingsForm = new TrustSettings();
-            }
-
-            settingsForm.ShowDialog();
+            base.OnButtonPress();
         }
 
         private void AddHooks()
@@ -132,11 +126,6 @@ namespace Trust
                 await Coroutine.Wait(1000, () => !ActionManager.IsSprintReady);
             }
 
-            if (!Core.Player.HasAura(FoodHelpers.FoodBuff))
-            {
-                await FoodHelpers.EatFood();
-            }
-
             if (await PlayerCheck())
             {
                 return true;
@@ -145,7 +134,7 @@ namespace Trust
             return await dungeonManager.RunAsync();
         }
 
-        private static async Task<bool> PlayerCheck()
+        private async Task<bool> PlayerCheck()
         {
             if (Core.Me.CurrentHealthPercent <= 0)
             {
@@ -154,10 +143,10 @@ namespace Trust
 #else
                 Logging.Write(Colors.Aquamarine, $"Player has died.");
 #endif
-                await Coroutine.Sleep(10000);
+                await Coroutine.Sleep(10_000);
                 NeoProfileManager.Load(NeoProfileManager.CurrentProfile.Path, true);
                 NeoProfileManager.UpdateCurrentProfileBehavior();
-                await Coroutine.Sleep(5000);
+                await Coroutine.Sleep(5_000);
                 return true;
             }
 

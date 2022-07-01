@@ -1,6 +1,5 @@
 ﻿using ff14bot;
 using ff14bot.Managers;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 85 Vanaspati dungeon logic.
+    /// Lv. 90.2: Alzadaal's Legacy dungeon logic.
     /// </summary>
     public class AlzadaalsLegacy : AbstractDungeon
     {

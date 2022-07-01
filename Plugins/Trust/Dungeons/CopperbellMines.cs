@@ -4,17 +4,17 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 80.2: The Grand Cosmos dungeon logic.
+    /// Lv. 17: Copperbell Mines dungeon logic.
     /// </summary>
-    public class TheGrandCosmos : AbstractDungeon
+    public class CopperbellMines : AbstractDungeon
     {
         /// <summary>
         /// Gets zone ID for this dungeon.
         /// </summary>
-        public new const ZoneId ZoneId = Data.ZoneId.TheGrandCosmos;
+        public new const ZoneId ZoneId = Data.ZoneId.CopperbellMines;
 
         /// <inheritdoc/>
-        public override DungeonId DungeonId => DungeonId.TheGrandCosmos;
+        public override DungeonId DungeonId => DungeonId.CopperbellMines;
 
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()

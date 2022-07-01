@@ -8,116 +8,132 @@ namespace RBTrust.Plugins.Trust.Data
     internal static class PartyMembers
     {
         /// <summary>
-        /// Gets NPC IDs of non-tank party members.
+        /// Gets NPC IDs of all possible party members.
         /// </summary>
-        public static readonly HashSet<uint> PartyMemberIds = new HashSet<uint>()
+        public static readonly HashSet<PartyMemberId> AllPartyMemberIds = new HashSet<PartyMemberId>()
         {
-            729,   // Y'shtola  :: 雅·修特拉
-            1492,  // Urianger  :: 于里昂热
-            4130,  // Alphinaud :: 阿尔菲诺
-            5239,  // Alisaie   :: 阿莉塞
-            8378,  // Y'shtola  :: 雅·修特拉
-            8889,  // Ryne      :: 琳
-            8917,  // Minfilia  :: 敏菲利亚
-            8919,  // Lyna      :: 莱楠
-            11264, // Alphinaud's avatar
-            11265, // Alisaie's avatar
-            11267, // Urianger's avatar
-            11268, // Y'shtola's avatar
-            11269, // Ryne's avatar
-            11270, // Estinien's avatar
-            10586, // Venat
-            10587, // Venat's Phantom
-            10898, // Emet-Selch
-            10899, // Hythlodaeus
-
-            // 713,  // Thancred       :: 桑克瑞德
-            // 8650, // Crystal Exarch :: 水晶公
-            // 11266, // Thancred's avatar
-            // 11271, // G'raha Tia's avatar
+            PartyMemberId.Alisaie,
+            PartyMemberId.Alphinaud,
+            PartyMemberId.CrystalExarch,
+            PartyMemberId.Estinien,
+            PartyMemberId.GrahaTia,
+            PartyMemberId.Lyna,
+            PartyMemberId.Minfilia,
+            PartyMemberId.Ryne,
+            PartyMemberId.Thancred,
+            PartyMemberId.Urianger,
+            PartyMemberId.Yshtola,
+            PartyMemberId.AlisaiesAvatar,
+            PartyMemberId.AlphinaudsAvatar,
+            PartyMemberId.EstiniensAvatar,
+            PartyMemberId.GrahaTiasAvatar,
+            PartyMemberId.RynesAvatar,
+            PartyMemberId.ThancredsAvatar,
+            PartyMemberId.UriangersAvatar,
+            PartyMemberId.YshtolasAvatar,
+            PartyMemberId.EmetSelch,
+            PartyMemberId.Hythlodaeus,
+            PartyMemberId.Venat,
+            PartyMemberId.EagerMarauder,
+            PartyMemberId.EagerLancer,
+            PartyMemberId.EagerThaumaturge,
+            PartyMemberId.EagerConjurer,
+            PartyMemberId.ScionMarauder,
+            PartyMemberId.ScionLancer,
+            PartyMemberId.ScionThaumaturge,
+            PartyMemberId.ScionConjurer,
+            PartyMemberId.StormMarauder,
+            PartyMemberId.SerpentLancer,
+            PartyMemberId.FlameThaumaturge,
+            PartyMemberId.SerpentConjurer,
         };
 
         /// <summary>
-        /// Gets NPC IDs of all possible party members.
+        /// Gets NPC IDs of non-tank party members.
         /// </summary>
-        public static readonly HashSet<uint> AllPartyMemberIds = new HashSet<uint>()
+        public static readonly HashSet<PartyMemberId> SafePartyMemberIds = new HashSet<PartyMemberId>()
         {
-            729,   // Y'shtola       :: 雅·修特拉
-            1492,  // Urianger       :: 于里昂热
-            4130,  // Alphinaud      :: 阿尔菲诺
-            5239,  // Alisaie        :: 阿莉塞
-            8378,  // Y'shtola       :: 雅·修特拉
-            8889,  // Ryne           :: 琳
-            8917,  // Minfilia       :: 敏菲利亚
-            8919,  // Lyna           :: 莱楠
-            11264, // Alphinaud's avatar
-            11265, // Alisaie's avatar
-            11267, // Urianger's avatar
-            11268, // Y'shtola's avatar
-            11269, // Ryne's avatar
-            11270, // Estinien's avatar
-            10586, // Venat
-            10587, // Venat's Phantom
-            10898, // Emet-Selch
-            10899, // Hythlodaeus
-            9363,  // G'raha Tia
-            713,   // Thancred       :: 桑克瑞德
-            8650,  // Crystal Exarch :: 水晶公
-            11266, // Thancred's avatar
-            11271, // G'raha Tia's avatar
+            PartyMemberId.Alphinaud,
+            PartyMemberId.Estinien,
+            PartyMemberId.Lyna,
+            PartyMemberId.Minfilia,
+            PartyMemberId.Ryne,
+            PartyMemberId.Urianger,
+            PartyMemberId.Yshtola,
+            PartyMemberId.AlphinaudsAvatar,
+            PartyMemberId.EstiniensAvatar,
+            PartyMemberId.RynesAvatar,
+            PartyMemberId.UriangersAvatar,
+            PartyMemberId.YshtolasAvatar,
+            PartyMemberId.Hythlodaeus,
+            PartyMemberId.EagerLancer,
+            PartyMemberId.EagerThaumaturge,
+            PartyMemberId.EagerConjurer,
+            PartyMemberId.ScionLancer,
+            PartyMemberId.ScionThaumaturge,
+            PartyMemberId.ScionConjurer,
+            PartyMemberId.SerpentLancer,
+            PartyMemberId.FlameThaumaturge,
+            PartyMemberId.SerpentConjurer,
         };
 
         /// <summary>
         /// Gets NPC IDs of DPS party members.
         /// </summary>
-        public static readonly HashSet<uint> PartyDpsIds = new HashSet<uint>()
+        public static readonly HashSet<PartyMemberId> PartyDpsIds = new HashSet<PartyMemberId>()
         {
-            729,  // Y'shtola    :: 雅·修特拉
-
-            // 1492, // Urianger  :: 于里昂热
-            // 4130, // Alphinaud :: 阿尔菲诺
-            5239, // Alisaie     :: 阿莉塞
-            8378, // Y'shtola    :: 雅·修特拉
-            8889, // Ryne        :: 琳
-            8917, // Minfilia    :: 敏菲利亚
-            8919, // Lyna        :: 莱楠
-
-            // 11264, // Alphinaud's avatar
-            11265, // Alisaie's avatar
-
-            // 11267, // Urianger's avatar
-            11268, // Y'shtola's avatar
-            11269, // Ryne's avatar
-            11270, // Estinien's avatar
-
-            // 10586, // Venat
-            // 10587, // Venat's Phantom
-            // 10898, // Emet-Selch
-            // 10899, // Hythlodaeus
-            // 9363,  G'raha Tia
-            // 713,  // Thancred       :: 桑克瑞德
-            // 8650, // Crystal Exarch :: 水晶公
-            // 11266, // Thancred's avatar
-            // 11271, // G'raha Tia's avatar
+            PartyMemberId.Alisaie,
+            PartyMemberId.Estinien,
+            PartyMemberId.Lyna,
+            PartyMemberId.Minfilia,
+            PartyMemberId.Ryne,
+            PartyMemberId.Yshtola,
+            PartyMemberId.AlisaiesAvatar,
+            PartyMemberId.EstiniensAvatar,
+            PartyMemberId.RynesAvatar,
+            PartyMemberId.YshtolasAvatar,
+            PartyMemberId.Hythlodaeus,
+            PartyMemberId.EagerLancer,
+            PartyMemberId.EagerThaumaturge,
+            PartyMemberId.ScionLancer,
+            PartyMemberId.ScionThaumaturge,
+            PartyMemberId.SerpentLancer,
+            PartyMemberId.FlameThaumaturge,
         };
 
         /// <summary>
         /// Gets NPC IDs of Tank party members.
         /// </summary>
-        public static readonly HashSet<uint> PartyTankIds = new HashSet<uint>()
+        public static readonly HashSet<PartyMemberId> PartyTankIds = new HashSet<PartyMemberId>()
         {
-            713,   // Thancred       :: 桑克瑞德
-            8650,  // Crystal Exarch :: 水晶公
-            11266, // Thancred's avatar
-            11271, // G'raha Tia's avatar
-            9363,  // G'raha Tia
+            PartyMemberId.CrystalExarch,
+            PartyMemberId.GrahaTia,
+            PartyMemberId.Thancred,
+            PartyMemberId.GrahaTiasAvatar,
+            PartyMemberId.ThancredsAvatar,
+            PartyMemberId.EmetSelch,
+            PartyMemberId.Venat,
+            PartyMemberId.EagerMarauder,
+            PartyMemberId.ScionMarauder,
+            PartyMemberId.StormMarauder,
         };
 
         /// <summary>
         /// Gets NPC IDs of Healer party members.
         /// </summary>
-        public static readonly HashSet<uint> PartyHealerIds = new HashSet<uint>()
+        public static readonly HashSet<PartyMemberId> PartyHealerIds = new HashSet<PartyMemberId>()
         {
+            PartyMemberId.Alphinaud,
+            PartyMemberId.CrystalExarch,
+            PartyMemberId.GrahaTia,
+            PartyMemberId.Urianger,
+            PartyMemberId.AlphinaudsAvatar,
+            PartyMemberId.GrahaTiasAvatar,
+            PartyMemberId.UriangersAvatar,
+            PartyMemberId.Venat,
+            PartyMemberId.EagerConjurer,
+            PartyMemberId.ScionConjurer,
+            PartyMemberId.SerpentConjurer,
         };
     }
 }

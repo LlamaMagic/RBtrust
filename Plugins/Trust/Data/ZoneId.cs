@@ -7,9 +7,104 @@
     {
 #pragma warning disable SA1629 // Documentation text should end with a period
         /// <summary>
-        /// Zone ID unavailable.
+        /// Zone ID not available.
         /// </summary>
         NONE = 0,
+
+        /// <summary>
+        /// Lv. 15.1: Sastasha
+        /// </summary>
+        Sastaha = 1036,
+
+        /// <summary>
+        /// Lv. 15.2: Hall of the Novice: Arena
+        /// </summary>
+        HallOfTheNoviceArena = 138,
+
+        /// <summary>
+        /// Lv. 15.3: Hall of the Novice: Final
+        /// </summary>
+        HallOfTheNoticeWesternLa = 543,
+
+        /// <summary>
+        /// Lv. 16: The Tam-Tara Deepcroft
+        /// </summary>
+        TheTamTaraDeepcroft = 1037,
+
+        /// <summary>
+        /// Lv. 17: Copperbell Mines
+        /// </summary>
+        CopperbellMines = 1038,
+
+        /// <summary>
+        /// Lv. 20.1: The Bowl of Embers
+        /// </summary>
+        TheBowlOfEmbers = 1045,
+
+        /// <summary>
+        /// Lv. 20.2: Halatali
+        /// </summary>
+        Halatali = 162,
+
+        /// <summary>
+        /// Lv. 24: The Thousand Maws of Toto-Rak
+        /// </summary>
+        TheThousandMawsOfTotoRak = 1039,
+
+        /// <summary>
+        /// Lv. 28: Haukke Manor
+        /// </summary>
+        HaukkeManor = 1040,
+
+        /// <summary>
+        /// Lv. 32: Brayflox's Longstop
+        /// </summary>
+        BrayfloxsLongstop = 1041,
+
+        /// <summary>
+        /// Lv. 34: The Navel
+        /// </summary>
+        TheNavel = 1046,
+
+        /// <summary>
+        /// Lv. 41: The Stone Vigil
+        /// </summary>
+        TheStoneVigil = 1042,
+
+        /// <summary>
+        /// Lv. 44: The Howling Eye
+        /// </summary>
+        TheHowlingEye = 1047,
+
+        /// <summary>
+        /// Lv. 47: The Aurum Vale
+        /// </summary>
+        TheAurumVale = 172,
+
+        /// <summary>
+        /// Lv. 50.1: Castrum Meridianum
+        /// </summary>
+        CastrumMeridianum = 1043,
+
+        /// <summary>
+        /// Lv. 50.2: The Praetorium
+        /// </summary>
+        ThePraetorium = 1044,
+
+        /// <summary>
+        /// Lv. 50.3: The Porta Decumana
+        /// </summary>
+        ThePortaDecumana = 1048,
+
+        /// <summary>
+        /// Lv. 50: Syrcus Tower
+        /// </summary>
+        SyrcusTower = 372,
+
+        /// <summary>
+        /// Lv. 70: Hells' Lid
+        /// </summary>
+        HellsLid = 742,
 
         /// <summary>
         /// Lv. 71: Holminster Switch

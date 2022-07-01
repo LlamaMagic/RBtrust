@@ -5,7 +5,6 @@ using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
-using RBTrust.Plugins.Trust.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +18,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 85 Vanaspati dungeon logic.
+    /// Lv. 85: Vanaspati dungeon logic.
     /// </summary>
     public class Vanaspati : AbstractDungeon
     {

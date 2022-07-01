@@ -3,7 +3,6 @@ using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 80.1 Amaurot dungeon logic.
+    /// Lv. 80.1: Amaurot dungeon logic.
     /// </summary>
     public class Amaurot : AbstractDungeon
     {

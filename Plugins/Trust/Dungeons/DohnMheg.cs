@@ -5,18 +5,18 @@ using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Trust.Data;
+using Trust.Extensions;
 using Trust.Helpers;
 
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 73 Dohn Mheg dungeon logic.
+    /// Lv. 73: Dohn Mheg dungeon logic.
     /// </summary>
     public class DohnMheg : AbstractDungeon
     {
