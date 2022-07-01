@@ -1,25 +1,40 @@
-# [RBtrust][0]
+# [RBtrust][github-repo]
 
-[![Download][1]][2]
-[![Discord][3]][4]
+[![Download][download-badge]][download-link]
+[![Discord][discord-badge]][discord-invite]
 
-🌎 **English** • [中文][-2]
+🌎 **English** • [中文][readme-zh]
 
-**RBtrust** is a Trust plugin + OrderBot scripts for [RebornBuddy][5]. It automatically runs Trust dungeons.
+**RBtrust** is a dungeon plugin + OrderBot scripts for [RebornBuddy][rebornbuddy]. It automatically runs Duty Support and Trust dungeons.
 
-
-[-2]: ./README.zh.md "中文"
-[-1]: ./README.md "English"
-[0]: https://github.com/TheManta/RBtrust "RBtrust on GitHub"
-[1]: https://img.shields.io/badge/-Download-brightgreen
-[2]: #installation "Download"
-[3]: https://img.shields.io/badge/Discord-7389D8?logo=discord&logoColor=ffffff&labelColor=6A7EC2
-[4]: https://discord.gg/bmgCq39 "Discord"
-[5]: https://www.rebornbuddy.com/ "RebornBuddy"
+[readme-zh]: ./README.zh.md "中文"
+[readme-en]: ./README.md "English"
+[github-repo]: https://github.com/TheManta/RBtrust "RBtrust on GitHub"
+[download-badge]: https://img.shields.io/badge/-Download-brightgreen
+[download-link]: #installation "Download"
+[discord-badge]: https://img.shields.io/badge/Discord-7389D8?logo=discord&logoColor=ffffff&labelColor=6A7EC2
+[discord-invite]: https://discord.gg/bmgCq39 "Discord"
+[rebornbuddy]: https://www.rebornbuddy.com/ "RebornBuddy"
 
 ## Supported Dungeons
 
-### 5.0 Shadowbringers
+### 2.0 - A Realm Reborn
+
+  ❌ Lv. 15: Sastasha\
+  ❌ Lv. 16: The Tam-Tara Deepcroft\
+  ❌ Lv. 17: Copperbell Mines\
+  ❌ Lv. 20: The Bowl of Embers\
+  ❌ Lv. 24: The Thousand Maws of Toto-Rak\
+  ❌ Lv. 28: Haukke Manor\
+  ❌ Lv. 32: Brayflox's Longstop\
+  ❌ Lv. 34: The Navel\
+  ❌ Lv. 41: The Stone Vigil\
+  ❌ Lv. 44: The Howling Eye\
+  ❌ Lv. 50.1: Castrum Meridianum\
+  ❌ Lv. 50.2: The Praetorium\
+  ❌ Lv. 50.3: The Porta Decumana
+
+### 5.0 - Shadowbringers
 
   ✔️ Lv. 71: Holminster Switch\
   ✔️ Lv. 73: Dohn Mheg\
@@ -33,7 +48,7 @@
   ❌ Lv. 80.5: Matoya's Relict\
   ❌ Lv. 80.6: Paglth'an
 
-### 6.0 Endwalker
+### 6.0 - Endwalker
 
   ✔️ Lv. 81: The Tower of Zot\
   ✔️ Lv. 83: The Tower of Babil\
@@ -48,71 +63,32 @@
 
 ### Prerequisites
 
-- [RebornBuddy][5] with active license (paid)
-- (Optional) Better combat routine, such as [Magitek][100] (free)
-- (Optional) Self-repair plugin, such as [AutoRepairLisbeth][101]
-- (Optional) Better food plugin, such as [Gluttony][102] (free)
+-   [RebornBuddy][rebornbuddy] with active license (paid)
+-   (Optional) Better combat routine, such as [Magitek][magitek-discord] (free)
+-   (Optional) Food plugin, such as [Gluttony][gluttony] (free)
+-   (Optional) Self-repair plugin, such as [AutoRepairLisbeth][llama-plugins]
 
-[100]: https://discord.gg/rDsFbKr "Magitek Discord"
-[101]: https://github.com/nt153133/LlamaPlugins "AutoRepairLisbeth"
-[102]: https://github.com/domesticwarlord86/Gluttony "Gluttony"
+[magitek-discord]: https://discord.gg/rDsFbKr "Magitek Discord"
+[llama-plugins]: https://github.com/nt153133/LlamaPlugins "AutoRepairLisbeth"
+[gluttony]: https://github.com/domesticwarlord86/Gluttony "Gluttony"
 
 ### Automatic Setup (recommended)
 
 Want **automatic installation and updates**, including prerequisites?
 
-Install the [RepoBuddy][103] plugin -- `RBtrust` is configured by default!
+Install the [RepoBuddy][repobuddy] plugin -- `RBtrust` is configured by default!
 
-[103]: https://github.com/Zimgineering/repoBuddy "repoBuddy"
+[repobuddy]: https://github.com/Zimgineering/repoBuddy "repoBuddy"
 
 #### Adding `RBtrust` to RepoBuddy
 
 ℹ️ New RepoBuddy users can skip this step.
 
-⚠️ Older RepoBuddy users may need to update the `RBtrust` URL!
-
-
 In case your repoBuddy config is too old or otherwise missing `RBtrust`, you can add it via repoBuddy's settings menu:
 
-- **Name:** RBtrust
-- **Type:** Plugin
-- **URL:** `https://github.com/TheManta/RBtrust.git/trunk`
-
-![repBuddy Settings](https://i.imgur.com/q53jzEX.png)
-
-OR by first closing the bot, then editing `RebornBuddy\Plugins\repoBuddy\repoBuddyRepos.xml`:
-
-```xml
-<Repo>
-  <Name>RBtrust</Name>
-  <Type>Plugin</Type>
-  <URL>https://github.com/TheManta/RBtrust.git/trunk</URL>
-</Repo>
-```
-
-### Manual Setup
-
-0. Fully delete old versions of RBtrust in the `RebornBuddy\Plugins\` folder.
-1. Download the [latest version][104].
-2. On the `.zip` file, right click > `Properties` > `Unblock` > `Apply`.
-3. Unzip all contents into `RebornBuddy\Plugins\` so it looks like this:
-
-```
-RebornBuddy
-└── Plugins
-    └── RBtrust
-        ├── Plugins\
-        ├── Profiles\
-        ├── Quest Behaviors\
-        ├── RBtrust.sln
-        ├── README.md
-        └── ...
-```
-
-4. Start RebornBuddy as normal.
-5. In the Plugins tab, enable the `Trust` plugin.
-
-[104]: https://github.com/TheManta/RBtrust/archive/refs/heads/master.zip "RBtrust.zip"
+-   **Name:** `RBtrust`
+-   **Type:** `Plugin`
+-   **URL:** `https://github.com/TheManta/RBtrust.git/trunk`
 
 ## Usage
 
@@ -129,15 +105,15 @@ To load a dungeon script:
 
 ## Troubleshooting
 
-For live volunteer support, join the [Project BR Discord][4] channel `#rbtrust-issues`.
+For live volunteer support, join the [Project BR Discord][discord-invite] channel `#rbtrust-issues`.
 
 When asking for help, always include:
 
-- which `.xml` script you loaded,
-- your class + Trust NPC list + scenario vs. avatar mode,
-- what you tried to do,
-- what went wrong,
-- **logs from the `RebornBuddy\Logs\` folder.**
+-   which OrderBot `.xml` script you loaded,
+-   your class + Trust NPC list + scenario vs. avatar mode,
+-   what you tried to do,
+-   what went wrong,
+-   **logs from the `RebornBuddy\Logs\` folder.**
 
 No need to ask if anyone's around or for permission to ask -- just go for it!
 
@@ -147,9 +123,9 @@ Maybe you can, maybe you can't.
 
 RBtrust has limited combat abilities, so some classes struggle with certain bosses. Some things to try:
 
-- Upgrade your gear and food to better survive big hits.
-- Adjust your combat routine to better use damage mitigation, heals, life steal, etc.
-- Change class (not a real solution)
+-   Upgrade your gear and food to better survive big hits.
+-   Adjust your combat routine to better use damage mitigation, heals, life-steal, etc.
+-   Change class (not a real solution)
 
 Worst case scenario: out-level and skip that dungeon by grinding the previous one, or kill the boss manually if needed for MSQ progression.
 
@@ -157,4 +133,4 @@ Worst case scenario: out-level and skip that dungeon by grinding the previous on
 
 The RBtrust folder might not have been fully extracted or put in the correct place.
 
-Check your Plugins tab to see if the "Trust" plugin is listed and enable if it is. If the plugin isn't there, try closing RebornBuddy and cleanly [reinstalling](#installation) RBtrust.
+Check your Plugins tab to see if the "Trust" plugin is listed and enable if it is. If the plugin isn't there, try closing RebornBuddy and cleanly [reinstalling][download] RBtrust.
