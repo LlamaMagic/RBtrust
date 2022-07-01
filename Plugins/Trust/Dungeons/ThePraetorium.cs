@@ -16,7 +16,7 @@ namespace Trust.Dungeons
         /// <summary>
         /// Gets zone ID for this dungeon.
         /// </summary>
-        public new const ZoneId ZoneId = Data.ZoneId.NONE;
+        public new const ZoneId ZoneId = Data.ZoneId.ThePraetorium;
 
         private const int Nero = 2135;
         private const int Gaius = 2136;

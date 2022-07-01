@@ -20,23 +20,24 @@ namespace Trust.Dungeons
             availableDungeons = new Dictionary<ZoneId, AbstractDungeon>()
             {
                 // 2.0 - A Realm Reborn
-                { ZoneId.TheNavel, new TheNavel() },
-                { ZoneId.TheHowlingEye, new TheHowlingEye() },
-                { ZoneId.Halatali, new Halatali() },
-                { ZoneId.TheAurumVale, new TheAurumVale() },
                 { ZoneId.HallOfTheNoviceArena, new HallOfTheNoviceArena() },
                 { ZoneId.HallOfTheNoticeWesternLa, new HallOfTheNoviceWesternLa() },
+                { ZoneId.Halatali, new Halatali() },
+                { ZoneId.TheNavel, new TheNavel() },
                 { ZoneId.TheStoneVigil, new TheStoneVigil() },
+                { ZoneId.TheHowlingEye, new TheHowlingEye() },
+                { ZoneId.TheAurumVale, new TheAurumVale() },
                 { ZoneId.CastrumMeridianum, new CastrumMeridianum() },
+                { ZoneId.ThePraetorium, new ThePraetorium() },
                 { ZoneId.ThePortaDecumana, new ThePortaDecumana() },
                 { ZoneId.SyrcusTower, new SyrcusTower() },
 
                 // 3.0 - Heavensward
 
                 // 4.0 - Stormblood
+                { ZoneId.HellsLid, new HellsLid() },
 
                 // 5.0 - Shadowbringers
-                { ZoneId.HellsLid, new HellsLid() },
                 { ZoneId.HolminsterSwitch, new HolminsterSwitch() },
                 { ZoneId.DohnMheg, new DohnMheg() },
                 { ZoneId.TheQitanaRavel, new TheQitanaRavel() },

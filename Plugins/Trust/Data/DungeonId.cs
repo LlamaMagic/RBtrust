@@ -62,17 +62,17 @@
         TheHowlingEye = 209,
 
         /// <summary>
-        /// Lv. 50: Castrum Meridianum
+        /// Lv. 50.1: Castrum Meridianum
         /// </summary>
         CastrumMeridianum = 210,
 
         /// <summary>
-        /// Lv. 50: The Praetorium
+        /// Lv. 50.2: The Praetorium
         /// </summary>
         ThePraetorium = 211,
 
         /// <summary>
-        /// Lv. 50: The Porta Decumana
+        /// Lv. 50.3: The Porta Decumana
         /// </summary>
         ThePortaDecumana = 212,
 

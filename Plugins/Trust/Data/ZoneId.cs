@@ -7,7 +7,7 @@
     {
 #pragma warning disable SA1629 // Documentation text should end with a period
         /// <summary>
-        /// Zone ID unavailable.
+        /// Zone ID not available.
         /// </summary>
         NONE = 0,
 
@@ -85,6 +85,11 @@
         /// Lv. 50.1: Castrum Meridianum
         /// </summary>
         CastrumMeridianum = 1043,
+
+        /// <summary>
+        /// Lv. 50.2: The Praetorium
+        /// </summary>
+        ThePraetorium = 1044,
 
         /// <summary>
         /// Lv. 50.3: The Porta Decumana
