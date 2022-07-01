@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
-using Trust.Helpers;
 
 namespace Trust.Dungeons
 {
@@ -154,7 +153,18 @@ namespace Trust.Dungeons
 
             if (Spells.IsCasting())
             {
-                await MovementHelpers.GetClosestAlly.Follow();
+                Core.Me.ClearTarget();
+                while (Core.Me.Location.Distance2D(PartyManager.VisibleMembers
+                           .Where(x => !x.IsMe && x.BattleCharacter.IsAlive).FirstOrDefault().BattleCharacter
+                           .Location) > 0.5)
+                {
+                    MovementManager.SetFacing(PartyManager.VisibleMembers
+                        .Where(x => !x.IsMe && x.BattleCharacter.IsAlive).FirstOrDefault().BattleCharacter.Location);
+                    MovementManager.MoveForwardStart();
+                    await Coroutine.Sleep(100);
+                    MovementManager.MoveStop();
+                }
+
                 await Coroutine.Yield();
             }
 
