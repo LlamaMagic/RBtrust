@@ -17,7 +17,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 71 Holminster Switch dungeon logic.
+    /// Lv. 71: Holminster Switch dungeon logic.
     /// </summary>
     public class HolminsterSwitch : AbstractDungeon
     {

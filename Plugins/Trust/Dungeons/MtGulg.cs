@@ -12,7 +12,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 79 Mt. Gulg dungeon logic.
+    /// Lv. 79: Mt. Gulg dungeon logic.
     /// </summary>
     public class MtGulg : AbstractDungeon
     {

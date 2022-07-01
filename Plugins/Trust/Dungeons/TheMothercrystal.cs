@@ -4,7 +4,7 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 89.2 The Mothercrystal dungeon logic.
+    /// Lv. 89.2: The Mothercrystal dungeon logic.
     /// </summary>
     public class TheMothercrystal : AbstractDungeon
     {

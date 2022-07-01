@@ -13,7 +13,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 50.3 The Porta Decumana dungeon logic.
+    /// Lv. 50.3: The Porta Decumana dungeon logic.
     /// </summary>
     public class ThePortaDecumana : AbstractDungeon
     {

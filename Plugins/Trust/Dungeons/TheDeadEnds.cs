@@ -17,7 +17,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 90.1 The Dead Ends dungeon logic.
+    /// Lv. 90.1: The Dead Ends dungeon logic.
     /// </summary>
     public class TheDeadEnds : AbstractDungeon
     {

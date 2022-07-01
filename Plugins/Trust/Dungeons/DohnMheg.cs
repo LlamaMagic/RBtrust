@@ -16,7 +16,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 73 Dohn Mheg dungeon logic.
+    /// Lv. 73: Dohn Mheg dungeon logic.
     /// </summary>
     public class DohnMheg : AbstractDungeon
     {

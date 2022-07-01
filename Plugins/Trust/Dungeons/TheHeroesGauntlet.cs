@@ -4,7 +4,7 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 80.4 The Heroes' Gauntlet dungeon logic.
+    /// Lv. 80.4: The Heroes' Gauntlet dungeon logic.
     /// </summary>
     public class TheHeroesGauntlet : AbstractDungeon
     {

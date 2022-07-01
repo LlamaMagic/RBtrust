@@ -14,7 +14,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 77 Malikah's Well dungeon logic.
+    /// Lv. 77: Malikah's Well dungeon logic.
     /// </summary>
     public class MalikahsWell : AbstractDungeon
     {

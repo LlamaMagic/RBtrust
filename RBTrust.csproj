@@ -60,6 +60,10 @@
     <Compile Include="Plugins\Trust\Dungeons\AlzadaalsLegacy.cs" />
     <Compile Include="Plugins\Trust\Dungeons\Amaurot.cs" />
     <Compile Include="Plugins\Trust\Dungeons\AnamnesisAnyder.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\BrayfloxsLongstop.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\CopperbellMines.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\HaukkeManor.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\Sastasha.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheAurumVale.cs" />
     <Compile Include="Plugins\Trust\Dungeons\CastrumMeridianum.cs" />
     <Compile Include="Plugins\Trust\Dungeons\DohnMheg.cs" />
@@ -76,6 +80,7 @@
     <Compile Include="Plugins\Trust\Dungeons\Paglthan.cs" />
     <Compile Include="Plugins\Trust\Dungeons\SyrcusTower.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheAitiascope.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheBowlOfEmbers.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheDeadEnds.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheGrandCosmos.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheHeroesGauntlet.cs" />
@@ -86,6 +91,8 @@
     <Compile Include="Plugins\Trust\Dungeons\ThePraetorium.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheQitanaRavel.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheStoneVigil.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheTamTaraDeepcroft.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheThousandMawsOfTotoRak.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheTowerOfBabil.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheTowerOfZot.cs" />
     <Compile Include="Plugins\Trust\Dungeons\Vanaspati.cs" />

@@ -18,7 +18,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 85 Vanaspati dungeon logic.
+    /// Lv. 85: Vanaspati dungeon logic.
     /// </summary>
     public class Vanaspati : AbstractDungeon
     {

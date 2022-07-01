@@ -4,17 +4,17 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 80.2: The Grand Cosmos dungeon logic.
+    /// Lv. 32: Brayflox's Longstop dungeon logic.
     /// </summary>
-    public class TheGrandCosmos : AbstractDungeon
+    public class BrayfloxsLongstop : AbstractDungeon
     {
         /// <summary>
         /// Gets zone ID for this dungeon.
         /// </summary>
-        public new const ZoneId ZoneId = Data.ZoneId.TheGrandCosmos;
+        public new const ZoneId ZoneId = Data.ZoneId.BrayfloxsLongstop;
 
         /// <inheritdoc/>
-        public override DungeonId DungeonId => DungeonId.TheGrandCosmos;
+        public override DungeonId DungeonId => DungeonId.BrayfloxsLongstop;
 
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()

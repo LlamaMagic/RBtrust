@@ -12,7 +12,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 83 The Tower of Babil dungeon logic.
+    /// Lv. 83: The Tower of Babil dungeon logic.
     /// </summary>
     public class TheTowerOfBabil : AbstractDungeon
     {

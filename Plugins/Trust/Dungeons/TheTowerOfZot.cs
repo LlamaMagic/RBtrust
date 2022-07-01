@@ -10,7 +10,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 81 The Tower of Zot dungeon logic.
+    /// Lv. 81: The Tower of Zot dungeon logic.
     /// </summary>
     public class TheTowerOfZot : AbstractDungeon
     {

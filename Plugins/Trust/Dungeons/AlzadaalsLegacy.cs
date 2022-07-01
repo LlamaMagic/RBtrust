@@ -10,7 +10,7 @@ using Trust.Helpers;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 85 Vanaspati dungeon logic.
+    /// Lv. 90.2: Alzadaal's Legacy dungeon logic.
     /// </summary>
     public class AlzadaalsLegacy : AbstractDungeon
     {

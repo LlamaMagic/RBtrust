@@ -4,7 +4,7 @@ using Trust.Data;
 namespace Trust.Dungeons
 {
     /// <summary>
-    /// Lv. 80.6 Paglth'an dungeon logic.
+    /// Lv. 80.6: Paglth'an dungeon logic.
     /// </summary>
     public class Paglthan : AbstractDungeon
     {
