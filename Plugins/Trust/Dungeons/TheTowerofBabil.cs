@@ -2,7 +2,6 @@ using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;

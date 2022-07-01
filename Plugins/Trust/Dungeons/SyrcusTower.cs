@@ -1,69 +1,69 @@
 using Buddy.Coroutines;
-using Clio.Utilities;
 using ff14bot;
-using ff14bot.Behavior;
 using ff14bot.Managers;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Linq;
-using ff14bot.Helpers;
-using System.Windows.Media;
+using System.Threading.Tasks;
 using Trust.Data;
-using Trust.Dungeons;
 using Trust.Extensions;
+using Trust.Helpers;
 
 namespace Trust.Dungeons
 {
+    /// <summary>
+    /// Lv. 50: Syrcus Tower dungeon logic.
+    /// </summary>
     public class SyrcusTower : AbstractDungeon
     {
+        /// <summary>
+        /// Gets zone ID for this dungeon.
+        /// </summary>
+        public new const ZoneId ZoneId = Data.ZoneId.SyrcusTower;
+
+        private static readonly HashSet<uint> Spells = new HashSet<uint>()
+        {
+            2441,
+            12461,
+            2361,
+            12214,
+            3412,
+            4198,
+            5254,
+            5253,
+            2359,
+            3413,
+            2317,
+            1730,
+            1731,
+            1748,
+            2347,
+            5253,
+            2359,
+            11928
+        };
+
+        private static readonly HashSet<uint> CurtainCall = new HashSet<uint>() { 2441, 12461 };
+        private static readonly HashSet<uint> AncientQuaga = new HashSet<uint>() { 2361, 12214, 3412, 4198, 5254, 5253, 2359, 3413, };
+        private static readonly HashSet<uint> AncientFlare = new HashSet<uint>() { 2317, 1730, 1731, 1748, 2347, 5253, 2359, 11928, };
+
+        /// <inheritdoc/>
+        public override DungeonId DungeonId => DungeonId.NONE;
+
+        /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
             // NOT TESTED
-
-            #region Spell Filters
-
-            /// 532, 1837, 2794, 5445, 7931, 9076, 9338, 9490, 2441
-
-            HashSet<uint> Spells = new HashSet<uint>()
-            {
-                2441,
-                12461,
-                2361,
-                12214,
-                3412,
-                4198,
-                5254,
-                5253,
-                2359,
-                3413,
-                2317,
-                1730,
-                1731,
-                1748,
-                2347,
-                5253,
-                2359,
-                11928
-            };
-
-            #endregion
-
-            #region Custom Mechanics
-
-            /// Therion (至大灾兽)
-            /// 2441                                :: CurtainCall
-            HashSet<uint> CurtainCall = new HashSet<uint>() {2441, 12461};
             if (CurtainCall.IsCasting())
             {
                 await Coroutine.Sleep(4000);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
+
                 while (sw.ElapsedMilliseconds < 12000)
                 {
                     Core.Me.ClearTarget();
-                    //Logging.Write(Colors.Aquamarine, $"Curtain Call Handling Going to Ice");
-                    // PartyManager.VisibleMembers.Where(x => !x.IsMe &&x.BattleCharacter.IsAlive).FirstOrDefault().BattleCharacter.Location
+
                     if (GameObjectManager.GetObjectByNPCId(2820) != null)
                     {
                         while (Core.Me.Location.Distance2D(GameObjectManager.GetObjectByNPCId(2820).Location) > 0.8)
@@ -75,32 +75,17 @@ namespace Trust.Dungeons
                         }
                     }
 
-                    //await Coroutine.Sleep(1000);
                     await Coroutine.Yield();
                 }
 
-                sw.Stop();
+                sw.Reset();
             }
 
-            /// Therion (至大灾兽)
-            /// 2441                                :: Ancient Quaga
-            HashSet<uint> AncientQuaga = new HashSet<uint>()
-            {
-                2361,
-                12214,
-                3412,
-                4198,
-                5254,
-                5253,
-                2359,
-                3413
-            };
             if (AncientQuaga.IsCasting())
             {
                 await Coroutine.Sleep(2000);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                //Logging.Write(Colors.Aquamarine, $"Ancient Quaga Handling");
 
                 while (sw.ElapsedMilliseconds < 7000)
                 {
@@ -132,29 +117,17 @@ namespace Trust.Dungeons
                         }
                     }
 
-                    //await Coroutine.Sleep(1000);
                     await Coroutine.Yield();
                 }
 
-                sw.Stop();
+                sw.Reset();
             }
 
-            HashSet<uint> AncientFlare = new HashSet<uint>()
-            {
-                2317,
-                1730,
-                1731,
-                1748,
-                2347,
-                5253,
-                2359,
-                11928
-            };
             if (AncientFlare.IsCasting())
             {
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                //Logging.Write(Colors.Aquamarine, $"Ancient Flare Handling");
+
                 while (sw.ElapsedMilliseconds < 10000)
                 {
                     Core.Me.ClearTarget();
@@ -179,35 +152,13 @@ namespace Trust.Dungeons
                 sw.Stop();
             }
 
-            #endregion
-
-            /// Default (缺省)
             if (Spells.IsCasting())
             {
-                Core.Me.ClearTarget(); //Logging.Write(Colors.Aquamarine, $"Default Spell Handling");
-                while (Core.Me.Location.Distance2D(PartyManager.VisibleMembers
-                           .Where(x => !x.IsMe && x.BattleCharacter.IsAlive).FirstOrDefault().BattleCharacter
-                           .Location) > 0.5)
-                {
-                    MovementManager.SetFacing(PartyManager.VisibleMembers
-                        .Where(x => !x.IsMe && x.BattleCharacter.IsAlive).FirstOrDefault().BattleCharacter.Location);
-                    MovementManager.MoveForwardStart();
-                    await Coroutine.Sleep(100);
-                    MovementManager.MoveStop();
-                }
-
-                //await Coroutine.Sleep(1000);
+                await MovementHelpers.GetClosestAlly.Follow();
                 await Coroutine.Yield();
-                ;
             }
-
-            /// SideStep (回避)
-            //if (WorldManager.SubZoneId != 2996) { Helpers.BossIds.ToggleSideStep(new uint[] { 8210 }); } else { Helpers.BossIds.ToggleSideStep(); }
 
             return false;
         }
-
-        public override DungeonId DungeonId { get; }
-
     }
 }

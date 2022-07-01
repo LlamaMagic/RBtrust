@@ -1,38 +1,37 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Buddy.Coroutines;
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
-using LlamaLibrary.Helpers;
-using Buddy.Coroutines;
-using Clio.Utilities;
-using ff14bot;
-using ff14bot.Behavior;
-using ff14bot.Managers;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Linq;
-using ff14bot.Helpers;
-using System.Windows.Media;
-using ff14bot.Enums;
-using RBTrust.Plugins.Trust.Extensions;
+using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
 
 namespace Trust.Dungeons
 {
+    /// <summary>
+    /// Lv. 44: The Howling Eye dungeon logic.
+    /// </summary>
     public class TheHowlingEye : AbstractDungeon
     {
-        public override DungeonId DungeonId { get; }
+        /// <summary>
+        /// Gets zone ID for this dungeon.
+        /// </summary>
+        public new const ZoneId ZoneId = Data.ZoneId.TheHowlingEye;
 
-        static PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
+        private const int Garuda = 1644;
 
-        static HashSet<uint> Spells = new HashSet<uint>() {651};
+        private static readonly HashSet<uint> Spells = new HashSet<uint>() { 651 };
+        private static readonly HashSet<uint> MistralSong = new HashSet<uint>() { 667, 660 };
+        private static readonly HashSet<uint> Slipstream = new HashSet<uint>() { 659 };
+        private static readonly HashSet<uint> MistralShriek = new HashSet<uint>() { 661 };
 
+        /// <inheritdoc/>
+        public override DungeonId DungeonId => DungeonId.TheHowlingEye;
+
+        /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
             /*
@@ -45,48 +44,43 @@ namespace Trust.Dungeons
 
              */
 
-            IEnumerable<BattleCharacter> Garuda = GameObjectManager.GetObjectsOfType<BattleCharacter>().Where(
-                r => !r.IsMe && r.Distance() < 26 && r.NpcId == 1644 && r.CurrentHealthPercent < 100);
+            BattleCharacter garudaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Garuda)
+                .FirstOrDefault(bc => bc.Distance() < 26 && bc.CurrentHealthPercent < 100);
 
-            if (Garuda.Any())
+            if (garudaNpc != null && garudaNpc.IsValid)
             {
-                if (GameObjectManager.GetObjectByNPCId(1644) != null) //Garuda
+                if (MistralSong.IsCasting())
                 {
-                    HashSet<uint> MistralSong = new HashSet<uint>() {667, 660};
-                    if (MistralSong.IsCasting())
+                    await MovementHelpers.GetClosestDps.Follow();
+                    await Coroutine.Wait(10000, () => !MistralSong.IsCasting());
+                    if (!MistralSong.IsCasting())
                     {
-                        await MovementHelpers.GetClosestDps.Follow();
-                        await Coroutine.Wait(10000, () => !MistralSong.IsCasting());
-                        if (!MistralSong.IsCasting())
-                        {
-                            await MovementHelpers.Spread(2000, 5);
-                        }
+                        await MovementHelpers.Spread(2000, 5);
                     }
+                }
 
-                    HashSet<uint> Slipstream = new HashSet<uint>() {659};
-                    if (Slipstream.IsCasting() && !GeneralHelpers.IsTankClass())
-                    {
-                        await MovementHelpers.Spread(5000, 5);
-                    }
+                if (Slipstream.IsCasting() && !Core.Player.IsTank())
+                {
+                    await MovementHelpers.Spread(5000, 5);
+                }
 
-                    HashSet<uint> MistralShriek = new HashSet<uint>() {661};
-                    if (MistralShriek.IsCasting())
-                    {
-                        await MovementHelpers.GetClosestDps.Follow();
-                    }
+                if (MistralShriek.IsCasting())
+                {
+                    await MovementHelpers.GetClosestDps.Follow();
+                }
 
-                    if (!Spells.IsCasting())
+                if (!Spells.IsCasting())
+                {
+                    if (!SidestepPlugin.Enabled)
                     {
-                        if (!sidestepPlugin.Enabled)
-                        {
-                            await Coroutine.Sleep(500);
-                            sidestepPlugin.Enabled = true;
-                        }
+                        await Coroutine.Sleep(500);
+                        SidestepPlugin.Enabled = true;
                     }
                 }
             }
 
             await Coroutine.Yield();
+
             return false;
         }
     }

@@ -7,6 +7,11 @@
     {
 #pragma warning disable SA1629 // Documentation text should end with a period
         /// <summary>
+        /// Dungeon ID not available.
+        /// </summary>
+        NONE = 0,
+
+        /// <summary>
         /// Lv. 15.1: Sastasha
         /// </summary>
         Sastasha = 200,

@@ -1,6 +1,5 @@
 ﻿using ff14bot;
 using ff14bot.Managers;
-using RBTrust.Plugins.Trust.Extensions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;

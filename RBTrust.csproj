@@ -59,13 +59,13 @@
     <Compile Include="Plugins\Trust\Dungeons\AlzadaalsLegacy.cs" />
     <Compile Include="Plugins\Trust\Dungeons\Amaurot.cs" />
     <Compile Include="Plugins\Trust\Dungeons\AnamnesisAnyder.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\AurumVale.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheAurumVale.cs" />
     <Compile Include="Plugins\Trust\Dungeons\CastrumMeridianum.cs" />
     <Compile Include="Plugins\Trust\Dungeons\DohnMheg.cs" />
     <Compile Include="Plugins\Trust\Dungeons\DungeonManager.cs" />
     <Compile Include="Plugins\Trust\Dungeons\Halatali.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HallofNoviceArena.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HallofNoviceWestLA.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\HallOfTheNoviceArena.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\HallOfTheNoviceWesternLa.cs" />
     <Compile Include="Plugins\Trust\Dungeons\HellsLid.cs" />
     <Compile Include="Plugins\Trust\Dungeons\HolminsterSwitch.cs" />
     <Compile Include="Plugins\Trust\Dungeons\KtisisHyperboreia.cs" />
@@ -91,7 +91,6 @@
     <Compile Include="Plugins\Trust\Extensions\BattleCharacterExtensions.cs" />
     <Compile Include="Plugins\Trust\Extensions\Extensions.cs" />
     <Compile Include="Plugins\Trust\Helpers\FoodHelpers.cs" />
-    <Compile Include="Plugins\Trust\Helpers\GeneralHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\LoadingHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\LocalizationHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\MovementHelpers.cs" />

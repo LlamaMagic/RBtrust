@@ -5,7 +5,6 @@ using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
-using RBTrust.Plugins.Trust.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -99,7 +98,7 @@ namespace Trust.Dungeons
 
         private static DateTime resetTime = DateTime.Now;
 
-        private bool Pmbuff;
+        private bool pmbuff;
 
         /// <inheritdoc/>
         public override DungeonId DungeonId => DungeonId.Vanaspati;
@@ -110,7 +109,6 @@ namespace Trust.Dungeons
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-
             if (WorldManager.SubZoneId != 4012 && WorldManager.SubZoneId != 4013 && WorldManager.SubZoneId != 4014)
             {
                 BattleCharacter target = GameObjectManager.Attackers?.OrderByDescending(e => e.CurrentHealthPercent).FirstOrDefault();
@@ -142,24 +140,22 @@ namespace Trust.Dungeons
                 magnet3SW.Reset();
             }
 
-            if (Core.Player.HasAura("Temporary Misdirection") || Pmbuff)
+            if (Core.Player.HasAura("Temporary Misdirection") || pmbuff)
             {
-                if (!Pmbuff)
+                if (!pmbuff)
                 {
-                    Pmbuff = true;
+                    pmbuff = true;
                 }
 
                 SidestepPlugin.Enabled = false;
 
-                if (!Core.Player.HasAura("Temporary Misdirection") && Pmbuff)
+                if (!Core.Player.HasAura("Temporary Misdirection") && pmbuff)
                 {
                     SidestepPlugin.Enabled = true;
                     CapabilityManager.Clear();
-                    Pmbuff = false;
+                    pmbuff = false;
                 }
-
             }
-
 
             if (WorldManager.SubZoneId == 4014 && !Core.Player.InCombat)
             {
@@ -174,8 +170,6 @@ namespace Trust.Dungeons
                 hastargetSW.Reset();
                 magnet3SW.Reset();
             }
-
-
 
             if (WorldManager.SubZoneId == 4014 && Core.Player.InCombat)
             {
@@ -232,7 +226,6 @@ namespace Trust.Dungeons
                         await MovementHelpers.GetClosestAlly.Follow();
                     }
                 }
-
             }
 
             if (follow.IsCasting() && !magnet3SW.IsRunning || followSW.IsRunning)
@@ -251,19 +244,15 @@ namespace Trust.Dungeons
                     CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 15000, "自动跟随");
                 }
 
-
                 if (!follow.IsCasting())
                 {
-
                     Logging.Write(Colors.Yellow, $@" 自动躲闪开启 followSW {followSW.ElapsedMilliseconds}");
                     SidestepPlugin.Enabled = true;
                     CapabilityManager.Clear();
                     followSW.Reset();
-
                 }
                 else
                 {
-
                     await MovementHelpers.GetClosestAlly.Follow();
                 }
             }
@@ -416,7 +405,6 @@ namespace Trust.Dungeons
 
             if (magnet1.IsCasting() || magnet1SW.IsRunning)
             {
-
                 if (!magnet1SW.IsRunning)
                 {
                     if (WorldManager.SubZoneId == 4013)
@@ -547,7 +535,6 @@ namespace Trust.Dungeons
                                 await MovementHelpers.SpreadSpLoc(3000, new Vector3("300.0752, 55.00583, -156.6629"), 6.5f, false);
                             }
                         }
-
                     }
                 }
                 else
