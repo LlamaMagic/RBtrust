@@ -79,20 +79,16 @@ namespace Trust.Helpers
                 .FirstOrDefault();
         }
 
-        public static async Task<bool> Spread(double timeToSpread, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
+        /// <summary>
+        /// Avoids all party members for a certain amount of time.
+        /// </summary>
+        /// <param name="timeToSpread">Spread duration, in milliseconds.</param>
+        /// <param name="spreadDistance">Minimum distance between party members.</param>
+        /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+        public static async Task<bool> Spread(double timeToSpread, float spreadDistance = 6.5f)
         {
-            if (isSpreading)
-            {
-                return true;
-            }
-
             double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
             double endMS = currentMS + timeToSpread;
-
-            if (spbc != 0)
-            {
-                PartyMembers.AllPartyMemberIds.Add((PartyMemberId)spbc);
-            }
 
             if (!AvoidanceManager.IsRunningOutOfAvoid)
             {
@@ -116,40 +112,38 @@ namespace Trust.Helpers
             return true;
         }
 
-        public static async Task<bool> HalfSpread(double timeToSpread, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> HalfSpread(double timeToSpread, float spreadDistance = 6.5f, uint spbc = 0)
         {
-            if (isSpreading)
-            {
-                return true;
-            }
-
             double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
             double endMS = currentMS + timeToSpread;
 
             if (spbc != 0)
             {
-                BattleCharacter nobj = PartyManager.AllMembers.Select(pm => pm.BattleCharacter)
-                    .OrderBy(obj => obj.Distance(Core.Player)).FirstOrDefault(obj => !obj.IsMe);
+                BattleCharacter closestPartyMember = PartyManager.AllMembers
+                    .Select(pm => pm.BattleCharacter)
+                    .OrderBy(obj => obj.Distance(Core.Player))
+                    .FirstOrDefault(obj => !obj.IsMe);
 
-                GameObject st = Core.Player.CurrentTarget;
+                GameObject target = Core.Player.CurrentTarget;
 
-                LocalPlayer fs = Core.Player;
+                LocalPlayer player = Core.Player;
 
-                Vector3 tl = default;
-                if (st != null && fs != null && st.Distance2D(fs) > 0)
+                // This appears to be "equation of line" y = mx + b, but z instead of y (height)
+                Vector3 newLoc = default;
+                if (target != null && player != null && target.Distance2D(player) > 0)
                 {
-                    float k = (st.Z - fs.Z) / (st.X - fs.X);
-                    float b = st.Z - (k * st.X);
+                    float m = (target.Z - player.Z) / (target.X - player.X);
+                    float b = target.Z - (m * target.X);
 
-                    float plg = 100f / fs.DistanceSqr(st.Location);
+                    float plg = 100f / player.DistanceSqr(target.Location);
 
-                    tl.X = fs.X - (plg * (st.X - fs.X));
-                    tl.Z = (k * tl.X) + b;
-                    tl.Y = st.Y;
+                    newLoc.X = player.X - (plg * (target.X - player.X));
+                    newLoc.Z = (m * newLoc.X) + b;
+                    newLoc.Y = target.Y;
 
-                    if (nobj.Distance(tl) - 2f < Core.Player.Distance(tl))
+                    if (closestPartyMember.Distance(newLoc) - 2f < Core.Player.Distance(newLoc))
                     {
-                        Navigator.PlayerMover.MoveTowards(tl);
+                        Navigator.PlayerMover.MoveTowards(newLoc);
                         await Coroutine.Yield();
                         return false;
                     }
@@ -176,24 +170,15 @@ namespace Trust.Helpers
             return true;
         }
 
-        public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f)
         {
-            if (isSpreading)
-            {
-                return true;
-            }
-
             double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
             double endMS = currentMS + timeToSpread;
 
-            if (spbc != 0)
-            {
-                PartyMembers.AllPartyMemberIds.Add((PartyMemberId)spbc);
-            }
-
             BattleCharacter nobj = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
                 .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
-                .OrderBy(obj => obj.Distance(Core.Player)).FirstOrDefault();
+                .OrderBy(obj => obj.Distance(Core.Player))
+                .FirstOrDefault();
 
             Vector3 playerLoc = Core.Player.Location;
 
@@ -211,8 +196,8 @@ namespace Trust.Helpers
             }
 
             foreach (BattleCharacter npc in GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                         .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
-                         .OrderByDescending(r => Core.Player.Distance()))
+                .Where(obj => PartyMembers.AllPartyMemberIds.Contains((PartyMemberId)obj.NpcId))
+                .OrderByDescending(r => Core.Player.Distance()))
             {
                 AvoidanceManager.AddAvoidObject<BattleCharacter>(
                     () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS,
@@ -232,20 +217,10 @@ namespace Trust.Helpers
             return true;
         }
 
-        public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f, bool isSpreading = false, uint spbc = 0)
+        public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f)
         {
-            if (isSpreading)
-            {
-                return true;
-            }
-
             double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
             double endMS = currentMS + timeToSpread;
-
-            if (spbc != 0)
-            {
-                PartyMembers.AllPartyMemberIds.Add((PartyMemberId)spbc);
-            }
 
             if (vector == null)
             {

@@ -361,7 +361,7 @@ namespace Trust.Dungeons
 
                 if (miasmataTimer.ElapsedMilliseconds < 19000)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(miasmataTimer, 19000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(miasmataTimer, 19000);
                 }
 
                 if (miasmataTimer.ElapsedMilliseconds >= 19000)
@@ -391,7 +391,7 @@ namespace Trust.Dungeons
                 if (coughUpTimer.ElapsedMilliseconds >= 12000 && coughUpTimer.ElapsedMilliseconds < 15000)
                 {
                     SidestepPlugin.Enabled = false;
-                    await MovementHelpers.GetClosestAlly.Follow2(coughUpTimer, 15000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(coughUpTimer, 15000);
                 }
 
                 if (coughUpTimer.ElapsedMilliseconds > 15000)
@@ -420,7 +420,7 @@ namespace Trust.Dungeons
 
                 if (orderToFireTimer.ElapsedMilliseconds < 4500)
                 {
-                    await MovementHelpers.GetClosestDps.Follow2(orderToFireTimer, 4500);
+                    await MovementHelpers.GetClosestDps.FollowTimed(orderToFireTimer, 4500);
                 }
 
                 if (orderToFireTimer.ElapsedMilliseconds > 4500 && orderToFireTimer.ElapsedMilliseconds < 8000)
@@ -449,7 +449,7 @@ namespace Trust.Dungeons
 
                 if (noFutureTimer.ElapsedMilliseconds < 16000)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(noFutureTimer, 16000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(noFutureTimer, 16000);
                 }
 
                 if (noFutureTimer.ElapsedMilliseconds >= 16000 && noFutureTimer.ElapsedMilliseconds < 19000)
@@ -469,7 +469,7 @@ namespace Trust.Dungeons
 
                 if (noFutureTimer.ElapsedMilliseconds >= 84000 && noFutureTimer.ElapsedMilliseconds < 100500)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(noFutureTimer, 100500);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(noFutureTimer, 100500);
                 }
 
                 if (noFutureTimer.ElapsedMilliseconds >= 100500 && noFutureTimer.ElapsedMilliseconds < 103500)
@@ -500,7 +500,7 @@ namespace Trust.Dungeons
 
                 if (peacefireTimer.ElapsedMilliseconds < 30000)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(peacefireTimer, 30000, useMesh: true);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(peacefireTimer, 30000, useMesh: true);
                 }
             }
 
@@ -515,7 +515,7 @@ namespace Trust.Dungeons
 
                 if (lifesbreathTimer.ElapsedMilliseconds < 18000)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(lifesbreathTimer, 18000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(lifesbreathTimer, 18000);
                 }
 
                 if (lifesbreathTimer.ElapsedMilliseconds >= 18000)
@@ -545,7 +545,7 @@ namespace Trust.Dungeons
                         ActionManager.Sprint();
                     }
 
-                    await MovementHelpers.GetClosestAlly.Follow2(pranceTimer, 14000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(pranceTimer, 14000);
                 }
 
                 if (pranceTimer.ElapsedMilliseconds >= 14500 && pranceTimer.ElapsedMilliseconds < 15000)

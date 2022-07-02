@@ -22,24 +22,8 @@ namespace Trust.Dungeons
 
         private static readonly HashSet<uint> Spells = new HashSet<uint>()
         {
-            2441,
-            12461,
-            2361,
-            12214,
-            3412,
-            4198,
-            5254,
-            5253,
-            2359,
-            3413,
-            2317,
-            1730,
-            1731,
-            1748,
-            2347,
-            5253,
-            2359,
-            11928
+            2441, 12461, 2361, 12214, 3412, 4198, 5254, 5253, 2359, 3413, 2317, 1730, 1731, 1748, 2347, 5253, 2359,
+            11928,
         };
 
         private static readonly HashSet<uint> CurtainCall = new HashSet<uint>() { 2441, 12461 };

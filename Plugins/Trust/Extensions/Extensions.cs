@@ -21,23 +21,19 @@ namespace Trust.Extensions
         /// <returns><see langword="true"/> if any given spell is being casted.</returns>
         public static bool IsCasting(this HashSet<uint> spellCastIds)
         {
-            return GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-                    .Any(obj => spellCastIds.Contains(obj.CastingSpellId) && obj.Distance() < 50);
-        }
+            BattleCharacter nonPartyCaster = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
+                    .Where(bc => spellCastIds.Contains(bc.CastingSpellId))
+                    .Where(bc => !(bool)PartyManager.AllMembers?.Any(pm => pm.ObjectId == bc.ObjectId))
+                    .FirstOrDefault();
 
-        public static bool IsCastingtwo(this HashSet<uint> spellCastIds)
-        {
-            IEnumerable<BattleCharacter> actids = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-               ?.Where(obj => obj.IsCasting && !(bool)PartyManager.AllMembers?.Any(p => p.ObjectId == obj.ObjectId));
-
-            foreach (BattleCharacter actid in actids)
+            if (nonPartyCaster != null)
             {
-                Logging.Write(Colors.Yellow, $@" IsCastingtwo 判断显示在使用的 actid ： {actid.CastingSpellId} {actid.SpellCastInfo.IsCasting} {actid.SpellCastInfo.SpellData.LocalizedName} {spellCastIds.Contains(actid.CastingSpellId)}");
+                SpellCastInfo spell = nonPartyCaster.SpellCastInfo;
 
-                return spellCastIds.Contains(actid.CastingSpellId) && actid.SpellCastInfo.IsCasting;
+                Logging.Write(Colors.Yellow, $"SpellCastInfo: ({nonPartyCaster.NpcId}) {nonPartyCaster.Name} casting ({spell.ActionId}) {spell.Name}");
             }
 
-            return false;
+            return nonPartyCaster != null;
         }
 
         /// <summary>
