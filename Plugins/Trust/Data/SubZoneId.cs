@@ -12,9 +12,34 @@
         NONE = 0,
 
         /// <summary>
-        /// Lv. 87: The Aitiascope > FrozenSphere Lyssa
+        /// Lv. 87: Ktisis Hyperboreia > FrozenSphere Lyssa
         /// </summary>
         FrozenSphere = 3766,
+
+        /// <summary>
+        /// Lv. 87: The Ktisis Hyperboreia  > Concept Review Ladon Lord
+        /// </summary>
+        ConceptReview = 3767,
+
+        /// <summary>
+        /// Lv. 87: The Ktisis Hyperboreia  > CelestialSphere Hermes
+        /// </summary>
+        CelestialSphere = 3768,
+
+        /// <summary>
+        /// Lv. 89.1: The Aitiascope > CentralObservatory Livia The Undeterred
+        /// </summary>
+        CentralObservatory = 3992,
+
+        /// <summary>
+        /// Lv. 89.1: The Aitiascope > SaltcrystalStrings Rhitahtyn the Unshakable
+        /// </summary>
+        SaltcrystalStrings = 3993,
+
+        /// <summary>
+        /// Lv. 89.1: The Aitiascope > MidnightDownwell Amon the Undying
+        /// </summary>
+        MidnightDownwell = 3994,
 
         /// <summary>
         /// Lv. 90.1: The Dead Ends > Pestilent Sands

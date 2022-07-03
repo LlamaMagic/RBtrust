@@ -116,7 +116,7 @@ namespace RBTrust.Plugins.Trust.Dungeons
             }
 
             // Lyssa First Boss
-            if (WorldManager.SubZoneId == 3766)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.FrozenSphere)
             {
                 if (_frostBiteAndSeek.IsCasting())
                 {
@@ -154,7 +154,7 @@ namespace RBTrust.Plugins.Trust.Dungeons
             }
 
             // Ladon Lord Second Boss
-            if (WorldManager.SubZoneId == 3767)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.ConceptReview)
             {
                 if (pyricBreath.IsCasting())
                 {
@@ -168,7 +168,7 @@ namespace RBTrust.Plugins.Trust.Dungeons
             }
 
             // hermes
-            if (WorldManager.SubZoneId == 3768)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.CelestialSphere)
             {
                 if (Core.Me.InCombat)
                 {

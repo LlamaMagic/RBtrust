@@ -109,7 +109,7 @@ namespace Trust.Dungeons
             }
 
             // Livia The Undeterred
-            if (WorldManager.SubZoneId == 3992)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.CentralObservatory)
             {
                 if (aglaeaClimb.IsCasting())
                 {
@@ -123,7 +123,7 @@ namespace Trust.Dungeons
             }
 
             // Rhitahtyn the Unshakable
-            if (WorldManager.SubZoneId == 3993)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.SaltcrystalStrings)
             {
                 if (shieldSkewer.IsCasting())
                 {
@@ -145,7 +145,7 @@ namespace Trust.Dungeons
             }
 
             // Amon the Undying
-            if (WorldManager.SubZoneId == 3994)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.MidnightDownwell)
             {
                 if (thundagaForte.IsCasting())
                 {
