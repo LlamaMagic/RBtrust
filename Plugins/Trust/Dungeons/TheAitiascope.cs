@@ -69,8 +69,8 @@ namespace Trust.Dungeons
         // Ysayle's Spirit NpcId: 10762 CastingSpell [Dreams of Ice] [Dreams of Ice] SpellId : 27756
         // Amon the Undying NpcId: 10293 CastingSpell [Right Firaga Forte] [Right Firaga Forte] SpellId : 25696
 
-
-        private readonly PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
+        // Livia the Undeterred
+        private readonly HashSet<uint> aglaeaClimb = new HashSet<uint>() { 25668, 25667, 25666 };
 
         // GENERIC MECHANICS
         private readonly HashSet<uint> stack = new HashSet<uint>()
@@ -78,14 +78,10 @@ namespace Trust.Dungeons
             25234, 25233, 25250, 24145, 25180, 25742, 25677,
         };
 
-        // Livia the Undeterred
-        private readonly HashSet<uint> aglaeaClimb = new HashSet<uint>() { 25668, 25667, 25666 };
-
         // Rhitahtyn the Unshakable
         private readonly HashSet<uint> vexillatio = new HashSet<uint>() { 25678 };
         private readonly HashSet<uint> shieldSkewer = new HashSet<uint>() { 25680 };
         private readonly HashSet<uint> sharpShell = new HashSet<uint>() { 25682, 25684 };
-
 
         // Amon the Undying
         private readonly HashSet<uint> thundagaForte = new HashSet<uint>() { 25690, 25691, 25691 };
@@ -106,10 +102,10 @@ namespace Trust.Dungeons
 
             if (stack.IsCasting())
             {
-                sidestepPlugin.Enabled = false;
+                SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
-                sidestepPlugin.Enabled = true;
+                SidestepPlugin.Enabled = true;
             }
 
             // Livia The Undeterred
@@ -117,12 +113,12 @@ namespace Trust.Dungeons
             {
                 if (aglaeaClimb.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(2500);
                     await MovementHelpers.GetClosestAlly.Follow();
                     await Coroutine.Sleep(1000);
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
             }
 
@@ -131,20 +127,20 @@ namespace Trust.Dungeons
             {
                 if (shieldSkewer.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(6000);
                     await MovementHelpers.GetFurthestAlly.Follow();
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
 
                 if (sharpShell.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(3000);
                     await MovementHelpers.GetFurthestAlly.Follow();
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
             }
 
@@ -154,20 +150,20 @@ namespace Trust.Dungeons
                 if (thundagaForte.IsCasting())
                 {
                     amonTimerTwo.Start();
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(1000);
                     await MovementHelpers.GetFurthestAlly.Follow();
 
                     while (amonTimerTwo.ElapsedMilliseconds <= 14_000)
                     {
-                        await Coroutine.Sleep(500);
                         await MovementHelpers.GetFurthestAlly.Follow();
+                        await Coroutine.Yield();
                     }
 
                     amonTimerTwo.Reset();
                     await Coroutine.Sleep(500);
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
 
                 if (curtainCall.IsCasting())
@@ -177,10 +173,9 @@ namespace Trust.Dungeons
                         amonTimerOne.Restart();
                     }
 
-                    // Logging.Write(Colors.Red, "stopwatchPassed: " + amonTimerOne.ElapsedMilliseconds);
                     if (amonTimerOne.ElapsedMilliseconds >= 20_000)
                     {
-                        sidestepPlugin.Enabled = false;
+                        SidestepPlugin.Enabled = false;
                         AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                         CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, "Get behind mummy shiva ice for protection");
                         Vector3 location = new Vector3(11.26893f, -236f, -482.5912f);
@@ -190,20 +185,20 @@ namespace Trust.Dungeons
 
                 if (rightFiragaForte.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(1200);
                     await MovementHelpers.GetClosestAlly.Follow();
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
 
                 if (leftFiragaForte.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(1200);
                     await MovementHelpers.GetClosestAlly.Follow();
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
             }
 
