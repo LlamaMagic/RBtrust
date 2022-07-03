@@ -12,6 +12,11 @@
         NONE = 0,
 
         /// <summary>
+        /// Lv. 87: The Aitiascope > FrozenSphere Lyssa
+        /// </summary>
+        FrozenSphere = 3766,
+
+        /// <summary>
         /// Lv. 90.1: The Dead Ends > Pestilent Sands
         /// </summary>
         PestilentSands = 4107,
@@ -45,6 +50,7 @@
         /// Lv. 90.1: The Dead Ends > The World Tree
         /// </summary>
         TheWorldTree = 4106,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
     }
 }
