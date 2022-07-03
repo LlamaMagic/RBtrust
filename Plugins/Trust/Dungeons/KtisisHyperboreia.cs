@@ -11,10 +11,11 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Trust.Data;
+using Trust.Dungeons;
 using Trust.Extensions;
 using Trust.Helpers;
 
-namespace Trust.Dungeons
+namespace RBTrust.Plugins.Trust.Dungeons
 {
     /// <summary>
     /// Lv. 87 Ktisis Hyperboreia dungeon logic.
@@ -24,7 +25,7 @@ namespace Trust.Dungeons
         /// <summary>
         /// Gets zone ID for this dungeon.
         /// </summary>
-        public new const ZoneId ZoneId = Data.ZoneId.KtisisHyperboreia;
+        public new const ZoneId ZoneId = global::Trust.Data.ZoneId.KtisisHyperboreia;
 
         // Boss Spells for this dungeon.
         // Lyssa Spells [BOSS] SubZone: 3766
@@ -62,12 +63,8 @@ namespace Trust.Dungeons
         // Hermes NpcId: 10399 CastingSpell [True Tornado] [True Tornado] SpellId : 25906
         // Meteor NpcId: 10495 CastingSpell [Cosmic Kiss] [Cosmic Kiss] SpellId : 25891
 
-
-
         /// <inheritdoc/>
         public override DungeonId DungeonId => DungeonId.KtisisHyperboreia;
-
-        private readonly PluginContainer sidestepPlugin = PluginHelpers.GetSideStepPlugin();
 
         // GENERIC MECHANICS
         private readonly HashSet<uint> stack = new HashSet<uint>()
@@ -78,7 +75,7 @@ namespace Trust.Dungeons
         // Lyssa
         private static readonly Stopwatch stopwatch = new Stopwatch();
         private int frostBiteSeekCount;
-        private readonly HashSet<uint> frostBiteAndSeek = new HashSet<uint>() { 25175 };
+        private readonly HashSet<uint> _frostBiteAndSeek = new HashSet<uint>() { 25175 };
 
         // Ladon Lord
         private readonly HashSet<uint> pyricBreath = new HashSet<uint>() { 25735, 25734, 25736 };
@@ -112,16 +109,16 @@ namespace Trust.Dungeons
 
             if (stack.IsCasting())
             {
-                sidestepPlugin.Enabled = false;
+                SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestAlly.Follow();
-                sidestepPlugin.Enabled = true;
+                SidestepPlugin.Enabled = true;
             }
 
             // Lyssa First Boss
             if (WorldManager.SubZoneId == 3766)
             {
-                if (frostBiteAndSeek.IsCasting())
+                if (_frostBiteAndSeek.IsCasting())
                 {
                     if (!stopwatch.IsRunning)
                     {
@@ -133,7 +130,7 @@ namespace Trust.Dungeons
                     // wait for stopwatch to reach 3 seconds
                     if (stopwatch.ElapsedMilliseconds >= 2500)
                     {
-                        sidestepPlugin.Enabled = false;
+                        SidestepPlugin.Enabled = false;
                         AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
 
                         if (frostBiteSeekCount == 0)
@@ -149,7 +146,7 @@ namespace Trust.Dungeons
                         }
 
                         await MovementHelpers.GetClosestAlly.Follow();
-                        sidestepPlugin.Enabled = true;
+                        SidestepPlugin.Enabled = true;
                         stopwatch.Reset();
                         frostBiteSeekCount++;
                     }
@@ -161,12 +158,12 @@ namespace Trust.Dungeons
             {
                 if (pyricBreath.IsCasting())
                 {
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     await Coroutine.Sleep(1500);
                     await MovementHelpers.GetClosestAlly.Follow();
                     Navigator.PlayerMover.MoveStop();
-                    sidestepPlugin.Enabled = true;
+                    SidestepPlugin.Enabled = true;
                 }
             }
 
@@ -184,7 +181,7 @@ namespace Trust.Dungeons
                 if (hermetica.IsCasting())
                 {
                     Logging.Write(Colors.Red, "stopwatchPassed: " + HermesTrueAeroIITimer.ElapsedMilliseconds);
-                    sidestepPlugin.Enabled = false;
+                    SidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                     moveToSafety = true;
                     while (moveToSafety)
@@ -201,32 +198,32 @@ namespace Trust.Dungeons
                 }
 
                 await Coroutine.Sleep(200);
-                sidestepPlugin.Enabled = true;
+                SidestepPlugin.Enabled = true;
             }
 
             if (trueAero.IsCasting())
             {
-                sidestepPlugin.Enabled = false;
+                SidestepPlugin.Enabled = false;
                 Vector3 location = new Vector3(-8f, 1f, -50.0f);
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5000, "Need to spread for True Aero");
                 await CommonTasks.MoveTo(location);
                 await Coroutine.Sleep(500);
-                sidestepPlugin.Enabled = true;
+                SidestepPlugin.Enabled = true;
             }
 
             if (trueAeroII.IsCasting() || (HermesTrueAeroIITimer.ElapsedMilliseconds >= 142_000 && HermesTrueAeroIITimer.ElapsedMilliseconds <= 150_000))
             {
-                sidestepPlugin.Enabled = false;
+                SidestepPlugin.Enabled = false;
                 Vector3 location = new Vector3(-8f, 1f, -50.0f);
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5000, "Need to spread for True Aero");
                 await CommonTasks.MoveTo(location);
                 await Coroutine.Sleep(500);
-                sidestepPlugin.Enabled = true;
+                SidestepPlugin.Enabled = true;
             }
 
             if (meteor.IsCasting())
             {
-                sidestepPlugin.Enabled = false;
+                SidestepPlugin.Enabled = false;
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5000, "Need to get to the middle to avoid meteor");
                 Vector3 location = new Vector3(0.0f, 0.0f, -50.0f);
                 await CommonTasks.MoveTo(location);
