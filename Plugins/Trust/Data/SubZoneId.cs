@@ -12,6 +12,11 @@
         NONE = 0,
 
         /// <summary>
+        /// Sub-Zone ID unavailable.
+        /// </summary>
+        LongstopFrontblock = 689,
+
+        /// <summary>
         /// Lv. 90.1: The Dead Ends > Pestilent Sands
         /// </summary>
         PestilentSands = 4107,
