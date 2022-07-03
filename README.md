@@ -52,7 +52,7 @@
 
   ✔️ Lv. 81: The Tower of Zot\
   ✔️ Lv. 83: The Tower of Babil\
-  ❌ Lv. 85: Vanaspati\
+  ✔️ Lv. 85: Vanaspati\
   ❌ Lv. 87: Ktisis Hyperboreia\
   ❌ Lv. 89.1: The Aitiascope\
   ❌ Lv. 89.2: The Mothercrystal\

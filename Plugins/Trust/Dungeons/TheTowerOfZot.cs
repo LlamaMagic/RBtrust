@@ -139,7 +139,7 @@ namespace Trust.Dungeons
                 {
                     sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.GetClosestAlly.Follow2(daSw, 24000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(daSw, 24000);
                 }
             }
 
@@ -161,7 +161,7 @@ namespace Trust.Dungeons
                 {
                     sidestepPlugin.Enabled = false;
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.GetClosestAlly.Follow2(tmSw, 20000);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(tmSw, 20000);
                 }
 
                 if (tmSw.ElapsedMilliseconds >= 20000)

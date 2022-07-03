@@ -116,11 +116,11 @@ namespace Trust.Dungeons
                 {
                     if (Core.Me.IsTank())
                     {
-                        await MovementHelpers.GetClosestAlly.Follow2(tentacleDigTimer, 18000, useMesh: true);
+                        await MovementHelpers.GetClosestAlly.FollowTimed(tentacleDigTimer, 18000, useMesh: true);
                     }
                     else
                     {
-                        await MovementHelpers.GetClosestTank.Follow2(tentacleDigTimer, 18000, useMesh: true);
+                        await MovementHelpers.GetClosestTank.FollowTimed(tentacleDigTimer, 18000, useMesh: true);
                     }
                 }
             }
@@ -135,7 +135,7 @@ namespace Trust.Dungeons
 
                 if (toxicFountainTimer.ElapsedMilliseconds < 12000)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(toxicFountainTimer, 12000, useMesh: true);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(toxicFountainTimer, 12000, useMesh: true);
                 }
             }
 
@@ -149,7 +149,7 @@ namespace Trust.Dungeons
 
                 if (articulatedBitsTimer.ElapsedMilliseconds < 24000)
                 {
-                    await MovementHelpers.GetClosestAlly.Follow2(articulatedBitsTimer, 24000, useMesh: true);
+                    await MovementHelpers.GetClosestAlly.FollowTimed(articulatedBitsTimer, 24000, useMesh: true);
                 }
             }
 

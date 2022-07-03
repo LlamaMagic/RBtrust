@@ -17,9 +17,6 @@ namespace Trust.Extensions
     /// </summary>
     internal static class BattleCharacterExtensions
     {
-        private static readonly Stopwatch MoveStopTimer = new Stopwatch();
-        private static Vector3 moveStopDc;
-
         /// <summary>
         /// Determines if <see cref="BattleCharacter"/> is in Tank role.
         /// </summary>
@@ -72,8 +69,6 @@ namespace Trust.Extensions
                 return true;
             }
 
-            MoveStopTimer.Reset();
-
             while (!Core.Me.IsDead && Core.Me.InCombat)
             {
                 curDistance = Core.Me.Distance2D(bc);
@@ -87,7 +82,7 @@ namespace Trust.Extensions
                     return false;
                 }
 
-                Logging.Write(Colors.Aquamarine, $"Following {bc.Name} [Distance2D: {curDistance}]");
+                Logging.Write(Colors.Aquamarine, $"Following ({bc.NpcId}) {bc.Name} - Distance: {curDistance:N2}");
 
                 if (useMesh)
                 {
@@ -103,7 +98,7 @@ namespace Trust.Extensions
 
                 if (curDistance < followDistance + 0.5f)
                 {
-                    moveStopDc = bc.Location;
+                    Vector3 moveStopDc = bc.Location;
 
                     if (await Coroutine.Wait(100, () => bc.Distance2D() < followDistance || bc.Distance2D(moveStopDc) > 0))
                     {
@@ -122,14 +117,24 @@ namespace Trust.Extensions
             return true;
         }
 
-        public static async Task<bool> Follow2(this BattleCharacter bc, Stopwatch sw, double timeToFollow = 3000, float followDistance = 0.3f, int msWait = 0, bool useMesh = false)
+        /// <summary>
+        /// Follows the specified <see cref="BattleCharacter"/> for a certain amount of time.
+        /// </summary>
+        /// <param name="bc">Character to follow.</param>
+        /// <param name="sw"><see cref="Stopwatch"/> to time following with.</param>
+        /// <param name="timeToFollow">Follow duration, in milliseconds.</param>
+        /// <param name="followDistance">Distance to follow at.</param>
+        /// <param name="msWait">Time between movement ticks, in milliseconds.</param>
+        /// <param name="useMesh">Whether to use Nav Mesh or move blindly.</param>
+        /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+        public static async Task<bool> FollowTimed(this BattleCharacter bc, Stopwatch sw, double timeToFollow = 3000, float followDistance = 0.3f, int msWait = 0, bool useMesh = false)
         {
             if (bc == null)
             {
                 return true;
             }
 
-            float curDistance = Core.Me.Location.Distance2D(bc.Location);
+            float curDistance = Core.Me.Distance2D(bc);
 
             if (!sw.IsRunning)
             {
@@ -138,7 +143,7 @@ namespace Trust.Extensions
 
             if (!Core.Me.IsDead && Core.Me.InCombat && (sw.ElapsedMilliseconds <= timeToFollow))
             {
-                Logging.Write(Colors.Aquamarine, $"Following {bc.Name} [Distance: {curDistance}]");
+                Logging.Write(Colors.Aquamarine, $"Following ({bc.NpcId}) {bc.Name} - Distance: {curDistance:N2}, Time Left: {timeToFollow - sw.ElapsedMilliseconds:N0}ms");
 
                 if (curDistance < followDistance)
                 {
@@ -158,7 +163,7 @@ namespace Trust.Extensions
 
                 if (curDistance < 1f)
                 {
-                    moveStopDc = bc.Location;
+                    Vector3 moveStopDc = bc.Location;
 
                     if (await Coroutine.Wait(100, () => bc.Distance2D() < followDistance || bc.Distance2D(moveStopDc) > 0))
                     {
