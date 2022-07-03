@@ -1,4 +1,5 @@
 ﻿using ff14bot.Managers;
+using RBTrust.Plugins.Trust.Dungeons;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
