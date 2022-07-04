@@ -12,6 +12,11 @@
         NONE = 0,
 
         /// <summary>
+        /// Lv. 32: Brayflox's Longstop > Longstop Frontblock, Hellbender
+        /// </summary>
+        LongstopFrontblock = 689,
+
+        /// <summary>
         /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
         /// </summary>
         FrozenSphere = 3766,
