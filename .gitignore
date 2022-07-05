@@ -451,11 +451,7 @@ Temporary Items
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+.idea/*
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -746,3 +742,5 @@ $RECYCLE.BIN/
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,macos,csharp,windows,visualstudio,visualstudiocode,rider
+.idea/.idea.RBTrust/.idea/.name
+.idea/.idea.RBTrust/.idea/codeStyles/codeStyleConfig.xml
