@@ -12,9 +12,39 @@
         NONE = 0,
 
         /// <summary>
-        /// Sub-Zone ID unavailable.
+        /// Lv. 32: Brayflox's Longstop > Longstop Frontblock, Hellbender
         /// </summary>
         LongstopFrontblock = 689,
+
+        /// <summary>
+        /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
+        /// </summary>
+        FrozenSphere = 3766,
+
+        /// <summary>
+        /// Lv. 87: Ktisis Hyperboreia  > Concept Review, Ladon Lord
+        /// </summary>
+        ConceptReview = 3767,
+
+        /// <summary>
+        /// Lv. 87: Ktisis Hyperboreia  > Celestial Sphere, Hermes
+        /// </summary>
+        CelestialSphere = 3768,
+
+        /// <summary>
+        /// Lv. 89.1: The Aitiascope > Central Observatory, Livia The Undeterred
+        /// </summary>
+        CentralObservatory = 3992,
+
+        /// <summary>
+        /// Lv. 89.1: The Aitiascope > Saltcrystal Strings, Rhitahtyn the Unshakable
+        /// </summary>
+        SaltcrystalStrings = 3993,
+
+        /// <summary>
+        /// Lv. 89.1: The Aitiascope > Midnight Downwell, Amon the Undying
+        /// </summary>
+        MidnightDownwell = 3994,
 
         /// <summary>
         /// Lv. 90.1: The Dead Ends > Pestilent Sands
