@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Profile [
+<!ENTITY Shortcut "2000700">
 ]>
 <Profile>
   <Name>[O][RBTrust] 79 Mt. Gulg by sodimm, Manta</Name>
@@ -18,6 +19,11 @@
 
       <If Condition="IsOnMap(822)">
         <WaitForLoading/>
+
+        <If Condition="ObjectExistsWithId(&Shortcut;) and GameObjectManager.GetObjectByNPCId(&Shortcut;).IsTargetable">
+          <!-- Shortcut available -->
+          <UseTransport NpcId="&Shortcut;" XYZ="283.1855, -78.43968, 117.0798"/>
+        </If>
 
         <MoveTo XYZ="194.0202, -48, -169.6748"/>
         <WaitTimer WaitTime="3"/>

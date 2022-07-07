@@ -17,6 +17,26 @@
         LongstopFrontblock = 689,
 
         /// <summary>
+        /// Lv. 79: Mt. Gulg > The Perished Path
+        /// </summary>
+        ThePerishedPath = 2998,
+
+        /// <summary>
+        /// Lv. 79: Mt. Gulg > The White Gate
+        /// </summary>
+        TheWhiteGate = 2999,
+
+        /// <summary>
+        /// Lv. 79: Mt. Gulg > The False Prayer
+        /// </summary>
+        TheFalsePrayer = 3027,
+
+        /// <summary>
+        /// Lv. 79: Mt. Gulg > The Winding Flare
+        /// </summary>
+        TheWindingFlare = 3000,
+
+        /// <summary>
         /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
         /// </summary>
         FrozenSphere = 3766,
