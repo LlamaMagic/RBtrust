@@ -12,9 +12,59 @@
         NONE = 0,
 
         /// <summary>
+        /// Lv. 32: The Thousand Maws of Toto-Rak > Confession Chamber, Coeurl O' Nine Tails
+        /// </summary>
+        ConfessionChamber = 523,
+
+        /// <summary>
+        /// Lv. 32: The Thousand Maws of Toto-Rak > The Fool's Rest, Coeurl O' Nine Tails - Part 2
+        /// </summary>
+        TheFoolsRest = 522,
+
+        /// <summary>
+        /// Lv. 32: The Thousand Maws of Toto-Rak > Abacination Chamber, Graffias
+        /// </summary>
+        AbacinationChamber = 612,
+
+        /// <summary>
         /// Lv. 32: Brayflox's Longstop > Longstop Frontblock, Hellbender
         /// </summary>
         LongstopFrontblock = 689,
+
+        /// <summary>
+        /// Lv. 44: Dzemael Darkhold > Grand Hall, All-Seeing Eye
+        /// </summary>
+        GrandHall = 808,
+
+        /// <summary>
+        /// Lv. 44: Dzemael Darkhold > Feasting Hall, Taulurd
+        /// </summary>
+        FeastingHall = 810,
+
+        /// <summary>
+        /// Lv. 44: Dzemael Darkhold > Altar to Saint Daniffen, Batraal
+        /// </summary>
+        AltartoSaintDaniffen = 812,
+
+        /// <summary>
+        /// Lv. 50: Pharos Sirius > Second Spire, Symond the Unsinkable
+        /// </summary>
+        SecondSpire = 928,
+
+        /// <summary>
+        /// Lv. 50: Pharos Sirius > Fuel Chamber, Zu
+        /// </summary>
+        FuelChamber = 929,
+
+        /// <summary>
+        /// Lv. 50: Pharos Sirius > Aether Compressor, Tyrant
+        /// </summary>
+        AetherCompressor = 930,
+
+        /// <summary>
+        /// Lv. 50: Pharos Sirius > Beacon Chamber, Siren
+        /// </summary>
+        BeaconChamber = 931,
 
         /// <summary>
         /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
