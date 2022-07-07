@@ -12,6 +12,26 @@
         NONE = 0,
 
         /// <summary>
+        /// Lv. 89: Mt. Gulg > The Perished Path
+        /// </summary>
+        ThePerishedPath = 2998,
+
+        /// <summary>
+        /// Lv. 89: Mt. Gulg > The White Gate
+        /// </summary>
+        TheWhiteGate = 2999,
+
+        /// <summary>
+        /// Lv. 89: Mt. Gulg > The False Prayer
+        /// </summary>
+        TheFalsePrayer = 3027,
+
+        /// <summary>
+        /// Lv. 89: Mt. Gulg > The Winding Flare
+        /// </summary>
+        TheWindingFlare = 3000,
+
+        /// <summary>
         /// Lv. 90.1: The Dead Ends > Pestilent Sands
         /// </summary>
         PestilentSands = 4107,
