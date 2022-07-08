@@ -67,6 +67,21 @@
         BeaconChamber = 931,
 
         /// <summary>
+        /// Lv. 50: The Copperbell Mines (Hard) > The Screaming Dark, Hecatoncheir Mastermind
+        /// </summary>
+        TheScreamingDark = 679,
+
+        /// <summary>
+        /// Lv. 50: The Copperbell Mines (Hard) > The Crying Dark, Gogmagolem
+        /// </summary>
+        TheCryingDark = 680,
+
+        /// <summary>
+        /// Lv. 50: The Copperbell Mines (Hard) > The Cold Throne, Ouranos
+        /// </summary>
+        TheColdThrone = 681,
+
+        /// <summary>
         /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
         /// </summary>
         FrozenSphere = 3766,

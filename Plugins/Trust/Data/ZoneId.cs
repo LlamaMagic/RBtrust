@@ -112,6 +112,11 @@
         TheWanderersPalace = 159,
 
         /// <summary>
+        /// Lv. 50.6: The Copperbell Mines (Hard)
+        /// </summary>
+        TheCopperbellMinesHard = 349,
+
+        /// <summary>
         /// Lv. 50: Syrcus Tower
         /// </summary>
         SyrcusTower = 372,

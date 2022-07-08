@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -85,6 +86,7 @@
     <Compile Include="Plugins\Trust\Dungeons\SyrcusTower.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheAitiascope.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheBowlOfEmbers.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheCopperbellMinesHard.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheDeadEnds.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheGrandCosmos.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheHeroesGauntlet.cs" />

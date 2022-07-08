@@ -38,6 +38,7 @@ namespace Trust.Dungeons
                 { ZoneId.CastrumMeridianum, new CastrumMeridianum() },
                 { ZoneId.TheWanderersPalace, new TheWanderersPalace() },
                 { ZoneId.PharosSirius , new PharosSirius() },
+                { ZoneId.TheCopperbellMinesHard , new TheCopperbellMinesHard() },
                 { ZoneId.ThePraetorium, new ThePraetorium() },
                 { ZoneId.ThePortaDecumana, new ThePortaDecumana() },
                 { ZoneId.SyrcusTower, new SyrcusTower() },
