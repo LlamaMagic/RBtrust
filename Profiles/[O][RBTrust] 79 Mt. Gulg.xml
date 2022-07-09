@@ -72,9 +72,7 @@
 
           <ClimbHill Start="-240, 204, 188" End="-240, 210, 210" Distance="2.5" />
         </If>
-
-        <StopBot/>
-
+        
         <If Condition="WorldManager.SubZoneId in [&TheFalsePrayer;, &TheWindingFlare;]">
           <MoveTo Distance="1" XYZ="-239.9252, 210, 214.856"/>
           <WaitWhile Condition="not ObjectExistsWithId(8262)"/>
