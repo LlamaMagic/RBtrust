@@ -77,6 +77,11 @@
         TheHowlingEye = 1047,
 
         /// <summary>
+        /// Lv. 44: Dzemael Darkhold
+        /// </summary>
+        DzemaelDarkhold = 171,
+
+        /// <summary>
         /// Lv. 47: The Aurum Vale
         /// </summary>
         TheAurumVale = 172,
@@ -95,6 +100,21 @@
         /// Lv. 50.3: The Porta Decumana
         /// </summary>
         ThePortaDecumana = 1048,
+
+        /// <summary>
+        /// Lv. 50.4: Pharos Sirius
+        /// </summary>
+        PharosSirius = 160,
+
+        /// <summary>
+        /// Lv. 50.5: The Wanderers Palace
+        /// </summary>
+        TheWanderersPalace = 159,
+
+        /// <summary>
+        /// Lv. 50.6: The Copperbell Mines (Hard)
+        /// </summary>
+        TheCopperbellMinesHard = 349,
 
         /// <summary>
         /// Lv. 50: Syrcus Tower

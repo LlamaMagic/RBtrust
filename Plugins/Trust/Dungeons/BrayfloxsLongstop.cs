@@ -17,14 +17,13 @@ namespace Trust.Dungeons
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.BrayfloxsLongstop;
 
+        public override DungeonId DungeonId => DungeonId.BrayfloxsLongstop;
+
         private const int GreatYellowPelican = 1280;
         private const int InfernoDrake = 1284;
         private const int Hellbender = 1286;
         private const int BubbleObj = 1383;
         private const int Aiatar = 1279;
-
-        /// <inheritdoc/>
-        public override DungeonId DungeonId => DungeonId.BrayfloxsLongstop;
 
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()

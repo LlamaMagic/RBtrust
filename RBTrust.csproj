@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -31,12 +32,14 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=AMD64">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.497\lib\net461\GreyMagic.dll</HintPath>
+    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.499\lib\net461\GreyMagic.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="RebornBuddy, Version=1.0.497.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=AMD64">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.497\lib\net461\RebornBuddy.exe</HintPath>
+    <Reference Include="RebornBuddy, Version=1.0.499.0, Culture=neutral, PublicKeyToken=48d7174f8a943034">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.499\lib\net461\RebornBuddy.exe</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,7 +65,9 @@
     <Compile Include="Plugins\Trust\Dungeons\AnamnesisAnyder.cs" />
     <Compile Include="Plugins\Trust\Dungeons\BrayfloxsLongstop.cs" />
     <Compile Include="Plugins\Trust\Dungeons\CopperbellMines.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\DzemaelDarkhold.cs" />
     <Compile Include="Plugins\Trust\Dungeons\HaukkeManor.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\PharosSirius.cs" />
     <Compile Include="Plugins\Trust\Dungeons\Sastasha.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheAurumVale.cs" />
     <Compile Include="Plugins\Trust\Dungeons\CastrumMeridianum.cs" />
@@ -81,6 +86,7 @@
     <Compile Include="Plugins\Trust\Dungeons\SyrcusTower.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheAitiascope.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheBowlOfEmbers.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheCopperbellMinesHard.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheDeadEnds.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheGrandCosmos.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheHeroesGauntlet.cs" />
@@ -95,6 +101,7 @@
     <Compile Include="Plugins\Trust\Dungeons\TheThousandMawsOfTotoRak.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheTowerOfBabil.cs" />
     <Compile Include="Plugins\Trust\Dungeons\TheTowerOfZot.cs" />
+    <Compile Include="Plugins\Trust\Dungeons\TheWanderersPalace.cs" />
     <Compile Include="Plugins\Trust\Dungeons\Vanaspati.cs" />
     <Compile Include="Plugins\Trust\Extensions\BattleCharacterExtensions.cs" />
     <Compile Include="Plugins\Trust\Extensions\Extensions.cs" />
