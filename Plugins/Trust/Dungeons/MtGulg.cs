@@ -21,24 +21,25 @@ namespace Trust.Dungeons
         /// </summary>
         public new const ZoneId ZoneId = Data.ZoneId.MtGulg;
 
-        private const int ForgivenWhimsy = 8261;
         private const int ForgivenCruelty = 8260;
+        private const int ForgivenWhimsy = 8261;
+        private const int Brightsphere = 7864;
+        private const int JudgmentDayTower = 2009807;
         private const int ForgivenRevelry = 8270;
         private const int ForgivenObscenity = 8262;
+        private const int ForgivenDissonance = 8299;
 
         /// <summary>
         /// Set of boss-related monster IDs.
         /// </summary>
         private static readonly HashSet<uint> BossIds = new HashSet<uint>
         {
-            4385,
-            7864,
-            8925, // Brightsphere          :: 光明晶球
+            Brightsphere,
             ForgivenCruelty,
             ForgivenWhimsy,
             ForgivenObscenity,
             ForgivenRevelry,
-            8299, // Forgiven Dissonance   :: 得到宽恕的失调
+            ForgivenDissonance,
         };
 
         private static readonly HashSet<uint> Spells = new HashSet<uint>() { 15614, 15615, 15616, 15617, 15618, 15622, 15623, 15638, 15640, 15641, 15642, 15643, 15644, 15645, 15648, 15649, 16247, 16248, 16249, 16250, 16521, 16818, 16987, 16988, 16989, 17153, 18025, };
@@ -54,61 +55,57 @@ namespace Trust.Dungeons
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
-            BattleCharacter forgivenCrueltyNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenCruelty)
-                .FirstOrDefault(bc => bc.Distance() < 50);
-            if (forgivenCrueltyNpc != null && forgivenCrueltyNpc.IsValid)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.ThePerishedPath)
             {
                 if (LumenInfinitum.IsCasting())
                 {
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.GetClosestDps.Follow();
+                    await MovementHelpers.GetClosestAlly.Follow();
                 }
             }
 
-            BattleCharacter forgivenWhimsyNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenWhimsy)
-                .FirstOrDefault(bc => bc.Distance() < 50);
-            if (forgivenWhimsyNpc != null && forgivenWhimsyNpc.IsValid)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.TheWhiteGate)
             {
-                SidestepPlugin.Enabled = false;
-
                 if (Exegesis.IsCasting())
                 {
                     AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.GetClosestDps.Follow();
-                }
-            }
-            else
-            {
-                SidestepPlugin.Enabled = true;
-            }
-
-            BattleCharacter forgivenRevelryNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenRevelry)
-                .FirstOrDefault(bc => bc.Distance() < 50);
-            if (forgivenRevelryNpc != null && forgivenRevelryNpc.IsValid)
-            {
-                if (RightPalm.IsCasting() || LeftPalm.IsCasting())
-                {
-                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.GetClosestDps.Follow();
+                    await MovementHelpers.GetClosestAlly.Follow();
                 }
             }
 
-            BattleCharacter forgivenObscenityNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenObscenity)
-                .FirstOrDefault(bc => bc.Distance() < 50);
-            if (forgivenObscenityNpc != null && forgivenObscenityNpc.IsValid)
+            if (WorldManager.SubZoneId == (uint)SubZoneId.TheFalsePrayer)
             {
-                if (GoldChaser.IsCasting())
+                BattleCharacter forgivenRevelryNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenRevelry)
+                        .FirstOrDefault(bc => bc.Distance() < 50);
+                if (forgivenRevelryNpc != null && forgivenRevelryNpc.IsValid)
                 {
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 20_000, "Forgiven Obscenity Avoid");
-                    while (sw.ElapsedMilliseconds < 20_000)
+                    if (RightPalm.IsCasting() || LeftPalm.IsCasting())
                     {
+                        AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                         await MovementHelpers.GetClosestAlly.Follow();
-                        await Coroutine.Yield();
                     }
+                }
+            }
 
-                    sw.Stop();
+            if (WorldManager.SubZoneId == (uint)SubZoneId.TheWindingFlare)
+            {
+                BattleCharacter forgivenObscenityNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenObscenity)
+                        .FirstOrDefault(bc => bc.Distance() < 50);
+                if (forgivenObscenityNpc != null && forgivenObscenityNpc.IsValid)
+                {
+                    if (GoldChaser.IsCasting())
+                    {
+                        Stopwatch sw = new Stopwatch();
+                        sw.Start();
+                        CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 20_000, "Forgiven Obscenity Avoid");
+                        while (sw.ElapsedMilliseconds < 20_000)
+                        {
+                            await MovementHelpers.GetClosestAlly.Follow();
+                            await Coroutine.Yield();
+                        }
+
+                        sw.Stop();
+                    }
                 }
             }
 
@@ -118,7 +115,7 @@ namespace Trust.Dungeons
                 await MovementHelpers.GetClosestAlly.Follow();
             }
 
-            if (WorldManager.SubZoneId != 3000)
+            if (WorldManager.SubZoneId != (uint)SubZoneId.TheWindingFlare)
             {
                 BossIds.ToggleSideStep(new uint[] { ForgivenObscenity });
             }
