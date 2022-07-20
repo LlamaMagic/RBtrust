@@ -105,6 +105,7 @@
     <Compile Include="Plugins\Trust\Dungeons\Vanaspati.cs" />
     <Compile Include="Plugins\Trust\Extensions\BattleCharacterExtensions.cs" />
     <Compile Include="Plugins\Trust\Extensions\Extensions.cs" />
+    <Compile Include="Plugins\Trust\Extensions\LocalPlayerExtensions.cs" />
     <Compile Include="Plugins\Trust\Helpers\AvoidanceHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\LoadingHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\LocalizationHelpers.cs" />
