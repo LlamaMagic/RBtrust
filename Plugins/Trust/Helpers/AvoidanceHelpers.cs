@@ -45,7 +45,7 @@ namespace RBTrust.Plugins.Trust.Helpers
         /// <param name="caster"><see cref="BattleCharacter"/> currently casting.</param>
         /// <param name="outerRadius">Radius of entire donut.</param>
         /// <param name="innerRadius">Radius of inner safe zone.</param>
-        /// <returns><see cref="AvoidInfo"/> for the new rectangle.</returns>
+        /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
         public static AvoidInfo AddAvoidDonut(BattleCharacter caster, double outerRadius, double innerRadius = 6.0)
         {
             Vector2[] donut = GenerateDonut(outerRadius, innerRadius);
@@ -54,13 +54,42 @@ namespace RBTrust.Plugins.Trust.Helpers
             return AvoidanceManager.AddAvoidPolygon(
                 condition: () => caster.IsValid && caster.CastingSpellId == cachedSpellId,
                 leashPointProducer: () => caster.Location,
-                leashRadius: (float)outerRadius,
+                leashRadius: (float)outerRadius * 1.5f,
                 rotationProducer: bc => 0.0f,
                 scaleProducer: bc => 1.0f,
                 heightProducer: bc => 15.0f,
                 pointsProducer: bc => donut,
                 locationProducer: bc => caster.Location,
                 collectionProducer: () => new[] { caster });
+        }
+
+        /// <summary>
+        /// Creates a donut-shaped avoid at the given location.
+        /// </summary>
+        /// <param name="canRun">Condition function that returns <see langword="true"/> when the avoid should be active.</param>
+        /// <param name="locationProducer">Position function that returns a <see cref="Vector3"/> of the donut's center.</param>
+        /// <param name="outerRadius">Radius of entire donut.</param>
+        /// <param name="innerRadius">Radius of inner safe zone.</param>
+        /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
+        public static AvoidInfo AddAvoidDonut(Func<bool> canRun, Func<Vector3> locationProducer, double outerRadius, double innerRadius = 6.0)
+        {
+            Vector2[] donut = GenerateDonut(outerRadius, innerRadius);
+
+            // RB avoidance ultimately expects Collection to be populated with objects it checks against
+            // Location when calculating avoids, usually descended from GameObject. But for drawing directly
+            // to the world, there is no GameObject to draw avoids relative to. Therefore, Collection<T> is
+            // populated with the Vector3 we want to draw at, which gets passed in to the locationProducer at
+            // run-time for us to simply return as-is, per one of RB's own AddAvoidLocation() overloads.
+            return AvoidanceManager.AddAvoidPolygon(
+                condition: canRun,
+                leashPointProducer: locationProducer,
+                leashRadius: (float)outerRadius * 1.5f,
+                rotationProducer: bc => 0.0f,
+                scaleProducer: bc => 1.0f,
+                heightProducer: bc => 15.0f,
+                pointsProducer: bc => donut,
+                locationProducer: (Vector3 location) => location,
+                collectionProducer: () => new Vector3[1] { locationProducer() });
         }
 
         private static Vector2[] GenerateRectangle(float width, float length, float xOffset, float yOffset)
