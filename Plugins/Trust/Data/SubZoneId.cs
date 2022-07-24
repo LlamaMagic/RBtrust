@@ -30,7 +30,7 @@
         /// Lv. 32: Brayflox's Longstop > Longstop Frontblock, Hellbender
         /// </summary>
         LongstopFrontblock = 689,
-        
+
         /// Lv. 44: Dzemael Darkhold > Grand Hall, All-Seeing Eye
         /// </summary>
         GrandHall = 808,
@@ -81,6 +81,21 @@
         TheColdThrone = 681,
 
         /// <summary>
+        /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
+        /// </summary>
+        TeagGye = 2963,
+
+        /// <summary>
+        /// Lv. 73: Dohn Mheg > The Atelier, Griaule
+        /// </summary>
+        TheAtelier = 2966,
+
+        /// <summary>
+        /// Lv. 73: Dohn Mheg > The Throne Room, Lord of the Lengthsome Gait
+        /// </summary>
+        TheThroneRoom = 2968,
+
+        /// <summary>
         /// Lv. 79: Mt. Gulg > The Perished Path
         /// </summary>
         ThePerishedPath = 2998,
@@ -99,7 +114,7 @@
         /// Lv. 79: Mt. Gulg > The Winding Flare
         /// </summary>
         TheWindingFlare = 3000,
-        
+
         /// <summary>
         /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
         /// </summary>
