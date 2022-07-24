@@ -106,9 +106,11 @@
     <Compile Include="Plugins\Trust\Extensions\BattleCharacterExtensions.cs" />
     <Compile Include="Plugins\Trust\Extensions\Extensions.cs" />
     <Compile Include="Plugins\Trust\Extensions\LocalPlayerExtensions.cs" />
+    <Compile Include="Plugins\Trust\Extensions\Vector3Extensions.cs" />
     <Compile Include="Plugins\Trust\Helpers\AvoidanceHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\LoadingHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\LocalizationHelpers.cs" />
+    <Compile Include="Plugins\Trust\Helpers\LoggingHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\MovementHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\PluginHelpers.cs" />
     <Compile Include="Plugins\Trust\Helpers\ReceiveMessageHelpers.cs" />
