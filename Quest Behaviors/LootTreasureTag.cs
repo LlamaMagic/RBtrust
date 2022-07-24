@@ -41,6 +41,10 @@ namespace ff14bot.NeoProfiles.Tags
 
             bool lootedSomething = false;
 
+            // Equip Recommended only works with gear in armory chest, so don't try if item didn't go into armory
+            // (loot wasn't gear, already had unique item, armory full, "loot to armory" disabled, etc)
+            int oldArmoryChestCount = InventoryManager.FilledArmorySlots.Count();
+
             foreach (Treasure chest in nearbyChests)
             {
                 while (Core.Me.Distance(chest.Location) > InteractRange)
@@ -57,7 +61,7 @@ namespace ff14bot.NeoProfiles.Tags
                 await Coroutine.Sleep(LootingCooldown);
             }
 
-            if (lootedSomething && ShouldEquipRecommended)
+            if (lootedSomething && ShouldEquipRecommended && oldArmoryChestCount < InventoryManager.FilledArmorySlots.Count())
             {
                 await RecommendEquip.EquipAsync();
             }
