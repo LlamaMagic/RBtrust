@@ -1,10 +1,8 @@
 ﻿using ff14bot;
-using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
 using Trust.Helpers;
 
 namespace Trust.Extensions
@@ -21,19 +19,10 @@ namespace Trust.Extensions
         /// <returns><see langword="true"/> if any given spell is being casted.</returns>
         public static bool IsCasting(this HashSet<uint> spellCastIds)
         {
-            BattleCharacter nonPartyCaster = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
+            return GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
                     .Where(bc => spellCastIds.Contains(bc.CastingSpellId))
                     .Where(bc => !(bool)PartyManager.AllMembers?.Any(pm => pm.ObjectId == bc.ObjectId))
-                    .FirstOrDefault();
-
-            if (nonPartyCaster != null)
-            {
-                SpellCastInfo spell = nonPartyCaster.SpellCastInfo;
-
-                Logging.Write(Colors.Yellow, $"SpellCastInfo: ({nonPartyCaster.NpcId}) {nonPartyCaster.Name} casting ({spell.ActionId}) {spell.Name}");
-            }
-
-            return nonPartyCaster != null;
+                    .Any();
         }
 
         /// <summary>

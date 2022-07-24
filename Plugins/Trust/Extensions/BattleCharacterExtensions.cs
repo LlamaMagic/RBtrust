@@ -121,13 +121,13 @@ namespace Trust.Extensions
         /// Follows the specified <see cref="BattleCharacter"/> for a certain amount of time.
         /// </summary>
         /// <param name="bc">Character to follow.</param>
-        /// <param name="sw"><see cref="Stopwatch"/> to time following with.</param>
+        /// <param name="stopwatch"><see cref="Stopwatch"/> to time following with.</param>
         /// <param name="timeToFollow">Follow duration, in milliseconds.</param>
         /// <param name="followDistance">Distance to follow at.</param>
         /// <param name="msWait">Time between movement ticks, in milliseconds.</param>
         /// <param name="useMesh">Whether to use Nav Mesh or move blindly.</param>
         /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
-        public static async Task<bool> FollowTimed(this BattleCharacter bc, Stopwatch sw, double timeToFollow = 3000, float followDistance = 0.3f, int msWait = 0, bool useMesh = false)
+        public static async Task<bool> FollowTimed(this BattleCharacter bc, Stopwatch stopwatch, double timeToFollow = 3000, float followDistance = 0.3f, int msWait = 0, bool useMesh = false)
         {
             if (bc == null)
             {
@@ -136,15 +136,14 @@ namespace Trust.Extensions
 
             float curDistance = Core.Me.Distance2D(bc);
 
-            if (!sw.IsRunning)
+            if (!stopwatch.IsRunning)
             {
-                sw.Restart();
+                Logging.Write(Colors.Aquamarine, $"Following ({bc.NpcId}) {bc.Name} - Distance: {curDistance:N2}, Time Left: {timeToFollow - stopwatch.ElapsedMilliseconds:N0}ms");
+                stopwatch.Restart();
             }
 
-            if (!Core.Me.IsDead && Core.Me.InCombat && (sw.ElapsedMilliseconds <= timeToFollow))
+            if (!Core.Me.IsDead && Core.Me.InCombat && (stopwatch.ElapsedMilliseconds <= timeToFollow))
             {
-                Logging.Write(Colors.Aquamarine, $"Following ({bc.NpcId}) {bc.Name} - Distance: {curDistance:N2}, Time Left: {timeToFollow - sw.ElapsedMilliseconds:N0}ms");
-
                 if (curDistance < followDistance)
                 {
                     Navigator.Stop();
@@ -175,6 +174,11 @@ namespace Trust.Extensions
                         Navigator.PlayerMover.MoveStop();
                     }
                 }
+            }
+            else
+            {
+                Logging.Write(Colors.Aquamarine, $"Done following ({bc.NpcId}) {bc.Name} - Final Distance: {curDistance:N2}");
+                stopwatch.Reset();
             }
 
             return false;
