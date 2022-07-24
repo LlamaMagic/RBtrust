@@ -123,13 +123,16 @@ namespace Trust
             if (!Core.Me.InCombat && ActionManager.IsSprintReady && MovementManager.IsMoving)
             {
                 ActionManager.Sprint();
-                await Coroutine.Wait(1000, () => !ActionManager.IsSprintReady);
+                await Coroutine.Wait(1_000, () => !ActionManager.IsSprintReady);
             }
 
             if (await PlayerCheck())
             {
                 return true;
             }
+
+            LoggingHelpers.LogAllSpellCasts();
+            LoggingHelpers.LogZoneChanges();
 
             return await dungeonManager.RunAsync();
         }
