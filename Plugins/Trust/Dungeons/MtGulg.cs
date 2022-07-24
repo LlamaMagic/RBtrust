@@ -1,6 +1,10 @@
 using Buddy.Coroutines;
+using Clio.Utilities;
+using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using RBTrust.Plugins.Trust.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -49,12 +53,22 @@ namespace Trust.Dungeons
         private static readonly HashSet<uint> LeftPalm = new HashSet<uint>() { 16249, 16250 };
         private static readonly HashSet<uint> GoldChaser = new HashSet<uint>() { 15652, 15653, 17066 };
 
+        private static readonly HashSet<uint> PenancePianissimo = new HashSet<uint>() { 15644 };
+        private static readonly Vector3 PenancePianissimoCenter = new Vector3(-239.9347f, 210.0f, 236.9791f);
+        private static readonly int PenancePianissimoDuration = 45_000;
+        private static DateTime penancePianissimoTimestamp = DateTime.MinValue;
+
         /// <inheritdoc/>
         public override DungeonId DungeonId => DungeonId.MtGulg;
 
         /// <inheritdoc/>
         public override async Task<bool> RunAsync()
         {
+            if (!Core.Player.InCombat)
+            {
+                AvoidanceManager.RemoveAllAvoids(ai => !ai.CanRun);
+            }
+
             if (WorldManager.SubZoneId == (uint)SubZoneId.ThePerishedPath)
             {
                 if (LumenInfinitum.IsCasting())
@@ -93,6 +107,18 @@ namespace Trust.Dungeons
                         .FirstOrDefault(bc => bc.Distance() < 50);
                 if (forgivenObscenityNpc != null && forgivenObscenityNpc.IsValid)
                 {
+                    if (PenancePianissimo.IsCasting() && penancePianissimoTimestamp < DateTime.Now)
+                    {
+                        penancePianissimoTimestamp = DateTime.Now.AddMilliseconds(PenancePianissimoDuration);
+
+                        // Create an AOE avoid for the orange swirly under the boss
+                        AvoidanceHelpers.AddAvoidDonut(
+                            canRun: () => Core.Player.InCombat && DateTime.Now < penancePianissimoTimestamp,
+                            locationProducer: () => PenancePianissimoCenter,
+                            outerRadius: 30,
+                            innerRadius: 15);
+                    }
+
                     if (GoldChaser.IsCasting())
                     {
                         Stopwatch sw = new Stopwatch();
