@@ -131,7 +131,7 @@ namespace Trust
                 return true;
             }
 
-            LoggingHelpers.LogAllSpellCasts();
+            //LoggingHelpers.LogAllSpellCasts();
             LoggingHelpers.LogZoneChanges();
 
             return await dungeonManager.RunAsync();
