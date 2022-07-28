@@ -61,6 +61,7 @@ namespace Trust.Dungeons
             new Vector3(-125.6857f, -144.5238f, -249.2640f),
             new Vector3(-122.5055f, -144.5192f, -258.3726f),
             new Vector3(-128.1084f, -144.5226f, -258.0896f),
+            new Vector3(-128.4761f, -144.5166f, -262.4524f),
         };
 
         private DateTime laughingLeapEnds = DateTime.MinValue;
