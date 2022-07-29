@@ -120,10 +120,17 @@ namespace Trust
 
         private async Task<bool> RunTrust()
         {
-            if (!Core.Me.InCombat && ActionManager.IsSprintReady && MovementManager.IsMoving)
+            if (!Core.Me.InCombat && MovementManager.IsMoving)
             {
-                ActionManager.Sprint();
-                await Coroutine.Wait(1_000, () => !ActionManager.IsSprintReady);
+                if (ActionManager.IsSprintReady)
+                {
+                    ActionManager.Sprint();
+                    await Coroutine.Wait(1_000, () => !ActionManager.IsSprintReady);
+                }
+                else if (!Core.Player.HasAura(1199) && ActionManager.CanCast(7557, Core.Player))
+                {
+                    ActionManager.DoAction(7557, Core.Player);
+                }
             }
 
             if (await PlayerCheck())
