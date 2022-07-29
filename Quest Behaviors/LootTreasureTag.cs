@@ -16,14 +16,14 @@ namespace ff14bot.NeoProfiles.Tags
     [XmlElement("LootTreasure")]
     public class LootTreasureTag : AbstractTaskTag
     {
-        private const float InteractRange = 1.5f;
-        private const int LootingCooldown = 1500;
+        private const float InteractRange = 1.0f;
+        private const int LootingCooldown = 1_500;
 
         /// <summary>
         /// Gets or sets max search radius for Treasure Coffers.
         /// </summary>
         [XmlAttribute("MaxDistance")]
-        public int MaxDistance { get; set; } = 50;
+        public float MaxDistance { get; set; } = 40.0f;
 
         /// <summary>
         /// Gets or sets a value indicating whether to equip recommended after looting.
@@ -35,11 +35,9 @@ namespace ff14bot.NeoProfiles.Tags
         protected override async Task<bool> RunAsync()
         {
             IOrderedEnumerable<Treasure> nearbyChests = GameObjectManager.GetObjectsOfType<Treasure>()
-              .Where(c => !c.IsOpen)
-              .Where(c => c.Distance() < MaxDistance)
-              .OrderBy(c => c.Distance());
-
-            bool lootedSomething = false;
+              .Where(chest => chest.IsValid && chest.IsTargetable && !chest.IsOpen)
+              .Where(chest => chest.Distance() < MaxDistance)
+              .OrderBy(chest => chest.Distance());
 
             // Equip Recommended only works with gear in armory chest, so don't try if item didn't go into armory
             // (loot wasn't gear, already had unique item, armory full, "loot to armory" disabled, etc)
@@ -54,16 +52,21 @@ namespace ff14bot.NeoProfiles.Tags
                 }
 
                 Navigator.PlayerMover.MoveStop();
+                await Coroutine.Sleep(250);
 
                 chest.Interact();
-                lootedSomething = true;
 
                 await Coroutine.Sleep(LootingCooldown);
             }
 
-            if (lootedSomething && ShouldEquipRecommended && oldArmoryChestCount < InventoryManager.FilledArmorySlots.Count())
+            if (ShouldEquipRecommended)
             {
-                await RecommendEquip.EquipAsync();
+                bool hasNewArmoryItem = oldArmoryChestCount < InventoryManager.FilledArmorySlots.Count();
+
+                if (hasNewArmoryItem)
+                {
+                    await RecommendEquip.EquipAsync();
+                }
             }
 
             return false;
