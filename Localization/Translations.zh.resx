@@ -118,30 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="JOB_DIFFICULTY_WARNING" xml:space="preserve">
-    <value>Certain jobs may have difficulty with some bosses.</value>
-  </data>
-  <data name="LOCALIZATION_CHANGED" xml:space="preserve">
-    <value>Localization changed to "{cultureCode}".</value>
-  </data>
-  <data name="LOCALIZATION_NOT_FOUND" xml:space="preserve">
-    <value>Failed to load localization "{cultureCode}": resource file not found.</value>
+    <value>近战如果打不到BOSS,另一个DPS带琳,添加吃食物,在trust设置里设置食物</value>
   </data>
   <data name="PLAYER_DIED_RELOADING_PROFILE" xml:space="preserve">
-    <value>Player has died. Reloading current profile.</value>
-  </data>
-  <data name="PROJECT_CHAT_URL" xml:space="preserve">
-    <value>https://discord.gg/bmgCq39</value>
-  </data>
-  <data name="PROJECT_DESCRIPTION" xml:space="preserve">
-    <value>Dungeon logic for Duty Support and Trust dungeons.</value>
+    <value>检测到死亡</value>
   </data>
   <data name="PROJECT_NAME" xml:space="preserve">
-    <value>Trust</value>
-  </data>
-  <data name="PROJECT_URL" xml:space="preserve">
-    <value>https://github.com/LlamaMagic/RBtrust</value>
+    <value>亲信战友</value>
   </data>
   <data name="TRUST_PLUGIN_MISSING" xml:space="preserve">
-    <value>This profile requires the "Trust" plugin to be installed and enabled.  Check your Plugins tab.</value>
+    <value>你必须在Plugins文件夹里存在Trust/亲信战友的插件</value>
   </data>
 </root>

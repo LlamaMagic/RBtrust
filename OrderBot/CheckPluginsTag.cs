@@ -4,6 +4,7 @@ using ff14bot.Managers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Trust.Localization;
 
 namespace ff14bot.NeoProfiles.Tags;
 
@@ -16,17 +17,14 @@ public class CheckPluginsTag : AbstractTaskTag
     /// <inheritdoc/>
     protected override async Task<bool> RunAsync()
     {
-        PluginContainer trustPlugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name == "Trust" || p.Plugin.Name == "亲信战友");
+        PluginContainer trustPlugin = PluginManager.Plugins.FirstOrDefault(p => p.Plugin.Name == Translations.PROJECT_NAME);
 
         if (trustPlugin != null)
         {
             // Plugin is installed and loaded correctly.  Force enable it so the user doesn't have to.
             trustPlugin.Enabled = true;
 
-            string usabilityWarning = "Certain jobs may have difficulty with some bosses.";
-#if RB_CN
-            usabilityWarning = "近战如果打不到BOSS,另一个DPS带琳,添加吃食物,在trust设置里设置食物";
-#endif
+            string usabilityWarning = Translations.JOB_DIFFICULTY_WARNING;
 
             Core.OverlayManager.AddToast(
                 () => usabilityWarning,
@@ -39,10 +37,7 @@ public class CheckPluginsTag : AbstractTaskTag
         }
         else
         {
-            string pluginMissingError = "This profile requires the \"Trust\" plugin to be installed and enabled.  Check your Plugins tab.";
-#if RB_CN
-            pluginMissingError = "你必须在Plugins文件夹里存在Trust/亲信战友的插件";
-#endif
+            string pluginMissingError = Translations.TRUST_PLUGIN_MISSING;
 
             Core.OverlayManager.AddToast(
                 () => pluginMissingError,

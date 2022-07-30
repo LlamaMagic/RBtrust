@@ -174,6 +174,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Translations.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Localization\Translations.zh.resx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -61,6 +61,15 @@ namespace Trust.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Certain jobs may have difficulty with some bosses..
+        /// </summary>
+        internal static string JOB_DIFFICULTY_WARNING {
+            get {
+                return ResourceManager.GetString("JOB_DIFFICULTY_WARNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Localization changed to &quot;{cultureCode}&quot;..
         /// </summary>
         internal static string LOCALIZATION_CHANGED {
@@ -75,6 +84,15 @@ namespace Trust.Localization {
         internal static string LOCALIZATION_NOT_FOUND {
             get {
                 return ResourceManager.GetString("LOCALIZATION_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player has died. Reloading current profile..
+        /// </summary>
+        internal static string PLAYER_DIED_RELOADING_PROFILE {
+            get {
+                return ResourceManager.GetString("PLAYER_DIED_RELOADING_PROFILE", resourceCulture);
             }
         }
         
@@ -111,6 +129,15 @@ namespace Trust.Localization {
         internal static string PROJECT_URL {
             get {
                 return ResourceManager.GetString("PROJECT_URL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This profile requires the &quot;Trust&quot; plugin to be installed and enabled.  Check your Plugins tab..
+        /// </summary>
+        internal static string TRUST_PLUGIN_MISSING {
+            get {
+                return ResourceManager.GetString("TRUST_PLUGIN_MISSING", resourceCulture);
             }
         }
     }

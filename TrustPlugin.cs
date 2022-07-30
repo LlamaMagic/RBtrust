@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TreeSharp;
 using Trust.Dungeons;
 using Trust.Helpers;
+using Trust.Localization;
 using Trust.Logging;
 
 namespace Trust;
@@ -24,13 +25,8 @@ public class TrustPlugin : BotPlugin
     /// <inheritdoc/>
     public override string Author => "athlon";
 
-#if RB_CN
     /// <inheritdoc/>
-    public override string Name => "亲信战友";
-#else
-    /// <inheritdoc/>
-    public override string Name => "Trust";
-#endif
+    public override string Name => Translations.PROJECT_NAME;
 
     /// <inheritdoc/>
     public override Version Version => new(1, 2, 0);
@@ -147,11 +143,8 @@ public class TrustPlugin : BotPlugin
     {
         if (Core.Me.CurrentHealthPercent <= 0)
         {
-#if RB_CN
-            Logger.Information($"检测到死亡");
-#else
-            Logger.Information($"Player has died.");
-#endif
+            Logger.Information(Translations.PLAYER_DIED_RELOADING_PROFILE);
+
             await Coroutine.Sleep(10_000);
             NeoProfileManager.Load(NeoProfileManager.CurrentProfile.Path, true);
             NeoProfileManager.UpdateCurrentProfileBehavior();

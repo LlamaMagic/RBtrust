@@ -11,7 +11,7 @@ internal class LocalizationProvider
     /// <summary>
     /// Sets the user-facing language and number presentation for the BotBase UI and logging.
     ///
-    /// Localized strings are loaded from Localization.{cultureCode}.resx files.  Unlocalized strings default to placeholders from <see cref="Translations"/>.
+    /// Localized strings are loaded from Translations.{cultureCode}.resx files. Default strings are loaded from Translations.resx.
     /// </summary>
     /// <param name="cultureCode">Localization to display.</param>
     public void SetLocalization(string cultureCode)

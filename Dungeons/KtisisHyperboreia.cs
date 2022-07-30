@@ -123,7 +123,7 @@ public class KtisisHyperboreia : AbstractDungeon
                     frostBiteAndSeekSw.Restart();
                 }
 
-                Logger.Information("stopwatchPassed: " + frostBiteAndSeekSw.ElapsedMilliseconds);
+                Logger.Information($"frostBiteAndSeekSw: {frostBiteAndSeekSw.ElapsedMilliseconds:N0}ms");
 
                 // wait for stopwatch to reach 3 seconds
                 if (frostBiteAndSeekSw.ElapsedMilliseconds >= 2_500)
