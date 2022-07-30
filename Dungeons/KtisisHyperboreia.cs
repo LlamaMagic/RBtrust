@@ -60,12 +60,6 @@ public class KtisisHyperboreia : AbstractDungeon
     // Hermes NpcId: 10399 CastingSpell [True Tornado] [True Tornado] SpellId : 25906
     // Meteor NpcId: 10495 CastingSpell [Cosmic Kiss] [Cosmic Kiss] SpellId : 25891
 
-    // GENERIC MECHANICS
-    private readonly HashSet<uint> stack = new()
-    {
-        25234, 25233, 25250, 24145, 25180, 25742,
-    };
-
     // Lyssa
     private readonly HashSet<uint> frostBiteAndSeek = new() { 25175 };
     private readonly Stopwatch frostBiteAndSeekSw = new();
@@ -98,6 +92,12 @@ public class KtisisHyperboreia : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.KtisisHyperboreia;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        25234, 25233, 25250, 24145, 25180, 25742,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         if (!Core.Me.InCombat)
@@ -105,13 +105,7 @@ public class KtisisHyperboreia : AbstractDungeon
             CapabilityManager.Clear();
         }
 
-        if (stack.IsCasting())
-        {
-            SidestepPlugin.Enabled = false;
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await MovementHelpers.GetClosestAlly.Follow();
-            SidestepPlugin.Enabled = true;
-        }
+        await FollowDodgeSpells();
 
         // Lyssa First Boss
         if (WorldManager.SubZoneId == (uint)SubZoneId.FrozenSphere)

@@ -23,22 +23,6 @@ public class TheQitanaRavel : AbstractDungeon
     private const int Batsquatch = 8232;
     private const int Eros = 8233;
 
-    private static readonly HashSet<uint> BossIds = new()
-    {
-        Lozatl, Batsquatch, Eros,
-    };
-
-    private static readonly HashSet<uint> SpellsDodgedFollowingClosest = new()
-    {
-        15918, 15916, 15917, 17223, 15498,
-        15500, 15725, 15501, 15503, 15504,
-        15509, 15510, 15511, 15512, 17213,
-        15570, 16263, 14730, 15514, 15516,
-        15517, 15518, 15519, 15520, 16923,
-        15523, 15527, 15522, 15526, 15525,
-        15524,
-    };
-
     private static readonly HashSet<uint> ConfessionOfFaith = new()
     {
         15521, 15522, 15523, 15524, 15525,
@@ -84,9 +68,19 @@ public class TheQitanaRavel : AbstractDungeon
     //          15521 Eros - Confession of Faith (Spread)
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        15918, 15916, 15917, 17223, 15498, 15500, 15725, 15501, 15503, 15504, 15509, 15510, 15511, 15512, 17213, 15570,
+        16263, 14730, 15514, 15516, 15517, 15518, 15519, 15520, 16923, 15523, 15527, 15522, 15526, 15525, 15524,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        BattleCharacter lozatlNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Lozatl).FirstOrDefault(bc => bc.Distance() < 50);
+        await FollowDodgeSpells();
+
+        BattleCharacter lozatlNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Lozatl)
+            .FirstOrDefault(bc => bc.IsTargetable);
         if (lozatlNpc != null && lozatlNpc.IsValid)
         {
             if (HeatUp.IsCasting())
@@ -114,7 +108,8 @@ public class TheQitanaRavel : AbstractDungeon
             }
         }
 
-        BattleCharacter batsquatchNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Batsquatch).FirstOrDefault(bc => bc.Distance() < 50);
+        BattleCharacter batsquatchNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Batsquatch)
+            .FirstOrDefault(bc => bc.IsTargetable);
         if (batsquatchNpc != null && batsquatchNpc.IsValid)
         {
             if (Soundwave.IsCasting())
@@ -125,7 +120,8 @@ public class TheQitanaRavel : AbstractDungeon
             }
         }
 
-        BattleCharacter erosNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Eros).FirstOrDefault(bc => bc.Distance() < 50);
+        BattleCharacter erosNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Eros)
+            .FirstOrDefault(bc => bc.IsTargetable);
         if (erosNpc != null && erosNpc.IsValid)
         {
             if (ConfessionOfFaith.IsCasting())
@@ -134,17 +130,11 @@ public class TheQitanaRavel : AbstractDungeon
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 await MovementHelpers.GetClosestDps.Follow();
             }
-
-            if (!SpellsDodgedFollowingClosest.IsCasting())
-            {
-                SidestepPlugin.Enabled = true;
-            }
         }
 
-        if (SpellsDodgedFollowingClosest.IsCasting())
+        if (!SpellsToFollowDodge.IsCasting())
         {
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2_500, "Follow/Stack Mechanic In Progress");
-            await MovementHelpers.GetClosestAlly.Follow();
+            SidestepPlugin.Enabled = true;
         }
 
         return false;

@@ -33,8 +33,13 @@ public class TheThousandMawsOfTotoRak : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheThousandMawsOfTotoRak;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         // Coeurl O' Nine Tails
         /* Turns out this poison can't be cured
         if (WorldManager.SubZoneId == (uint)SubZoneId.ConfessionChamber ||

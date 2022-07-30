@@ -274,8 +274,13 @@ public class TheDeadEnds : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheDeadEnds;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (WorldManager.SubZoneId == (uint)SubZoneId.JudgmentDay)
         {
             SidestepPlugin.Enabled = Core.Player.InCombat;
@@ -312,12 +317,6 @@ public class TheDeadEnds : AbstractDungeon
             {
                 spreadTimer.Reset();
             }
-        }
-
-        if (stack.IsCasting())
-        {
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2_500, "Follow/Stack Mechanic In Progress");
-            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         if (nausea.IsCasting() && !miasmataTimer.IsRunning)

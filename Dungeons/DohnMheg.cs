@@ -41,11 +41,6 @@ public class DohnMheg : AbstractDungeon
 
     private readonly Stopwatch laughingLeapSw = new();
 
-    private readonly HashSet<uint> spellsDodgedByFollowingClosest = new()
-    {
-        13551, 13547, 13952,
-    };
-
     private readonly HashSet<uint> laughingLeap = new()
     {
         8852, 8840,
@@ -72,9 +67,15 @@ public class DohnMheg : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.DohnMheg;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        13551, 13547, 13952,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        await FollowDodgeEnemySpells();
+        await FollowDodgeSpells();
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
         bool result = false;
@@ -93,21 +94,6 @@ public class DohnMheg : AbstractDungeon
         }
 
         return result;
-    }
-
-    private async Task<bool> FollowDodgeEnemySpells()
-    {
-        BattleCharacter caster = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .FirstOrDefault(bc => spellsDodgedByFollowingClosest.Contains(bc.CastingSpellId) && bc.Distance() < 50);
-
-        if (caster != null)
-        {
-            SpellCastInfo spell = caster.SpellCastInfo;
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, spell.RemainingCastTime, $"Follow-Dodge: ({caster.NpcId}) {caster.Name} is casting ({spell.ActionId}) {spell.Name} for {spell.RemainingCastTime.TotalMilliseconds:N0}ms");
-            await MovementHelpers.GetClosestAlly.Follow();
-        }
-
-        return false;
     }
 
     private async Task<bool> HandleLordOfLingeringGazeAsync()

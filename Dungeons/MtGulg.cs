@@ -45,7 +45,6 @@ public class MtGulg : AbstractDungeon
         ForgivenDissonance,
     };
 
-    private static readonly HashSet<uint> Spells = new() { 15614, 15615, 15616, 15617, 15618, 15622, 15623, 15638, 15640, 15641, 15642, 15643, 15644, 15645, 15648, 15649, 16247, 16248, 16249, 16250, 16521, 16818, 16987, 16988, 16989, 17153, 18025, };
     private static readonly HashSet<uint> LumenInfinitum = new() { 16818 };
     private static readonly HashSet<uint> Exegesis = new() { 15622, 15623, 16987, 16988, 16989, };
     private static readonly HashSet<uint> RightPalm = new() { 16247, 16248 };
@@ -61,8 +60,17 @@ public class MtGulg : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.MtGulg;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        15614, 15615, 15616, 15617, 15618, 15622, 15623, 15638, 15640, 15641, 15642, 15643, 15644, 15645, 15648, 15649,
+        16247, 16248, 16249, 16250, 16521, 16818, 16987, 16988, 16989, 17153, 18025,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (!Core.Player.InCombat)
         {
             AvoidanceManager.RemoveAllAvoids(ai => !ai.CanRun);
@@ -132,12 +140,6 @@ public class MtGulg : AbstractDungeon
                     sw.Stop();
                 }
             }
-        }
-
-        if (Spells.IsCasting())
-        {
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 1_500, "Enemy Spell Cast In Progress");
-            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         if (WorldManager.SubZoneId != (uint)SubZoneId.TheWindingFlare)

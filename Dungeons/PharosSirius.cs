@@ -38,8 +38,13 @@ public class PharosSirius : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         // Symond the Unsinkable
         if (WorldManager.SubZoneId == (uint)SubZoneId.SecondSpire && Core.Me.InCombat)
         {
@@ -97,6 +102,7 @@ public class PharosSirius : AbstractDungeon
         }
 
         await Coroutine.Yield();
+
         return false;
     }
 }

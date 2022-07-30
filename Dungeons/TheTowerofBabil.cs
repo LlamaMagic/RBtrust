@@ -52,11 +52,6 @@ public class TheTowerOfBabil : AbstractDungeon
     // Obliviating Claw   25355
     // Obliviating Claw 2 25354
     // Erupting Pain      25351
-    private readonly HashSet<uint> follow = new()
-    {
-        21182, 25324,
-    };
-
     private readonly HashSet<uint> magnet = new()
     {
         25326, 25157, 25158, 25328,
@@ -87,7 +82,6 @@ public class TheTowerOfBabil : AbstractDungeon
         25354,
     };
 
-    private readonly Stopwatch followTimer = new();
     private readonly Stopwatch magnetTimer = new();
     private readonly Stopwatch miniTimer = new();
     private readonly Stopwatch toadTimer = new();
@@ -99,27 +93,15 @@ public class TheTowerOfBabil : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheTowerOfBabil;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        21182, 25324,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        if (follow.IsCasting() || followTimer.IsRunning)
-        {
-            if (!followTimer.IsRunning)
-            {
-                SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                CapabilityManager.Clear();
-                followTimer.Restart();
-            }
-
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2_500, "Follow/Stack Mechanic In Progress");
-            await MovementHelpers.GetClosestAlly.Follow();
-
-            if (!follow.IsCasting())
-            {
-                SidestepPlugin.Enabled = true;
-                followTimer.Reset();
-            }
-        }
+        await FollowDodgeSpells();
 
         if (magnet.IsCasting() || magnetTimer.IsRunning)
         {

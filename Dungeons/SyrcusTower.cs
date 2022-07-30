@@ -22,18 +22,19 @@ public class SyrcusTower : AbstractDungeon
 
     private const int IceCage = 2820;
 
-    private static readonly HashSet<uint> Spells = new()
-    {
-        2441, 12461, 2361, 12214, 3412, 4198, 5254, 5253, 2359, 3413, 2317, 1730, 1731, 1748, 2347, 5253, 2359,
-        11928,
-    };
-
     private static readonly HashSet<uint> CurtainCall = new() { 2441, 12461 };
     private static readonly HashSet<uint> AncientQuaga = new() { 2361, 12214, 3412, 4198, 5254, 5253, 2359, 3413, };
     private static readonly HashSet<uint> AncientFlare = new() { 2317, 1730, 1731, 1748, 2347, 5253, 2359, 11928, };
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;
+
+    /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        2441, 12461, 2361, 12214, 3412, 4198, 5254, 5253, 2359, 3413, 2317, 1730, 1731, 1748, 2347, 5253, 2359,
+        11928,
+    };
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
@@ -137,7 +138,7 @@ public class SyrcusTower : AbstractDungeon
             sw.Stop();
         }
 
-        if (Spells.IsCasting())
+        if (SpellsToFollowDodge.IsCasting())
         {
             Core.Me.ClearTarget();
             while (Core.Me.Location.Distance2D(PartyManager.VisibleMembers

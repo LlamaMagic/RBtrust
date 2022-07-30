@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
-using Trust.Helpers;
 
 namespace Trust.Dungeons;
 
@@ -20,21 +19,6 @@ public class HellsLid : AbstractDungeon
     /// Gets zone ID for this dungeon.
     /// </summary>
     public new const ZoneId ZoneId = Data.ZoneId.HellsLid;
-
-    // 532, 1837, 2794, 5445, 7931, 9076, 9338, 9490, 2441
-    private static readonly HashSet<uint> Spells = new()
-    {
-        // 1st boss 100 tonze swing
-        // 10176 liquid capace (constant spewing attack, needs to run away)
-        // 2nd boss Reapders gale
-        // 10599. 10187 <45.62811, -26, -105.941> or Current XYZ: <50.26293, -26, -111.4103>
-        11541,
-        10192, // Hell of Water by Genbu
-        10193,
-        10194, // Hell of Waste by Genbu
-
-        // ,10196,10197 //Sinister Tide (Arrow Mechanic)
-    };
 
     private static readonly HashSet<uint> HellOfWater = new()
     {
@@ -52,8 +36,19 @@ public class HellsLid : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        11541,
+        10192, // Hell of Water by Genbu
+        10193,
+        10194, // Hell of Waste by Genbu
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (HellOfWater.IsCasting() || HellOfWaste2.IsCasting())
         {
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 4_000, "Hell of Water/Waste");
@@ -69,12 +64,6 @@ public class HellsLid : AbstractDungeon
             }
 
             await Coroutine.Sleep(1_000);
-            await Coroutine.Yield();
-        }
-
-        if (Spells.IsCasting())
-        {
-            await MovementHelpers.GetClosestAlly.Follow();
             await Coroutine.Yield();
         }
 

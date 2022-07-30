@@ -41,8 +41,13 @@ public class HallOfTheNoviceWesternLa : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         IEnumerable<BattleCharacter> targets = GameObjectManager.GetObjectsOfType<BattleCharacter>()
             .Where(bc => bc.NpcId == QuickFistedTrainingPartner || bc.NpcId == TamedJackal)
             .Where(bc => bc.IsAlive && bc.CurrentHealth > 1)

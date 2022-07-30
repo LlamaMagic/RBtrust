@@ -2,6 +2,7 @@
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -32,8 +33,13 @@ public class DzemaelDarkhold : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         // All-seeing Eye
         if (WorldManager.SubZoneId == (uint)SubZoneId.GrandHall && Core.Me.InCombat)
         {

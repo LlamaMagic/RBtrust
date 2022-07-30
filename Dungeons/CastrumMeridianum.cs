@@ -6,8 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
-using Trust.Extensions;
-using Trust.Helpers;
 
 namespace Trust.Dungeons;
 
@@ -22,11 +20,6 @@ public class CastrumMeridianum : AbstractDungeon
     public new const ZoneId ZoneId = Data.ZoneId.CastrumMeridianum;
 
     private const int LiviaSasJunius = 2118;
-
-    private static readonly HashSet<uint> BossIds = new()
-    {
-        LiviaSasJunius,
-    };
 
     private static readonly Stopwatch StackStopwatch = new();
 
@@ -53,12 +46,15 @@ public class CastrumMeridianum : AbstractDungeon
     //  Thermobaric Charge   29356 (Stack)
     //
     // Debug Info - It runs away and gets stuck on Edge on both of These
-    //
+
     // TRASH WITH NO OMEN
     //
 
-    // GENERIC MECHANICS
-    private static readonly HashSet<uint> Spells = new()
+    /// <inheritdoc/>
+    public override DungeonId DungeonId => DungeonId.CastrumMeridianum;
+
+    /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
         28778, 28779, 28786, 28791, 28793,
         28797, 28790, 29356, 28787, 29357,
@@ -66,20 +62,16 @@ public class CastrumMeridianum : AbstractDungeon
     };
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.CastrumMeridianum;
-
-    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        BattleCharacter liviaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: LiviaSasJunius).FirstOrDefault(bc => bc.Distance() < 50);
+        await FollowDodgeSpells();
+
+        BattleCharacter liviaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: LiviaSasJunius)
+            .FirstOrDefault(bc => bc.IsTargetable);
+
         if (liviaNpc != null && liviaNpc.IsValid)
         {
-            if (Spells.IsCasting())
-            {
-                SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestAlly.Follow();
-            }
+            await FollowDodgeSpells();
 
             if (StackStopwatch.ElapsedMilliseconds > 2_000)
             {
@@ -89,6 +81,7 @@ public class CastrumMeridianum : AbstractDungeon
         }
 
         await Coroutine.Yield();
+
         return false;
     }
 }

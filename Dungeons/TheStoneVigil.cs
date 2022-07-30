@@ -49,8 +49,13 @@ public class TheStoneVigil : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheStoneVigil;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         BattleCharacter chudoYudoNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ChudoYudo).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
         if (chudoYudoNpc != null && chudoYudoNpc.IsValid)
         {

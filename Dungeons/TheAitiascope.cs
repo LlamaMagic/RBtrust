@@ -68,12 +68,6 @@ public class TheAitiascope : AbstractDungeon
     // Livia the Undeterred
     private readonly HashSet<uint> aglaeaClimb = new() { 25668, 25667, 25666 };
 
-    // GENERIC MECHANICS
-    private readonly HashSet<uint> stack = new()
-    {
-        25234, 25233, 25250, 24145, 25180, 25742, 25677,
-    };
-
     // Rhitahtyn the Unshakable
     private readonly HashSet<uint> vexillatio = new() { 25678 };
     private readonly HashSet<uint> shieldSkewer = new() { 25680 };
@@ -92,19 +86,19 @@ public class TheAitiascope : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheAitiascope;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        25234, 25233, 25250, 24145, 25180, 25742, 25677,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (!Core.Me.InCombat)
         {
             CapabilityManager.Clear();
-        }
-
-        if (stack.IsCasting())
-        {
-            SidestepPlugin.Enabled = false;
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await MovementHelpers.GetClosestAlly.Follow();
-            SidestepPlugin.Enabled = true;
         }
 
         // Livia The Undeterred

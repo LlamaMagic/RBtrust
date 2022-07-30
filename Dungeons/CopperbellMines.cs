@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Trust.Data;
 
 namespace Trust.Dungeons;
@@ -17,8 +18,13 @@ public class CopperbellMines : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.CopperbellMines;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         return false;
     }
 }

@@ -28,11 +28,6 @@ public class TheAurumVale : AbstractDungeon
     private const uint GoldLungAura = 302;
     private const uint BurrsAura = 303;
 
-    private static readonly HashSet<uint> BossIds = new()
-    {
-        Locksmith, Coincounter, MisersMistress,
-    };
-
     private static readonly uint[] LocksmithFruits = new uint[]
     {
         2002647, 2002648, 2002649, 2000778,
@@ -48,15 +43,22 @@ public class TheAurumVale : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        BattleCharacter locksmithNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Locksmith).FirstOrDefault(bc => bc.Distance() < 50);
+        await FollowDodgeSpells();
+
+        BattleCharacter locksmithNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Locksmith)
+            .FirstOrDefault(bc => bc.IsTargetable);
         if (locksmithNpc != null && locksmithNpc.IsValid)
         {
             await TryCleanseWithFruitAsync(GoldLungAura, 2, LocksmithFruits);
         }
 
-        BattleCharacter misersMistressNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: MisersMistress).FirstOrDefault(bc => bc.Distance() < 50);
+        BattleCharacter misersMistressNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(MisersMistress)
+            .FirstOrDefault(bc => bc.IsTargetable);
         if (misersMistressNpc != null && misersMistressNpc.IsValid)
         {
             await TryCleanseWithFruitAsync(BurrsAura, 2, MisersMistressFruits);

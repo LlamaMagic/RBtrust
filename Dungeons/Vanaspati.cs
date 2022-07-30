@@ -101,12 +101,17 @@ public class Vanaspati : AbstractDungeon
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.Vanaspati;
 
+    /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
     private static bool HasTarget => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false).
                 Any(bc => bc.CanAttack && bc.IsTargetable);
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (WorldManager.SubZoneId != 4012 && WorldManager.SubZoneId != 4013 && WorldManager.SubZoneId != 4014)
         {
             BattleCharacter target = GameObjectManager.Attackers?.OrderByDescending(e => e.CurrentHealthPercent).FirstOrDefault();

@@ -22,11 +22,6 @@ public class Halatali : AbstractDungeon
     private const int ThunderclapGuivre = 1196;
     private const int LightningPool = 2001648;
 
-    private static readonly HashSet<uint> BossIds = new()
-    {
-        ThunderclapGuivre,
-    };
-
     private static readonly List<(Vector3 Location, float Radius)> LightningPoolAvoids = new()
     {
         (new Vector3(-177.9965f, -14.69446f, -133.0435f), 25f),
@@ -38,8 +33,13 @@ public class Halatali : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         BattleCharacter thunderclapGuivreNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ThunderclapGuivre)
             .FirstOrDefault(bc => bc.Distance() < 100);
 

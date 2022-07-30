@@ -75,12 +75,6 @@ public class TheTowerOfZot : AbstractDungeon
     // Zot Roader
     // Haywire 24145
 
-    // GENERIC MECHANICS
-    private readonly HashSet<uint> stack = new()
-    {
-        25234, 25233, 25250, 24145,
-    };
-
     // B1
     private readonly HashSet<uint> transmute = new()
     {
@@ -96,28 +90,22 @@ public class TheTowerOfZot : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheTowerOfZot;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        25234, 25233, 25250, 24145,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (!Core.Me.InCombat)
         {
             CapabilityManager.Clear();
             daSw.Reset();
             tmSw.Reset();
             stSw.Reset();
-        }
-
-        if (stack.IsCasting())
-        {
-            if (!stSw.IsRunning)
-            {
-                stSw.Restart();
-            }
-
-            SidestepPlugin.Enabled = false;
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            CapabilityManager.Update(trustHandle1, CapabilityFlags.Movement, 1_000, "Follow/Stack Mechanic In Progress");
-            CapabilityManager.Update(trustHandle2, CapabilityFlags.Facing, 1_000, "Follow/Stack Mechanic In Progress");
-            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         if (stSw.ElapsedMilliseconds > 3_000)

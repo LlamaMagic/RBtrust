@@ -1,13 +1,6 @@
-﻿using Buddy.Coroutines;
-using ff14bot;
-using ff14bot.Managers;
-using ff14bot.Navigation;
-using ff14bot.Objects;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
-using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -21,161 +14,23 @@ public class MalikahsWell : AbstractDungeon
     /// </summary>
     public new const ZoneId ZoneId = Data.ZoneId.MalikahsWell;
 
+    private const int GreaterArmadillo = 8252;
+    private const int AmphibiousTalos = 8250;
+    private const int Storge = 8249;
+
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.MalikahsWell;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        15594, 15590, 15591, 15592, 15593, 15602, 15605, 15606, 15607, 15610, 15609,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        // 检测附近 对象是否有特定读条技能
-        IEnumerable<BattleCharacter> num = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-            .Where(r => r.CastingSpellId != 0 && !r.IsMe && r.Distance() < 50 &&
-                (
-                r.CastingSpellId == 15594 ||
-                r.CastingSpellId == 15590 ||
-                r.CastingSpellId == 15591 ||
-                r.CastingSpellId == 15592 ||
-                r.CastingSpellId == 15593 ||
-                r.CastingSpellId == 15602 ||
-                r.CastingSpellId == 15605 ||
-                r.CastingSpellId == 15606 ||
-                r.CastingSpellId == 15607 ||
-                r.CastingSpellId == 15610 ||
-                r.CastingSpellId == 15609));
-
-        if (num != null && num.Count() > 0)
-        {
-            BattleCharacter spell = num.First();
-            Logger.Information($"跟随");
-
-            if (spell.NpcId == 8299)
-            {
-                if (SidestepPlugin != null)
-                {
-                    if (SidestepPlugin.Enabled == true)
-                    {
-                        SidestepPlugin.Enabled = false;
-                    }
-                }
-            }
-
-            BattleCharacter obj = GameObjectManager.GetObjectsOfType<BattleCharacter>(true)
-                .Where(r =>
-                  r.NpcId == 729 || r.NpcId == 8378 || // "雅·修特拉"
-                  r.NpcId == 1492 || // "于里昂热"
-                  r.NpcId == 4130 || // "阿尔菲诺"
-                  r.NpcId == 5239 || // "阿莉塞"
-                  r.NpcId == 8889 || // 琳
-                  r.NpcId == 11264 || // Alphinaud's avatar
-                  r.NpcId == 11265 || // Alisaie's avatar
-                  r.NpcId == 11267 || // Urianger's avatar
-                  r.NpcId == 11268 || // Y'shtola's avatar
-                  r.NpcId == 11269 || // Ryne's avatar
-                  r.NpcId == 11270 || // Estinien's avatar
-                  r.Name == "阿莉塞" ||
-                  r.Name == "琳" ||
-                  r.Name == "水晶公" ||
-                  r.Name == "敏菲利亚" ||
-                  r.Name == "桑克瑞德")
-                .OrderBy(r => r.Distance())
-                .First();
-
-            // 当距离大于跟随距离 再处理跟随
-            if (obj.Location.Distance2D(Core.Me.Location) >= 0.2)
-            {
-                if (Core.Me.IsCasting)
-                {
-                    ActionManager.StopCasting();  // 断读条
-                }
-
-                // 选中跟随最近的队友
-                obj.Target();
-
-                Logger.Information($"队友{obj.Name}距离:{obj.Location.Distance2D(Core.Me.Location)}");
-
-                while (obj.Location.Distance2D(Core.Me.Location) >= 0.2)
-                {
-                    CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 1_500, "Enemy Spell Cast In Progress");
-                    Navigator.PlayerMover.MoveTowards(obj.Location);
-                    await Coroutine.Sleep(50);
-                }
-
-                Navigator.PlayerMover.MoveStop();
-                await Coroutine.Sleep(50);
-
-                return true;
-            }
-        }
-
-        if (Core.Target != null)
-        {
-            IEnumerable<BattleCharacter> sC = GameObjectManager.GetObjectsOfType<BattleCharacter>()
-                .Where(r => !r.IsMe && r.Distance() < 50 && r.NpcId == 8250); // 77BOSS2
-
-            // 77BOSS2 移动
-            if (sC.Any() == true)
-            {
-                if (SidestepPlugin != null)
-                {
-                    if (SidestepPlugin.Enabled == true)
-                    {
-                        SidestepPlugin.Enabled = false;
-                    }
-                }
-
-                Logger.Information($"boss2");
-                BattleCharacter spellCaster = sC.First();
-
-                if (spellCaster != null && spellCaster.Name == Core.Target.Name)
-                {
-                    BattleCharacter obj1 = GameObjectManager.GetObjectsOfType<BattleCharacter>(true)
-                        .Where(r =>
-                          r.NpcId == 729 || r.NpcId == 8378 || // "雅·修特拉"
-                          r.NpcId == 1492 || // "于里昂热"
-                          r.NpcId == 4130 || // "阿尔菲诺"
-                          r.NpcId == 5239 || // "阿莉塞"
-                          r.NpcId == 8889 || // 琳
-                          r.NpcId == 11264 || // Alphinaud's avatar
-                          r.NpcId == 11265 || // Alisaie's avatar
-                          r.NpcId == 11267 || // Urianger's avatar
-                          r.NpcId == 11268 || // Y'shtola's avatar
-                          r.NpcId == 11269 || // Ryne's avatar
-                          r.NpcId == 11270 || // Estinien's avatar
-                          r.Name == "阿莉塞" ||
-                          r.Name == "琳" ||
-                          r.Name == "水晶公" ||
-                          r.Name == "敏菲利亚" ||
-                          r.Name == "桑克瑞德")
-                        .OrderBy(r => r.Distance())
-                        .First();
-
-                    // 当距离大于跟随距离 再处理跟随
-                    if (obj1.Location.Distance2D(Core.Me.Location) >= 0.2)
-                    {
-                        if (Core.Me.IsCasting)
-                        {
-                            ActionManager.StopCasting(); // 断读条
-                        }
-
-                        // 选中跟随最近的队友
-                        obj1.Target();
-
-                        Logger.Information($"队友{obj1.Name}距离:{obj1.Location.Distance2D(Core.Me.Location)}");
-
-                        while (obj1.Location.Distance2D(Core.Me.Location) >= 0.2)
-                        {
-                            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 1_500, "Enemy Spell Cast In Progress");
-                            Navigator.PlayerMover.MoveTowards(obj1.Location);
-                            await Coroutine.Sleep(50);
-                        }
-
-                        Navigator.PlayerMover.MoveStop();
-                        await Coroutine.Sleep(50);
-                        return true;
-                    }
-                }
-            }
-        }
+        await FollowDodgeSpells();
 
         return false;
     }

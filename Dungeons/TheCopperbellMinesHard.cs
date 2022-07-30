@@ -44,6 +44,9 @@ public class TheCopperbellMinesHard : AbstractDungeon
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;
 
+    /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
     private static BattleCharacter? HecatoncheirMastermindBC =>
         (BattleCharacter)GameObjectManager.GetObjectByNPCId(HecatoncheirMastermind);
 
@@ -60,6 +63,8 @@ public class TheCopperbellMinesHard : AbstractDungeon
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         // Gogmagolem
         if (WorldManager.SubZoneId == (uint)SubZoneId.TheScreamingDark && Core.Me.InCombat)
         {

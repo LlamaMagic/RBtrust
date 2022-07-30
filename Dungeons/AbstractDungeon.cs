@@ -1,6 +1,10 @@
 ﻿using ff14bot.Managers;
+using ff14bot.Objects;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
+using Trust.Extensions;
 using Trust.Helpers;
 
 namespace Trust.Dungeons;
@@ -31,8 +35,38 @@ public abstract class AbstractDungeon
     protected PluginContainer SidestepPlugin { get; } = PluginHelpers.GetSideStepPlugin();
 
     /// <summary>
+    /// Gets spell IDs to follow-dodge while any contained spell is casting.
+    /// </summary>
+    protected abstract HashSet<uint> SpellsToFollowDodge { get; }
+
+    /// <summary>
     /// Executes dungeon logic.
     /// </summary>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
     public abstract Task<bool> RunAsync();
+
+    /// <summary>
+    /// Follows closest safe ally while <see cref="SpellsToFollowDodge"/> are casting.
+    /// </summary>
+    /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+    protected async Task<bool> FollowDodgeSpells()
+    {
+        if (SpellsToFollowDodge == null || SpellsToFollowDodge.Count == 0)
+        {
+            return false;
+        }
+
+        BattleCharacter caster = GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
+            .FirstOrDefault(bc => SpellsToFollowDodge.Contains(bc.CastingSpellId));
+
+        if (caster != null)
+        {
+            SpellCastInfo spell = caster.SpellCastInfo;
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, spell.RemainingCastTime, $"Follow-Dodge: ({caster.NpcId}) {caster.Name} is casting ({spell.ActionId}) {spell.Name} for {spell.RemainingCastTime.TotalMilliseconds:N0}ms");
+
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+
+        return false;
+    }
 }

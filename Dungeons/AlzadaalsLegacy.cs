@@ -42,11 +42,6 @@ public class AlzadaalsLegacy : AbstractDungeon
         28524,
     };
 
-    private readonly HashSet<uint> stack = new()
-    {
-        28526, 28522,
-    };
-
     private readonly HashSet<uint> articulatedBits = new()
     {
         28441,
@@ -77,8 +72,16 @@ public class AlzadaalsLegacy : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.AlzadaalsLegacy;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        28526, 28522,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (spread.IsCasting() || spreadTimer.IsRunning)
         {
             if (!spreadTimer.IsRunning)
@@ -96,12 +99,6 @@ public class AlzadaalsLegacy : AbstractDungeon
             {
                 spreadTimer.Reset();
             }
-        }
-
-        if (stack.IsCasting())
-        {
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2_500, "Stack Mechanic In Progress");
-            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         if (tentacleDig.IsCasting() || (tentacleDigTimer.IsRunning && tentacleDigTimer.ElapsedMilliseconds < 18_000))

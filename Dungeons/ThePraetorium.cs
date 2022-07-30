@@ -83,8 +83,13 @@ public class ThePraetorium : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.ThePraetorium;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         if (GameObjectManager.GetObjectByNPCId(Nero) != null)
         {
             if (AugmentedSuffering.IsCasting())

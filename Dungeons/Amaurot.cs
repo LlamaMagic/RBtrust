@@ -32,44 +32,36 @@ public class Amaurot : AbstractDungeon
         8210,             // Therion               :: 至大灾兽
     };
 
+    private static readonly HashSet<uint> MeteorRain = new() { 15556, 15558 };
+    private static readonly Vector3 MeteorRainLocation = new(-99.49644f, 748.2327f, 101.4963f);
+
+    private static readonly HashSet<uint> Apokalypsis = new() { 15575, 15577 };
+    private static readonly HashSet<uint> TherionCharge = new() { 15578 };
+
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.Amaurot;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        532, 1837, 2794, 5445, 7931, 9076, 9338, 9490, 9493, 10256, 10257, 11573,
+        11582, 12377, 12486, 12589, 12590, 12591, 12648, 12654, 12681, 12688, 12805,
+        12809, 12823, 12824, 12825, 13251, 13336, 13337, 13344, 13345, 13346, 15561,
+        15559, 15560, 15562, 15565, 15566, 15579, 15580, 15581, 15582, 15583, 15585,
+        15586, 16785, 16786, 18157, 17996,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        // NOT TESTED
-
-        // 532, 1837, 2794, 5445, 7931, 9076, 9338, 9490,
-        // 9493, 10256, 10257, 11573, 11582, 12377, 12486,
-        // 12589, 12590, 12591, 12648, 12654, 12681, 12688,
-        // 12805, 12809, 12823, 12824, 12825, 13251, 13336,
-        // 13337, 13344, 13345, 13346, 15565, 18157                    :: Earthquake
-        // 15559, 15560                                                :: The Burning Sky
-        // 15561, 15562                                                :: The Falling Sky
-        // 15566                                                       :: Venomous Breath
-        // 15579, 15580, 15581, 15582, 15583, 15585, 16785, 16786      :: Deathly Ray
-        // 15586                                                       :: Misfortune
-        // 17996                                                       :: Starstorm
-        HashSet<uint> spells = new()
-        {
-            532, 1837, 2794, 5445, 7931, 9076, 9338, 9490, 9493, 10256, 10257, 11573,
-            11582, 12377, 12486, 12589, 12590, 12591, 12648, 12654, 12681, 12688, 12805,
-            12809, 12823, 12824, 12825, 13251, 13336, 13337, 13344, 13345, 13346, 15561,
-            15559, 15560, 15562, 15565, 15566, 15579, 15580, 15581, 15582, 15583, 15585,
-            15586, 16785, 16786, 18157, 17996,
-        };
+        await FollowDodgeSpells();
 
         // The First Beast (第一之兽)
-        // 15556, 15558                                 :: Meteor Rain
-        HashSet<uint> meteorRain = new() { 15556, 15558 };
-        if (meteorRain.IsCasting())
+        if (MeteorRain.IsCasting())
         {
-            Vector3 location = new(-99.49644f, 748.2327f, 101.4963f);
-
-            while (Core.Me.Distance(location) > 1f)
+            while (Core.Me.Distance(MeteorRainLocation) > 1f)
             {
-                await CommonTasks.MoveTo(location);
+                await CommonTasks.MoveTo(MeteorRainLocation);
                 await Coroutine.Yield();
             }
 
@@ -93,9 +85,7 @@ public class Amaurot : AbstractDungeon
         }
 
         // Therion (至大灾兽)
-        // 15575, 15577                                 :: Apokalypsis
-        HashSet<uint> apokalypsis = new() { 15575, 15577 };
-        if (apokalypsis.IsCasting())
+        if (Apokalypsis.IsCasting())
         {
             Stopwatch sw = new();
             sw.Start();
@@ -109,9 +99,7 @@ public class Amaurot : AbstractDungeon
         }
 
         // Therion (至大灾兽)
-        // 15578                                        :: Therion Charge
-        HashSet<uint> therionCharge = new() { 15578 };
-        if (therionCharge.IsCasting())
+        if (TherionCharge.IsCasting())
         {
             Stopwatch sw = new();
             sw.Start();
@@ -122,12 +110,6 @@ public class Amaurot : AbstractDungeon
             }
 
             sw.Stop();
-        }
-
-        // Default (缺省)
-        if (spells.IsCasting())
-        {
-            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         // SideStep (回避)

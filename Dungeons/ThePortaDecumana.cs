@@ -22,13 +22,9 @@ public class ThePortaDecumana : AbstractDungeon
     public new const ZoneId ZoneId = Data.ZoneId.ThePortaDecumana;
 
     private const uint TheUltimaWeapon = 2137;
-    private static readonly HashSet<uint> Spells = new() { 28991, 28999, 29003, 29011, 29012, 29013, 29014, 29021, };
+    private static readonly HashSet<uint> NonSidestepSpells = new() { 28991, 28999, 29003, 29011, 29012, 29013, 29014, 29021, };
 
-    private static readonly HashSet<uint> Geocrush = new() { 28999 };
-    private static readonly HashSet<uint> VulcanBurst = new() { 29003 };
     private static readonly HashSet<uint> RadiantBlaze = new() { 28991 };
-    private static readonly HashSet<uint> Explosion = new() { 29021 };
-    private static readonly HashSet<uint> LaserFocus = new() { 29013, 29014 };
 
     private static readonly HashSet<uint> HomingRay = new() { 29011, 29012 };
     private static readonly int HomingRayDuration = 5_000;
@@ -41,8 +37,16 @@ public class ThePortaDecumana : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.ThePortaDecumana;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        28999, 29003, 29021, 29013, 29014,
+    };
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         /*
         [18:58:25.925 V] [SideStep] Geocrush [CastType][Id: 28999][Omen: 27][RawCastType: 2][ObjId: 1073895042]
                 Move to Ally
@@ -67,36 +71,10 @@ public class ThePortaDecumana : AbstractDungeon
          */
 
         // Ultima Weapon
-        // Geocrush [CastType][Id: 28999][Omen: 27][RawCastType: 2][ObjId: 1073895042]
-        if (Geocrush.IsCasting())
-        {
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await MovementHelpers.GetClosestAlly.Follow();
-        }
-
-        // Vulcan Burst [CastType][Id: 29003][Omen: 141][RawCastType: 2][ObjId: 1073895041]
-        if (VulcanBurst.IsCasting())
-        {
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await MovementHelpers.GetClosestAlly.Follow();
-        }
-
         // Radiant Blaze [CastType][Id: 28991][Omen: 7][RawCastType: 2][ObjId: 1073895054]
         if (RadiantBlaze.IsCasting())
         {
             SidestepPlugin.Enabled = false;
-        }
-
-        if (Explosion.IsCasting())
-        {
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await MovementHelpers.GetClosestAlly.Follow();
-        }
-
-        if (LaserFocus.IsCasting())
-        {
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         if (HomingRay.IsCasting())
@@ -114,10 +92,7 @@ public class ThePortaDecumana : AbstractDungeon
             citadelBusterTimestamp = DateTime.Now.AddMilliseconds(CitadelBusterDuration);
         }
 
-        if (!Spells.IsCasting())
-        {
-            SidestepPlugin.Enabled = true;
-        }
+        SidestepPlugin.Enabled = !NonSidestepSpells.IsCasting();
 
         await Coroutine.Yield();
 

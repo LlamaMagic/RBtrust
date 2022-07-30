@@ -30,8 +30,13 @@ public class TheNavel : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheNavel;
 
     /// <inheritdoc/>
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
+        await FollowDodgeSpells();
+
         /*
          * [12:14:39.575 V] [SideStep] Landslide [CastType][Id: 650][Omen: 9][RawCastType: 4][ObjId: 1073996108]
          *    Handled by SideStep
@@ -45,14 +50,11 @@ public class TheNavel : AbstractDungeon
         {
             if (Spells.IsCasting())
             {
-                if (Spells.IsCasting())
-                {
-                    SidestepPlugin.Enabled = false;
-                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                    await MovementHelpers.GetClosestAlly.Follow();
-                }
-
+                SidestepPlugin.Enabled = false;
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestAlly.Follow();
                 SidestepPlugin.Enabled = true;
+
                 Logger.Information("Resetting navigation");
                 AvoidanceManager.ResetNavigation();
             }
