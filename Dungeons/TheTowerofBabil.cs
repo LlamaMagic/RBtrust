@@ -134,7 +134,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (magnetTimer.ElapsedMilliseconds < 12_000)
             {
-                Vector3 location = new("-314.4527, -175, 70.98297");
+                Vector3 location = new(-314.4527f, -175f, 70.98297f);
 
                 if (Core.Me.Distance(location) > 1f)
                 {
@@ -166,7 +166,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (toadTimer.ElapsedMilliseconds < 12_000)
             {
-                Vector3 location = new("214.2467, 0.9999993, 306.0189");
+                Vector3 location = new(214.2467f, 0.9999993f, 306.0189f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {
@@ -203,7 +203,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (miniTimer.ElapsedMilliseconds < 12_000)
             {
-                Vector3 location = new("227.0484, 1.00001, 305.9774");
+                Vector3 location = new(227.0484f, 1.00001f, 305.9774f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {
@@ -217,7 +217,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (miniTimer.ElapsedMilliseconds >= 12_000 && miniTimer.ElapsedMilliseconds < 24_000)
             {
-                Vector3 location = new("220.9772, 1, 305.9483");
+                Vector3 location = new(220.9772f, 1f, 305.9483f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {
@@ -249,7 +249,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (claw2Timer.ElapsedMilliseconds < 6_000)
             {
-                Vector3 location = new("16.74083, 120, -406.9069");
+                Vector3 location = new(16.74083f, 120f, -406.9069f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {
@@ -263,7 +263,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (claw2Timer.ElapsedMilliseconds >= 6_000 && claw2Timer.ElapsedMilliseconds < 12_000)
             {
-                Vector3 location = new("-15.15774, 120, -408.2812");
+                Vector3 location = new(-15.15774f, 120f, -408.2812f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {
@@ -295,7 +295,7 @@ public class TheTowerOfBabil : AbstractDungeon
 
             if (boundlessPainTimer.ElapsedMilliseconds >= 8_000 && boundlessPainTimer.ElapsedMilliseconds < 18_000)
             {
-                Vector3 location = new("11.11008, 479.9997, -199.1336");
+                Vector3 location = new(11.11008f, 479.9997f, -199.1336f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {

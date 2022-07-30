@@ -104,11 +104,11 @@ public class HolminsterSwitch : AbstractDungeon
     private static readonly HashSet<uint> Taphephobia = new() { 15842, 16769 };
     private static readonly HashSet<uint> FierceBeating = new() { 15834, 15835, 15836, 15837, 15838, 15839, };
 
-    private static readonly Vector3 ExorciseStackLoc = new("79.35034, 0, -81.01664");
+    private static readonly Vector3 ExorciseStackLoc = new(79.35034f, 0f, -81.01664f);
     private static readonly int ExorciseDuration = 25_000;
 
     private static readonly HashSet<uint> Pendulum = new() { 15833, 15842, 16769, 16777, 16790, };
-    private static readonly Vector3 PendulumDodgeLoc = new("117.1188,23,-474.0881");
+    private static readonly Vector3 PendulumDodgeLoc = new(117.1188f, 23f, -474.0881f);
 
     private static readonly int FierceBeatingDuration = 32_000;
     private static DateTime fierceBeatingTimestamp = DateTime.MinValue;

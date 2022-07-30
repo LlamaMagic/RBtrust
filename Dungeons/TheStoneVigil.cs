@@ -39,7 +39,7 @@ public class TheStoneVigil : AbstractDungeon
     private static readonly HashSet<uint> Cauterize = new() { 1026 };
     private static readonly HashSet<uint> FrostBreath = new() { 1022 };
 
-    private static readonly Vector3 CauterizeLocation = new("-0.0195615, 0.04040873, -247.211");
+    private static readonly Vector3 CauterizeLocation = new(-0.0195615f, 0.04040873f, -247.211f);
 
     private static DateTime swingeTimestamp = DateTime.MinValue;
     private static DateTime lionsBreathTimestamp = DateTime.MinValue;

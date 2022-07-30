@@ -282,7 +282,7 @@ public class Vanaspati : AbstractDungeon
             {
                 if (follow1SW.ElapsedMilliseconds < 2_000)
                 {
-                    Vector3 location = new("-294.9383, 41.5, -354.0579");
+                    Vector3 location = new(-294.9383f, 41.5f, -354.0579f);
 
                     if (Core.Me.Distance2D(location) > 1f)
                     {
@@ -295,7 +295,7 @@ public class Vanaspati : AbstractDungeon
                 }
                 else
                 {
-                    await MovementHelpers.GetClosestPartyMember(new Vector3("-294.9383, 41.5, -354.0579")).Follow(2f);
+                    await MovementHelpers.GetClosestPartyMember(new Vector3(-294.9383f, 41.5f, -354.0579f)).Follow(2f);
                 }
             }
         }
@@ -335,7 +335,7 @@ public class Vanaspati : AbstractDungeon
             }
             else
             {
-                await MovementHelpers.GetClosestPartyMember(new Vector3("300.0752, 55.00583, -156.6629")).Follow();
+                await MovementHelpers.GetClosestPartyMember(new Vector3(300.0752f, 55.00583f, -156.6629f)).Follow();
             }
         }
 
@@ -373,7 +373,7 @@ public class Vanaspati : AbstractDungeon
             {
                 if (WorldManager.SubZoneId == 4012)
                 {
-                    Vector3 location = new("-375.0211, 14.5, 84.97742");
+                    Vector3 location = new(-375.0211f, 14.5f, 84.97742f);
 
                     if (Core.Me.Distance2D(location) > 1f)
                     {
@@ -387,7 +387,7 @@ public class Vanaspati : AbstractDungeon
 
                 if (WorldManager.SubZoneId == 4013)
                 {
-                    Vector3 location = new("-294.9383, 41.5, -354.0579");
+                    Vector3 location = new(-294.9383f, 41.5f, -354.0579f);
 
                     if (Core.Me.Distance2D(location) > 1f)
                     {
@@ -505,7 +505,7 @@ public class Vanaspati : AbstractDungeon
             {
                 if (magnet3SW.ElapsedMilliseconds < 7_500 && !ReceiveMessageHelpers.SkillsdeterminationOverStatus)
                 {
-                    await MovementHelpers.GetClosestPartyMember(new Vector3("300.0752, 55.00583, -156.6629")).Follow();
+                    await MovementHelpers.GetClosestPartyMember(new Vector3(300.0752f, 55.00583f, -156.6629f)).Follow();
                 }
                 else
                 {
@@ -516,9 +516,9 @@ public class Vanaspati : AbstractDungeon
 
                     if (magnet3fW.ElapsedMilliseconds < 600)
                     {
-                        if (MovementHelpers.GetClosestAlly.Distance(new Vector3("300.0752, 55.00583, -156.6629")) - 3f < Core.Player.Distance(new Vector3("300.0752, 55.00583, -156.6629")))
+                        if (MovementHelpers.GetClosestAlly.Distance(new Vector3(300.0752f, 55.00583f, -156.6629f)) - 3f < Core.Player.Distance(new Vector3(300.0752f, 55.00583f, -156.6629f)))
                         {
-                            Navigator.PlayerMover.MoveTowards(new Vector3("300.0752, 55.00583, -156.6629"));
+                            Navigator.PlayerMover.MoveTowards(new Vector3(300.0752f, 55.00583f, -156.6629f));
                         }
                         else
                         {
@@ -529,7 +529,7 @@ public class Vanaspati : AbstractDungeon
                     {
                         if (!AvoidanceManager.IsRunningOutOfAvoid)
                         {
-                            await MovementHelpers.SpreadSpLoc(3_000, new Vector3("300.0752, 55.00583, -156.6629"), 6.5f);
+                            await MovementHelpers.SpreadSpLoc(3_000, new Vector3(300.0752f, 55.00583f, -156.6629f), 6.5f);
                         }
                     }
                 }
@@ -540,13 +540,13 @@ public class Vanaspati : AbstractDungeon
                 {
                     if (magnet3SW.ElapsedMilliseconds < 4_000)
                     {
-                        await MovementHelpers.GetClosestPartyMember(new Vector3("299.9771, 55.00583, -157.0001")).Follow();
+                        await MovementHelpers.GetClosestPartyMember(new Vector3(299.9771f, 55.00583f, -157.0001f)).Follow();
                     }
                     else
                     {
                         if (!AvoidanceManager.IsRunningOutOfAvoid)
                         {
-                            await MovementHelpers.SpreadSp(3_000, new Vector3("299.9771, 55.00583, -157.0001"), 6f);
+                            await MovementHelpers.SpreadSp(3_000, new Vector3(299.9771f, 55.00583f, -157.0001f), 6f);
                         }
                     }
                 }

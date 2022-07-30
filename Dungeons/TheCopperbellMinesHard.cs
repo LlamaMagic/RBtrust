@@ -65,7 +65,7 @@ public class TheCopperbellMinesHard : AbstractDungeon
         {
             if (DarkFireIII.IsCasting())
             {
-                Vector3 safeLocation = new("67.52563, -12, -47.93259");
+                Vector3 safeLocation = new(67.52563f, -12f, -47.93259f);
                 while (safeLocation.Distance2D(Core.Me.Location) > 5)
                 {
                     if (PartyManager.IsInParty && PartyManager.AllMembers.Any(pm => pm is TrustPartyMember))

@@ -331,7 +331,7 @@ public class TheDeadEnds : AbstractDungeon
             if (Core.Player.IsTank())
             {
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 2_500, "Tankbuster Spread In Progress");
-                Vector3 location = new("-105.0078, 0.1995358, -218.126");
+                Vector3 location = new(-105.0078f, 0.1995358f, -218.126f);
 
                 if (Core.Me.Distance(location) < 1f)
                 {
