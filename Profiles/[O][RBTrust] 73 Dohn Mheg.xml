@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Profile [
+  <!ENTITY Shortcut "2000700">
+  
+  <!ENTITY HiddenGardens "2959">
+  <!ENTITY TeagGye "2963">
+  <!ENTITY Wanderlust "2960">
+  <!ENTITY TheAtelier "2966">
+  <!ENTITY DohnLran "2962">
+  <!ENTITY Reflections "2967">
+  <!ENTITY TheThroneRoom "2968">
+  
+  <!ENTITY LordOfLingeringGaze "8141">
+  <!ENTITY Griaule "8143">
+  <!ENTITY PaintedRoot "8145">
+  <!ENTITY ShellCrown "2009760">
+  <!ENTITY LordOfLengthsomeGait "8146">
+  <!ENTITY ShadeOfFear "8171">
+  <!ENTITY LiarsLyre "8958">
 ]>
 <Profile>
   <Name>[O][RBTrust] 73 Dohn Mheg by athlon, Minami16, 疾风点破, Manta</Name>
@@ -16,146 +33,81 @@
 
       <If Condition="IsOnMap(821)">
         <WaitForLoading/>
-        <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
-
-        <!-- 第一步 禁园风花 -->
-        <MoveTo XYZ="-53.46396,8.040462,130.1588"/>
-
-        <!-- 第二步 禁园篮筐 -->
-        <MoveTo XYZ="-25.65871,8.101549,174.557"/>
-
-        <!-- 第三步 禁园爱蒂恩蛾 -->
-        <MoveTo XYZ="61.03216,8.424351,131.8419"/>
-
-        <!-- 第四步 禁园水妖 -->
-        <MoveTo XYZ="35.01454,8.267113,81.02051"/>
-        <WaitTimer waitTime="2"/>
-        <!-- 第五步 BOOS1 美眼 因克·佐恩 -->
-        <NoCombatMoveTo XYZ="6.234492,6.851405,21.12165" Wait="1"/>
-        <Grind GrindRef="boss1" While="GameObjectManager.GetObjectByNPCId(8141)"/>
-
-        <LootTreasure/>
-
         <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
 
-        <!-- 第六步  打怪 禁园石莲猬 -->
-        <MoveTo XYZ="-4.819658,0.7291775,-48.64905"/>
+        <If Condition="ObjectExistsWithId(&Shortcut;) and GameObjectManager.GetObjectByNPCId(&Shortcut;).IsTargetable">
+          <!-- Shortcut available -->
+          <UseTransport NpcId="&Shortcut;" XYZ="6.232459, 15.94254, 129.5941"/>
+        </If>
 
-        <WaitTimer waitTime="1"/>
-        <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
+        <If Condition="WorldManager.SubZoneId in [&HiddenGardens;]">
+          <MoveTo XYZ="-54.65071, 8.046385, 142.048"/>
+          <MoveTo XYZ="-15.42615, 8.313893, 182.9977"/>
+          <MoveTo XYZ="52.93258, 8.360373, 120.2364"/>
+          <MoveTo XYZ="11.46793, 8.453989, 79.21922"/>
+          <MoveTo XYZ="-0.3176979, 6.851522, 47.16537"/>
+        </If>
 
-        <!-- 第七步  打怪 酿蜜蜂 -->
-        <MoveTo XYZ="-35.63404,1.916844,-89.18874"/>
-        <WaitTimer waitTime="1"/>
+        <If Condition="WorldManager.SubZoneId in [&HiddenGardens;, &TeagGye;]">
+          <NoCombatMoveTo XYZ="-0.01531982, 6.851518, 21.4389" Wait="0"/>
+          <Grind GrindRef="boss1" PostCombatDelay="2.0" While="GameObjectManager.GetObjectByNPCId(&LordOfLingeringGaze;)"/>
+          <LootTreasure/>
+        </If>
 
-        <LootTreasure/>
+        <If Condition="WorldManager.SubZoneId in [&TeagGye;, &HiddenGardens;, &Wanderlust;]">
+          <MoveTo XYZ="-0.8095495, 0.7393442, -62.62094"/>
+          <MoveTo XYZ="-51.14277, 1.37592, -104.3883"/>
+          <LootTreasure/>
 
-        <!-- 第八步  打怪 猎蜜熊 -->
-        <MoveTo XYZ="-67.10806,16.14704,-186.3012"/>
+          <MoveTo XYZ="-66.48364, 16.06886, -180.1633"/>
+          <MoveTo XYZ="-8.712891, 12.22044, -229.6941"/>
+          <LootTreasure/>
 
-        <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
+          <MoveTo XYZ="7.570662, 23.04288, -318.1942"/>
+        </If>
+        
+        <If Condition="WorldManager.SubZoneId in [&Wanderlust;, &TheAtelier;]">
+          <NoCombatMoveTo XYZ="7.156433, 23.04288, -351.1254"  Wait="0"/>
+          <Grind GrindRef="boss2" PostCombatDelay="2.0" While="GameObjectManager.GetObjectByNPCId(&Griaule;)"/>
+          <LootTreasure/>
 
-        <!-- 第九步  打怪 禁园水妖 -->
-        <MoveTo XYZ="-4.79935,11.95175,-235.6158"/>
-        <WaitTimer waitTime="2"/>
+          <MoveTo XYZ="9.237274, 20.27565, -397.1015"/>
+          <RunCode name="Boss2Transition"/>
+          <WaitForLoading/>
+        </If>
 
-        <LootTreasure/>
+        <If Condition="WorldManager.SubZoneId in [&DohnLran;, &Reflections;]">
+          <MoveTo XYZ="-169.7949, -182.7501, 40.82694"/>
+          <LootTreasure/>
 
-        <!-- 第十步  BOSS2 格里奥勒 -->
-        <NoCombatMoveTo XYZ="12.55156,23.04288,-349.3528" Wait="1"/>
-        <Grind GrindRef="boss2" While="GameObjectManager.GetObjectByNPCId(8143)"/>
+          <MoveTo XYZ="-171.8624, -178.7595, -6.363098"/>
+          <UseObject NpcId="&ShellCrown;" XYZ="-171.8624, -178.7595, -6.363098" Condition="GameObjectManager.GetObjectByNPCId(&ShellCrown;).IsTargetable"/>
 
-        <LootTreasure/>
+          <MoveTo XYZ="-128.2216, -167.4947, -105.4246"/>
+          <MoveTo XYZ="-128.6794, -156.0078, -164.9653"/>
+          <LootTreasure/>
 
-        <!-- 第十一步 打怪 上个BOSS打完要往前去到下一层 再往前右键互动石柱才能开怪-->
-        <MoveTo XYZ="8.755135,20.0074,-400.4264"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <WaitTimer waitTime="5"/>
-        <MoveTo XYZ="-170.8162,-182.7501,35.80744"/>
+          <MoveTo XYZ="-128.5572, -144.521, -228.6646"/>
+        </If>
 
-        <LootTreasure/>
+        <If Condition="WorldManager.SubZoneId in [&TheThroneRoom;]">
+          <NoCombatMoveTo XYZ="-128.5, -144.5259, -256"  Wait="0"/>
+          <Grind GrindRef="boss3" PostCombatDelay="2.0" While="GameObjectManager.GetObjectByNPCId(&LordOfLengthsomeGait;)"/>
+          <LootTreasure/>
 
-        <MoveTo XYZ="-171.8794,-178.75,-6.813273"/>
-        <RunCode name="贝壳王冠"/>
-        <WaitTimer waitTime="5"/>
-
-        <!-- 第十二步 打怪 禁园凯尔派 -->
-        <MoveTo XYZ="-172.199,-179.0002,-23.83175"/>
-        <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-
-        <!-- 第十三步 打怪 禁园凯尔派2 -->
-        <MoveTo XYZ="-125.179,-167.7505,-84.55482"/>
-
-        <!-- 第十四步 打怪 那伊阿得斯 -->
-        <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
-        <MoveTo XYZ="-123.701,-167.4992,-101.0573"/>
-        <WaitTimer waitTime="1"/>
-
-        <!-- 第十五步 打怪 那伊阿得斯2 -->
-        <MoveTo XYZ="-128.6821,-167.4947,-103.0438"/>
-        <MoveTo XYZ="-128.4726,-167.4992,-111.1085"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <WaitTimer waitTime="1"/>
-
-        <LootTreasure/>
-
-        <!-- 第十六步 BOSS3 乐圣 因克·佐恩 -->
-        <MoveTo XYZ="-128.4545,-156.0078,-160.0941"/>
-        <MoveTo XYZ="-128.5197,-156.0078,-173.2586"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <RunCode name="向前移动"/>
-        <WaitTimer waitTime="3"/>
-        <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
-        <MoveTo XYZ="-135.7786,-144.5292,-253.5551"/>
-        <Grind GrindRef="boss3" While="GameObjectManager.GetObjectByNPCId(8146)"/>
-
-        <WaitTimer waitTime="2"/>
-        <MoveTo XYZ="-128.9267,-144.5268,-255.1648"/>
-
-        <LootTreasure/>
-
-        <LeaveDuty/>
+          <LeaveDuty/>
+        </If>
       </If>
     </While>
   </Order>
   <CodeChunks>
-    <CodeChunk Name="向前移动">
-      <![CDATA[  await Buddy.Coroutines.Coroutine.Sleep(500);
-      ff14bot.Managers.MovementManager.MoveForwardStart();
-      await Buddy.Coroutines.Coroutine.Sleep(3000);
-      ff14bot.Managers.MovementManager.MoveForwardStop();
-      await Buddy.Coroutines.Coroutine.Sleep(500);
-      ]]>
-    </CodeChunk>
-    <CodeChunk name="贝壳王冠">
+    <CodeChunk Name="Boss2Transition">
       <![CDATA[
-        if(GameObjectManager.GetObjectsOfType<EventObject>().Where(r => r.Distance() < 50 && r.NpcId == 2009760 && r.IsVisible == true).Any() == true) {
-          var obj = GameObjectManager.GetObjectsOfType<EventObject>().Where(r => r.Distance() < 50 && r.NpcId == 2009760 && r.IsVisible == true).First();
-           while (Core.Me.Location.Distance2D(obj.Location) > 1f)
-          {
-            Navigator.PlayerMover.MoveTowards(obj.Location);
-            await Coroutine.Sleep(100);
-          }
-
-          Navigator.PlayerMover.MoveStop();
-          await Coroutine.Sleep(1000);
-          obj.Target();
-          await Coroutine.Sleep(1000);
-          if(Core.Target == null)  {
-            obj.Target();
-            await Coroutine.Sleep(1000);
-          }
-          Core.Target.Interact();
-        }
-        ]]>
+        Core.Player.SetFacing(3.1479f);
+        MovementManager.MoveForwardStart();
+        while (WorldManager.SubZoneId != 2962)  {  await Coroutine.Yield();  }
+        Navigator.PlayerMover.MoveStop();
+      ]]>
     </CodeChunk>
   </CodeChunks>
   <GrindAreas>
@@ -164,7 +116,7 @@
         <Hotspot Radius="200" XYZ="6.234492,6.851405,21.12165"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Name="美眼 因克·佐恩" Id="8141" Weight="1"/>
+        <TargetMob Name="Aenc Thon, Lord of the Lingering Gaze" Id="&LordOfLingeringGaze;" Weight="1"/>
       </TargetMobs>
     </GrindArea>
     <GrindArea name="boss2">
@@ -172,8 +124,8 @@
         <Hotspot Radius="200" XYZ="12.55156,23.04288,-349.352"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Name="格里奥勒" Id="8143" Weight="1"/>
-        <TargetMob Name="格里奥勒根茎" Id="8145" Weight="100"/>
+        <TargetMob Name="Griaule" Id="&Griaule;" Weight="1"/>
+        <TargetMob Name="Painted Root" Id="&PaintedRoot;" Weight="100"/>
       </TargetMobs>
     </GrindArea>
     <GrindArea name="boss3">
@@ -181,8 +133,9 @@
         <Hotspot Radius="200" XYZ="-135.7786,-144.5292,-253.5551"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Name="乐圣 因克·佐恩" Id="8146" Weight="1"/>
-        <TargetMob Name="恐怖幻影" Id="8171" Weight="1"/>
+        <TargetMob Name="Aenc Thon, Lord of the Lengthsome Gait" Id="&LordOfLengthsomeGait;" Weight="1"/>
+        <TargetMob Name="Shade of Fear" Id="&ShadeOfFear;" Weight="1"/>
+        <TargetMob Name="Liar's Lyre" Id="&LiarsLyre;" Weight="100"/>
       </TargetMobs>
     </GrindArea>
   </GrindAreas>

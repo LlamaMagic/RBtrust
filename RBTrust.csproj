@@ -7,7 +7,7 @@
     <ProjectGuid>{5459F0C3-4FB6-44A4-AE1E-8CE9CBCA67F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RBTrust</RootNamespace>
+    <RootNamespace>Trust</RootNamespace>
     <AssemblyName>RBTrust</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,78 +52,90 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\SquadronAction.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Plugins\Trust\Data\ClassJobRoles.cs" />
-    <Compile Include="Plugins\Trust\Data\DungeonId.cs" />
-    <Compile Include="Plugins\Trust\Data\PartyMemberId.cs" />
-    <Compile Include="Plugins\Trust\Data\PartyMembers.cs" />
-    <Compile Include="Plugins\Trust\Data\SubZoneId.cs" />
-    <Compile Include="Plugins\Trust\Data\ZoneId.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\AbstractDungeon.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\AlzadaalsLegacy.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\Amaurot.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\AnamnesisAnyder.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\BrayfloxsLongstop.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\CopperbellMines.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\DzemaelDarkhold.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HaukkeManor.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\PharosSirius.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\Sastasha.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheAurumVale.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\CastrumMeridianum.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\DohnMheg.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\DungeonManager.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\Halatali.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HallOfTheNoviceArena.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HallOfTheNoviceWesternLa.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HellsLid.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\HolminsterSwitch.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\KtisisHyperboreia.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\MalikahsWell.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\MatoyasRelict.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\MtGulg.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\Paglthan.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\SyrcusTower.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheAitiascope.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheBowlOfEmbers.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheCopperbellMinesHard.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheDeadEnds.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheGrandCosmos.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheHeroesGauntlet.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheHowlingEye.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheMothercrystal.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheNavel.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\ThePortaDecumana.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\ThePraetorium.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheQitanaRavel.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheStoneVigil.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheTamTaraDeepcroft.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheThousandMawsOfTotoRak.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheTowerOfBabil.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheTowerOfZot.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\TheWanderersPalace.cs" />
-    <Compile Include="Plugins\Trust\Dungeons\Vanaspati.cs" />
-    <Compile Include="Plugins\Trust\Extensions\BattleCharacterExtensions.cs" />
-    <Compile Include="Plugins\Trust\Extensions\Extensions.cs" />
-    <Compile Include="Plugins\Trust\Helpers\AvoidanceHelpers.cs" />
-    <Compile Include="Plugins\Trust\Helpers\LoadingHelpers.cs" />
-    <Compile Include="Plugins\Trust\Helpers\LocalizationHelpers.cs" />
-    <Compile Include="Plugins\Trust\Helpers\MovementHelpers.cs" />
-    <Compile Include="Plugins\Trust\Helpers\PluginHelpers.cs" />
-    <Compile Include="Plugins\Trust\Helpers\ReceiveMessageHelpers.cs" />
-    <Compile Include="Plugins\Trust\Trust.cs" />
-    <Compile Include="Plugins\Trust\Windows\RecommendEquip.cs" />
+    <Compile Include="Data\ClassJobRoles.cs" />
+    <Compile Include="Data\DungeonId.cs" />
+    <Compile Include="Data\PartyMemberId.cs" />
+    <Compile Include="Data\PartyMembers.cs" />
+    <Compile Include="Data\SubZoneId.cs" />
+    <Compile Include="Data\ZoneId.cs" />
+    <Compile Include="Dungeons\AbstractDungeon.cs" />
+    <Compile Include="Dungeons\AlzadaalsLegacy.cs" />
+    <Compile Include="Dungeons\Amaurot.cs" />
+    <Compile Include="Dungeons\AnamnesisAnyder.cs" />
+    <Compile Include="Dungeons\BrayfloxsLongstop.cs" />
+    <Compile Include="Dungeons\CopperbellMines.cs" />
+    <Compile Include="Dungeons\DzemaelDarkhold.cs" />
+    <Compile Include="Dungeons\HaukkeManor.cs" />
+    <Compile Include="Dungeons\PharosSirius.cs" />
+    <Compile Include="Dungeons\Sastasha.cs" />
+    <Compile Include="Dungeons\TheAurumVale.cs" />
+    <Compile Include="Dungeons\CastrumMeridianum.cs" />
+    <Compile Include="Dungeons\DohnMheg.cs" />
+    <Compile Include="Dungeons\DungeonManager.cs" />
+    <Compile Include="Dungeons\Halatali.cs" />
+    <Compile Include="Dungeons\HallOfTheNoviceArena.cs" />
+    <Compile Include="Dungeons\HallOfTheNoviceWesternLa.cs" />
+    <Compile Include="Dungeons\HellsLid.cs" />
+    <Compile Include="Dungeons\HolminsterSwitch.cs" />
+    <Compile Include="Dungeons\KtisisHyperboreia.cs" />
+    <Compile Include="Dungeons\MalikahsWell.cs" />
+    <Compile Include="Dungeons\MatoyasRelict.cs" />
+    <Compile Include="Dungeons\MtGulg.cs" />
+    <Compile Include="Dungeons\Paglthan.cs" />
+    <Compile Include="Dungeons\SyrcusTower.cs" />
+    <Compile Include="Dungeons\TheAitiascope.cs" />
+    <Compile Include="Dungeons\TheBowlOfEmbers.cs" />
+    <Compile Include="Dungeons\TheCopperbellMinesHard.cs" />
+    <Compile Include="Dungeons\TheDeadEnds.cs" />
+    <Compile Include="Dungeons\TheGrandCosmos.cs" />
+    <Compile Include="Dungeons\TheHeroesGauntlet.cs" />
+    <Compile Include="Dungeons\TheHowlingEye.cs" />
+    <Compile Include="Dungeons\TheMothercrystal.cs" />
+    <Compile Include="Dungeons\TheNavel.cs" />
+    <Compile Include="Dungeons\ThePortaDecumana.cs" />
+    <Compile Include="Dungeons\ThePraetorium.cs" />
+    <Compile Include="Dungeons\TheQitanaRavel.cs" />
+    <Compile Include="Dungeons\TheStoneVigil.cs" />
+    <Compile Include="Dungeons\TheTamTaraDeepcroft.cs" />
+    <Compile Include="Dungeons\TheThousandMawsOfTotoRak.cs" />
+    <Compile Include="Dungeons\TheTowerOfBabil.cs" />
+    <Compile Include="Dungeons\TheTowerOfZot.cs" />
+    <Compile Include="Dungeons\TheWanderersPalace.cs" />
+    <Compile Include="Dungeons\Vanaspati.cs" />
+    <Compile Include="Extensions\BattleCharacterExtensions.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\LocalPlayerExtensions.cs" />
+    <Compile Include="Extensions\Vector3Extensions.cs" />
+    <Compile Include="Helpers\AvoidanceHelpers.cs" />
+    <Compile Include="Helpers\LoadingHelpers.cs" />
+    <Compile Include="Helpers\LocalizationHelpers.cs" />
+    <Compile Include="Helpers\LoggingHelpers.cs" />
+    <Compile Include="Helpers\MovementHelpers.cs" />
+    <Compile Include="Helpers\PluginHelpers.cs" />
+    <Compile Include="Helpers\ReceiveMessageHelpers.cs" />
+    <Compile Include="Localization\LocalizationProvider.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Localization\Translations.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Translations.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TrustPlugin.cs" />
+    <Compile Include="Windows\RecommendEquip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quest Behaviors\AbstractTaskTag.cs" />
-    <Compile Include="Quest Behaviors\CheckPluginsTag.cs" />
-    <Compile Include="Quest Behaviors\EquipRecommendedTag.cs" />
-    <Compile Include="Plugins\Trust\Helpers\InstanceFlags.cs" />
-    <Compile Include="Quest Behaviors\JoinDutyFinderTag.cs" />
-    <Compile Include="Quest Behaviors\LeaveDutyTag.cs" />
-    <Compile Include="Quest Behaviors\LootTreasureTag.cs" />
-    <Compile Include="Quest Behaviors\SetPluginsTag.cs" />
-    <Compile Include="Quest Behaviors\WaitForLoadingTag.cs" />
-    <Compile Include="Plugins\Trust\Windows\ExtendedContentsFinder.cs" />
+    <Compile Include="OrderBot\AbstractTaskTag.cs" />
+    <Compile Include="OrderBot\CheckPluginsTag.cs" />
+    <Compile Include="OrderBot\EquipRecommendedTag.cs" />
+    <Compile Include="Helpers\InstanceFlags.cs" />
+    <Compile Include="OrderBot\JoinDutyFinderTag.cs" />
+    <Compile Include="OrderBot\LeaveDutyTag.cs" />
+    <Compile Include="OrderBot\LootTreasureTag.cs" />
+    <Compile Include="OrderBot\SetPluginsTag.cs" />
+    <Compile Include="OrderBot\WaitForLoadingTag.cs" />
+    <Compile Include="Windows\ExtendedContentsFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -157,6 +169,14 @@
       <Name>LlamaLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Translations.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\Translations.zh.resx" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <!-- One of: BotBases, Plugins, Profiles, Quest Behaviors, Routines -->
