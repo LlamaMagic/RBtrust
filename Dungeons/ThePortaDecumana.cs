@@ -97,7 +97,7 @@ public class ThePortaDecumana : AbstractDungeon
         {
             BattleCharacter ultimaWeaponNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(TheUltimaWeapon)
                 .FirstOrDefault(bc => bc.IsTargetable);
-
+            SidestepPlugin.Enabled = true;
             AvoidanceHelpers.AddAvoidRectangle(ultimaWeaponNpc, 12.0f, 40.0f);
             citadelBusterTimestamp = DateTime.Now.AddMilliseconds(CitadelBusterDuration);
         }
