@@ -61,6 +61,8 @@ public abstract class AbstractDungeon
 
         if (caster != null)
         {
+            SidestepPlugin.Enabled = false;
+            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
             SpellCastInfo spell = caster.SpellCastInfo;
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, spell.RemainingCastTime, $"Follow-Dodge: ({caster.NpcId}) {caster.Name} is casting ({spell.ActionId}) {spell.Name} for {spell.RemainingCastTime.TotalMilliseconds:N0}ms");
 
