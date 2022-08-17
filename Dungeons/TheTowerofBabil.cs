@@ -2,8 +2,11 @@ using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
+using ff14bot.Objects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
@@ -52,35 +55,28 @@ public class TheTowerOfBabil : AbstractDungeon
     // Obliviating Claw   25355
     // Obliviating Claw 2 25354
     // Erupting Pain      25351
+
+    private static readonly int groundandPoundDuration = 7_000;
+    private static DateTime groundandPoundTimestamp = DateTime.MinValue;
+
+    private const uint Barnabas = 10279;
+
+    private readonly HashSet<uint> groundandPound = new() { 25159, 25322 };
+
     private readonly HashSet<uint> magnet = new()
     {
         25326, 25157, 25158, 25328,
     };
 
-    private readonly HashSet<uint> toad = new()
-    {
-        25333,
-    };
+    private readonly HashSet<uint> toad = new() {25333,};
 
-    private readonly HashSet<uint> mini = new()
-    {
-        25331,
-    };
+    private readonly HashSet<uint> mini = new() {25331,};
 
-    private readonly HashSet<uint> boundlessPain = new()
-    {
-        25347,
-    };
+    private readonly HashSet<uint> boundlessPain = new() {25347,};
 
-    private readonly HashSet<uint> spread = new()
-    {
-        25351,
-    };
+    private readonly HashSet<uint> spread = new() { 25351,};
 
-    private readonly HashSet<uint> claw2 = new()
-    {
-        25354,
-    };
+    private readonly HashSet<uint> claw2 = new() {25354,};
 
     private readonly Stopwatch magnetTimer = new();
     private readonly Stopwatch miniTimer = new();
@@ -89,19 +85,26 @@ public class TheTowerOfBabil : AbstractDungeon
     private readonly Stopwatch claw2Timer = new();
     private readonly Stopwatch spreadTimer = new();
 
+
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheTowerOfBabil;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
-    {
-        21182, 25324,
-    };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {21182, 25324,};
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
+
+        if (groundandPound.IsCasting() && groundandPoundTimestamp < DateTime.Now)
+        {
+            BattleCharacter barnabasNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Barnabas)
+                .FirstOrDefault(bc => bc.IsTargetable);
+            SidestepPlugin.Enabled = true;
+            AvoidanceHelpers.AddAvoidRectangle(barnabasNpc, 12.0f, 40.0f);
+            groundandPoundTimestamp = DateTime.Now.AddMilliseconds(groundandPoundDuration);
+        }
 
         if (magnet.IsCasting() || magnetTimer.IsRunning)
         {
@@ -110,7 +113,8 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Magnet Spell In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000,
+                    "Magnet Spell In Progress");
                 magnetTimer.Restart();
             }
 
@@ -142,7 +146,8 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 30_000, "Shapeshift Mechanic In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 30_000,
+                    "Shapeshift Mechanic In Progress");
                 toadTimer.Restart();
             }
 
@@ -179,7 +184,8 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 24_000, "Shapeshift Mechanic In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 24_000,
+                    "Shapeshift Mechanic In Progress");
                 miniTimer.Restart();
             }
 
@@ -225,7 +231,8 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Obliviating Claw 2 In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000,
+                    "Obliviating Claw 2 In Progress");
                 claw2Timer.Restart();
             }
 
