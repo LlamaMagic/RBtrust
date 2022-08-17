@@ -112,7 +112,7 @@ public class TheStoneVigil : AbstractDungeon
         }
 
         BattleCharacter koshcheiNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Koshchei).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
-        if (chudoYudoNpc != null && chudoYudoNpc.IsValid)
+        if (koshcheiNpc != null && koshcheiNpc.IsValid)
         {
             if (Typhoon.IsCasting())
             {
