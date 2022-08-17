@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\SquadronAction.cs" />
+    <Compile Include="Dungeons\SohmAl.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Data\ClassJobRoles.cs" />
     <Compile Include="Data\DungeonId.cs" />

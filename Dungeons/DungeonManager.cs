@@ -44,6 +44,7 @@ internal class DungeonManager
             { ZoneId.SyrcusTower, new SyrcusTower() },
 
             // 3.0 - Heavensward
+            { ZoneId.SohmAl, new SohmAl() },
 
             // 4.0 - Stormblood
             { ZoneId.HellsLid, new HellsLid() },

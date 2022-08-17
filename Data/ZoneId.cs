@@ -122,6 +122,11 @@ public enum ZoneId : ushort
     SyrcusTower = 372,
 
     /// <summary>
+    /// Lv. 53: Sohm Al
+    /// </summary>
+    SohmAl = 441,
+
+    /// <summary>
     /// Lv. 70: Hells' Lid
     /// </summary>
     HellsLid = 742,
