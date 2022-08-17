@@ -1,7 +1,11 @@
-﻿using ff14bot;
+﻿using Clio.Utilities;
+using ff14bot;
 using ff14bot.Managers;
+using ff14bot.Objects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
@@ -81,10 +85,16 @@ public class TheTowerOfZot : AbstractDungeon
         25242, 25372, 25371, 25373,
     };
 
-    private readonly HashSet<uint> deltaattack = new()
-    {
-        25260, 25261, 25262,
-    };
+    private readonly HashSet<uint> deltaattack = new() {25260, 25261, 25262,};
+
+    private const int Sanduruva = 10257;
+
+    // Prakamya Siddhi
+    private readonly HashSet<uint> prakamyaSiddhi = new() { 25251 };
+
+    private static DateTime prakamyaSiddhiTimestamp = DateTime.MinValue;
+
+    private const int prakamyaSiddhiDuration = 6_000;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheTowerOfZot;
@@ -134,6 +144,30 @@ public class TheTowerOfZot : AbstractDungeon
         if (daSw.ElapsedMilliseconds > 24_000)
         {
             SidestepPlugin.Enabled = true;
+        }
+
+        BattleCharacter sanduruvaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Sanduruva)
+            .FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+        if (sanduruvaNpc != null && sanduruvaNpc.IsValid)
+        {
+            if (prakamyaSiddhi.IsCasting() &&
+                prakamyaSiddhiTimestamp.AddMilliseconds(prakamyaSiddhiDuration) < DateTime.Now)
+            {
+                Vector3 location = sanduruvaNpc.Location;
+                uint objectId = sanduruvaNpc.ObjectId;
+
+                prakamyaSiddhiTimestamp = DateTime.Now;
+                Stopwatch prakamyaSiddhiTimer = new();
+                prakamyaSiddhiTimer.Restart();
+
+                // Create an AOE avoid for the Prakamya Siddhi around the boss
+                AvoidanceManager.AddAvoidObject<GameObject>(
+                    canRun: () =>
+                        prakamyaSiddhiTimer.IsRunning &&
+                        prakamyaSiddhiTimer.ElapsedMilliseconds < prakamyaSiddhiDuration,
+                    radius: 5f,
+                    unitIds: objectId);
+            }
         }
 
         if (transmute.IsCasting() || tmSw.IsRunning)
