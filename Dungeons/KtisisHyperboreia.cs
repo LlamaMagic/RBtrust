@@ -1,16 +1,16 @@
 ﻿using Buddy.Coroutines;
 using Clio.Utilities;
-using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
 using ff14bot.Navigation;
+using ff14bot.Objects;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
-using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -61,11 +61,11 @@ public class KtisisHyperboreia : AbstractDungeon
     // Meteor NpcId: 10495 CastingSpell [Cosmic Kiss] [Cosmic Kiss] SpellId : 25891
 
     // Lyssa
+    private const int FrostBiteAndSeekDuration = 20_000;
     private readonly HashSet<uint> frostBiteAndSeek = new() { 25175 };
-    private readonly Stopwatch frostBiteAndSeekSw = new();
 
     // Ladon Lord
-    private readonly HashSet<uint> pyricBreath = new() { 25735, 25734, 25736 };
+    private readonly HashSet<uint> pyricBreath = new() { 25734, 25735, 25736, 25737, 25738, 25739 };
 
     // hermes
     private readonly HashSet<uint> hermetica = new() { 25888, 25893, 25895 };
@@ -73,8 +73,8 @@ public class KtisisHyperboreia : AbstractDungeon
     private readonly HashSet<uint> trueAero = new() { 25899, 25901 };
     private readonly HashSet<uint> trueAeroII = new() { 25897, 25896, 25898 };
     private readonly HashSet<uint> trueTornado = new() { 25902, 25906 };
-    private readonly HashSet<uint> doubleDouble = new() { 25892 };
-    private readonly HashSet<uint> quadraruple = new() { 25894 };
+    private readonly HashSet<uint> doubleSpell = new() { 25892 };
+    private readonly HashSet<uint> quadruple = new() { 25894 };
     private readonly HashSet<uint> trueBravery = new() { 25907 };
     private readonly HashSet<uint> trismegistos = new() { 25886 };
     private readonly HashSet<uint> anySpellAfterHermetica = new()
@@ -83,10 +83,9 @@ public class KtisisHyperboreia : AbstractDungeon
         25897, 25896, 25898,
     };
 
-    private readonly Stopwatch hermesTrueAeroIITimer = new();
+    private DateTime frostBiteAndSeekEnds = DateTime.MinValue;
 
     private bool moveToSafety;
-    private int frostBiteSeekCount;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.KtisisHyperboreia;
@@ -100,99 +99,89 @@ public class KtisisHyperboreia : AbstractDungeon
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
-        if (!Core.Me.InCombat)
-        {
-            CapabilityManager.Clear();
-        }
-
         await FollowDodgeSpells();
 
-        // Lyssa First Boss
-        if (WorldManager.SubZoneId == (uint)SubZoneId.FrozenSphere)
+        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+        bool result = false;
+
+        switch (currentSubZoneId)
         {
-            if (frostBiteAndSeek.IsCasting())
-            {
-                if (!frostBiteAndSeekSw.IsRunning)
-                {
-                    frostBiteAndSeekSw.Restart();
-                }
-
-                Logger.Information($"frostBiteAndSeekSw: {frostBiteAndSeekSw.ElapsedMilliseconds:N0}ms");
-
-                // wait for stopwatch to reach 3 seconds
-                if (frostBiteAndSeekSw.ElapsedMilliseconds >= 2_500)
-                {
-                    SidestepPlugin.Enabled = false;
-                    AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-
-                    if (frostBiteSeekCount == 0)
-                    {
-                        frostBiteAndSeekSw.Reset();
-                        await Coroutine.Sleep(8_000);
-                    }
-                    else
-                    {
-                        frostBiteAndSeekSw.Reset();
-
-                        // the second one the npc move a little bit slower :(
-                        await Coroutine.Sleep(10_000);
-                    }
-
-                    await MovementHelpers.GetClosestAlly.Follow();
-                    SidestepPlugin.Enabled = true;
-                    frostBiteAndSeekSw.Reset();
-                    frostBiteSeekCount++;
-                }
-            }
+            case SubZoneId.FrozenSphere:
+                result = await HandleLyssa();
+                break;
+            case SubZoneId.ConceptReview:
+                result = await HandleLadonLord();
+                break;
+            case SubZoneId.CelestialSphere:
+                result = await HandleHermes();
+                break;
         }
 
-        // Ladon Lord Second Boss
-        if (WorldManager.SubZoneId == (uint)SubZoneId.ConceptReview)
+        return result;
+    }
+
+    private async Task<bool> HandleLyssa()
+    {
+        if (frostBiteAndSeek.IsCasting() && frostBiteAndSeekEnds < DateTime.Now)
         {
-            if (pyricBreath.IsCasting())
-            {
-                SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await Coroutine.Sleep(1_500);
-                await MovementHelpers.GetClosestAlly.Follow();
-                Navigator.PlayerMover.MoveStop();
-                SidestepPlugin.Enabled = true;
-            }
+            frostBiteAndSeekEnds = DateTime.Now.AddMilliseconds(FrostBiteAndSeekDuration);
+
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, FrostBiteAndSeekDuration, $"Dodging Frostbite and Seek");
         }
 
-        // hermes
-        if (WorldManager.SubZoneId == (uint)SubZoneId.CelestialSphere)
+        if (DateTime.Now < frostBiteAndSeekEnds)
         {
-            if (Core.Me.InCombat)
-            {
-                if (!hermesTrueAeroIITimer.IsRunning)
-                {
-                    hermesTrueAeroIITimer.Restart();
-                }
-            }
+            // Venat walks to safety ahead of time instead of teleporting last second
+            BattleCharacter partyMember = PartyManager.VisibleMembers
+                .Select(pm => pm.BattleCharacter)
+                .FirstOrDefault(bc => bc.NpcId == (uint)PartyMemberId.Venat)
 
-            if (hermetica.IsCasting())
-            {
-                Logger.Information($"True Aero II timer: {hermesTrueAeroIITimer.ElapsedMilliseconds:N0}ms");
-                SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                moveToSafety = true;
-                while (moveToSafety)
-                {
-                    if (anySpellAfterHermetica.IsCasting())
-                    {
-                        moveToSafety = false;
-                        break;
-                    }
+                // Can't find specific character. Trusts mode/non-default party setup?
+                ?? PartyManager.VisibleMembers.FirstOrDefault(pm => !pm.IsMe)?.BattleCharacter;
 
-                    await MovementHelpers.GetClosestAlly.Follow();
-                    await Coroutine.Yield();
-                }
-            }
+            await partyMember?.Follow();
+        }
 
-            await Coroutine.Sleep(200);
+        return false;
+    }
+
+    private async Task<bool> HandleLadonLord()
+    {
+        if (pyricBreath.IsCasting())
+        {
+            SidestepPlugin.Enabled = false;
+            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+            await Coroutine.Sleep(1_500);
+            await MovementHelpers.GetClosestAlly.Follow();
+            Navigator.PlayerMover.MoveStop();
             SidestepPlugin.Enabled = true;
         }
+
+        return false;
+    }
+
+    private async Task<bool> HandleHermes()
+    {
+        if (hermetica.IsCasting())
+        {
+            SidestepPlugin.Enabled = false;
+            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+            moveToSafety = true;
+            while (moveToSafety)
+            {
+                if (anySpellAfterHermetica.IsCasting())
+                {
+                    moveToSafety = false;
+                    break;
+                }
+
+                await MovementHelpers.GetClosestAlly.Follow();
+                await Coroutine.Yield();
+            }
+        }
+
+        await Coroutine.Sleep(200);
+        SidestepPlugin.Enabled = true;
 
         if (trueAero.IsCasting())
         {
@@ -204,7 +193,7 @@ public class KtisisHyperboreia : AbstractDungeon
             SidestepPlugin.Enabled = true;
         }
 
-        if (trueAeroII.IsCasting() || (hermesTrueAeroIITimer.ElapsedMilliseconds >= 142_000 && hermesTrueAeroIITimer.ElapsedMilliseconds <= 150_000))
+        if (trueAeroII.IsCasting())
         {
             SidestepPlugin.Enabled = false;
             Vector3 location = new(-8f, 1f, -50.0f);
