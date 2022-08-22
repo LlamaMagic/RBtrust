@@ -4,6 +4,7 @@ using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,17 +34,19 @@ public class TheStoneVigil : AbstractDungeon
     private const int LionsBreathDuration = 10_000;
     private const int FrostBreathDuration = 3_000;
 
-    private static readonly HashSet<uint> Swinge = new() { 903 };
-    private static readonly HashSet<uint> LionsBreath = new() { 902 };
-    private static readonly HashSet<uint> Typhoon = new() { 28730 };
-    private static readonly HashSet<uint> Cauterize = new() { 1026 };
-    private static readonly HashSet<uint> FrostBreath = new() { 1022 };
+    private static readonly HashSet<uint> Swinge = new() {903};
+    private static readonly HashSet<uint> LionsBreath = new() {902};
+    private static readonly HashSet<uint> Typhoon = new() {28730};
+    private static readonly HashSet<uint> Cauterize = new() {1026};
+    private static readonly HashSet<uint> FrostBreath = new() {1022};
 
     private static readonly Vector3 CauterizeLocation = new(-0.0195615f, 0.04040873f, -247.211f);
 
     private static DateTime swingeTimestamp = DateTime.MinValue;
     private static DateTime lionsBreathTimestamp = DateTime.MinValue;
     private static DateTime frostBreathTimestamp = DateTime.MinValue;
+
+    private AvoidInfo? someTrackedSkill;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheStoneVigil;
@@ -56,7 +59,8 @@ public class TheStoneVigil : AbstractDungeon
     {
         await FollowDodgeSpells();
 
-        BattleCharacter chudoYudoNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ChudoYudo).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+        BattleCharacter chudoYudoNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ChudoYudo)
+            .FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
         if (chudoYudoNpc != null && chudoYudoNpc.IsValid)
         {
             if (Swinge.IsCasting() && swingeTimestamp.AddMilliseconds(SwingeDuration) < DateTime.Now)
@@ -111,7 +115,9 @@ public class TheStoneVigil : AbstractDungeon
             }
         }
 
-        BattleCharacter koshcheiNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Koshchei).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+        /* Removed until I can figure out how to add the avoid once and only once
+        BattleCharacter koshcheiNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Koshchei)
+            .FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
         if (koshcheiNpc != null && koshcheiNpc.IsValid)
         {
             if (Typhoon.IsCasting())
@@ -120,8 +126,10 @@ public class TheStoneVigil : AbstractDungeon
                 AvoidanceManager.AddAvoidObject<GameObject>(() => Core.Player.InCombat, 5.5f, typhoonIds);
             }
         }
+        */
 
-        BattleCharacter isgebindNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Isgebind).FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
+        BattleCharacter isgebindNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Isgebind)
+            .FirstOrDefault(bc => bc.Distance() < 50 && bc.IsTargetable);
         if (isgebindNpc != null && isgebindNpc.IsValid)
         {
             if (Cauterize.IsCasting())
