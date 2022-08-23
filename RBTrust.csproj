@@ -162,6 +162,7 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 90.3 The Fell Court of Troia.xml" />
     <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.2 The Grand Cosmos.xml" />
     <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.3 Anamnesis Anyder.xml" />
     <Content Include="Profiles\[O][RBTrust] 71 Holminster Switch.xml" />
