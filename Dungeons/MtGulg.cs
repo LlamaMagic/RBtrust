@@ -19,10 +19,8 @@ namespace Trust.Dungeons;
 /// </summary>
 public class MtGulg : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.MtGulg;
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.MtGulg;
 
     private const int ForgivenCruelty = 8260;
     private const int ForgivenWhimsy = 8261;

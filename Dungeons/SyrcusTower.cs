@@ -15,16 +15,14 @@ namespace Trust.Dungeons;
 /// </summary>
 public class SyrcusTower : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.SyrcusTower;
-
     private const int IceCage = 2820;
 
     private static readonly HashSet<uint> CurtainCall = new() { 2441, 12461 };
     private static readonly HashSet<uint> AncientQuaga = new() { 2361, 12214, 3412, 4198, 5254, 5253, 2359, 3413, };
     private static readonly HashSet<uint> AncientFlare = new() { 2317, 1730, 1731, 1748, 2347, 5253, 2359, 11928, };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.SyrcusTower;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

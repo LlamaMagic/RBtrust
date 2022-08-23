@@ -13,11 +13,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class ThePraetorium : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.ThePraetorium;
-
     private const int Nero = 2135;
     private const int Gaius = 2136;
 
@@ -78,6 +73,9 @@ public class ThePraetorium : AbstractDungeon
     {
         19657, 19774, 20107, 28493,
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.ThePraetorium;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.ThePraetorium;

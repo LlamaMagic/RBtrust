@@ -14,11 +14,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Halatali : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.Halatali;
-
     private const int ThunderclapGuivre = 1196;
     private const int LightningPool = 2001648;
 
@@ -28,6 +23,9 @@ public class Halatali : AbstractDungeon
         (new Vector3(-189.0614f, -15.30659f, -157.837f), 15f),
         (new Vector3(-204.8858f, -15.06509f, -117.6959f), 20f),
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.Halatali;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

@@ -18,13 +18,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheTowerOfZot : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheTowerOfZot;
-
-    private readonly CapabilityManagerHandle trustHandle1 = CapabilityManager.CreateNewHandle();
-    private readonly CapabilityManagerHandle trustHandle2 = CapabilityManager.CreateNewHandle();
     private readonly CapabilityManagerHandle trustHandle3 = CapabilityManager.CreateNewHandle();
     private readonly CapabilityManagerHandle trustHandle4 = CapabilityManager.CreateNewHandle();
 
@@ -85,7 +78,7 @@ public class TheTowerOfZot : AbstractDungeon
         25242, 25372, 25371, 25373,
     };
 
-    private readonly HashSet<uint> deltaattack = new() {25260, 25261, 25262,};
+    private readonly HashSet<uint> deltaattack = new() { 25260, 25261, 25262, };
 
     private const int Sanduruva = 10257;
 
@@ -94,7 +87,10 @@ public class TheTowerOfZot : AbstractDungeon
 
     private static DateTime prakamyaSiddhiTimestamp = DateTime.MinValue;
 
-    private const int prakamyaSiddhiDuration = 6_000;
+    private const int PrakamyaSiddhiDuration = 6_000;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheTowerOfZot;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheTowerOfZot;
@@ -151,7 +147,7 @@ public class TheTowerOfZot : AbstractDungeon
         if (sanduruvaNpc != null && sanduruvaNpc.IsValid)
         {
             if (prakamyaSiddhi.IsCasting() &&
-                prakamyaSiddhiTimestamp.AddMilliseconds(prakamyaSiddhiDuration) < DateTime.Now)
+                prakamyaSiddhiTimestamp.AddMilliseconds(PrakamyaSiddhiDuration) < DateTime.Now)
             {
                 Vector3 location = sanduruvaNpc.Location;
                 uint objectId = sanduruvaNpc.ObjectId;
@@ -164,7 +160,7 @@ public class TheTowerOfZot : AbstractDungeon
                 AvoidanceManager.AddAvoidObject<GameObject>(
                     canRun: () =>
                         prakamyaSiddhiTimer.IsRunning &&
-                        prakamyaSiddhiTimer.ElapsedMilliseconds < prakamyaSiddhiDuration,
+                        prakamyaSiddhiTimer.ElapsedMilliseconds < PrakamyaSiddhiDuration,
                     radius: 5f,
                     unitIds: objectId);
             }

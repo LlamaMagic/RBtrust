@@ -9,14 +9,12 @@ namespace Trust.Dungeons;
 /// </summary>
 public class MalikahsWell : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.MalikahsWell;
-
     private const int GreaterArmadillo = 8252;
     private const int AmphibiousTalos = 8250;
     private const int Storge = 8249;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.MalikahsWell;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.MalikahsWell;

@@ -19,11 +19,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheTowerOfBabil : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheTowerOfBabil;
-
     // SPELLIDS
 
     // BARNABAS (B1)
@@ -55,7 +50,6 @@ public class TheTowerOfBabil : AbstractDungeon
     // Obliviating Claw   25355
     // Obliviating Claw 2 25354
     // Erupting Pain      25351
-
     private static readonly int groundandPoundDuration = 7_000;
     private static DateTime groundandPoundTimestamp = DateTime.MinValue;
 
@@ -68,15 +62,15 @@ public class TheTowerOfBabil : AbstractDungeon
         25326, 25157, 25158, 25328,
     };
 
-    private readonly HashSet<uint> toad = new() {25333,};
+    private readonly HashSet<uint> toad = new() { 25333, };
 
-    private readonly HashSet<uint> mini = new() {25331,};
+    private readonly HashSet<uint> mini = new() { 25331, };
 
-    private readonly HashSet<uint> boundlessPain = new() {25347,};
+    private readonly HashSet<uint> boundlessPain = new() { 25347, };
 
-    private readonly HashSet<uint> spread = new() { 25351,};
+    private readonly HashSet<uint> spread = new() { 25351, };
 
-    private readonly HashSet<uint> claw2 = new() {25354,};
+    private readonly HashSet<uint> claw2 = new() { 25354, };
 
     private readonly Stopwatch magnetTimer = new();
     private readonly Stopwatch miniTimer = new();
@@ -85,12 +79,14 @@ public class TheTowerOfBabil : AbstractDungeon
     private readonly Stopwatch claw2Timer = new();
     private readonly Stopwatch spreadTimer = new();
 
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheTowerOfBabil;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheTowerOfBabil;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {21182, 25324,};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 21182, 25324, };
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
@@ -113,8 +109,7 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000,
-                    "Magnet Spell In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Magnet Spell In Progress");
                 magnetTimer.Restart();
             }
 
@@ -146,8 +141,7 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 30_000,
-                    "Shapeshift Mechanic In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 30_000, "Shapeshift Mechanic In Progress");
                 toadTimer.Restart();
             }
 
@@ -184,8 +178,7 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 24_000,
-                    "Shapeshift Mechanic In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 24_000, "Shapeshift Mechanic In Progress");
                 miniTimer.Restart();
             }
 
@@ -231,8 +224,7 @@ public class TheTowerOfBabil : AbstractDungeon
                 SidestepPlugin.Enabled = false;
                 AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
-                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000,
-                    "Obliviating Claw 2 In Progress");
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Obliviating Claw 2 In Progress");
                 claw2Timer.Restart();
             }
 

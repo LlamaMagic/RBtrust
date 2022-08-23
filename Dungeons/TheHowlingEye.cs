@@ -16,16 +16,14 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheHowlingEye : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheHowlingEye;
-
     private const int Garuda = 1644;
 
     private static readonly HashSet<uint> MistralSong = new() { 667, 660 };
     private static readonly HashSet<uint> Slipstream = new() { 659 };
     private static readonly HashSet<uint> MistralShriek = new() { 661 };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheHowlingEye;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheHowlingEye;

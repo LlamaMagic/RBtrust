@@ -17,11 +17,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheAitiascope : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheAitiascope;
-
     // Boss Spells for this dungeon.
 
     // Livia the Undeterred Ename: Livia the Undeterred NpcId: 10290  The Aitiascope Id: 978 Sub: 3992 Raw: 978
@@ -81,6 +76,9 @@ public class TheAitiascope : AbstractDungeon
 
     private readonly Stopwatch amonTimerOne = new();
     private readonly Stopwatch amonTimerTwo = new();
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheAitiascope;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheAitiascope;

@@ -14,11 +14,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheQitanaRavel : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheQitanaRavel;
-
     private const int Lozatl = 8231;
     private const int Batsquatch = 8232;
     private const int Eros = 8233;
@@ -53,6 +48,9 @@ public class TheQitanaRavel : AbstractDungeon
     {
         15506,
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheQitanaRavel;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheQitanaRavel;

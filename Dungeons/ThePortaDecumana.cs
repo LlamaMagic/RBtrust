@@ -16,11 +16,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class ThePortaDecumana : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.ThePortaDecumana;
-
     private const uint TheUltimaWeapon = 2137;
 
     private static readonly HashSet<uint> NonSidestepSpells = new()
@@ -35,21 +30,24 @@ public class ThePortaDecumana : AbstractDungeon
         29021,
     };
 
-    private static readonly HashSet<uint> RadiantBlaze = new() {28991};
+    private static readonly HashSet<uint> RadiantBlaze = new() { 28991 };
 
-    private static readonly HashSet<uint> HomingRay = new() {29011, 29012};
+    private static readonly HashSet<uint> HomingRay = new() { 29011, 29012 };
     private static readonly int HomingRayDuration = 5_000;
 
-    private static readonly HashSet<uint> CitadelBuster = new() {29020};
-    private static readonly HashSet<uint> LaserFocus = new() {29013, 29014};
+    private static readonly HashSet<uint> CitadelBuster = new() { 29020 };
+    private static readonly HashSet<uint> LaserFocus = new() { 29013, 29014 };
     private static readonly int CitadelBusterDuration = 5_000;
     private static DateTime citadelBusterTimestamp = DateTime.MinValue;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.ThePortaDecumana;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.ThePortaDecumana;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {28999, 29003, 29021, 29013, 29014};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 28999, 29003, 29021, 29013, 29014 };
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()

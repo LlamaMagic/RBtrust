@@ -14,17 +14,15 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheNavel : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheNavel;
-
     private const int Titan = 1801;
 
     private static readonly HashSet<uint> Spells = new()
     {
         651,
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheNavel;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheNavel;

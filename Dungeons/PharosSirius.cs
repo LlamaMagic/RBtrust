@@ -15,11 +15,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class PharosSirius : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.PharosSirius;
-
     private const int SymondtheUnsinkable = 2259;
     private const int Zu = 2261;
     private const int Tyrant = 2264;
@@ -33,6 +28,9 @@ public class PharosSirius : AbstractDungeon
     private static readonly HashSet<uint> AetherDetonation = new() { 1668, 5377, 5376, 1669 };
 
     private readonly HashSet<uint> avoidobjs = new();
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.PharosSirius;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

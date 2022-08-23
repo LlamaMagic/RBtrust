@@ -21,11 +21,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Vanaspati : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.Vanaspati;
-
     private readonly HashSet<uint> follow = new()
     {
         25139, 25140,
@@ -97,6 +92,9 @@ public class Vanaspati : AbstractDungeon
 
     private bool pmbuff;
     private bool magnet3SWhaifrun;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.Vanaspati;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.Vanaspati;

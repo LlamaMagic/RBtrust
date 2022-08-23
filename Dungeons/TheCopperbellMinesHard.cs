@@ -19,11 +19,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheCopperbellMinesHard : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheCopperbellMinesHard;
-
     private const int HecatoncheirMastermind = 2282;
     private const int Gogmagolem = 2285;
     private const int Ouranos = 2289;
@@ -40,6 +35,9 @@ public class TheCopperbellMinesHard : AbstractDungeon
     private static readonly HashSet<uint> DarkFireIII = new() { 1679 };
 
     private readonly HashSet<uint> avoidobjs = new();
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheCopperbellMinesHard;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

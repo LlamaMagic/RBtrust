@@ -17,7 +17,7 @@ public abstract class AbstractDungeon
     /// <summary>
     /// Gets zone ID for this dungeon.
     /// </summary>
-    public const ZoneId ZoneId = Data.ZoneId.NONE;
+    public abstract ZoneId ZoneId { get; }
 
     /// <summary>
     /// Gets <see cref="DungeonId"/> for this dungeon.
@@ -38,6 +38,24 @@ public abstract class AbstractDungeon
     /// Gets spell IDs to follow-dodge while any contained spell is casting.
     /// </summary>
     protected abstract HashSet<uint> SpellsToFollowDodge { get; }
+
+    /// <summary>
+    /// Setup run once after entering the dungeon.
+    /// </summary>
+    /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+    public virtual Task<bool> OnEnterDungeonAsync()
+    {
+        return Task.FromResult(false);
+    }
+
+    /// <summary>
+    /// Teardown run once after exiting the dungeon.
+    /// </summary>
+    /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+    public virtual Task<bool> OnExitDungeonAsync()
+    {
+        return Task.FromResult(false);
+    }
 
     /// <summary>
     /// Executes dungeon logic.
@@ -61,8 +79,6 @@ public abstract class AbstractDungeon
 
         if (caster != null)
         {
-            SidestepPlugin.Enabled = false;
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
             SpellCastInfo spell = caster.SpellCastInfo;
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, spell.RemainingCastTime, $"Follow-Dodge: ({caster.NpcId}) {caster.Name} is casting ({spell.ActionId}) {spell.Name} for {spell.RemainingCastTime.TotalMilliseconds:N0}ms");
 

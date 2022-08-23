@@ -22,11 +22,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class DohnMheg : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.DohnMheg;
-
     private const int LordOfLingeringGaze = 8141;
     private const int Griaule = 8143;
     private const int PaintedSapling = 8144;
@@ -62,6 +57,9 @@ public class DohnMheg : AbstractDungeon
 
     private DateTime fodderEnds = DateTime.MinValue;
     private Vector3 fodderTetherPoint = Vector3.Zero;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.DohnMheg;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.DohnMheg;

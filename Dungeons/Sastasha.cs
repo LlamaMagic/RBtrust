@@ -9,10 +9,8 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Sastasha : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.Sastaha;
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.Sastaha;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.Sastasha;

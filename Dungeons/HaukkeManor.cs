@@ -9,10 +9,8 @@ namespace Trust.Dungeons;
 /// </summary>
 public class HaukkeManor : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.HaukkeManor;
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.HaukkeManor;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.HaukkeManor;

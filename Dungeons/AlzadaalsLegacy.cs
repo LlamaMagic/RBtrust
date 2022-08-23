@@ -14,11 +14,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class AlzadaalsLegacy : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.AlzadaalsLegacy;
-
     // Ambujam
     // Big Wave         28512
     // Tentacle Dig     28501, 28505
@@ -67,6 +62,9 @@ public class AlzadaalsLegacy : AbstractDungeon
     private readonly Stopwatch spinOutTimer = new();
     private readonly Stopwatch tentacleDigTimer = new();
     private readonly Stopwatch toxicFountainTimer = new();
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.AlzadaalsLegacy;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.AlzadaalsLegacy;

@@ -20,11 +20,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheStoneVigil : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheStoneVigil;
-
     private const int ChudoYudo = 1677;
     private const int Koshchei = 1678;
     private const int TyphoonObj = 9910;
@@ -47,6 +42,9 @@ public class TheStoneVigil : AbstractDungeon
     private static DateTime frostBreathTimestamp = DateTime.MinValue;
 
     private AvoidInfo? someTrackedSkill;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheStoneVigil;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheStoneVigil;

@@ -21,11 +21,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class HolminsterSwitch : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.HolminsterSwitch;
-
     private const int ForgivenDissonance = 8299;
     private const int TesleenTheForgiven = 8300;
     private const int Philia = 8301;
@@ -62,6 +57,9 @@ public class HolminsterSwitch : AbstractDungeon
 
     private static readonly int FierceBeatingDuration = 32_000;
     private static DateTime fierceBeatingTimestamp = DateTime.MinValue;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.HolminsterSwitch;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.HolminsterSwitch;

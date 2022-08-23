@@ -16,11 +16,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class DzemaelDarkhold : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.DzemaelDarkhold;
-
     private const int AllseeingEye = 1397;
     private const int GlowingCrystal = 2000276;
     private const int Taulurd = 1415;
@@ -28,6 +23,9 @@ public class DzemaelDarkhold : AbstractDungeon
 
     private const int CrystalVeilAura = 322;
     private const int InvincibilityAura = 325;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.DzemaelDarkhold;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

@@ -13,11 +13,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheThousandMawsOfTotoRak : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheThousandMawsOfTotoRak;
-
     private const int CoeurlONineTails = 442;
     private const int Graffias = 444;
 
@@ -28,6 +23,9 @@ public class TheThousandMawsOfTotoRak : AbstractDungeon
     private static readonly HashSet<uint> DeadlyThrust = new() { 702 };
 
     private readonly HashSet<uint> avoidobjs = new();
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheThousandMawsOfTotoRak;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheThousandMawsOfTotoRak;

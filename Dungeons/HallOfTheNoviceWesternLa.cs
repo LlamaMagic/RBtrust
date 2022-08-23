@@ -18,11 +18,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class HallOfTheNoviceWesternLa : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.HallOfTheNoticeWesternLa;
-
     private const int QuickFistedTrainingPartner = 4786;
     private const int TamedJackal = 4787;
 
@@ -36,6 +31,9 @@ public class HallOfTheNoviceWesternLa : AbstractDungeon
         { ClassJobType.DarkKnight, 3624 },
         { ClassJobType.Gunbreaker, 16143 },
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.HallOfTheNoticeWesternLa;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

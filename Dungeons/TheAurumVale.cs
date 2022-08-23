@@ -16,11 +16,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheAurumVale : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheAurumVale;
-
     private const int Locksmith = 1534;
     private const int Coincounter = 1533;
     private const int MisersMistress = 1532;
@@ -38,6 +33,9 @@ public class TheAurumVale : AbstractDungeon
         2002654, 2002655, 2002656, 2002657, 2002658,
         2002659, 2002660, 2002661, 2002662, 2002663,
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheAurumVale;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

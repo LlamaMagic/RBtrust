@@ -18,11 +18,6 @@ namespace Trust.Dungeons;
 public class Amaurot : AbstractDungeon
 {
     /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.Amaurot;
-
-    /// <summary>
     /// Set of boss-related monster IDs.
     /// </summary>
     private static readonly HashSet<uint> BossIds = new()
@@ -37,6 +32,9 @@ public class Amaurot : AbstractDungeon
 
     private static readonly HashSet<uint> Apokalypsis = new() { 15575, 15577 };
     private static readonly HashSet<uint> TherionCharge = new() { 15578 };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.Amaurot;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.Amaurot;

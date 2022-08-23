@@ -14,11 +14,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class CastrumMeridianum : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.CastrumMeridianum;
-
     private const int LiviaSasJunius = 2118;
 
     private static readonly Stopwatch StackStopwatch = new();
@@ -47,8 +42,8 @@ public class CastrumMeridianum : AbstractDungeon
     //
     // Debug Info - It runs away and gets stuck on Edge on both of These
 
-    // TRASH WITH NO OMEN
-    //
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.CastrumMeridianum;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.CastrumMeridianum;

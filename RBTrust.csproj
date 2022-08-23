@@ -74,7 +74,7 @@
     <Compile Include="Dungeons\TheAurumVale.cs" />
     <Compile Include="Dungeons\CastrumMeridianum.cs" />
     <Compile Include="Dungeons\DohnMheg.cs" />
-    <Compile Include="Dungeons\DungeonManager.cs" />
+    <Compile Include="Managers\DungeonManager.cs" />
     <Compile Include="Dungeons\Halatali.cs" />
     <Compile Include="Dungeons\HallOfTheNoviceArena.cs" />
     <Compile Include="Dungeons\HallOfTheNoviceWesternLa.cs" />

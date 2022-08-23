@@ -7,10 +7,10 @@ using ff14bot.NeoProfiles;
 using System;
 using System.Threading.Tasks;
 using TreeSharp;
-using Trust.Dungeons;
 using Trust.Helpers;
 using Trust.Localization;
 using Trust.Logging;
+using Trust.Managers;
 
 namespace Trust;
 

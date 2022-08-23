@@ -20,11 +20,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheDeadEnds : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheDeadEnds;
-
     private const int CausticGrebuloff = 10313;
     private const int Peacekeeper = 10315;
     private const int Rala = 10316;
@@ -269,6 +264,9 @@ public class TheDeadEnds : AbstractDungeon
     /// Tracks sub-zone since last tick for environmental decision making.
     /// </summary>
     private SubZoneId lastSubZoneId = SubZoneId.NONE;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheDeadEnds;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheDeadEnds;

@@ -15,11 +15,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class HellsLid : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.HellsLid;
-
     private static readonly HashSet<uint> HellOfWater = new()
     {
         11541,
@@ -31,6 +26,9 @@ public class HellsLid : AbstractDungeon
         10194,
         10193,
     };
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.HellsLid;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;

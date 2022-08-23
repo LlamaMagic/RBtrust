@@ -13,12 +13,10 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TheWanderersPalace : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.TheWanderersPalace;
-
     private const int TonberryStalker = 1556;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.TheWanderersPalace;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.NONE;
