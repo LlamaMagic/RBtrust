@@ -1,9 +1,10 @@
 ﻿using Buddy.Coroutines;
 using Clio.Utilities;
+using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
-using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class KtisisHyperboreia : AbstractDungeon
 {
-    /// <summary>
-    /// Gets zone ID for this dungeon.
-    /// </summary>
-    public new const ZoneId ZoneId = Data.ZoneId.KtisisHyperboreia;
-
     // Boss Spells for this dungeon.
     // Lyssa Spells [BOSS] SubZone: 3766
     // Lyssa NpcId: 10396 CastingSpell [Heavy Smash] [Heavy Smash] SpellId : 25180 (STACK)
@@ -87,6 +83,11 @@ public class KtisisHyperboreia : AbstractDungeon
 
     private bool moveToSafety;
 
+    private AvoidInfo hermesArenaEdge = default;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.KtisisHyperboreia;
+
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.KtisisHyperboreia;
 
@@ -95,6 +96,29 @@ public class KtisisHyperboreia : AbstractDungeon
     {
         25234, 25233, 25250, 24145, 25180, 25742,
     };
+
+    /// <inheritdoc/>
+    public override async Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        if (hermesArenaEdge == default)
+        {
+            Vector3 arenaCenter = new(0f, 0f, -50f);
+
+            hermesArenaEdge = AvoidanceHelpers.AddAvoidDonut(
+                () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CelestialSphere,
+                () => arenaCenter,
+                outerRadius: 45.0f,
+                innerRadius: 19.5f);
+        }
+        else
+        {
+            AvoidanceManager.AddAvoid(hermesArenaEdge);
+        }
+
+        return false;
+    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
@@ -149,25 +173,27 @@ public class KtisisHyperboreia : AbstractDungeon
     {
         if (pyricBreath.IsCasting())
         {
-            SidestepPlugin.Enabled = false;
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-            await Coroutine.Sleep(1_500);
             await MovementHelpers.GetClosestAlly.Follow();
-            Navigator.PlayerMover.MoveStop();
-            SidestepPlugin.Enabled = true;
         }
 
+        // TODO: Pyric Breath: Stack
         return false;
     }
 
     private async Task<bool> HandleHermes()
     {
+    	// TODO:
+        // Hermetica: check NPC facing, cast bar; add line AOE when cast bar low enough?
+        // Meteor: Go to middle. Is undamaged meteor detectable? HP? Otherwise follow
+        // Double/Quadruple: Might need to manually draw the second line for x seconds as subsequent cast finishes casting.
+        // True Aero 1: Spread line, then dodge line if Double/Quadruple. See above.
+        // True Bravery: Try interrupt
+        // True Aero 2: Spread circles, then dodge circles if Double/Quadruple. See above.
+        // True Tornado: Mitigate circle buster, then dodge circle if has Double/Quadruple buff. See above.
         if (hermetica.IsCasting())
         {
-            SidestepPlugin.Enabled = false;
-            AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
             moveToSafety = true;
-            while (moveToSafety)
+            while (Core.Player.InCombat && moveToSafety)
             {
                 if (anySpellAfterHermetica.IsCasting())
                 {
@@ -197,7 +223,7 @@ public class KtisisHyperboreia : AbstractDungeon
         {
             SidestepPlugin.Enabled = false;
             Vector3 location = new(-8f, 1f, -50.0f);
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5_000, "Need to spread for True Aero");
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5_000, "Need to spread for True Aero II");
             await CommonTasks.MoveTo(location);
             await Coroutine.Sleep(500);
             SidestepPlugin.Enabled = true;
