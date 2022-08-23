@@ -53,7 +53,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\SquadronAction.cs" />
+    <Compile Include="Dungeons\Aery.cs" />
+    <Compile Include="Dungeons\AetherochemicalResearchFacility.cs" />
+    <Compile Include="Dungeons\AlaMhigo.cs" />
+    <Compile Include="Dungeons\Antitower.cs" />
+    <Compile Include="Dungeons\BaelsarsWall.cs" />
+    <Compile Include="Dungeons\BardamsMettle.cs" />
+    <Compile Include="Dungeons\Burn.cs" />
+    <Compile Include="Dungeons\CastrumAbania.cs" />
+    <Compile Include="Dungeons\DomaCastle.cs" />
+    <Compile Include="Dungeons\DrownedCityOfSkalla.cs" />
+    <Compile Include="Dungeons\FellCourtOfTroia.cs" />
+    <Compile Include="Dungeons\GhimlytDark.cs" />
+    <Compile Include="Dungeons\GreatGubalLibrary.cs" />
+    <Compile Include="Dungeons\KeeperOfTheLake.cs" />
+    <Compile Include="Dungeons\SirensongSea.cs" />
+    <Compile Include="Dungeons\Snowcloak.cs" />
     <Compile Include="Dungeons\SohmAl.cs" />
+    <Compile Include="Dungeons\SohrKai.cs" />
+    <Compile Include="Dungeons\Vault.cs" />
+    <Compile Include="Dungeons\Xelphatol.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Data\ClassJobRoles.cs" />
     <Compile Include="Data\DungeonId.cs" />

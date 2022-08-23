@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 80.5: Matoya's Relict dungeon logic.
+/// Lv. 60.5: Baelsar's Wall dungeon logic.
 /// </summary>
-public class MatoyasRelict : AbstractDungeon
+public class BaelsarsWall : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.MatoyasRelict;
+    public override ZoneId ZoneId => Data.ZoneId.BaelsarsWall;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.MatoyasRelict;
+    public override DungeonId DungeonId => DungeonId.BaelsarsWall;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;

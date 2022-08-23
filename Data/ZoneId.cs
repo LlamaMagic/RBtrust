@@ -102,17 +102,27 @@ public enum ZoneId : ushort
     ThePortaDecumana = 1048,
 
     /// <summary>
-    /// Lv. 50.4: Pharos Sirius
+    /// Lv. 50.4: Snowcloak
+    /// </summary>
+    Snowcloak = 1062,
+
+    /// <summary>
+    /// Lv. 50.5: The Keeper of the Lake
+    /// </summary>
+    TheKeeperOfTheLake = 1063,
+
+    /// <summary>
+    /// Lv. 50: Pharos Sirius
     /// </summary>
     PharosSirius = 160,
 
     /// <summary>
-    /// Lv. 50.5: The Wanderers Palace
+    /// Lv. 50: The Wanderers Palace
     /// </summary>
     TheWanderersPalace = 159,
 
     /// <summary>
-    /// Lv. 50.6: The Copperbell Mines (Hard)
+    /// Lv. 50: The Copperbell Mines (Hard)
     /// </summary>
     TheCopperbellMinesHard = 349,
 
@@ -124,7 +134,87 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 53: Sohm Al
     /// </summary>
-    SohmAl = 441,
+    SohmAl = 1064,
+
+    /// <summary>
+    /// Lv. 55: The Aery
+    /// </summary>
+    TheAery = 1065,
+
+    /// <summary>
+    /// Lv. 57: The Vault
+    /// </summary>
+    TheVault = 1066,
+
+    /// <summary>
+    /// Lv. 59: The Great Gubal Library
+    /// </summary>
+    TheGreatGubalLibrary = 416,
+
+    /// <summary>
+    /// Lv. 60.1: The Aetherochemical Research Facility
+    /// </summary>
+    TheAetherochemicalResearchFacility = 438,
+
+    /// <summary>
+    /// Lv. 60.2: The Antitower
+    /// </summary>
+    TheAntitower = 516,
+
+    /// <summary>
+    /// Lv. 60.3: Sohr Kai
+    /// </summary>
+    SohrKai = 555,
+
+    /// <summary>
+    /// Lv. 60.4: Xelphatol
+    /// </summary>
+    Xelphatol = 572,
+
+    /// <summary>
+    /// Lv. 60.5: Baelsar's Wall
+    /// </summary>
+    BaelsarsWall = 615,
+
+    /// <summary>
+    /// Lv. 61: The Sirensong Sea
+    /// </summary>
+    TheSirensongSea = 626,
+
+    /// <summary>
+    /// Lv. 65: Bardam's Mettle
+    /// </summary>
+    BardamsMettle = 623,
+
+    /// <summary>
+    /// Lv. 67: Doma Castle
+    /// </summary>
+    DomaCastle = 660,
+
+    /// <summary>
+    /// Lv. 69: Castrum Abania
+    /// </summary>
+    CastrumAbania = 661,
+
+    /// <summary>
+    /// Lv. 70.1: Ala Mhigo
+    /// </summary>
+    AlaMhigo = 689,
+
+    /// <summary>
+    /// Lv. 70.2: The Drowned City of Skalla
+    /// </summary>
+    TheDrownedCityOfSkalla = 731,
+
+    /// <summary>
+    /// Lv. 70.3: The Burn
+    /// </summary>
+    TheBurn = 789,
+
+    /// <summary>
+    /// Lv. 70.4: The Ghimlyt Dark
+    /// </summary>
+    TheGhimlytDark = 793,
 
     /// <summary>
     /// Lv. 70: Hells' Lid
@@ -225,6 +315,11 @@ public enum ZoneId : ushort
     /// Lv. 90.2: Alzadaal's Legacy
     /// </summary>
     AlzadaalsLegacy = 1050,
+
+    /// <summary>
+    /// Lv. 90.3: The Fell Court of Troia
+    /// </summary>
+    TheFellCourtOfTroia = 1070,
 
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

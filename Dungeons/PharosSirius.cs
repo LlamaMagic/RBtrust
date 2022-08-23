@@ -11,7 +11,7 @@ using Trust.Extensions;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Abstract starting point for implementing specialized dungeon logic.
+/// Lv. 50: Pharos Sirius dungeon logic.
 /// </summary>
 public class PharosSirius : AbstractDungeon
 {

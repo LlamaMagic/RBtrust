@@ -9,7 +9,7 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 50.5: The Wanderer's Palace dungeon logic.
+/// Lv. 50: The Wanderer's Palace dungeon logic.
 /// </summary>
 public class TheWanderersPalace : AbstractDungeon
 {

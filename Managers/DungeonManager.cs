@@ -44,13 +44,29 @@ internal class DungeonManager
             { ZoneId.TheCopperbellMinesHard, typeof(TheCopperbellMinesHard) },
             { ZoneId.ThePraetorium, typeof(ThePraetorium) },
             { ZoneId.ThePortaDecumana, typeof(ThePortaDecumana) },
-            { ZoneId.SyrcusTower, typeof(SyrcusTower) },
+            { ZoneId.Snowcloak, typeof(Snowcloak) },
+            { ZoneId.TheKeeperOfTheLake, typeof(KeeperOfTheLake) },
 
             // 3.0 - Heavensward
             { ZoneId.SohmAl, typeof(SohmAl) },
+            { ZoneId.TheAery, typeof(Aery) },
+            { ZoneId.TheVault, typeof(Vault) },
+            { ZoneId.TheGreatGubalLibrary, typeof(GreatGubalLibrary) },
+            { ZoneId.TheAetherochemicalResearchFacility, typeof(AetherochemicalResearchFacility) },
+            { ZoneId.TheAntitower, typeof(Antitower) },
+            { ZoneId.SohrKai, typeof(SohrKai) },
+            { ZoneId.Xelphatol, typeof(Xelphatol) },
+            { ZoneId.BaelsarsWall, typeof(BaelsarsWall) },
 
             // 4.0 - Stormblood
-            { ZoneId.HellsLid, typeof(HellsLid) },
+            { ZoneId.TheSirensongSea, typeof(SirensongSea) },
+            { ZoneId.BardamsMettle, typeof(BardamsMettle) },
+            { ZoneId.DomaCastle, typeof(DomaCastle) },
+            { ZoneId.CastrumAbania, typeof(CastrumAbania) },
+            { ZoneId.AlaMhigo, typeof(AlaMhigo) },
+            { ZoneId.TheDrownedCityOfSkalla, typeof(DrownedCityOfSkalla) },
+            { ZoneId.TheBurn, typeof(Burn) },
+            { ZoneId.TheGhimlytDark, typeof(GhimlytDark) },
 
             // 5.0 - Shadowbringers
             { ZoneId.HolminsterSwitch, typeof(HolminsterSwitch) },
@@ -74,6 +90,7 @@ internal class DungeonManager
             { ZoneId.TheMothercrystal, typeof(TheMothercrystal) },
             { ZoneId.TheDeadEnds, typeof(TheDeadEnds) },
             { ZoneId.AlzadaalsLegacy, typeof(AlzadaalsLegacy) },
+            { ZoneId.TheFellCourtOfTroia, typeof(FellCourtOfTroia) },
         };
     }
 

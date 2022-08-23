@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 80.5: Matoya's Relict dungeon logic.
+/// Lv. 50.4: Snowcloak dungeon logic.
 /// </summary>
-public class MatoyasRelict : AbstractDungeon
+public class Snowcloak : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.MatoyasRelict;
+    public override ZoneId ZoneId => Data.ZoneId.Snowcloak;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.MatoyasRelict;
+    public override DungeonId DungeonId => DungeonId.Snowcloak;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;

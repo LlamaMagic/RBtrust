@@ -77,6 +77,101 @@ public enum DungeonId : uint
     ThePortaDecumana = 212,
 
     /// <summary>
+    /// Lv. 50.4: Snowcloak
+    /// </summary>
+    Snowcloak = 213,
+
+    /// <summary>
+    /// Lv. 50.5: The Keeper of the Lake
+    /// </summary>
+    TheKeeperOfTheLake = 214,
+
+    /// <summary>
+    /// Lv. 53: Sohm Al
+    /// </summary>
+    SohmAl = 215,
+
+    /// <summary>
+    /// Lv. 55: The Aery
+    /// </summary>
+    TheAery = 216,
+
+    /// <summary>
+    /// Lv. 57: The Vault
+    /// </summary>
+    TheVault = 217,
+
+    /// <summary>
+    /// Lv. 59: The Great Gubal Library
+    /// </summary>
+    TheGreatGubalLibrary = 218,
+
+    /// <summary>
+    /// Lv. 60.1: The Aetherochemical Research Facility
+    /// </summary>
+    TheAetherochemicalResearchFacility = 219,
+
+    /// <summary>
+    /// Lv. 60.2: The Antitower
+    /// </summary>
+    TheAntitower = 220,
+
+    /// <summary>
+    /// Lv. 60.3: Sohr Kai
+    /// </summary>
+    SohrKai = 221,
+
+    /// <summary>
+    /// Lv. 60.4: Xelphatol
+    /// </summary>
+    Xelphatol = 222,
+
+    /// <summary>
+    /// Lv. 60.5: Baelsar's Wall
+    /// </summary>
+    BaelsarsWall = 223,
+
+    /// <summary>
+    /// Lv. 61: The Sirensong Sea
+    /// </summary>
+    TheSirensongSea = 224,
+
+    /// <summary>
+    /// Lv. 65: Bardam's Mettle
+    /// </summary>
+    BardamsMettle = 225,
+
+    /// <summary>
+    /// Lv. 67: Doma Castle
+    /// </summary>
+    DomaCastle = 226,
+
+    /// <summary>
+    /// Lv. 69: Castrum Abania
+    /// </summary>
+    CastrumAbania = 227,
+
+    /// <summary>
+    /// Lv. 70.1: Ala Mhigo
+    /// </summary>
+    AlaMhigo = 228,
+
+    /// <summary>
+    /// Lv. 70.2: The Drowned City of Skalla
+    /// </summary>
+    TheDrownedCityOfSkalla = 229,
+
+    /// <summary>
+    /// Lv. 70.3: The Burn
+    /// </summary>
+    TheBurn = 230,
+
+    /// <summary>
+    /// Lv. 70.4: The Ghimlyt Dark
+    /// </summary>
+    TheGhimlytDark = 231,
+
+    /// <summary>
     /// Lv. 71: Holminster Switch
     /// </summary>
     HolminsterSwitch = 1,
@@ -170,5 +265,10 @@ public enum DungeonId : uint
     /// Lv. 90.2: Alzadaal's Legacy
     /// </summary>
     AlzadaalsLegacy = 19,
+
+    /// <summary>
+    /// Lv. 90.3: The Fell Court of Troia
+    /// </summary>
+    TheFellCourtOfTroia = 20,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

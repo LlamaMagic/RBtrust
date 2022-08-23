@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 80.5: Matoya's Relict dungeon logic.
+/// Lv. 50.5: The Keeper of the Lake dungeon logic.
 /// </summary>
-public class MatoyasRelict : AbstractDungeon
+public class KeeperOfTheLake : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.MatoyasRelict;
+    public override ZoneId ZoneId => Data.ZoneId.TheKeeperOfTheLake;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.MatoyasRelict;
+    public override DungeonId DungeonId => DungeonId.TheKeeperOfTheLake;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
