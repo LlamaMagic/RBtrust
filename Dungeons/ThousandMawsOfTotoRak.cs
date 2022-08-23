@@ -11,7 +11,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 24: The Thousand Maws of Toto-Rak dungeon logic.
 /// </summary>
-public class TheThousandMawsOfTotoRak : AbstractDungeon
+public class ThousandMawsOfTotoRak : AbstractDungeon
 {
     private const int CoeurlONineTails = 442;
     private const int Graffias = 444;

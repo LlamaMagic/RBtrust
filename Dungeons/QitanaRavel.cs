@@ -12,7 +12,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 75: The Qitana Ravel dungeon logic.
 /// </summary>
-public class TheQitanaRavel : AbstractDungeon
+public class QitanaRavel : AbstractDungeon
 {
     private const int Lozatl = 8231;
     private const int Batsquatch = 8232;

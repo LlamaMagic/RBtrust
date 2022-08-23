@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 16: The Tam-Tara Deepcroft dungeon logic.
+/// Lv. 80.2: The Grand Cosmos dungeon logic.
 /// </summary>
-public class TheTamTaraDeepcroft : AbstractDungeon
+public class GrandCosmos : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.TheTamTaraDeepcroft;
+    public override ZoneId ZoneId => Data.ZoneId.TheGrandCosmos;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.TheTamTaraDeepcroft;
+    public override DungeonId DungeonId => DungeonId.TheGrandCosmos;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;

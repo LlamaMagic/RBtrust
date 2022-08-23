@@ -14,7 +14,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 50.3: The Porta Decumana dungeon logic.
 /// </summary>
-public class ThePortaDecumana : AbstractDungeon
+public class PortaDecumana : AbstractDungeon
 {
     private const uint TheUltimaWeapon = 2137;
 

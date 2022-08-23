@@ -14,7 +14,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 47: The Aurum Vale dungeon logic.
 /// </summary>
-public class TheAurumVale : AbstractDungeon
+public class AurumVale : AbstractDungeon
 {
     private const int Locksmith = 1534;
     private const int Coincounter = 1533;

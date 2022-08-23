@@ -18,7 +18,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 41: The Stone Vigil dungeon logic.
 /// </summary>
-public class TheStoneVigil : AbstractDungeon
+public class StoneVigil : AbstractDungeon
 {
     private const int ChudoYudo = 1677;
     private const int Koshchei = 1678;

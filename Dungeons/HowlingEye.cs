@@ -14,7 +14,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 44: The Howling Eye dungeon logic.
 /// </summary>
-public class TheHowlingEye : AbstractDungeon
+public class HowlingEye : AbstractDungeon
 {
     private const int Garuda = 1644;
 

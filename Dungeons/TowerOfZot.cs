@@ -16,7 +16,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 81: The Tower of Zot dungeon logic.
 /// </summary>
-public class TheTowerOfZot : AbstractDungeon
+public class TowerOfZot : AbstractDungeon
 {
     private readonly CapabilityManagerHandle trustHandle3 = CapabilityManager.CreateNewHandle();
     private readonly CapabilityManagerHandle trustHandle4 = CapabilityManager.CreateNewHandle();

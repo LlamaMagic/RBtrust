@@ -12,7 +12,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 34: The Navel dungeon logic.
 /// </summary>
-public class TheNavel : AbstractDungeon
+public class Navel : AbstractDungeon
 {
     private const int Titan = 1801;
 

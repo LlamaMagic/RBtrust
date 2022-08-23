@@ -15,7 +15,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 89.1: The Aitiascope dungeon logic.
 /// </summary>
-public class TheAitiascope : AbstractDungeon
+public class Aitiascope : AbstractDungeon
 {
     // Boss Spells for this dungeon.
 

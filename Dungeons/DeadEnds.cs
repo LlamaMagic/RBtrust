@@ -18,7 +18,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 90.1: The Dead Ends dungeon logic.
 /// </summary>
-public class TheDeadEnds : AbstractDungeon
+public class DeadEnds : AbstractDungeon
 {
     private const int CausticGrebuloff = 10313;
     private const int Peacekeeper = 10315;

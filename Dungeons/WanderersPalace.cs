@@ -11,7 +11,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 50: The Wanderer's Palace dungeon logic.
 /// </summary>
-public class TheWanderersPalace : AbstractDungeon
+public class WanderersPalace : AbstractDungeon
 {
     private const int TonberryStalker = 1556;
 

@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 80.4: The Heroes' Gauntlet dungeon logic.
+/// Lv. 16: The Tam-Tara Deepcroft dungeon logic.
 /// </summary>
-public class TheHeroesGauntlet : AbstractDungeon
+public class TamTaraDeepcroft : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.TheHeroesGauntlet;
+    public override ZoneId ZoneId => Data.ZoneId.TheTamTaraDeepcroft;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.TheHeroesGauntlet;
+    public override DungeonId DungeonId => DungeonId.TheTamTaraDeepcroft;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;

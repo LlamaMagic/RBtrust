@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 89.2: The Mothercrystal dungeon logic.
+/// Lv. 80.4: The Heroes' Gauntlet dungeon logic.
 /// </summary>
-public class TheMothercrystal : AbstractDungeon
+public class HeroesGauntlet : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.TheMothercrystal;
+    public override ZoneId ZoneId => Data.ZoneId.TheHeroesGauntlet;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.TheMothercrystal;
+    public override DungeonId DungeonId => DungeonId.TheHeroesGauntlet;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;

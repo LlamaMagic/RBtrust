@@ -5,15 +5,15 @@ using Trust.Data;
 namespace Trust.Dungeons;
 
 /// <summary>
-/// Lv. 20: The Bowl of Embers dungeon logic.
+/// Lv. 89.2: The Mothercrystal dungeon logic.
 /// </summary>
-public class TheBowlOfEmbers : AbstractDungeon
+public class Mothercrystal : AbstractDungeon
 {
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.TheBowlOfEmbers;
+    public override ZoneId ZoneId => Data.ZoneId.TheMothercrystal;
 
     /// <inheritdoc/>
-    public override DungeonId DungeonId => DungeonId.TheBowlOfEmbers;
+    public override DungeonId DungeonId => DungeonId.TheMothercrystal;
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;

@@ -11,7 +11,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 50: The Praetorium dungeon logic.
 /// </summary>
-public class ThePraetorium : AbstractDungeon
+public class Praetorium : AbstractDungeon
 {
     private const int Nero = 2135;
     private const int Gaius = 2136;

@@ -17,7 +17,7 @@ namespace Trust.Dungeons;
 /// <summary>
 /// Lv. 50: Copperbell Mines (Hard) dungeon logic.
 /// </summary>
-public class TheCopperbellMinesHard : AbstractDungeon
+public class CopperbellMinesHard : AbstractDungeon
 {
     private const int HecatoncheirMastermind = 2282;
     private const int Gogmagolem = 2285;
