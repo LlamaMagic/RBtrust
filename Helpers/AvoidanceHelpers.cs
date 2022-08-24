@@ -21,8 +21,9 @@ public static class AvoidanceHelpers
     /// <param name="length">Total length of the rectangle.</param>
     /// <param name="xOffset">Left/right offset from caster's center.</param>
     /// <param name="yOffset">Front/back offset from caster's center.</param>
+    /// /// <param name="priority">Avoidance priority. Higher is scarier.</param>
     /// <returns><see cref="AvoidInfo"/> for the new rectangle.</returns>
-    public static AvoidInfo AddAvoidRectangle(BattleCharacter caster, float width, float length, float xOffset = 0.0f, float yOffset = 0.0f)
+    public static AvoidInfo AddAvoidRectangle(BattleCharacter caster, float width, float length, float xOffset = 0.0f, float yOffset = 0.0f, AvoidancePriority priority = AvoidancePriority.Medium)
     {
         Vector2[] rectangle = GenerateRectangle(width, length, xOffset, yOffset);
         uint cachedSpellId = caster.CastingSpellId;
@@ -36,7 +37,8 @@ public static class AvoidanceHelpers
             heightProducer: bc => 15.0f,
             pointsProducer: bc => rectangle,
             locationProducer: bc => caster.Location,
-            collectionProducer: () => new[] { caster });
+            collectionProducer: () => new[] { caster },
+            priority: priority);
     }
 
     /// <summary>
@@ -45,8 +47,9 @@ public static class AvoidanceHelpers
     /// <param name="caster"><see cref="BattleCharacter"/> currently casting.</param>
     /// <param name="outerRadius">Radius of entire donut.</param>
     /// <param name="innerRadius">Radius of inner safe zone.</param>
+    /// <param name="priority">Avoidance priority. Higher is scarier.</param>
     /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
-    public static AvoidInfo AddAvoidDonut(BattleCharacter caster, double outerRadius, double innerRadius = 6.0)
+    public static AvoidInfo AddAvoidDonut(BattleCharacter caster, double outerRadius, double innerRadius = 6.0, AvoidancePriority priority = AvoidancePriority.Medium)
     {
         Vector2[] donut = GenerateDonut(outerRadius, innerRadius);
         uint cachedSpellId = caster.CastingSpellId;
@@ -60,7 +63,8 @@ public static class AvoidanceHelpers
             heightProducer: bc => 15.0f,
             pointsProducer: bc => donut,
             locationProducer: bc => caster.Location,
-            collectionProducer: () => new[] { caster });
+            collectionProducer: () => new[] { caster },
+            priority: priority);
     }
 
     /// <summary>
@@ -70,8 +74,9 @@ public static class AvoidanceHelpers
     /// <param name="locationProducer">Position function that returns a <see cref="Vector3"/> of the donut's center.</param>
     /// <param name="outerRadius">Radius of entire donut.</param>
     /// <param name="innerRadius">Radius of inner safe zone.</param>
+    /// <param name="priority">Avoidance priority. Higher is scarier.</param>
     /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
-    public static AvoidInfo AddAvoidDonut(Func<bool> canRun, Func<Vector3> locationProducer, double outerRadius, double innerRadius = 6.0)
+    public static AvoidInfo AddAvoidDonut(Func<bool> canRun, Func<Vector3> locationProducer, double outerRadius, double innerRadius = 6.0, AvoidancePriority priority = AvoidancePriority.Medium)
     {
         Vector2[] donut = GenerateDonut(outerRadius, innerRadius);
 
@@ -89,7 +94,8 @@ public static class AvoidanceHelpers
             heightProducer: bc => 15.0f,
             pointsProducer: bc => donut,
             locationProducer: (Vector3 location) => location,
-            collectionProducer: () => new Vector3[1] { locationProducer() });
+            collectionProducer: () => new Vector3[1] { locationProducer() },
+            priority: priority);
     }
 
     private static Vector2[] GenerateRectangle(float width, float length, float xOffset, float yOffset)
