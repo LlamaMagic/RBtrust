@@ -3,6 +3,7 @@ using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -50,12 +51,12 @@ public class TowerOfBabil : AbstractDungeon
     // Obliviating Claw   25355
     // Obliviating Claw 2 25354
     // Erupting Pain      25351
-    private static readonly int groundandPoundDuration = 7_000;
-    private static DateTime groundandPoundTimestamp = DateTime.MinValue;
-
     private const uint Barnabas = 10279;
+    private const uint AetherialPullSpell = 25345;
 
-    private readonly HashSet<uint> groundandPound = new() { 25159, 25322 };
+    private static readonly int GroundAndPoundDuration = 7_000;
+    private static DateTime groundAndPoundTimestamp = DateTime.MinValue;
+    private readonly HashSet<uint> groundAndPound = new() { 25159, 25322 };
 
     private readonly HashSet<uint> magnet = new()
     {
@@ -89,17 +90,30 @@ public class TowerOfBabil : AbstractDungeon
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 21182, 25324, };
 
     /// <inheritdoc/>
+    public override async Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat,
+            objectSelector: bc => bc.CastingSpellId == AetherialPullSpell && bc.SpellCastInfo.TargetId == Core.Player.ObjectId,
+            radiusProducer: bc => 20.0f));
+
+        return false;
+    }
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
 
-        if (groundandPound.IsCasting() && groundandPoundTimestamp < DateTime.Now)
+        if (groundAndPound.IsCasting() && groundAndPoundTimestamp < DateTime.Now)
         {
             BattleCharacter barnabasNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Barnabas)
                 .FirstOrDefault(bc => bc.IsTargetable);
             SidestepPlugin.Enabled = true;
             AvoidanceHelpers.AddAvoidRectangle(barnabasNpc, 12.0f, 40.0f);
-            groundandPoundTimestamp = DateTime.Now.AddMilliseconds(groundandPoundDuration);
+            groundAndPoundTimestamp = DateTime.Now.AddMilliseconds(GroundAndPoundDuration);
         }
 
         if (magnet.IsCasting() || magnetTimer.IsRunning)
@@ -107,7 +121,7 @@ public class TowerOfBabil : AbstractDungeon
             if (!magnetTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Magnet Spell In Progress");
                 magnetTimer.Restart();
@@ -139,7 +153,7 @@ public class TowerOfBabil : AbstractDungeon
             if (!toadTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 30_000, "Shapeshift Mechanic In Progress");
                 toadTimer.Restart();
@@ -176,7 +190,7 @@ public class TowerOfBabil : AbstractDungeon
             if (!miniTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 24_000, "Shapeshift Mechanic In Progress");
                 miniTimer.Restart();
@@ -222,7 +236,7 @@ public class TowerOfBabil : AbstractDungeon
             if (!claw2Timer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Obliviating Claw 2 In Progress");
                 claw2Timer.Restart();
@@ -268,7 +282,7 @@ public class TowerOfBabil : AbstractDungeon
             if (!boundlessPainTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 18_000, "Boundless Pain Avoid");
                 boundlessPainTimer.Restart();
@@ -311,7 +325,7 @@ public class TowerOfBabil : AbstractDungeon
             if (spreadTimer.ElapsedMilliseconds >= 5_000)
             {
                 spreadTimer.Reset();
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
             }
         }
 
