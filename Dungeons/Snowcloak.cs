@@ -43,7 +43,7 @@ public class Snowcloak : AbstractDungeon
      * SpellName: Lunar Cry SpellId: 29599  follow
      * SpellName: Heavensward Roar SpellId: 29593 sidestep
      */
-    
+
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.Snowcloak;
 
