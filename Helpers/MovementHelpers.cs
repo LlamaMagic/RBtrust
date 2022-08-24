@@ -4,6 +4,7 @@ using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace Trust.Helpers;
 /// </summary>
 internal static class MovementHelpers
 {
+    private static AvoidInfo spreadInfo = default;
+
     /// <summary>
     /// Gets the nearest party member.
     /// </summary>
@@ -82,34 +85,25 @@ internal static class MovementHelpers
     /// <summary>
     /// Avoids all party members for a certain amount of time.
     /// </summary>
-    /// <param name="timeToSpread">Spread duration, in milliseconds.</param>
-    /// <param name="spreadDistance">Minimum distance between party members.</param>
+    /// <param name="duration">Time to stay spread out, in milliseconds.</param>
+    /// <param name="distance">Minimum distance between party members.</param>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
-    public static async Task<bool> Spread(double timeToSpread, float spreadDistance = 6.5f)
+    public static Task<bool> Spread(double duration, float distance = 6.5f)
     {
-        double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
-        double endMS = currentMS + timeToSpread;
-
-        if (!AvoidanceManager.IsRunningOutOfAvoid)
+        if (spreadInfo == default || !spreadInfo.CanRun)
         {
-            foreach (BattleCharacter npc in PartyManager.AllMembers.Select(p => p.BattleCharacter)
-                         .OrderByDescending(obj => Core.Player.Distance(obj)))
-            {
-                AvoidanceManager.AddAvoidObject<BattleCharacter>(
-                    () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS && DateTime.Now.TimeOfDay.TotalMilliseconds >= currentMS,
-                    radius: spreadDistance,
-                    npc.ObjectId);
-            }
+            AvoidanceManager.RemoveAvoid(spreadInfo);
 
-            await Coroutine.Wait(300, () => AvoidanceManager.IsRunningOutOfAvoid);
+            DateTime spreadEndsAt = DateTime.Now.AddMilliseconds(duration);
+            uint[] partyMemberIds = PartyManager.AllMembers.Select(p => p.BattleCharacter.ObjectId).ToArray();
+
+            spreadInfo = AvoidanceManager.AddAvoidObject<BattleCharacter>(
+                () => Core.Player.InCombat && DateTime.Now < spreadEndsAt,
+                radius: distance,
+                unitIds: partyMemberIds);
         }
 
-        if (!AvoidanceManager.IsRunningOutOfAvoid)
-        {
-            MovementManager.MoveStop();
-        }
-
-        return true;
+        return Task.FromResult(true);
     }
 
     public static async Task<bool> HalfSpread(double timeToSpread, float spreadDistance = 6.5f, uint spbc = 0)
