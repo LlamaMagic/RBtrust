@@ -32,7 +32,32 @@
   ❌ Lv. 44: The Howling Eye\
   ❌ Lv. 50.1: Castrum Meridianum\
   ❌ Lv. 50.2: The Praetorium\
-  ❌ Lv. 50.3: The Porta Decumana
+  ✔️ Lv. 50.3: The Porta Decumana\
+  ❌ Lv. 50.4: Snowcloak\
+  ❌ Lv. 50.5: The Keeper of the Lake
+
+### 3.0 - Heavensward
+
+  ❌ Lv. 53: Sohm Al\
+  ❌ Lv. 55: The Aery\
+  ❌ Lv. 57: The Vault\
+  ❌ Lv. 59: The Great Gubal Library\
+  ❌ Lv. 60.1: The Aetherochemical Research Facility\
+  ❌ Lv. 60.2: The Antitower\
+  ❌ Lv. 60.3: Sohr Kai\
+  ❌ Lv. 60.4: Xelphatol\
+  ❌ Lv. 60.5: Baelsar's Wall
+
+### 4.0 - Stormblood
+
+  ❌ Lv. 61: The Sirensong Sea\
+  ❌ Lv. 65: Bardam's Mettle\
+  ❌ Lv. 67: Doma Castle\
+  ❌ Lv. 69: Castrum Abania\
+  ❌ Lv. 70.1: Ala Mhigo\
+  ❌ Lv. 70.2: The Drowned City of Skala\
+  ❌ Lv. 70.3: The Burn\
+  ❌ Lv. 70.4: The Ghimlyt Dark
 
 ### 5.0 - Shadowbringers
 
@@ -52,12 +77,13 @@
 
   ✔️ Lv. 81: The Tower of Zot\
   ✔️ Lv. 83: The Tower of Babil\
-  ✔️ Lv. 85: Vanaspati\
-  ❌ Lv. 87: Ktisis Hyperboreia\
-  ❌ Lv. 89.1: The Aitiascope\
+  ⚠️ Lv. 85: Vanaspati\
+  ✔️ Lv. 87: Ktisis Hyperboreia\
+  ⚠️ Lv. 89.1: The Aitiascope\
   ❌ Lv. 89.2: The Mothercrystal\
-  ✔️ Lv. 90.1 The Dead Ends\
-  ❌ Lv. 90.2: Alzadaal's Legacy
+  ✔️ Lv. 90.1: The Dead Ends\
+  ❌ Lv. 90.2: Alzadaal's Legacy\
+  ❌ Lv. 90.3: The Fell Court of Troia
 
 ## Installation
 
