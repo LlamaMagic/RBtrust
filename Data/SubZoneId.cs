@@ -180,5 +180,20 @@ public enum SubZoneId : uint
     /// Lv. 90.1: The Dead Ends > The World Tree
     /// </summary>
     TheWorldTree = 4106,
+
+    /// <summary>
+    /// Lv. 90.2: The Fell Court of Troia > Penitence, Evil Dreamers
+    /// </summary>
+    Penitence = 4184,
+
+    /// <summary>
+    /// Lv. 90.2: The Fell Court of Troia > Seat of the Foremost, Beatrice
+    /// </summary>
+    SeatOfTheForemost = 4185,
+
+    /// <summary>
+    /// Lv. 90.2: The Fell Court of Troia > Seat of the Foremost, Scarmiglione
+    /// </summary>
+    GardenOfEpopts = 4186,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

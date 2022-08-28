@@ -83,7 +83,7 @@
   ❌ Lv. 89.2: The Mothercrystal\
   ✔️ Lv. 90.1: The Dead Ends\
   ❌ Lv. 90.2: Alzadaal's Legacy\
-  ❌ Lv. 90.3: The Fell Court of Troia
+  ✔️ Lv. 90.3: The Fell Court of Troia
 
 ## Installation
 

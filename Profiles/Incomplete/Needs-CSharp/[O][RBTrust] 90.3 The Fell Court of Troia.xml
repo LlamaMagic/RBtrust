@@ -2,14 +2,20 @@
 <!DOCTYPE Profile [
   <!ENTITY ZoneId "1070">
   <!ENTITY DutyId "869">
-  
+
   <!ENTITY Shortcut "2000700">
-  
-  <!ENTITY SubZoneName "1">
-  
-  <!ENTITY Boss1 "1">
-  <!ENTITY Boss2 "2">
-  <!ENTITY Boss3 "3">
+
+  <!ENTITY CarcereIV "4188">
+  <!ENTITY Penitence "4184">
+  <!ENTITY TroiaKeep "4189">
+  <!ENTITY SeatOfTheForemost "4185">
+  <!ENTITY PilgrimsAscent "4187">
+  <!ENTITY HydromanticTerraces "4190">
+  <!ENTITY TheGardenOfEpopts "4186">
+
+  <!ENTITY EvilDreamer "11382">
+  <!ENTITY Beatrice "11384">
+  <!ENTITY Scarmiglione "11372">
 ]>
 <Profile>
   <Name>[O][RBTrust] 90.3: The Fell Court of Troia</Name>
@@ -28,59 +34,92 @@
 
         <If Condition="ObjectExistsWithId(&Shortcut;) and GameObjectManager.GetObjectByNPCId(&Shortcut;).IsTargetable">
           <!-- Shortcut available -->
-          <UseTransport NpcId="&Shortcut;" XYZ="0, 0, 0"/>
+          <UseTransport NpcId="&Shortcut;" XYZ="-24.59801, -718, 129.6828"/>
         </If>
 
-        <If Condition="WorldManager.SubZoneId in [&SubZoneName;,]">
-          <MoveTo XYZ="0, 0, 0"/>
+        <If Condition="WorldManager.SubZoneId in [&CarcereIV;,] and GetInstanceTodo(1) == 0">
+          <MoveTo XYZ="168.0317, -700.0002, 107.6802"/>
         </If>
 
-        <If Condition="WorldManager.SubZoneId in [&SubZoneName;,]">
-          <NoCombatMoveTo XYZ="0, 0, 0" Wait="0"/>
-          <Grind GrindRef="boss1" PostCombatDelay="2.0" While="GameObjectManager.GetObjectByNPCId(&Boss1;)"/>
+        <If Condition="WorldManager.SubZoneId in [&CarcereIV;, &Penitence;,]">
+          <Grind GrindRef="Boss1" While="GetInstanceTodo(1) == 0"/>
           <LootTreasure/>
 
-          <RunCode name="Boss2Transition"/>
+          <MoveTo XYZ="266.1186, -707.9906, 90.38605"/>
+          <LLChangeZone Heading="1.574989" />
           <WaitForLoading/>
+        </If>
 
+        <If Condition="WorldManager.SubZoneId in [&TroiaKeep;,]">
+          <MoveTo XYZ="-157.8973, -699.9672, 11.76597"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="0.2507172, -697.9004, -84.04816"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="-0.04349291, -697.9418, -124.4448"/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&SeatOfTheForemost;,]">
+          <MoveTo XYZ="0.3203735, -698.0104, -148.3635"/>
+          <Grind GrindRef="Boss2" While="GetInstanceTodo(3) == 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="0.1925379, -694.0023, -224.0045"/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&PilgrimsAscent;,]">
+          <MoveTo XYZ="-11.0783, -682.8865, -250.2765"/>
+          <LLChangeZone Heading="5.4153" />
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&HydromanticTerraces;,]">
+          <MoveTo XYZ="-0.08109884, 359.1992, -103.997"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="-66.76745, 376.6405, -182.7161"/>
+          <MoveTo XYZ="-35.85081, 385.2499, -213.8927"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="-35.65555, 386.45, -246.9598"/>
+          <WaitWhile condition="not IsOnSubMap(&TheGardenOfEpopts;)" />
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&TheGardenOfEpopts;,]">
+          <MoveTo XYZ="-35, 385.0012, -307"/>
+          <Grind GrindRef="Boss3" While="not IsDutyEnded()"/>
+
+          <LootTreasure/>
           <LeaveDuty/>
         </If>
       </If>
     </While>
   </Order>
   <CodeChunks>
-    <CodeChunk Name="Boss2Transition">
-      <![CDATA[
-        Core.Player.SetFacing(3.1479f);
-        MovementManager.MoveForwardStart();
-        while (WorldManager.SubZoneId != 2962)  {  await Coroutine.Yield();  }
-        Navigator.PlayerMover.MoveStop();
-      ]]>
-    </CodeChunk>
   </CodeChunks>
   <GrindAreas>
     <GrindArea name="Boss1">
       <Hotspots>
-        <Hotspot Radius="200" XYZ="0, 0, 0"/>
+        <Hotspot Radius="90" XYZ="168, -700, 92"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Name="Boss 1" Id="&Boss1;" Weight="1"/>
+        <TargetMob Name="Evil Dreamer" Id="&EvilDreamer;" Weight="1"/>
       </TargetMobs>
     </GrindArea>
     <GrindArea name="Boss2">
       <Hotspots>
-        <Hotspot Radius="200" XYZ="0, 0, 0"/>
+        <Hotspot Radius="90" XYZ="0, -698, -148"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Name="Boss 2" Id="&Boss2;" Weight="1"/>
+        <TargetMob Name="Beatrice" Id="&Beatrice;" Weight="1"/>
       </TargetMobs>
     </GrindArea>
     <GrindArea name="Boss3">
       <Hotspots>
-        <Hotspot Radius="200" XYZ="0, 0, 0"/>
+        <Hotspot Radius="90" XYZ="-35, 385, -307"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Name="Boss 3" Id="&Boss3;" Weight="1"/>
+        <TargetMob Name="Scarmiglione" Id="&Scarmiglione;" Weight="1"/>
       </TargetMobs>
     </GrindArea>
   </GrindAreas>

@@ -32,14 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.499\lib\net461\GreyMagic.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=AMD64">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.508\lib\net461\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="RebornBuddy, Version=1.0.499.0, Culture=neutral, PublicKeyToken=48d7174f8a943034">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.499\lib\net461\RebornBuddy.exe</HintPath>
-      <Private>True</Private>
+    <Reference Include="RebornBuddy, Version=1.0.508.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=AMD64">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.508\lib\net461\RebornBuddy.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

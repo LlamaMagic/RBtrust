@@ -40,7 +40,7 @@ public abstract class AbstractDungeon
     protected abstract HashSet<uint> SpellsToFollowDodge { get; }
 
     /// <summary>
-    /// Setup run once after entering the dungeon.
+    /// Setup -- run once after entering the dungeon.
     /// </summary>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
     public virtual Task<bool> OnEnterDungeonAsync()
@@ -49,7 +49,7 @@ public abstract class AbstractDungeon
     }
 
     /// <summary>
-    /// Teardown run once after exiting the dungeon.
+    /// Tear-down -- run once after exiting the dungeon.
     /// </summary>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
     public virtual Task<bool> OnExitDungeonAsync()
