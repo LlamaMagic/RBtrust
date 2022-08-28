@@ -76,19 +76,22 @@ internal static class MovementHelpers
             return null;
         }
 
-        return GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
-            .Where(obj => !obj.IsDead && PartyMembers.SafePartyMemberIds.Contains((PartyMemberId)obj.NpcId))
-            .OrderBy(r => r.Distance(location))
-            .FirstOrDefault();
+        return PartyManager.AllMembers
+            .Select(pm => pm.BattleCharacter)
+            .OrderBy(bc => bc.Distance())
+            .FirstOrDefault(bc =>
+                !bc.IsMe
+                && bc.IsAlive
+                && (!bc.IsNpc || PartyMembers.SafePartyMemberIds.Contains((PartyMemberId)bc.NpcId)));
     }
 
     /// <summary>
     /// Avoids all party members for a certain amount of time.
     /// </summary>
     /// <param name="duration">Time to stay spread out, in milliseconds.</param>
-    /// <param name="distance">Minimum distance between party members.</param>
+    /// <param name="radius">Minimum distance between party members.</param>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
-    public static Task<bool> Spread(double duration, float distance = 6.5f)
+    public static Task<bool> Spread(double duration, float radius = 6.5f)
     {
         if (spreadInfo == default || !spreadInfo.CanRun)
         {
@@ -99,14 +102,14 @@ internal static class MovementHelpers
 
             spreadInfo = AvoidanceManager.AddAvoidObject<BattleCharacter>(
                 () => Core.Player.InCombat && DateTime.Now < spreadEndsAt,
-                radius: distance,
+                radius: radius,
                 unitIds: partyMemberIds);
         }
 
         return Task.FromResult(true);
     }
 
-    public static async Task<bool> HalfSpread(double timeToSpread, float spreadDistance = 6.5f, uint spbc = 0)
+    public static async Task<bool> HalfSpread(double timeToSpread, float radius = 6.5f, uint spbc = 0)
     {
         double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
         double endMS = currentMS + timeToSpread;
@@ -150,7 +153,7 @@ internal static class MovementHelpers
         {
             AvoidanceManager.AddAvoidObject<BattleCharacter>(
                 () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS && DateTime.Now.TimeOfDay.TotalMilliseconds >= currentMS,
-                radius: spreadDistance,
+                radius: radius,
                 npc.ObjectId);
 
             await Coroutine.Yield();
@@ -164,7 +167,7 @@ internal static class MovementHelpers
         return true;
     }
 
-    public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f)
+    public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float radius = 6.5f)
     {
         double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
         double endMS = currentMS + timeToSpread;
@@ -197,7 +200,7 @@ internal static class MovementHelpers
                 () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS && DateTime.Now.TimeOfDay.TotalMilliseconds >= currentMS,
                 () => new Vector3(playerLoc.X - ls, playerLoc.Y, playerLoc.Z),
                 leashRadius: 40,
-                radius: spreadDistance,
+                radius: radius,
                 npc.ObjectId);
 
             await Coroutine.Yield();
@@ -211,7 +214,7 @@ internal static class MovementHelpers
         return true;
     }
 
-    public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float spreadDistance = 6.5f)
+    public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float radius = 6.5f)
     {
         double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
         double endMS = currentMS + timeToSpread;
@@ -233,7 +236,7 @@ internal static class MovementHelpers
                 () => DateTime.Now.TimeOfDay.TotalMilliseconds <= endMS && DateTime.Now.TimeOfDay.TotalMilliseconds >= currentMS,
                 () => vector,
                 leashRadius: 40,
-                radius: spreadDistance,
+                radius: radius,
                 npc.ObjectId);
 
             await Coroutine.Yield();
