@@ -67,6 +67,21 @@ public enum SubZoneId : uint
     BeaconChamber = 931,
 
     /// <summary>
+    /// Lv. 50: Keeper of the Lake > Agrius Hull, Einhander
+    /// </summary>
+    AgriusHull = 1503,
+
+    /// <summary>
+    /// Lv. 50: Keeper of the Lake > Ceruleum Spill, Magitek Gunship
+    /// </summary>
+    CeruleumSpill = 1505,
+
+    /// <summary>
+    /// Lv. 50: Keeper of the Lake > The Forsworn Promise, Midgardsormr
+    /// </summary>
+    TheForswornPromise = 1507,
+
+    /// <summary>
     /// Lv. 50: The Copperbell Mines (Hard) > The Screaming Dark, Hecatoncheir Mastermind
     /// </summary>
     TheScreamingDark = 679,

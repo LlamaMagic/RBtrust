@@ -1,6 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using ff14bot;
+using ff14bot.Managers;
+using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
+using Trust.Helpers;
 
 namespace Trust.Dungeons;
 
@@ -39,9 +45,30 @@ public class KeeperOfTheLake : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheKeeperOfTheLake;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {29272,29278, 29279, 29283, 29285};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        29272,
+        29278,
+        29279,
+        29283,
+        29285
+    };
 
     /// <inheritdoc/>
+    public override Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        // Boss 2: Magitek Gunship Garlean Fire
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<GameObject>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CeruleumSpill,
+            objectSelector: bc => bc.NpcId == 2005194 && bc.IsVisible,
+            radiusProducer: bc => 8.5f,
+            priority: AvoidancePriority.High));
+
+        return Task.FromResult(false);
+    }
+
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
