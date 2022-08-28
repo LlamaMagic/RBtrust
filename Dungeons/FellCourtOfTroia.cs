@@ -240,16 +240,27 @@ public class FellCourtOfTroia : AbstractDungeon
 
         if (boss3 != default && blightedBedevilmentEnds < DateTime.Now)
         {
-            AvoidanceManager.RemoveAvoid(blightedBedevilmentAvoid);
-
             blightedBedevilmentEnds = DateTime.Now.AddMilliseconds(BlightedBedevilmentDuration);
 
+            // Drawing cone avoids doesn't support dynamic rotation via a "rotation producer" Func<float>,
+            // so we can manually add/remove AvoidInfos to update the rotation argument.
+            AvoidanceManager.RemoveAvoid(blightedBedevilmentAvoid);
+
+            // The mechanic involves a knockback to a 15 degree-wide destructible wall section,
+            // so we can draw a 360-15 = 345 degree "cone" and point it directly away from the nearest wall
+            // to create an avoid-compatible safe space that plays nice with other simultaneous avoids.
+            // Adding 15 degrees found experimentally because the wall's "real" position is off-center.
+            float rotation = 15f + MathEx.CalculateNeededFacing(
+                GameObjectManager.GetObjectsByNPCId(WallSegmentNpc).OrderBy(obj => obj.Distance()).First().Location,
+                ScarmiglioneArenaCenter);
+
+            // Add updated cone and save it for later removal
             blightedBedevilmentAvoid = AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
                 canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.GardenOfEpopts,
                 objectSelector: (bc) => bc.CastingSpellId == VacuumWaveSpell,
                 leashPointProducer: () => ScarmiglioneArenaCenter,
                 leashRadius: 40.0f,
-                rotationDegrees: MathEx.CalculateNeededFacing(GameObjectManager.GetObjectsByNPCId(WallSegmentNpc).OrderBy(obj => obj.Distance()).First().Location, ScarmiglioneArenaCenter) + 15f,
+                rotationDegrees: rotation,
                 radius: 40.0f,
                 arcDegrees: 345.0f);
         }

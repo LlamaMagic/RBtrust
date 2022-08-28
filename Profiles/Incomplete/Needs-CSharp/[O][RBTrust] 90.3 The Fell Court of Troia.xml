@@ -82,7 +82,7 @@
           <LootTreasure/>
 
           <MoveTo XYZ="-35.65555, 386.45, -246.9598"/>
-          <WaitWhile condition="not IsOnSubMap(&TheGardenOfEpopts;)" />
+          <WaitWhile condition="MovementManager.IsMoving" />
         </If>
 
         <If Condition="WorldManager.SubZoneId in [&TheGardenOfEpopts;,]">
