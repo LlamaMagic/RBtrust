@@ -6,6 +6,7 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using System.Linq;
 using System.Threading.Tasks;
+using Trust.Logging;
 using Trust.Windows;
 
 namespace ff14bot.NeoProfiles.Tags;
@@ -17,6 +18,7 @@ namespace ff14bot.NeoProfiles.Tags;
 public class LootTreasureTag : AbstractTaskTag
 {
     private const float InteractRange = 1.0f;
+    private const int ScanDuration = 3_000;
     private const int LootingCooldown = 1_500;
 
     /// <summary>
@@ -34,6 +36,11 @@ public class LootTreasureTag : AbstractTaskTag
     /// <inheritdoc/>
     protected override async Task<bool> RunAsync()
     {
+        // Give boss chests time to spawn so they don't get skipped if LootTreasure ticks too early
+        Logger.Information($"Waiting up to {ScanDuration:N0}ms for treasure chests to spawn.");
+        await Coroutine.Wait(ScanDuration, () => GameObjectManager.GetObjectsOfType<Treasure>()
+            .Any(chest => chest.IsValid && chest.IsTargetable));
+
         IOrderedEnumerable<Treasure> nearbyChests = GameObjectManager.GetObjectsOfType<Treasure>()
           .Where(chest => chest.IsValid && chest.IsTargetable && !chest.IsOpen)
           .Where(chest => chest.Distance() < MaxDistance)
@@ -45,6 +52,8 @@ public class LootTreasureTag : AbstractTaskTag
 
         foreach (Treasure chest in nearbyChests)
         {
+            Logger.Information($"Found treasure chest at {chest.Location}");
+
             while (Core.Me.Distance(chest.Location) > InteractRange)
             {
                 await CommonTasks.MoveTo(chest.Location);
@@ -65,6 +74,7 @@ public class LootTreasureTag : AbstractTaskTag
 
             if (hasNewArmoryItem)
             {
+                Logger.Information($"Looted new item to Armory Chest; trying to Equip Recommended.");
                 await RecommendEquip.EquipAsync();
             }
         }
