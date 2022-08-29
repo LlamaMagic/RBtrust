@@ -71,7 +71,8 @@ public class FellCourtOfTroia : AbstractDungeon
      * SpellName: Hush SpellId: 29824 Tank buster
      * SpellName: Beatific Scorn SpellId: 29813 - NPC follow for about 30 secnds after cast starts
      * SpellName: Void Nail SpellId: 29823 - Spread
-     * Spellname: Toric Void SpellId: 29829, 31207, 31206 - Donut
+     * SpellName: Toric Void SpellId: 29829, 31207, 31206 - Donut
+     * SpellName: Antipressure SpellId: 31208 - Stack
      */
 
     /* Scarmiglione Spells
@@ -92,7 +93,7 @@ public class FellCourtOfTroia : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheFellCourtOfTroia;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 30024, 30025, 30243, 30253, 30254, };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 30024, 30025, 30243, 30253, 30254, 31208 };
 
     /// <inheritdoc/>
     public override Task<bool> OnEnterDungeonAsync()
