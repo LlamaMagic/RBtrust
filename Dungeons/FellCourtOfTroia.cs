@@ -25,6 +25,7 @@ public class FellCourtOfTroia : AbstractDungeon
 
     private const uint BeatriceNpc = 11384;
     private const uint BeatificScornSpell = 29817;
+    private const int BeatificScornDuration = 10_000;
     private const int VoidNailDuration = 5_250;
 
     private const uint ScarmiglioneNpc = 11372;
@@ -108,13 +109,19 @@ public class FellCourtOfTroia : AbstractDungeon
         // Boss 2: Beatific Scorn with progressive avoid priority
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
-            objectSelector: bc => bc.CastingSpellId == BeatificScornSpell && bc.SpellCastInfo.RemainingCastTime.TotalSeconds < 3.0f,
+            objectSelector: bc => bc.CastingSpellId == BeatificScornSpell && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds < BeatificScornDuration * 0.33,
             radiusProducer: bc => 11.0f,
             priority: AvoidancePriority.High));
 
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
-            objectSelector: bc => bc.CastingSpellId == BeatificScornSpell && bc.SpellCastInfo.RemainingCastTime.TotalSeconds >= 3.0f,
+            objectSelector: bc => bc.CastingSpellId == BeatificScornSpell && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds >= BeatificScornDuration * 0.33,
+            radiusProducer: bc => 11.0f,
+            priority: AvoidancePriority.Medium));
+
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
+            objectSelector: bc => bc.CastingSpellId == BeatificScornSpell && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds >= BeatificScornDuration * 0.66,
             radiusProducer: bc => 11.0f,
             priority: AvoidancePriority.Low));
 
