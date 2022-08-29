@@ -42,7 +42,7 @@
         </If>
 
         <If Condition="WorldManager.SubZoneId in [&CarcereIV;, &Penitence;,]">
-          <Grind GrindRef="Boss1" While="GetInstanceTodo(1) == 0"/>
+          <Grind GrindRef="Boss1" PostCombatDelay="3" While="GetInstanceTodo(1) == 0"/>
           <LootTreasure/>
 
           <MoveTo XYZ="266.1186, -707.9906, 90.38605"/>
@@ -57,12 +57,13 @@
           <MoveTo XYZ="0.2507172, -697.9004, -84.04816"/>
           <LootTreasure/>
 
-          <MoveTo XYZ="-0.04349291, -697.9418, -124.4448"/>
+          <MoveTo XYZ="-0.04349291, -697.9418, -130"/>
         </If>
 
         <If Condition="WorldManager.SubZoneId in [&SeatOfTheForemost;,]">
-          <MoveTo XYZ="0.3203735, -698.0104, -148.3635"/>
-          <Grind GrindRef="Boss2" While="GetInstanceTodo(3) == 0"/>
+          <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
+          <Grind GrindRef="Boss2" PostCombatDelay="3" While="GetInstanceTodo(3) == 0"/>
+          <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <LootTreasure/>
 
           <MoveTo XYZ="0.1925379, -694.0023, -224.0045"/>
@@ -86,8 +87,9 @@
         </If>
 
         <If Condition="WorldManager.SubZoneId in [&TheGardenOfEpopts;,]">
-          <MoveTo XYZ="-35, 385.0012, -307"/>
-          <Grind GrindRef="Boss3" While="not IsDutyEnded()"/>
+          <MoveTo XYZ="-34.85857, 385.0012, -288"/>
+          <Grind GrindRef="Boss3" PostCombatDelay="3" While="not IsDutyEnded()"/>
+          <WaitForLoading/>
 
           <LootTreasure/>
           <LeaveDuty/>

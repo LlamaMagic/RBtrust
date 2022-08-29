@@ -27,6 +27,8 @@ public class FellCourtOfTroia : AbstractDungeon
     private const uint BeatificScornSpell = 29817;
     private const int BeatificScornDuration = 10_000;
     private const int VoidNailDuration = 5_250;
+    private const uint DeathForeseenSpell = 29828;
+    private const uint VoidshakerSpell = 29822;
 
     private const uint ScarmiglioneNpc = 11372;
     private const uint WallSegmentNpc = 108;
@@ -38,7 +40,6 @@ public class FellCourtOfTroia : AbstractDungeon
 
     private static readonly HashSet<uint> VoidGravity = new() { 29626, 30022, 30242, 30023 };
     private static readonly HashSet<uint> VoidNail = new() { 29823 };
-    private static readonly HashSet<uint> EyeofTroia = new() { 29818 };
     private static readonly HashSet<uint> RottenRampage = new() { 30231 };
     private static readonly HashSet<uint> VoidVortex = new() { 30024, 30025, 30243, 30253, 30254, };
     private static readonly HashSet<uint> ToricVoid = new() { 29829, 31207, 31206, };
@@ -68,15 +69,17 @@ public class FellCourtOfTroia : AbstractDungeon
 
     /* Beatrice Spells
      * SpellName: Eye of Troia SpellId: 29818 - Turn away about 10 seconds after cast starts
+     * SpellName: Death Foreseen SpellId: 29821, 29828 - Actual gaze cast for Eye of Troia. 29828 multi-point version
      * SpellName: Hush SpellId: 29824 Tank buster
-     * SpellName: Beatific Scorn SpellId: 29813 - NPC follow for about 30 secnds after cast starts
+     * SpellName: Beatific Scorn SpellId: 29813 - NPC follow for about 30 seconds after cast starts
      * SpellName: Void Nail SpellId: 29823 - Spread
      * SpellName: Toric Void SpellId: 29829, 31207, 31206 - Donut
      * SpellName: Antipressure SpellId: 31208 - Stack
+     * SpellName: Voidshaker SpellId: 29822 - Cone
      */
 
     /* Scarmiglione Spells
-     * SpellName: Cursed Echo SpellId: 30257 room wide aoe, nothing to do
+     * SpellName: Cursed Echo SpellId: 30257 - Room-wide AOE, nothing to do
      * SpellName: Rotten Rampage SpellId: 30028,30031,30056,30231,30232,30233 spread
      *   - Looks like 30231 does the actual spread
      * SpellName: Void Vortex SpellId: 30024,30025,30243,30253,30254 stack
@@ -126,6 +129,17 @@ public class FellCourtOfTroia : AbstractDungeon
             radiusProducer: bc => 11.0f,
             priority: AvoidancePriority.Low));
 
+        // Boss 2: Voidshaker cone
+        // TODO: Remove this, Toric Void, and SideStep toggle in XML after SideStep updates with type-10 donut support
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
+            objectSelector: (bc) => bc.CastingSpellId == VoidshakerSpell,
+            leashPointProducer: () => BeatriceArenaCenter,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 125.0f);
+
         // Boss 2: Toric Void donut
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost
@@ -133,7 +147,17 @@ public class FellCourtOfTroia : AbstractDungeon
             () => BeatriceArenaCenter,
             outerRadius: 90.0f,
             innerRadius: 11.0f,
-            priority: AvoidancePriority.Medium);
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Eye of Troia / Death Foreseen multi-gaze attack
+        // Conveniently, the multi-point gaze is a separate spell ID from the single version.
+        // Since the boss is centered, we can add them large circle-avoids to stand in the "butt-crack"
+        // between avoids and implicitly look away due to attacking/facing the boss.
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
+            objectSelector: bc => bc.CastingSpellId == DeathForeseenSpell,
+            radiusProducer: bc => 16.0f,
+            priority: AvoidancePriority.Medium));
 
         // Boss 3: Blighted Bedevilment inner circle
         // Vacuum Wave knockback handled more dynamically in RunAsync()
@@ -204,25 +228,6 @@ public class FellCourtOfTroia : AbstractDungeon
 
     private async Task<bool> HandleBeatriceAsync()
     {
-        /*if (EyeofTroia.IsCasting())
-        {
-            BattleCharacter beatriceNPC = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Beatrice)
-                .FirstOrDefault(bc => bc.IsTargetable && bc.Distance() < 50);
-
-            SpellCastInfo eyeofTroia = beatriceNPC.SpellCastInfo;
-            TimeSpan gazeDuration = eyeofTroia.RemainingCastTime + TimeSpan.FromMilliseconds(8000);
-
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, gazeDuration,
-                $"Looking away from ({eyeofTroia.ActionId}) {eyeofTroia.Name} for {gazeDuration.TotalMilliseconds:N0}ms");
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Facing, gazeDuration);
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Targeting, gazeDuration);
-
-            ActionManager.StopCasting();
-            Core.Player.ClearTarget();
-            Core.Player.FaceAway(beatriceNPC);
-            await Coroutine.Sleep(gazeDuration);
-        }*/
-
         if (VoidNail.IsCasting())
         {
             await MovementHelpers.Spread(VoidNailDuration);
@@ -258,9 +263,11 @@ public class FellCourtOfTroia : AbstractDungeon
             // so we can draw a 360-15 = 345 degree "cone" and point it directly away from the nearest wall
             // to create an avoid-compatible safe space that plays nice with other simultaneous avoids.
             // Adding 15 degrees found experimentally because the wall's "real" position is off-center.
-            float rotation = 15f + MathEx.CalculateNeededFacing(
-                GameObjectManager.GetObjectsByNPCId(WallSegmentNpc).OrderBy(obj => obj.Distance()).First().Location,
-                ScarmiglioneArenaCenter);
+            Vector3 wallSegmentLocation = GameObjectManager.GetObjectsByNPCId(WallSegmentNpc)
+                .OrderBy(obj => obj.Distance())
+                .First().Location;
+
+            float rotation = 15f + MathEx.CalculateNeededFacing(wallSegmentLocation, ScarmiglioneArenaCenter);
 
             // Add updated cone and save it for later removal
             blightedBedevilmentAvoid = AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
