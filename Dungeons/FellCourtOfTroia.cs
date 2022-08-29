@@ -27,7 +27,8 @@ public class FellCourtOfTroia : AbstractDungeon
     private const uint BeatificScornSpell = 29817;
     private const int BeatificScornDuration = 10_000;
     private const int VoidNailDuration = 5_250;
-    private const uint DeathForeseenSpell = 29828;
+    private const uint DeathForeseenSingleSpell = 29821;
+    private const uint DeathForeseenMultiSpell = 29828;
     private const uint VoidshakerSpell = 29822;
 
     private const uint ScarmiglioneNpc = 11372;
@@ -149,13 +150,22 @@ public class FellCourtOfTroia : AbstractDungeon
             innerRadius: 11.0f,
             priority: AvoidancePriority.High);
 
+        // Boss 2: Eye of Troia / Death Foreseen single-gaze attack
+        // TODO: Since BattleCharacter.FaceAway() can't stay looking away for now,
+        // draw a circle avoid at the end of cast so we run/face away from the boss.
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
+            objectSelector: bc => bc.CastingSpellId == DeathForeseenSingleSpell && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds <= 500,
+            radiusProducer: bc => 18.0f,
+            priority: AvoidancePriority.High));
+
         // Boss 2: Eye of Troia / Death Foreseen multi-gaze attack
         // Conveniently, the multi-point gaze is a separate spell ID from the single version.
         // Since the boss is centered, we can add them large circle-avoids to stand in the "butt-crack"
         // between avoids and implicitly look away due to attacking/facing the boss.
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SeatOfTheForemost,
-            objectSelector: bc => bc.CastingSpellId == DeathForeseenSpell,
+            objectSelector: bc => bc.CastingSpellId == DeathForeseenMultiSpell,
             radiusProducer: bc => 16.0f,
             priority: AvoidancePriority.Medium));
 
