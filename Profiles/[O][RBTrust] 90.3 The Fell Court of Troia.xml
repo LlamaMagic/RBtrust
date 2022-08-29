@@ -62,6 +62,7 @@
 
         <If Condition="WorldManager.SubZoneId in [&SeatOfTheForemost;,]">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
+          <MoveTo XYZ="-0.04349291, -697.9418, -133"/>
           <Grind GrindRef="Boss2" PostCombatDelay="3" While="GetInstanceTodo(3) == 0"/>
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <LootTreasure/>
@@ -82,8 +83,9 @@
           <MoveTo XYZ="-35.85081, 385.2499, -213.8927"/>
           <LootTreasure/>
 
-          <MoveTo XYZ="-35.65555, 386.45, -246.9598"/>
-          <WaitWhile condition="MovementManager.IsMoving" />
+          <MoveTo XYZ="-35.82511, 386.45, -245"/>
+          <WaitWhile condition="not IsOnSubMap(&TheGardenOfEpopts;)" />
+          <WaitTimer waitTime="4"/>
         </If>
 
         <If Condition="WorldManager.SubZoneId in [&TheGardenOfEpopts;,]">
