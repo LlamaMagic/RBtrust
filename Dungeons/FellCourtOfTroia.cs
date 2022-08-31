@@ -258,6 +258,11 @@ public class FellCourtOfTroia : AbstractDungeon
             await MovementHelpers.Spread(FiredampDuration);
         }
 
+        if (VoidGravity.IsCasting())
+        {
+            await MovementHelpers.Spread(VoidGravityDuration);
+        }
+
         BattleCharacter boss3 = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(ScarmiglioneNpc)
             .FirstOrDefault(bc => bc.IsTargetable && bc.CastingSpellId == BlightedBedevilmentSpell);
 
