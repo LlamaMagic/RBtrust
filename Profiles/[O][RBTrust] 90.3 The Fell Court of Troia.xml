@@ -42,7 +42,7 @@
         </If>
 
         <If Condition="WorldManager.SubZoneId in [&CarcereIV;, &Penitence;,]">
-          <Grind GrindRef="Boss1" PostCombatDelay="3" While="GetInstanceTodo(1) == 0"/>
+          <Grind GrindRef="Boss1" While="GetInstanceTodo(1) == 0"/>
           <LootTreasure/>
 
           <MoveTo XYZ="266.1186, -707.9906, 90.38605"/>
@@ -63,7 +63,7 @@
         <If Condition="WorldManager.SubZoneId in [&SeatOfTheForemost;,]">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
           <MoveTo XYZ="-0.04349291, -697.9418, -133"/>
-          <Grind GrindRef="Boss2" PostCombatDelay="3" While="GetInstanceTodo(3) == 0"/>
+          <Grind GrindRef="Boss2" While="GetInstanceTodo(3) == 0"/>
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <LootTreasure/>
 
@@ -90,10 +90,10 @@
 
         <If Condition="WorldManager.SubZoneId in [&TheGardenOfEpopts;,]">
           <MoveTo XYZ="-34.85857, 385.0012, -288"/>
-          <Grind GrindRef="Boss3" PostCombatDelay="3" While="not IsDutyEnded()"/>
+          <Grind GrindRef="Boss3" While="not IsDutyEnded()"/>
           <WaitForLoading/>
-
           <LootTreasure/>
+          
           <LeaveDuty/>
         </If>
       </If>
