@@ -108,7 +108,7 @@ public class FellCourtOfTroia : AbstractDungeon
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Penitence,
             objectSelector: bc => bc.CastingSpellId == UniteMareSpell,
-            radiusProducer: bc => 20.0f,
+            radiusProducer: bc => 18.0f,
             priority: AvoidancePriority.High));
 
         // Boss 2: Beatific Scorn with progressive avoid priority
