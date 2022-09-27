@@ -46,7 +46,7 @@ public class Aery : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheAery;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {3889,30190,30195,30196,30224,31234};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {3889,30181,30190,30195,30224,31234};
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
