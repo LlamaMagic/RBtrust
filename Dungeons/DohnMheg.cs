@@ -5,6 +5,8 @@ using ff14bot.Behavior;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Pathing;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,10 +31,16 @@ public class DohnMheg : AbstractDungeon
     private const int LiarsLyre = 8958;
 
     private const int ImpChoir = 13552;
+    private const int ToadChoir = 13551;
     private const int Finale = 15723;
 
     private const int LaughingLeapDuration = 30_000;
     private const int FodderDuration = 13_000;
+    private const float FodderDistance = 0.5f;
+
+    private static readonly Vector3 LordOfLingeringGazeArenaCenter = new(0f, 6.85f, 30.16f);
+    private static readonly Vector3 GriauleArenaCenter = new(7f, 23f, -339f);
+    private static readonly Vector3 LordOfLengthsomeGaitArenaCenter = new(-128f, -144.5f, -244f);
 
     private readonly Stopwatch laughingLeapSw = new();
 
@@ -67,8 +75,55 @@ public class DohnMheg : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        13551, 13547, 13952,
+        13547, 13952,
     };
+
+    /// <inheritdoc/>
+    public override Task<bool> OnEnterDungeonAsync()
+    {
+        // Boss 2: Toad Choir
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThroneRoom,
+            objectSelector: (bc) => bc.CastingSpellId == ToadChoir,
+            leashPointProducer: () => LordOfLengthsomeGaitArenaCenter,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 135.0f);
+
+        // Boss 3: Imp Choir gaze attack
+        // TODO: Since BattleCharacter.FaceAway() can't stay looking away for now,
+        // draw a circle avoid at the end of cast so we run/face away from the boss.
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThroneRoom,
+            objectSelector: bc => bc.CastingSpellId == ImpChoir && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds <= 500,
+            radiusProducer: bc => 18.0f,
+            priority: AvoidancePriority.High));
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TeagGye,
+            () => LordOfLingeringGazeArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheAtelier,
+            () => GriauleArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 22.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThroneRoom,
+            () => LordOfLengthsomeGaitArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        return Task.FromResult(false);
+    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
@@ -141,9 +196,15 @@ public class DohnMheg : AbstractDungeon
                 Logger.Information($"Blocking sapling tether: {start} <- {start.Distance(fodderTetherPoint):N2} -> {fodderTetherPoint} <- {fodderTetherPoint.Distance(end):N2} -> {end}");
             }
 
-            if (DateTime.Now < fodderEnds && Core.Player.Distance(fodderTetherPoint) > 0.5f)
+            if (DateTime.Now < fodderEnds && Core.Player.Distance(fodderTetherPoint) > FodderDistance)
             {
-                await CommonTasks.MoveTo(fodderTetherPoint);
+                MoveToParameters parameters = new MoveToParameters
+                {
+                    Location = fodderTetherPoint,
+                    DistanceTolerance = FodderDistance,
+                };
+
+                await CommonTasks.MoveAndStop(parameters, FodderDistance);
             }
         }
 
@@ -152,11 +213,8 @@ public class DohnMheg : AbstractDungeon
 
     private async Task<bool> HandleLordOfLengthsomeGaitAsync()
     {
-        BattleCharacter boss3 = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(LordOfLengthsomeGait)
-            .FirstOrDefault(bc => bc.IsTargetable && bc.Distance() < 50);
-
         BattleCharacter liarsLyre = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(LiarsLyre)
-            .FirstOrDefault(bc => bc.CastingSpellId == Finale && bc.Distance() < 50);
+            .FirstOrDefault(bc => bc.CastingSpellId == Finale);
 
         if (liarsLyre != null && liarsLyre.Location.Distance2D(Core.Player.Location) >= 10.0f)
         {
@@ -184,20 +242,6 @@ public class DohnMheg : AbstractDungeon
 
             Navigator.PlayerMover.MoveStop();
             CapabilityManager.Clear(CapabilityHandle, reason: $"Finished walking tight-rope for ({finale.ActionId}) {finale.Name} with {finaleDuration.TotalMilliseconds:N0}ms remaining");
-        }
-        else if (boss3 != null && boss3.CastingSpellId == ImpChoir)
-        {
-            SpellCastInfo impChoir = boss3.SpellCastInfo;
-            TimeSpan gazeDuration = impChoir.RemainingCastTime + TimeSpan.FromMilliseconds(250);
-
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, gazeDuration, $"Looking away from ({impChoir.ActionId}) {impChoir.Name} for {gazeDuration.TotalMilliseconds:N0}ms");
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Facing, gazeDuration);
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Targeting, gazeDuration);
-
-            ActionManager.StopCasting();
-            Core.Player.ClearTarget();
-            Core.Player.FaceAway(boss3);
-            await Coroutine.Sleep(gazeDuration);
         }
 
         return false;
