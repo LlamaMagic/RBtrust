@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Profile [
+  <!ENTITY ZoneId "821">
+  <!ENTITY DutyId "649">
+  
   <!ENTITY Shortcut "2000700">
   
   <!ENTITY HiddenGardens "2959">
@@ -24,14 +27,14 @@
     <CheckPlugins/>
 
     <While Condition="True">
-      <If Condition="not IsOnMap(821)">
+      <If Condition="not IsOnMap(&ZoneId;)">
 
         <EquipRecommended/>
-        <JoinSupportDuty DutyId="649"/>
+        <JoinSupportDuty DutyId="&DutyId;"/>
 
       </If>
 
-      <If Condition="IsOnMap(821)">
+      <If Condition="IsOnMap(&ZoneId;)">
         <WaitForLoading/>
         <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
 
@@ -83,6 +86,7 @@
           <MoveTo XYZ="-171.8624, -178.7595, -6.363098"/>
           <UseObject NpcId="&ShellCrown;" XYZ="-171.8624, -178.7595, -6.363098" Condition="GameObjectManager.GetObjectByNPCId(&ShellCrown;).IsTargetable"/>
 
+          <MoveTo XYZ="-169.9535, -167.4991, -69.54301"/>
           <MoveTo XYZ="-128.2216, -167.4947, -105.4246"/>
           <MoveTo XYZ="-128.6794, -156.0078, -164.9653"/>
           <LootTreasure/>
