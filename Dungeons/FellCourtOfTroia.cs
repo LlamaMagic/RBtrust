@@ -174,7 +174,7 @@ public class FellCourtOfTroia : AbstractDungeon
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.GardenOfEpopts,
             objectSelector: bc => bc.CastingSpellId == BlightedBedevilmentSpell,
-            radiusProducer: bc => 12.0f,
+            radiusProducer: bc => 11.0f,
             priority: AvoidancePriority.High));
 
         // Boss Arenas
@@ -292,7 +292,8 @@ public class FellCourtOfTroia : AbstractDungeon
                 leashRadius: 40.0f,
                 rotationDegrees: rotation,
                 radius: 40.0f,
-                arcDegrees: 345.0f);
+                arcDegrees: 345.0f,
+                priority: AvoidancePriority.Low);
         }
 
         return false;
