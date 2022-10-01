@@ -97,6 +97,21 @@ public enum SubZoneId : uint
     TheColdThrone = 681,
 
     /// <summary>
+    /// Lv. 57: The Vault > The Quire, Ser Adelphel
+    /// </summary>
+    TheQuire = 1570,
+
+    /// <summary>
+    /// Lv. 57: The Vault > Chapter House, Ser Grinnaux
+    /// </summary>
+    ChapterHouse = 1571,
+
+    /// <summary>
+    /// Lv. 57: The Vault > The Chancel, Ser Charibert
+    /// </summary>
+    TheChancel = 1572,
+
+    /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>
     TeagGye = 2963,
