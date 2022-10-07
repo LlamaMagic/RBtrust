@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Profile [
+  <!ENTITY ZoneId "933">
+  <!ENTITY DutyId "746">
+  
+  <!ENTITY Shortcut "2000700">
+  
+  <!ENTITY EarthyPortal "2011290">
+  <!ENTITY IntersticePortal1 "2011293">
+  <!ENTITY WateryPortal "2011291">
+  <!ENTITY IntersticePortal2 "2011354">
+  <!ENTITY FireyPortal "2011292">
+  <!ENTITY IntersticePortal3 "2011355">
+  
+  <!ENTITY TheSorcerersInterstice "3585">
+  <!ENTITY Grimegrot "3582">
+  <!ENTITY ClayclotCauldron "3586">
+  <!ENTITY WanderingWell "3583">
+  <!ENTITY ClearnoteCauldron "3587">
+  <!ENTITY FlamesFantasia "3584">
+  <!ENTITY KilnfireCauldron "3588">
+  <!ENTITY WoebegoneWorkshop "3589">
+  
+  <!ENTITY Mudman "9735">
+  <!ENTITY Nixie "9738">
+  <!ENTITY MotherPorxie "9741">
+]>
+<Profile>
+  <Name>[O][RBTrust] 80.5 Matoya's Relict</Name>
+  <Order>
+    <CheckPlugins/>
+    
+    <While Condition="True">
+      <WaitForLoading/>
+
+      <If Condition="not IsOnMap(&ZoneId;)">
+        <EquipRecommended/>
+        <JoinSupportDuty DutyId="&DutyId;"/>
+      </If>
+
+      <If Condition="IsOnMap(&ZoneId;)">
+        <WaitForLoading/>
+        <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
+
+        <If Condition="WorldManager.SubZoneId in [&TheSorcerersInterstice;,] and (GetInstanceTodo(0) == 0 or GetInstanceTodo(1) == 0)">
+          <MoveTo XYZ="3.790484, 8.499207, 62.86783"/>
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&EarthyPortal;).IsTargetable"/>
+          <UseTransport NpcId="&EarthyPortal;" XYZ="3.790484, 8.499207, 62.86783"/>
+          <WaitWhile Condition="WorldManager.SubZoneId != &Grimegrot;"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&Grimegrot;,]">
+          <If Condition="0 &lt; Core.Player.Location.Z">
+            <MoveTo XYZ="-176.1183, -205.9799, 93.92548"/>
+            <MoveTo XYZ="-212.0154, -211.98, 48.044"/>
+
+            <!-- Jump Pad -->
+            <MoveTo XYZ="-211.8123, -212.043, 30" Distance="1.5"/>
+            <WaitTimer waitTime="6"/>
+          </If>
+
+          <If Condition="Core.Player.Location.Z  &lt; 0">
+            <MoveTo XYZ="-211.9718, -215.98, -20.21012"/>
+            <MoveTo XYZ="-179.78, -219.98, -61.52341"/>
+
+            <!-- Jump Pad -->
+            <MoveTo XYZ="-180.0594, -220.043, -80" Distance="1.5"/>
+            <WaitTimer waitTime="6"/>
+          </If>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&ClayclotCauldron;,]">
+          <!-- Boss 1: Mudman -->
+          <MoveTo XYZ="-180, -220, -140" Distance="1.5"/>
+          <Grind GrindRef="Mudman" While="GetInstanceTodo(1) == 0"/>
+          <LootTreasure/>
+
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&IntersticePortal1;).IsTargetable"/>
+          <UseTransport NpcId="&IntersticePortal1;" XYZ="-180, -220, -150"/>
+          <WaitWhile Condition="WorldManager.SubZoneId != &TheSorcerersInterstice;"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&TheSorcerersInterstice;,] and (GetInstanceTodo(2) == 0 or GetInstanceTodo(3) == 0)">
+          <MoveTo XYZ="8.132032, 8.499605, 63.95441"/>
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&WateryPortal;).IsTargetable"/>
+          <UseTransport NpcId="&WateryPortal;" XYZ="8.132032, 8.499605, 63.95441"/>
+          <WaitWhile Condition="WorldManager.SubZoneId != &WanderingWell;"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&WanderingWell;,]">
+          <If Condition="225  &lt; Core.Player.Location.Y">
+            <MoveTo XYZ="5.020142, 234, -205.4628"/>
+            <MoveTo XYZ="51.23654, 234, -177.7182"/>
+            <LootTreasure/>
+
+            <!-- Irreversible fall -->
+            <ClimbHill Start="53.75039, 233.8, -160.2009" End="49.94342, 202, -132.6163" Distance="3" />
+          </If>
+
+          <If Condition="195  &lt; Core.Player.Location.Y  &lt; 205">
+            <MoveTo XYZ="30.99097, 202, -105.9739"/>
+            <MoveTo XYZ="-13.99607, 198, -174.296"/>
+
+            <!-- Jump Pad -->
+            <MoveTo XYZ="-21.16, 198, -186.16"  Distance="1.5"/>
+            <WaitTimer waitTime="6"/>
+          </If>
+
+          <!-- Should split here for resuming's sake if we can find a less-conflicting condition than pure height -->
+          <!-- TODO: Previous/current condition overlap, so resuming from here isn't possible and we get stuck "going back" -->
+          <If Condition="200  &lt; Core.Player.Location.Y  &lt; 205">
+            -->
+            <LootTreasure/>
+            <MoveTo XYZ="-53.66602, 202, -143.2975"/>
+
+            <!-- Irreversible fall -->
+            <ClimbHill Start="-51.74948, 201.8, -132.3905" End="-36.04734, 169.8999, -111.0362" Distance="3" />
+          </If>
+
+          <If Condition="165  &lt; Core.Player.Location.Y  &lt; 175">
+            <!-- Jump Pad -->
+            <MoveTo XYZ="-0.165, 169.9, -107"  Distance="1.5"/>
+            <WaitTimer waitTime="6"/>
+          </If>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&ClearnoteCauldron;,]">
+          <!-- Boss 2: Nixie -->
+          <MoveTo XYZ="0, 150, -150" Distance="1.5"/>
+          <Grind GrindRef="Nixie" While="GetInstanceTodo(3) == 0"/>
+          <LootTreasure/>
+
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&IntersticePortal2;).IsTargetable"/>
+          <UseTransport NpcId="&IntersticePortal2;" XYZ="-0.01531982, 149.9808, -160.0214"/>
+          <WaitWhile Condition="WorldManager.SubZoneId != &TheSorcerersInterstice;"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&TheSorcerersInterstice;,] and GetInstanceTodo(4) == 0">
+          <MoveTo XYZ="12.55068, 8.499607, 65.06276"/>
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&FireyPortal;).IsTargetable"/>
+          <UseTransport NpcId="&FireyPortal;" XYZ="12.55068, 8.499607, 65.06276"/>
+          <WaitWhile Condition="WorldManager.SubZoneId != &FlamesFantasia;"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&FlamesFantasia;,]">
+          <If Condition="115 &lt; Core.Player.Location.Z">
+            <MoveTo XYZ="161.2421, -596.8228, 139.4827"/>
+            <MoveTo XYZ="160.0986, -598.5392, 106.7146"/>
+            <LootTreasure/>
+          </If>
+
+          <If Condition="0 &lt; Core.Player.Location.Z &lt; 115">
+            <MoveTo XYZ="195.5748, -598.3291, 74.35718"/>
+            <MoveTo XYZ="154.2839, -598.4076, 6.485046"/>
+            <LootTreasure/>
+          </If>
+
+          <If Condition="Core.Player.Location.Z &lt; 20">
+            <MoveTo XYZ="166.186, -598.5078, -40.39063"/>
+            <MoveTo XYZ="160.2074, -599.488, -108.911"/>
+            <MoveTo XYZ="161.8524, -592.5536, -149.8894"/>
+          </If>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&KilnfireCauldron;,]">
+          <MoveTo XYZ="161.8524, -592.5536, -149.8894"/>
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&IntersticePortal3;).IsTargetable"/>
+          <UseTransport NpcId="&IntersticePortal3;" XYZ="161.8524, -592.5536, -149.8894"/>
+          <WaitWhile Condition="WorldManager.SubZoneId != &TheSorcerersInterstice;"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&TheSorcerersInterstice;,] and (GetInstanceTodo(5) == 0 or IsDutyEnded())">
+          <MoveTo XYZ="-7.498118, 8.499607, 64.17719"/>
+          <MoveTo XYZ="0, 0, 5"/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in [&TheSorcerersInterstice;, &WoebegoneWorkshop;,] and (GetInstanceTodo(5) == 0 or IsDutyEnded())">
+          <!-- Boss 3: Mother Porxie -->
+          <MoveTo XYZ="0, 0, 5"/>
+          <Grind GrindRef="Mother Porxie" While="not IsDutyEnded()"/>
+
+          <WaitForLoading/>
+          <LootTreasure/>
+
+          <LeaveDuty/>
+        </If>
+      </If>
+    </While>
+  </Order>
+  <GrindAreas>
+    <GrindArea Name="Mudman">
+      <Hotspots>
+        <Hotspot XYZ="-180, -220, -140" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="&Mudman;"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="Nixie">
+      <Hotspots>
+        <Hotspot XYZ="0, 150, -150" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="&Nixie;"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="Mother Porxie">
+      <Hotspots>
+        <Hotspot XYZ="0, 0, 0" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="&MotherPorxie;"/>
+      </TargetMobs>
+    </GrindArea>
+  </GrindAreas>
+</Profile>
