@@ -4,6 +4,7 @@ using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Helpers;
@@ -25,6 +26,7 @@ public class Vault : AbstractDungeon
 
     private const uint DawnKnightNpc = 3851;
     private const uint DuskKnightNpc = 3852;
+    private const uint HolyFlame = 4400;
     private const uint BurningChainsAura = 769;
 
     private static readonly Vector3 SerAdelphelArenaCenter = new(0f, -292f, -100f);
@@ -105,7 +107,7 @@ public class Vault : AbstractDungeon
 
         // Boss 3: Dawn Knight + Dusk Knight
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheChancel,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheChancel && !GameObjectManager.GetObjectsByNPCId(HolyFlame).Any(),
             objectSelector: bc => bc.NpcId is DawnKnightNpc or DuskKnightNpc,
             width: 4f,
             length: 27f,
