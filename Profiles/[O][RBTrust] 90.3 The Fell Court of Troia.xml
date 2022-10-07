@@ -23,6 +23,8 @@
     <CheckPlugins/>
 
     <While Condition="True">
+      <WaitForLoading/>
+      
       <If Condition="not IsOnMap(&ZoneId;)">
         <EquipRecommended/>
         <JoinSupportDuty DutyId="&DutyId;"/>
@@ -92,6 +94,7 @@
           <MoveTo XYZ="-34.85857, 385.0012, -288"/>
           <Grind GrindRef="Boss3" While="not IsDutyEnded()"/>
           <WaitForLoading/>
+          
           <LootTreasure/>
           
           <LeaveDuty/>
