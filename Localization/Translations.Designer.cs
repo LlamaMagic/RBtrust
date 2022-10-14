@@ -88,11 +88,20 @@ namespace Trust.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Player has died. Reloading current profile..
+        ///   Looks up a localized string similar to Player has died. Reloading current profile after respawn..
         /// </summary>
         internal static string PLAYER_DIED_RELOADING_PROFILE {
             get {
                 return ResourceManager.GetString("PLAYER_DIED_RELOADING_PROFILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player failed to respawn after {0:N0}ms. Is there a special death mechanic?.
+        /// </summary>
+        internal static string PLAYER_FAILED_TO_RESPAWN {
+            get {
+                return ResourceManager.GetString("PLAYER_FAILED_TO_RESPAWN", resourceCulture);
             }
         }
         

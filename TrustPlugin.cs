@@ -115,23 +115,12 @@ public class TrustPlugin : BotPlugin
 
     private async Task<bool> RunTrust()
     {
-        if (!Core.Me.InCombat && MovementManager.IsMoving)
-        {
-            if (ActionManager.IsSprintReady)
-            {
-                ActionManager.Sprint();
-                await Coroutine.Wait(1_000, () => !ActionManager.IsSprintReady);
-            }
-            else if (!Core.Player.HasAura(1199) && ActionManager.CanCast(7557, Core.Player))
-            {
-                ActionManager.DoAction(7557, Core.Player);
-            }
-        }
-
-        if (await PlayerCheck())
+        if (await TryRespawnPlayerAsync())
         {
             return true;
         }
+
+        await MovementHelpers.TryIncreaseMovementSpeedAsync();
 
         // LoggingHelpers.LogAllSpellCasts();
         LoggingHelpers.LogZoneChanges();
@@ -139,19 +128,30 @@ public class TrustPlugin : BotPlugin
         return await dungeonManager.RunAsync();
     }
 
-    private async Task<bool> PlayerCheck()
+    private async Task<bool> TryRespawnPlayerAsync()
     {
-        if (Core.Me.CurrentHealthPercent <= 0)
+        if (Core.Player.IsAlive)
         {
-            Logger.Information(Translations.PLAYER_DIED_RELOADING_PROFILE);
-
-            await Coroutine.Sleep(10_000);
-            NeoProfileManager.Load(NeoProfileManager.CurrentProfile.Path, true);
-            NeoProfileManager.UpdateCurrentProfileBehavior();
-            await Coroutine.Sleep(5_000);
-            return true;
+            return false;
         }
 
-        return false;
+        Logger.Information(Translations.PLAYER_DIED_RELOADING_PROFILE);
+
+        const int maxRespawnTime = 60_000;
+        bool respawnedInReasonableTime = await Coroutine.Wait(maxRespawnTime, () => Core.Player.IsAlive);
+
+        await LoadingHelpers.WaitForLoadingAsync();
+
+        if (respawnedInReasonableTime)
+        {
+            NeoProfileManager.Load(NeoProfileManager.CurrentProfile.Path, true);
+            NeoProfileManager.UpdateCurrentProfileBehavior();
+        }
+        else
+        {
+            Logger.Error(Translations.PLAYER_FAILED_TO_RESPAWN, maxRespawnTime);
+        }
+
+        return true;
     }
 }

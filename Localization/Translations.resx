@@ -127,7 +127,10 @@
     <value>Failed to load localization "{cultureCode}": resource file not found.</value>
   </data>
   <data name="PLAYER_DIED_RELOADING_PROFILE" xml:space="preserve">
-    <value>Player has died. Reloading current profile.</value>
+    <value>Player has died. Reloading current profile after respawn.</value>
+  </data>
+  <data name="PLAYER_FAILED_TO_RESPAWN" xml:space="preserve">
+    <value>Player failed to respawn after {0:N0}ms. Is there a special death mechanic?</value>
   </data>
   <data name="PROJECT_CHAT_URL" xml:space="preserve">
     <value>https://discord.gg/bmgCq39</value>
