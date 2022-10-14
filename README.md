@@ -8,7 +8,6 @@
 **RBtrust** is a dungeon plugin + OrderBot scripts for [RebornBuddy][rebornbuddy]. It automatically runs Duty Support and Trust dungeons.
 
 [readme-zh]: ./README.zh.md "中文"
-[readme-en]: ./README.md "English"
 [github-repo]: https://github.com/TheManta/RBtrust "RBtrust on GitHub"
 [download-badge]: https://img.shields.io/badge/-Download-brightgreen
 [download-link]: #installation "Download"
@@ -17,6 +16,15 @@
 [rebornbuddy]: https://www.rebornbuddy.com/ "RebornBuddy"
 
 ## Supported Dungeons
+
+  ⏰ - Waiting for Duty Support\
+  ❌ - Not Yet Implemented\
+  ⚠️ - Incomplete or Very Buggy\
+  ✔️ - Complete
+
+Dungeons are listed by unlock level, then by order unlocked for MSQ/Duty Support (e.g., Lv. 50.1: Castrum Meridianum, Lv. 50.2: The Praetorium).
+
+For same-level dungeons that aren't part of MSQ/Duty Support but got scripted anyway (unsynced runs?), no sequence number is given (e.g., Lv. 50: The Wanderer's Palace, Lv. 50: Amdapoor Keep). There are no plans for player-party scripts at this time, only NPC-party scripts via Duty Support and Trusts.
 
 ### 2.0 - A Realm Reborn
 
@@ -41,23 +49,23 @@
   ❌ Lv. 53: Sohm Al\
   ❌ Lv. 55: The Aery\
   ❌ Lv. 57: The Vault\
-  ❌ Lv. 59: The Great Gubal Library\
-  ❌ Lv. 60.1: The Aetherochemical Research Facility\
-  ❌ Lv. 60.2: The Antitower\
-  ❌ Lv. 60.3: Sohr Kai\
-  ❌ Lv. 60.4: Xelphatol\
-  ❌ Lv. 60.5: Baelsar's Wall
+  ⏰ Lv. 59: The Great Gubal Library\
+  ⏰ Lv. 60.1: The Aetherochemical Research Facility\
+  ⏰ Lv. 60.2: The Antitower\
+  ⏰ Lv. 60.3: Sohr Kai\
+  ⏰ Lv. 60.4: Xelphatol\
+  ⏰ Lv. 60.5: Baelsar's Wall
 
 ### 4.0 - Stormblood
 
-  ❌ Lv. 61: The Sirensong Sea\
-  ❌ Lv. 65: Bardam's Mettle\
-  ❌ Lv. 67: Doma Castle\
-  ❌ Lv. 69: Castrum Abania\
-  ❌ Lv. 70.1: Ala Mhigo\
-  ❌ Lv. 70.2: The Drowned City of Skala\
-  ❌ Lv. 70.3: The Burn\
-  ❌ Lv. 70.4: The Ghimlyt Dark
+  ⏰ Lv. 61: The Sirensong Sea\
+  ⏰ Lv. 65: Bardam's Mettle\
+  ⏰ Lv. 67: Doma Castle\
+  ⏰ Lv. 69: Castrum Abania\
+  ⏰ Lv. 70.1: Ala Mhigo\
+  ⏰ Lv. 70.2: The Drowned City of Skala\
+  ⏰ Lv. 70.3: The Burn\
+  ⏰ Lv. 70.4: The Ghimlyt Dark
 
 ### 5.0 - Shadowbringers
 
@@ -67,10 +75,10 @@
   ✔️ Lv. 77: Malikah's Well\
   ✔️ Lv. 79: Mt. Gulg\
   ⚠️ Lv. 80.1: Amaurot\
-  ❌ Lv. 80.2: The Grand Cosmos\
-  ❌ Lv. 80.3: Anamnesis Anyder\
+  ⚠️ Lv. 80.2: The Grand Cosmos\
+  ⚠️ Lv. 80.3: Anamnesis Anyder\
   ❌ Lv. 80.4: The Heroes' Gauntlet\
-  ❌ Lv. 80.5: Matoya's Relict\
+  ⚠️ Lv. 80.5: Matoya's Relict\
   ❌ Lv. 80.6: Paglth'an
 
 ### 6.0 - Endwalker
@@ -82,7 +90,7 @@
   ⚠️ Lv. 89.1: The Aitiascope\
   ❌ Lv. 89.2: The Mothercrystal\
   ✔️ Lv. 90.1: The Dead Ends\
-  ❌ Lv. 90.2: Alzadaal's Legacy\
+  ⚠️ Lv. 90.2: Alzadaal's Legacy\
   ✔️ Lv. 90.3: The Fell Court of Troia
 
 ## Installation
