@@ -45,7 +45,7 @@ public static class LoadingHelpers
     /// <summary>
     /// Waits for the game to finish loading.
     /// </summary>
-    /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public static async Task WaitForLoadingAsync()
     {
         if (CommonBehaviors.IsLoading)
@@ -57,7 +57,7 @@ public static class LoadingHelpers
     /// <summary>
     /// Skips any pending cutscenes.
     /// </summary>
-    /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public static async Task SkipCutsceneAsync()
     {
         if (QuestLogManager.InCutscene)
@@ -79,7 +79,7 @@ public static class LoadingHelpers
     /// <summary>
     /// Waits for duty to commence.
     /// </summary>
-    /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public static async Task WaitForDutyCommencedAsync()
     {
         if (IsInInstance)
