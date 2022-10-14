@@ -249,4 +249,24 @@ internal static class MovementHelpers
 
         return true;
     }
+
+    /// <summary>
+    /// Tries to increase out-of-combat movement speed by using various abilities (e.g., Sprint, Peloton).
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public static async Task TryIncreaseMovementSpeedAsync()
+    {
+        if (!Core.Me.InCombat && MovementManager.IsMoving)
+        {
+            if (ActionManager.IsSprintReady)
+            {
+                ActionManager.Sprint();
+                await Coroutine.Wait(1_000, () => !ActionManager.IsSprintReady);
+            }
+            else if (!Core.Player.HasAura(1199) && ActionManager.CanCast(7557, Core.Player))
+            {
+                ActionManager.DoAction(7557, Core.Player);
+            }
+        }
+    }
 }
