@@ -125,8 +125,8 @@ csharp_style_pattern_local_over_anonymous_function = true
 csharp_style_prefer_index_operator = true:suggestion
 csharp_style_prefer_range_operator = true:suggestion
 csharp_style_throw_expression = true:suggestion
-csharp_style_unused_value_assignment_preference = discard_variable:suggestion
-csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+csharp_style_unused_value_assignment_preference = false
+csharp_style_unused_value_expression_statement_preference = false
 
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace:silent
@@ -233,8 +233,8 @@ dotnet_style_prefer_auto_properties = true:suggestion
 dotnet_style_object_initializer = true:suggestion
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
+dotnet_style_prefer_conditional_expression_over_assignment = false:silent
+dotnet_style_prefer_conditional_expression_over_return = false:silent
 dotnet_style_explicit_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
