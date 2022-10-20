@@ -32,12 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=AMD64">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.515\lib\net461\GreyMagic.dll</HintPath>
+    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=Amd64">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.517\lib\net461\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="RebornBuddy, Version=1.0.515.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=AMD64">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.515\lib\net461\RebornBuddy.exe</HintPath>
+    <Reference Include="RebornBuddy, Version=1.0.517.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=Amd64">
+      <HintPath>packages\RebornBuddy.Assemblies.1.0.517\lib\net461\RebornBuddy.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -180,10 +180,6 @@
     <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 90.2 Alzadaal%27s Legacy.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Quest Behaviors\__LlamaLibrary\LlamaLibrary.csproj">
       <Project>{196ee308-0205-4cc4-b449-51064f7e9960}</Project>
       <Name>LlamaLibrary</Name>
@@ -196,7 +192,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\Translations.zh.resx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <!-- One of: BotBases, Plugins, Profiles, Quest Behaviors, Routines -->
