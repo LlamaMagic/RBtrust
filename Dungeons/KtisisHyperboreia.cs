@@ -212,9 +212,8 @@ public class KtisisHyperboreia : AbstractDungeon
         if (trueAero.IsCasting())
         {
             SidestepPlugin.Enabled = false;
-            Vector3 location = new(-8f, 1f, -50.0f);
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5_000, "Need to spread for True Aero");
-            await CommonTasks.MoveTo(location);
+            await MovementHelpers.Spread(5_000);
             await Coroutine.Sleep(500);
             SidestepPlugin.Enabled = true;
         }
@@ -222,9 +221,8 @@ public class KtisisHyperboreia : AbstractDungeon
         if (trueAeroII.IsCasting())
         {
             SidestepPlugin.Enabled = false;
-            Vector3 location = new(-8f, 1f, -50.0f);
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5_000, "Need to spread for True Aero II");
-            await CommonTasks.MoveTo(location);
+            await MovementHelpers.Spread(5_000);
             await Coroutine.Sleep(500);
             SidestepPlugin.Enabled = true;
         }
