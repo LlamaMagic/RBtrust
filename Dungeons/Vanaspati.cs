@@ -21,52 +21,29 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Vanaspati : AbstractDungeon
 {
-    private readonly HashSet<uint> follow = new()
-    {
-        25139, 25140,
-    };
+    private readonly HashSet<uint> follow = new() { 25139, 25140, };
 
-    private readonly HashSet<uint> follow1 = new()
-    {
-        25151, 25153,
-    };
+    private readonly HashSet<uint> follow1 = new() { 25151, 25153, };
 
-    private readonly HashSet<uint> follow2 = new()
-    {
-        25160, 25166,
-    };
+    private readonly HashSet<uint> follow2 = new() { 25160, 25166, };
 
     private readonly HashSet<uint> magnet = new()
     {
         25143, 25146, 25148, 27852,
     };
 
-    private readonly HashSet<uint> magnet1 = new()
-    {
-        25145,
-    };
+    private readonly HashSet<uint> magnet1 = new() { 25145, };
 
-    private readonly HashSet<uint> magnet2 = new()
-    {
-        25147,
-    };
+    private readonly HashSet<uint> magnet2 = new() { 25147, };
 
-    private readonly HashSet<uint> magnet3 = new()
-    {
-       25142, 25168,
-    };
+    private readonly HashSet<uint> magnet3 = new() { 25142, 25168, };
 
-    private readonly HashSet<uint> magnet4 = new()
-    {
-        25169,
-    };
+    private readonly HashSet<uint> magnet4 = new() { 25169, };
 
-    private readonly HashSet<string> overStr = new()
-    {
-       "地脉失控", "污秽的",
-    };
+    private readonly HashSet<string> overStr = new() { "地脉失控", "污秽的", };
 
-    private readonly AvoidInfo avoidNull = AvoidanceManager.AddAvoidLocation(() => false, 0, () => new Vector3("0,0,1"));
+    private readonly AvoidInfo
+        avoidNull = AvoidanceManager.AddAvoidLocation(() => false, 0, () => new Vector3("0,0,1"));
 
     private readonly Stopwatch followSW = new();
     private readonly Stopwatch follow1SW = new();
@@ -102,8 +79,8 @@ public class Vanaspati : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
 
-    private static bool HasTarget => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false).
-                Any(bc => bc.CanAttack && bc.IsTargetable);
+    private static bool HasTarget => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
+        .Any(bc => bc.CanAttack && bc.IsTargetable);
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
@@ -112,7 +89,8 @@ public class Vanaspati : AbstractDungeon
 
         if (WorldManager.SubZoneId != 4012 && WorldManager.SubZoneId != 4013 && WorldManager.SubZoneId != 4014)
         {
-            BattleCharacter target = GameObjectManager.Attackers?.OrderByDescending(e => e.CurrentHealthPercent).FirstOrDefault();
+            BattleCharacter target = GameObjectManager.Attackers?.OrderByDescending(e => e.CurrentHealthPercent)
+                .FirstOrDefault();
 
             if (target != null && Core.Player.CurrentTarget != target)
             {
@@ -229,7 +207,7 @@ public class Vanaspati : AbstractDungeon
             }
         }
 
-        if (follow.IsCasting() && !magnet3SW.IsRunning || followSW.IsRunning)
+        if ((follow.IsCasting() && !magnet3SW.IsRunning) || followSW.IsRunning)
         {
             if (!followSW.IsRunning)
             {
@@ -311,7 +289,8 @@ public class Vanaspati : AbstractDungeon
             followxSW.Reset();
         }
 
-        if (!hastargetSW.IsRunning && !magnet3SW.IsRunning && !magnet3xsSW.IsRunning && (follow2.IsCasting() || follow2SW.IsRunning))
+        if (!hastargetSW.IsRunning && !magnet3SW.IsRunning && !magnet3xsSW.IsRunning &&
+            (follow2.IsCasting() || follow2SW.IsRunning))
         {
             if (!follow2SW.IsRunning)
             {
@@ -465,7 +444,9 @@ public class Vanaspati : AbstractDungeon
             {
                 if (WorldManager.SubZoneId == 4013)
                 {
-                    Vector3 usets = (Vector3)GameObjectManager.GetObjectsOfType<BattleCharacter>()?.Where(obj => obj.NpcId == 1383).OrderBy(obj => Core.Player.Distance2D(obj)).FirstOrDefault().Location;
+                    Vector3 usets = (Vector3)GameObjectManager.GetObjectsOfType<BattleCharacter>()
+                        ?.Where(obj => obj.NpcId == 1383).OrderBy(obj => Core.Player.Distance2D(obj)).FirstOrDefault()
+                        .Location;
 
                     if (Core.Me.Distance2D(usets) > 0.5f)
                     {
@@ -519,7 +500,8 @@ public class Vanaspati : AbstractDungeon
 
                     if (magnet3fW.ElapsedMilliseconds < 600)
                     {
-                        if (MovementHelpers.GetClosestAlly.Distance(new Vector3(300.0752f, 55.00583f, -156.6629f)) - 3f < Core.Player.Distance(new Vector3(300.0752f, 55.00583f, -156.6629f)))
+                        if (MovementHelpers.GetClosestAlly.Distance(new Vector3(300.0752f, 55.00583f, -156.6629f)) -
+                            3f < Core.Player.Distance(new Vector3(300.0752f, 55.00583f, -156.6629f)))
                         {
                             Navigator.PlayerMover.MoveTowards(new Vector3(300.0752f, 55.00583f, -156.6629f));
                         }
@@ -532,7 +514,7 @@ public class Vanaspati : AbstractDungeon
                     {
                         if (!AvoidanceManager.IsRunningOutOfAvoid)
                         {
-                            await MovementHelpers.SpreadSpLoc(3_000, new Vector3(300.0752f, 55.00583f, -156.6629f), 6.5f);
+                            await MovementHelpers.SpreadSpLoc(3_000, new Vector3(300.0752f, 55.00583f, -156.6629f));
                         }
                     }
                 }
@@ -543,7 +525,8 @@ public class Vanaspati : AbstractDungeon
                 {
                     if (magnet3SW.ElapsedMilliseconds < 4_000)
                     {
-                        await MovementHelpers.GetClosestPartyMember(new Vector3(299.9771f, 55.00583f, -157.0001f)).Follow();
+                        await MovementHelpers.GetClosestPartyMember(new Vector3(299.9771f, 55.00583f, -157.0001f))
+                            .Follow();
                     }
                     else
                     {
