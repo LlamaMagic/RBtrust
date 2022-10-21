@@ -4,7 +4,6 @@ using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
-using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,11 +28,11 @@ public class StoneVigil : AbstractDungeon
     private const int LionsBreathDuration = 10_000;
     private const int FrostBreathDuration = 3_000;
 
-    private static readonly HashSet<uint> Swinge = new() {903};
-    private static readonly HashSet<uint> LionsBreath = new() {902};
-    private static readonly HashSet<uint> Typhoon = new() {28730};
-    private static readonly HashSet<uint> Cauterize = new() {1026};
-    private static readonly HashSet<uint> FrostBreath = new() {1022};
+    private static readonly HashSet<uint> Swinge = new() { 903 };
+    private static readonly HashSet<uint> LionsBreath = new() { 902 };
+    private static readonly HashSet<uint> Typhoon = new() { 28730 };
+    private static readonly HashSet<uint> Cauterize = new() { 1026 };
+    private static readonly HashSet<uint> FrostBreath = new() { 1022 };
 
     private static readonly Vector3 CauterizeLocation = new(-0.0195615f, 0.04040873f, -247.211f);
 
@@ -41,10 +40,8 @@ public class StoneVigil : AbstractDungeon
     private static DateTime lionsBreathTimestamp = DateTime.MinValue;
     private static DateTime frostBreathTimestamp = DateTime.MinValue;
 
-    private AvoidInfo? someTrackedSkill;
-
     /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.TheStoneVigil;
+    public override ZoneId ZoneId => ZoneId.TheStoneVigil;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheStoneVigil;

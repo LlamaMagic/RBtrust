@@ -40,11 +40,11 @@ public class SohmAl : AbstractDungeon
      *
      */
 
-    private readonly HashSet<uint> MadDash = new() { 3808, };
-
     private static readonly int MadDashDuration = 7_000;
 
-    private readonly HashSet<uint> fireball = new() {3809};
+    private readonly HashSet<uint> madDash = new() { 3808, };
+
+    private readonly HashSet<uint> fireball = new() { 3809 };
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.SohmAl;
@@ -55,26 +55,27 @@ public class SohmAl : AbstractDungeon
     /// <summary>
     /// Gets spell IDs to follow-dodge while any contained spell is casting.
     /// </summary>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {29272,3809};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 29272, 3809 };
 
     /// <summary>
     /// Executes dungeon logic.
     /// </summary>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
-    public override async Task<bool> OnEnterDungeonAsync()
+    public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
         AvoidanceManager.AddAvoidObject<GameObject>(() => Core.Player.InCombat, 6f, 2005287);
 
-        return false;
+        return Task.FromResult(false);
     }
 
+    /// <inheritdoc />
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
 
-        if (MadDash.IsCasting())
+        if (madDash.IsCasting())
         {
             await MovementHelpers.Spread(MadDashDuration);
         }

@@ -18,6 +18,11 @@ namespace Trust.Dungeons;
 /// </summary>
 public class TowerOfZot : AbstractDungeon
 {
+    private const int Sanduruva = 10257;
+    private const int PrakamyaSiddhiDuration = 6_000;
+
+    private static DateTime prakamyaSiddhiTimestamp = DateTime.MinValue;
+
     private readonly CapabilityManagerHandle trustHandle3 = CapabilityManager.CreateNewHandle();
     private readonly CapabilityManagerHandle trustHandle4 = CapabilityManager.CreateNewHandle();
 
@@ -80,14 +85,8 @@ public class TowerOfZot : AbstractDungeon
 
     private readonly HashSet<uint> deltaattack = new() { 25260, 25261, 25262, };
 
-    private const int Sanduruva = 10257;
-
     // Prakamya Siddhi
     private readonly HashSet<uint> prakamyaSiddhi = new() { 25251 };
-
-    private static DateTime prakamyaSiddhiTimestamp = DateTime.MinValue;
-
-    private const int PrakamyaSiddhiDuration = 6_000;
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.TheTowerOfZot;

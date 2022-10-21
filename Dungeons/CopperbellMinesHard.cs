@@ -1,4 +1,5 @@
-﻿using Buddy.Coroutines;
+﻿#nullable enable
+using Buddy.Coroutines;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
@@ -43,7 +44,7 @@ public class CopperbellMinesHard : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.NONE;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = null!;
 
     private static BattleCharacter? HecatoncheirMastermindBC =>
         (BattleCharacter)GameObjectManager.GetObjectByNPCId(HecatoncheirMastermind);
@@ -83,7 +84,7 @@ public class CopperbellMinesHard : AbstractDungeon
                 if (PartyManager.IsInParty && PartyManager.AllMembers.Any(pm => pm is TrustPartyMember))
                 {
                     Logger.Information("Using Engage.");
-                    HecatoncheirMastermindBC.Target();
+                    HecatoncheirMastermindBC?.Target();
                     ActionManager.DoAction(ActionType.Squadron, SquadronAction.Engage, GameObjectManager.Target);
                 }
             }
@@ -117,14 +118,22 @@ public class CopperbellMinesHard : AbstractDungeon
                 return false;
             }
 
-            GameObject waymakerBombBC = WaymakerBombBC;
+            GameObject? waymakerBombBC = WaymakerBombBC;
 
-            await Navigation.FlightorMove(WaymakerBombBC.Location);
-            waymakerBombBC.Interact();
+            if (WaymakerBombBC != null)
+            {
+                await Navigation.FlightorMove(WaymakerBombBC.Location);
+            }
+
+            waymakerBombBC?.Interact();
 
             if (await Coroutine.Wait(10_000, () => Core.Me.HasAura(404)))
             {
-                await Navigation.FlightorMove(GogmagolemBC.Location);
+                if (GogmagolemBC != null)
+                {
+                    await Navigation.FlightorMove(GogmagolemBC.Location);
+                }
+
                 ActionManager.DoAction(ActionType.General, 18, Core.Me);
             }
         }

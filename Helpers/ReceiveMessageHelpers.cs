@@ -6,10 +6,39 @@ using Trust.Logging;
 
 namespace Trust.Helpers;
 
+/// <summary>
+/// ReceiveMessageHelpers class.
+/// </summary>
 internal static class ReceiveMessageHelpers
 {
+    /// <summary>
+    /// SkillsdeterminationOverStatus.
+    /// </summary>
+    public static bool SkillsdeterminationOverStatus;
+
+    /// <summary>
+    /// SkillsdeterminationOverStr.
+    /// </summary>
+    public static HashSet<string> SkillsdeterminationOverStr = new();
+
     private static readonly Regex LosesEffectRegex = new("loses the effect of (.*?)", RegexOptions.None);
 
+    private static string wfnpcAcmtsstr;
+    private static string vcNpcAcmtsstr;
+    private static bool magnetOverStatus;
+    private static bool vcNpcAcmtsstrStatus;
+    private static bool wfnpcAcmtsstrStatus;
+    private static bool skillsdetStatus;
+
+    private static HashSet<string> magnetOverStr = new();
+
+    private static HashSet<string> Skillsdetstr { get; set; } = new();
+
+    /// <summary>
+    /// ReceiveMessage.
+    /// </summary>
+    /// <param name="sender">?.</param>
+    /// <param name="args">args.</param>
     public static void ReceiveMessage(object sender, ChatEventArgs args)
     {
         NPCAcmts(args);
@@ -27,38 +56,40 @@ internal static class ReceiveMessageHelpers
         MagnetOver(args.ChatLogEntry.FullLine);
     }
 
-    public static string VcNPCAcmtsstr;
-
-    public static bool VcNPCAcmtsstrStatus;
-
+    /// <summary>
+    /// NPCAcmts.
+    /// </summary>
+    /// <param name="npcatstr">?.</param>
     public static void NPCAcmts(ChatEventArgs npcatstr)
     {
         if (npcatstr.ChatLogEntry.MessageType == ff14bot.Enums.MessageType.NPCAnnouncements)
         {
-            if (VcNPCAcmtsstr != null)
+            if (vcNpcAcmtsstr != null)
             {
-                VcNPCAcmtsstrStatus = npcatstr.ChatLogEntry.FullLine.Contains(VcNPCAcmtsstr);
+                vcNpcAcmtsstrStatus = npcatstr.ChatLogEntry.FullLine.Contains(vcNpcAcmtsstr);
             }
         }
     }
 
-    public static string WFNPCAcmtsstr;
-
-    public static bool WFNPCAcmtsstrStatus;
-
+    /// <summary>
+    /// WFNPCAcmts.
+    /// </summary>
+    /// <param name="npcatstr">?.</param>
     public static void WFNPCAcmts(ChatEventArgs npcatstr)
     {
         if (npcatstr.ChatLogEntry.MessageType == ff14bot.Enums.MessageType.NPCAnnouncements)
         {
-            if (!string.IsNullOrEmpty(WFNPCAcmtsstr))
+            if (!string.IsNullOrEmpty(wfnpcAcmtsstr))
             {
-                WFNPCAcmtsstrStatus = npcatstr.ChatLogEntry.FullLine.Contains(WFNPCAcmtsstr);
+                wfnpcAcmtsstrStatus = npcatstr.ChatLogEntry.FullLine.Contains(wfnpcAcmtsstr);
             }
         }
     }
 
-    public static HashSet<string> Skillsdetstr { get; set; } = new();
-
+    /// <summary>
+    /// SkillsdetstrGet.
+    /// </summary>
+    /// <param name="goldChaser">?.</param>
     public static void SkillsdetstrGet(HashSet<uint> goldChaser)
     {
         IEnumerable<string> skstr = goldChaser?.Select(r => DataManager.GetSpellData(r).LocalizedName);
@@ -66,8 +97,10 @@ internal static class ReceiveMessageHelpers
         Skillsdetstr = new HashSet<string>(skstr);
     }
 
-    public static bool SkillsdetStatus;
-
+    /// <summary>
+    /// SkillsdeterminationStart.
+    /// </summary>
+    /// <param name="sderstr">?.</param>
     public static void SkillsdeterminationStart(string sderstr)
     {
         if (sderstr.Contains("readies") ||
@@ -77,7 +110,7 @@ internal static class ReceiveMessageHelpers
             {
                 if (Skillsdetstr != null)
                 {
-                    SkillsdetStatus = (bool)Skillsdetstr?.Any(r => sderstr.Contains(r));
+                    skillsdetStatus = (bool)Skillsdetstr?.Any(r => sderstr.Contains(r));
                 }
             }
             catch
@@ -93,16 +126,16 @@ internal static class ReceiveMessageHelpers
             {
                 if ((bool)Skillsdetstr?.Any(r => sderstr.Contains(r)))
                 {
-                    SkillsdetStatus = false;
+                    skillsdetStatus = false;
                 }
             }
         }
     }
 
-    public static HashSet<string> SkillsdeterminationOverStr = new();
-
-    public static bool SkillsdeterminationOverStatus;
-
+    /// <summary>
+    /// SkillsdeterminationOver.
+    /// </summary>
+    /// <param name="sderstr">?.</param>
     public static void SkillsdeterminationOver(string sderstr)
     {
         if (sderstr.Contains("uses") ||
@@ -125,17 +158,21 @@ internal static class ReceiveMessageHelpers
         }
     }
 
-    public static HashSet<string> MagnetOverStr = new();
-
+    /// <summary>
+    /// MagnetOverStrGet.
+    /// </summary>
+    /// <param name="magnet">?.</param>
     public static void MagnetOverStrGet(HashSet<uint> magnet)
     {
         IEnumerable<string> str = magnet?.Select(r => DataManager.GetSpellData(r).LocalizedName);
 
-        MagnetOverStr = new HashSet<string>(str);
+        magnetOverStr = new HashSet<string>(str);
     }
 
-    public static bool MagnetOverStatus;
-
+    /// <summary>
+    /// MagnetOver.
+    /// </summary>
+    /// <param name="sderstr">?.</param>
     public static void MagnetOver(string sderstr)
     {
         if (sderstr.Contains("uses") ||
@@ -143,9 +180,9 @@ internal static class ReceiveMessageHelpers
         {
             try
             {
-                if ((bool)MagnetOverStr?.Any())
+                if ((bool)magnetOverStr?.Any())
                 {
-                    MagnetOverStatus = (bool)MagnetOverStr?.Any(r => sderstr.Contains(r));
+                    magnetOverStatus = (bool)magnetOverStr?.Any(r => sderstr.Contains(r));
                 }
             }
             catch

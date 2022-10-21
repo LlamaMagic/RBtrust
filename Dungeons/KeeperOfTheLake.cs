@@ -51,7 +51,7 @@ public class KeeperOfTheLake : AbstractDungeon
         29278,
         29279,
         29283,
-        29285
+        29285,
     };
 
     /// <inheritdoc/>
@@ -69,6 +69,7 @@ public class KeeperOfTheLake : AbstractDungeon
         return Task.FromResult(false);
     }
 
+    /// <inheritdoc />
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
