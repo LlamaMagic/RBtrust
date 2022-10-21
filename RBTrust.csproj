@@ -1,234 +1,234 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5459F0C3-4FB6-44A4-AE1E-8CE9CBCA67F4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Trust</RootNamespace>
-    <AssemblyName>RBTrust</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <LangVersion>10</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\x64\Debug\RBTrust.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=Amd64">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.517\lib\net461\GreyMagic.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="RebornBuddy, Version=1.0.517.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=Amd64">
-      <HintPath>packages\RebornBuddy.Assemblies.1.0.517\lib\net461\RebornBuddy.exe</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Data\SquadronAction.cs" />
-    <Compile Include="Dungeons\Aery.cs" />
-    <Compile Include="Dungeons\AetherochemicalResearchFacility.cs" />
-    <Compile Include="Dungeons\AlaMhigo.cs" />
-    <Compile Include="Dungeons\Antitower.cs" />
-    <Compile Include="Dungeons\BaelsarsWall.cs" />
-    <Compile Include="Dungeons\BardamsMettle.cs" />
-    <Compile Include="Dungeons\Burn.cs" />
-    <Compile Include="Dungeons\CastrumAbania.cs" />
-    <Compile Include="Dungeons\DomaCastle.cs" />
-    <Compile Include="Dungeons\DrownedCityOfSkalla.cs" />
-    <Compile Include="Dungeons\FellCourtOfTroia.cs" />
-    <Compile Include="Dungeons\GhimlytDark.cs" />
-    <Compile Include="Dungeons\GreatGubalLibrary.cs" />
-    <Compile Include="Dungeons\KeeperOfTheLake.cs" />
-    <Compile Include="Dungeons\SirensongSea.cs" />
-    <Compile Include="Dungeons\Snowcloak.cs" />
-    <Compile Include="Dungeons\SohmAl.cs" />
-    <Compile Include="Dungeons\SohrKai.cs" />
-    <Compile Include="Dungeons\Vault.cs" />
-    <Compile Include="Dungeons\Xelphatol.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Data\ClassJobRoles.cs" />
-    <Compile Include="Data\DungeonId.cs" />
-    <Compile Include="Data\PartyMemberId.cs" />
-    <Compile Include="Data\PartyMembers.cs" />
-    <Compile Include="Data\SubZoneId.cs" />
-    <Compile Include="Data\ZoneId.cs" />
-    <Compile Include="Dungeons\AbstractDungeon.cs" />
-    <Compile Include="Dungeons\AlzadaalsLegacy.cs" />
-    <Compile Include="Dungeons\Amaurot.cs" />
-    <Compile Include="Dungeons\AnamnesisAnyder.cs" />
-    <Compile Include="Dungeons\BrayfloxsLongstop.cs" />
-    <Compile Include="Dungeons\CopperbellMines.cs" />
-    <Compile Include="Dungeons\DzemaelDarkhold.cs" />
-    <Compile Include="Dungeons\HaukkeManor.cs" />
-    <Compile Include="Dungeons\PharosSirius.cs" />
-    <Compile Include="Dungeons\Sastasha.cs" />
-    <Compile Include="Dungeons\AurumVale.cs" />
-    <Compile Include="Dungeons\CastrumMeridianum.cs" />
-    <Compile Include="Dungeons\DohnMheg.cs" />
-    <Compile Include="Managers\DungeonManager.cs" />
-    <Compile Include="Dungeons\Halatali.cs" />
-    <Compile Include="Dungeons\HallOfTheNoviceArena.cs" />
-    <Compile Include="Dungeons\HallOfTheNoviceWesternLa.cs" />
-    <Compile Include="Dungeons\HellsLid.cs" />
-    <Compile Include="Dungeons\HolminsterSwitch.cs" />
-    <Compile Include="Dungeons\KtisisHyperboreia.cs" />
-    <Compile Include="Dungeons\MalikahsWell.cs" />
-    <Compile Include="Dungeons\MatoyasRelict.cs" />
-    <Compile Include="Dungeons\MtGulg.cs" />
-    <Compile Include="Dungeons\Paglthan.cs" />
-    <Compile Include="Dungeons\SyrcusTower.cs" />
-    <Compile Include="Dungeons\Aitiascope.cs" />
-    <Compile Include="Dungeons\BowlOfEmbers.cs" />
-    <Compile Include="Dungeons\CopperbellMinesHard.cs" />
-    <Compile Include="Dungeons\DeadEnds.cs" />
-    <Compile Include="Dungeons\GrandCosmos.cs" />
-    <Compile Include="Dungeons\HeroesGauntlet.cs" />
-    <Compile Include="Dungeons\HowlingEye.cs" />
-    <Compile Include="Dungeons\Mothercrystal.cs" />
-    <Compile Include="Dungeons\Navel.cs" />
-    <Compile Include="Dungeons\PortaDecumana.cs" />
-    <Compile Include="Dungeons\Praetorium.cs" />
-    <Compile Include="Dungeons\QitanaRavel.cs" />
-    <Compile Include="Dungeons\StoneVigil.cs" />
-    <Compile Include="Dungeons\TamTaraDeepcroft.cs" />
-    <Compile Include="Dungeons\ThousandMawsOfTotoRak.cs" />
-    <Compile Include="Dungeons\TowerOfBabil.cs" />
-    <Compile Include="Dungeons\TowerOfZot.cs" />
-    <Compile Include="Dungeons\WanderersPalace.cs" />
-    <Compile Include="Dungeons\Vanaspati.cs" />
-    <Compile Include="Extensions\BattleCharacterExtensions.cs" />
-    <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Extensions\LocalPlayerExtensions.cs" />
-    <Compile Include="Extensions\Vector3Extensions.cs" />
-    <Compile Include="Helpers\AvoidanceHelpers.cs" />
-    <Compile Include="Helpers\LoadingHelpers.cs" />
-    <Compile Include="Helpers\LocalizationHelpers.cs" />
-    <Compile Include="Helpers\LoggingHelpers.cs" />
-    <Compile Include="Helpers\MovementHelpers.cs" />
-    <Compile Include="Helpers\PluginHelpers.cs" />
-    <Compile Include="Helpers\ReceiveMessageHelpers.cs" />
-    <Compile Include="Localization\LocalizationProvider.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\LogLevel.cs" />
-    <Compile Include="Localization\Translations.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Translations.resx</DependentUpon>
-    </Compile>
-    <Compile Include="TrustPlugin.cs" />
-    <Compile Include="Windows\RecommendEquip.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OrderBot\AbstractTaskTag.cs" />
-    <Compile Include="OrderBot\CheckPluginsTag.cs" />
-    <Compile Include="OrderBot\EquipRecommendedTag.cs" />
-    <Compile Include="Helpers\InstanceFlags.cs" />
-    <Compile Include="OrderBot\JoinDutyFinderTag.cs" />
-    <Compile Include="OrderBot\LeaveDutyTag.cs" />
-    <Compile Include="OrderBot\LootTreasureTag.cs" />
-    <Compile Include="OrderBot\SetPluginsTag.cs" />
-    <Compile Include="OrderBot\WaitForLoadingTag.cs" />
-    <Compile Include="Windows\ExtendedContentsFinder.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.5 Matoya%27s Relict.xml" />
-    <Content Include="Profiles\[O][RBTrust] 90.3 The Fell Court of Troia.xml" />
-    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.2 The Grand Cosmos.xml" />
-    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.3 Anamnesis Anyder.xml" />
-    <Content Include="Profiles\[O][RBTrust] 71 Holminster Switch.xml" />
-    <Content Include="Profiles\[O][RBTrust] 73 Dohn Mheg.xml" />
-    <Content Include="Profiles\[O][RBTrust] 75 The Qitana Ravel.xml" />
-    <Content Include="Profiles\[O][RBTrust] 77 Malikah%27s Well.xml" />
-    <Content Include="Profiles\[O][RBTrust] 79 Mt. Gulg.xml" />
-    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.1 Amaurot.xml" />
-    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 89.2 The Mothercrystal.xml" />
-    <Content Include="Profiles\[O][RBTrust] 81 The Tower of Zot.xml" />
-    <Content Include="Profiles\[O][RBTrust] 83 The Tower of Babil.xml" />
-    <Content Include="Profiles\[O][RBTrust] 85 Vanaspati.xml" />
-    <Content Include="Profiles\[O][RBTrust] 87 Ktisis Hyperboreia.xml" />
-    <Content Include="Profiles\[O][RBTrust] 89.1 The Aitiascope.xml" />
-    <Content Include="Profiles\[O][RBTrust] 90.1 The Dead Ends.xml" />
-    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 90.2 Alzadaal%27s Legacy.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Quest Behaviors\__LlamaLibrary\LlamaLibrary.csproj">
-      <Project>{196ee308-0205-4cc4-b449-51064f7e9960}</Project>
-      <Name>LlamaLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Localization\Translations.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Translations.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\Translations.zh.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <!-- One of: BotBases, Plugins, Profiles, Quest Behaviors, Routines -->
-    <AddonType>Plugins</AddonType>
-    <!-- $(TargetName) auto-populated by Project Properties > Application > Assembly Name -->
-    <AddonName>$(TargetName)</AddonName>
-    <RebornDir>$(RebornbuddyDir)</RebornDir>
-    <RootDir>$(SolutionDir)</RootDir>
-    <IsInRebornDir>$(RootDir.StartsWith($(RebornDir), System.StringComparison.OrdinalIgnoreCase))</IsInRebornDir>
-  </PropertyGroup>
-  <Target Name="CopySolutionItems" AfterTargets="AfterBuild;AfterRebuild">
-    <!-- Copy selected solution items to project build output directory (e.g., README.md, LICENSE.md) -->
-    <!-- Special project items should instead use Properties > Copy to Output Directory: Copy Always -->
-    <!-- RebornBuddy requires at least one uncompiled C# file set to Copy Always (e.g., Loader.cs) -->
-    <CreateItem Include="$(SolutionDir)\*.md">
-      <Output TaskParameter="Include" ItemName="SolutionItems" />
-    </CreateItem>
-    <Message Importance="High" Text="Copying solution items to build output..." />
-    <Copy SourceFiles="@(SolutionItems)" DestinationFiles="@(SolutionItems->'$(OutDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-  <Target Name="DeployToRebornBuddy" AfterTargets="CopySolutionItems" Condition="'$(RebornDir)' != '' And !$(IsInRebornDir)">
-    <!-- For development convenience of pre-compiled addons, auto-copy build output to RebornBuddy if RebornbuddyDir env var set -->
-    <Error Condition="!Exists('$(RebornDir)')" Text="RebornbuddyDir set but directory doesn't exist! RebornbuddyDir='$(RebornDir)'" />
-    <CreateItem Include="$(TargetDir)\**\*" Exclude="$(TargetDir)\**\*.tmp">
-      <Output TaskParameter="Include" ItemName="BuildOutput" />
-    </CreateItem>
-    <Message Importance="High" Text="Copying build output to '$(RebornDir)\$(AddonType)\$(AddonName)'" />
-    <Copy SourceFiles="@(BuildOutput)" DestinationFiles="@(BuildOutput->'$(RebornDir)\$(AddonType)\$(AddonName)\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-  <Target Name="CleanIfInRebornBuddy" AfterTargets="CopySolutionItems" Condition="'$(RebornDir)' == '' Or $(IsInRebornDir)">
-    <!-- RebornBuddy does its own compilation and fails due to bin\obj folders, but manual VS builds are useful for finding compile-time errors -->
-    <!-- If solution is under RebornDir, clean build artifacts so RebornBuddy can do its own thing -->
-    <Message Importance="High" Text="Solution within RebornBuddy directory; cleaning build artifacts to avoid RB compile errors..." />
-    <CallTarget Targets="Clean" />
-  </Target>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{5459F0C3-4FB6-44A4-AE1E-8CE9CBCA67F4}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Trust</RootNamespace>
+        <AssemblyName>RBTrust</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <Deterministic>true</Deterministic>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>bin\x64\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>x64</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <DocumentationFile>bin\x64\Debug\RBTrust.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+        <OutputPath>bin\x64\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>x64</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="GreyMagic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=Amd64">
+            <HintPath>packages\RebornBuddy.Assemblies.1.0.517\lib\net461\GreyMagic.dll</HintPath>
+        </Reference>
+        <Reference Include="PresentationCore"/>
+        <Reference Include="RebornBuddy, Version=1.0.517.0, Culture=neutral, PublicKeyToken=48d7174f8a943034, processorArchitecture=Amd64">
+            <HintPath>packages\RebornBuddy.Assemblies.1.0.517\lib\net461\RebornBuddy.exe</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Windows.Forms"/>
+        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="System.Data.DataSetExtensions"/>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Xml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Data\SquadronAction.cs"/>
+        <Compile Include="Dungeons\Aery.cs"/>
+        <Compile Include="Dungeons\AetherochemicalResearchFacility.cs"/>
+        <Compile Include="Dungeons\AlaMhigo.cs"/>
+        <Compile Include="Dungeons\Antitower.cs"/>
+        <Compile Include="Dungeons\BaelsarsWall.cs"/>
+        <Compile Include="Dungeons\BardamsMettle.cs"/>
+        <Compile Include="Dungeons\Burn.cs"/>
+        <Compile Include="Dungeons\CastrumAbania.cs"/>
+        <Compile Include="Dungeons\DomaCastle.cs"/>
+        <Compile Include="Dungeons\DrownedCityOfSkalla.cs"/>
+        <Compile Include="Dungeons\FellCourtOfTroia.cs"/>
+        <Compile Include="Dungeons\GhimlytDark.cs"/>
+        <Compile Include="Dungeons\GreatGubalLibrary.cs"/>
+        <Compile Include="Dungeons\KeeperOfTheLake.cs"/>
+        <Compile Include="Dungeons\SirensongSea.cs"/>
+        <Compile Include="Dungeons\Snowcloak.cs"/>
+        <Compile Include="Dungeons\SohmAl.cs"/>
+        <Compile Include="Dungeons\SohrKai.cs"/>
+        <Compile Include="Dungeons\Vault.cs"/>
+        <Compile Include="Dungeons\Xelphatol.cs"/>
+        <Compile Include="GlobalSuppressions.cs"/>
+        <Compile Include="Data\ClassJobRoles.cs"/>
+        <Compile Include="Data\DungeonId.cs"/>
+        <Compile Include="Data\PartyMemberId.cs"/>
+        <Compile Include="Data\PartyMembers.cs"/>
+        <Compile Include="Data\SubZoneId.cs"/>
+        <Compile Include="Data\ZoneId.cs"/>
+        <Compile Include="Dungeons\AbstractDungeon.cs"/>
+        <Compile Include="Dungeons\AlzadaalsLegacy.cs"/>
+        <Compile Include="Dungeons\Amaurot.cs"/>
+        <Compile Include="Dungeons\AnamnesisAnyder.cs"/>
+        <Compile Include="Dungeons\BrayfloxsLongstop.cs"/>
+        <Compile Include="Dungeons\CopperbellMines.cs"/>
+        <Compile Include="Dungeons\DzemaelDarkhold.cs"/>
+        <Compile Include="Dungeons\HaukkeManor.cs"/>
+        <Compile Include="Dungeons\PharosSirius.cs"/>
+        <Compile Include="Dungeons\Sastasha.cs"/>
+        <Compile Include="Dungeons\AurumVale.cs"/>
+        <Compile Include="Dungeons\CastrumMeridianum.cs"/>
+        <Compile Include="Dungeons\DohnMheg.cs"/>
+        <Compile Include="Managers\DungeonManager.cs"/>
+        <Compile Include="Dungeons\Halatali.cs"/>
+        <Compile Include="Dungeons\HallOfTheNoviceArena.cs"/>
+        <Compile Include="Dungeons\HallOfTheNoviceWesternLa.cs"/>
+        <Compile Include="Dungeons\HellsLid.cs"/>
+        <Compile Include="Dungeons\HolminsterSwitch.cs"/>
+        <Compile Include="Dungeons\KtisisHyperboreia.cs"/>
+        <Compile Include="Dungeons\MalikahsWell.cs"/>
+        <Compile Include="Dungeons\MatoyasRelict.cs"/>
+        <Compile Include="Dungeons\MtGulg.cs"/>
+        <Compile Include="Dungeons\Paglthan.cs"/>
+        <Compile Include="Dungeons\SyrcusTower.cs"/>
+        <Compile Include="Dungeons\Aitiascope.cs"/>
+        <Compile Include="Dungeons\BowlOfEmbers.cs"/>
+        <Compile Include="Dungeons\CopperbellMinesHard.cs"/>
+        <Compile Include="Dungeons\DeadEnds.cs"/>
+        <Compile Include="Dungeons\GrandCosmos.cs"/>
+        <Compile Include="Dungeons\HeroesGauntlet.cs"/>
+        <Compile Include="Dungeons\HowlingEye.cs"/>
+        <Compile Include="Dungeons\Mothercrystal.cs"/>
+        <Compile Include="Dungeons\Navel.cs"/>
+        <Compile Include="Dungeons\PortaDecumana.cs"/>
+        <Compile Include="Dungeons\Praetorium.cs"/>
+        <Compile Include="Dungeons\QitanaRavel.cs"/>
+        <Compile Include="Dungeons\StoneVigil.cs"/>
+        <Compile Include="Dungeons\TamTaraDeepcroft.cs"/>
+        <Compile Include="Dungeons\ThousandMawsOfTotoRak.cs"/>
+        <Compile Include="Dungeons\TowerOfBabil.cs"/>
+        <Compile Include="Dungeons\TowerOfZot.cs"/>
+        <Compile Include="Dungeons\WanderersPalace.cs"/>
+        <Compile Include="Dungeons\Vanaspati.cs"/>
+        <Compile Include="Extensions\BattleCharacterExtensions.cs"/>
+        <Compile Include="Extensions\Extensions.cs"/>
+        <Compile Include="Extensions\LocalPlayerExtensions.cs"/>
+        <Compile Include="Extensions\Vector3Extensions.cs"/>
+        <Compile Include="Helpers\AvoidanceHelpers.cs"/>
+        <Compile Include="Helpers\LoadingHelpers.cs"/>
+        <Compile Include="Helpers\LocalizationHelpers.cs"/>
+        <Compile Include="Helpers\LoggingHelpers.cs"/>
+        <Compile Include="Helpers\MovementHelpers.cs"/>
+        <Compile Include="Helpers\PluginHelpers.cs"/>
+        <Compile Include="Helpers\ReceiveMessageHelpers.cs"/>
+        <Compile Include="Localization\LocalizationProvider.cs"/>
+        <Compile Include="Logging\Logger.cs"/>
+        <Compile Include="Logging\LogLevel.cs"/>
+        <Compile Include="Localization\Translations.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Translations.resx</DependentUpon>
+        </Compile>
+        <Compile Include="TrustPlugin.cs"/>
+        <Compile Include="Windows\RecommendEquip.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="OrderBot\AbstractTaskTag.cs"/>
+        <Compile Include="OrderBot\CheckPluginsTag.cs"/>
+        <Compile Include="OrderBot\EquipRecommendedTag.cs"/>
+        <Compile Include="Helpers\InstanceFlags.cs"/>
+        <Compile Include="OrderBot\JoinDutyFinderTag.cs"/>
+        <Compile Include="OrderBot\LeaveDutyTag.cs"/>
+        <Compile Include="OrderBot\LootTreasureTag.cs"/>
+        <Compile Include="OrderBot\SetPluginsTag.cs"/>
+        <Compile Include="OrderBot\WaitForLoadingTag.cs"/>
+        <Compile Include="Windows\ExtendedContentsFinder.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="packages.config"/>
+        <AdditionalFiles Include="stylecop.json"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.5 Matoya%27s Relict.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 90.3 The Fell Court of Troia.xml"/>
+        <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.2 The Grand Cosmos.xml"/>
+        <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.3 Anamnesis Anyder.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 71 Holminster Switch.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 73 Dohn Mheg.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 75 The Qitana Ravel.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 77 Malikah%27s Well.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 79 Mt. Gulg.xml"/>
+        <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.1 Amaurot.xml"/>
+        <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 89.2 The Mothercrystal.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 81 The Tower of Zot.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 83 The Tower of Babil.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 85 Vanaspati.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 87 Ktisis Hyperboreia.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 89.1 The Aitiascope.xml"/>
+        <Content Include="Profiles\[O][RBTrust] 90.1 The Dead Ends.xml"/>
+        <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 90.2 Alzadaal%27s Legacy.xml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Quest Behaviors\__LlamaLibrary\LlamaLibrary.csproj">
+            <Project>{196ee308-0205-4cc4-b449-51064f7e9960}</Project>
+            <Name>LlamaLibrary</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Localization\Translations.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Translations.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Localization\Translations.zh.resx"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll"/>
+        <Analyzer Include="packages\StyleCop.Analyzers.Unstable.1.2.0.435\analyzers\dotnet\cs\StyleCop.Analyzers.dll"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <PropertyGroup>
+        <!-- One of: BotBases, Plugins, Profiles, Quest Behaviors, Routines -->
+        <AddonType>Plugins</AddonType>
+        <!-- $(TargetName) auto-populated by Project Properties > Application > Assembly Name -->
+        <AddonName>$(TargetName)</AddonName>
+        <RebornDir>$(RebornbuddyDir)</RebornDir>
+        <RootDir>$(SolutionDir)</RootDir>
+        <IsInRebornDir>$(RootDir.StartsWith($(RebornDir), System.StringComparison.OrdinalIgnoreCase))</IsInRebornDir>
+    </PropertyGroup>
+    <Target Name="CopySolutionItems" AfterTargets="AfterBuild;AfterRebuild">
+        <!-- Copy selected solution items to project build output directory (e.g., README.md, LICENSE.md) -->
+        <!-- Special project items should instead use Properties > Copy to Output Directory: Copy Always -->
+        <!-- RebornBuddy requires at least one uncompiled C# file set to Copy Always (e.g., Loader.cs) -->
+        <CreateItem Include="$(SolutionDir)\*.md">
+            <Output TaskParameter="Include" ItemName="SolutionItems"/>
+        </CreateItem>
+        <Message Importance="High" Text="Copying solution items to build output..."/>
+        <Copy SourceFiles="@(SolutionItems)" DestinationFiles="@(SolutionItems->'$(OutDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+    <Target Name="DeployToRebornBuddy" AfterTargets="CopySolutionItems" Condition="'$(RebornDir)' != '' And !$(IsInRebornDir)">
+        <!-- For development convenience of pre-compiled addons, auto-copy build output to RebornBuddy if RebornbuddyDir env var set -->
+        <Error Condition="!Exists('$(RebornDir)')" Text="RebornbuddyDir set but directory doesn't exist! RebornbuddyDir='$(RebornDir)'"/>
+        <CreateItem Include="$(TargetDir)\**\*" Exclude="$(TargetDir)\**\*.tmp">
+            <Output TaskParameter="Include" ItemName="BuildOutput"/>
+        </CreateItem>
+        <Message Importance="High" Text="Copying build output to '$(RebornDir)\$(AddonType)\$(AddonName)'"/>
+        <Copy SourceFiles="@(BuildOutput)" DestinationFiles="@(BuildOutput->'$(RebornDir)\$(AddonType)\$(AddonName)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+    <Target Name="CleanIfInRebornBuddy" AfterTargets="CopySolutionItems" Condition="'$(RebornDir)' == '' Or $(IsInRebornDir)">
+        <!-- RebornBuddy does its own compilation and fails due to bin\obj folders, but manual VS builds are useful for finding compile-time errors -->
+        <!-- If solution is under RebornDir, clean build artifacts so RebornBuddy can do its own thing -->
+        <Message Importance="High" Text="Solution within RebornBuddy directory; cleaning build artifacts to avoid RB compile errors..."/>
+        <CallTarget Targets="Clean"/>
+    </Target>
 </Project>
