@@ -22,7 +22,7 @@ public class MalikahsWell : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        15594, 15590, 15591, 15592, 15593, 15602, 15605, 15606, 15607, 15610, 15609,
+        15590, 15591, 15592, 15593, 15602, 15605, 15606, 15607, 15610, 15609,
     };
 
     /// <inheritdoc/>
