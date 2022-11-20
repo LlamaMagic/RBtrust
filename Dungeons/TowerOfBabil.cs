@@ -90,7 +90,7 @@ public class TowerOfBabil : AbstractDungeon
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 21182, 25324, };
 
     /// <inheritdoc/>
-    public override async Task<bool> OnEnterDungeonAsync()
+    public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
@@ -99,7 +99,7 @@ public class TowerOfBabil : AbstractDungeon
             objectSelector: bc => bc.CastingSpellId == AetherialPullSpell && bc.SpellCastInfo.TargetId == Core.Player.ObjectId,
             radiusProducer: bc => 20.0f));
 
-        return false;
+        return Task.FromResult(false);
     }
 
     /// <inheritdoc/>
@@ -121,7 +121,8 @@ public class TowerOfBabil : AbstractDungeon
             if (!magnetTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+
+                // AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Magnet Spell In Progress");
                 magnetTimer.Restart();
@@ -153,7 +154,8 @@ public class TowerOfBabil : AbstractDungeon
             if (!toadTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+
+                // AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 30_000, "Shapeshift Mechanic In Progress");
                 toadTimer.Restart();
@@ -190,7 +192,8 @@ public class TowerOfBabil : AbstractDungeon
             if (!miniTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+
+                // AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 24_000, "Shapeshift Mechanic In Progress");
                 miniTimer.Restart();
@@ -236,7 +239,8 @@ public class TowerOfBabil : AbstractDungeon
             if (!claw2Timer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+
+                // AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 12_000, "Obliviating Claw 2 In Progress");
                 claw2Timer.Restart();
@@ -282,7 +286,8 @@ public class TowerOfBabil : AbstractDungeon
             if (!boundlessPainTimer.IsRunning)
             {
                 SidestepPlugin.Enabled = false;
-                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+
+                // AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
                 CapabilityManager.Clear();
                 CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 18_000, "Boundless Pain Avoid");
                 boundlessPainTimer.Restart();
@@ -325,7 +330,8 @@ public class TowerOfBabil : AbstractDungeon
             if (spreadTimer.ElapsedMilliseconds >= 5_000)
             {
                 spreadTimer.Reset();
-                //AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+
+                // AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
             }
         }
 

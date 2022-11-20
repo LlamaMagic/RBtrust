@@ -38,22 +38,6 @@ public class AnamnesisAnyder : AbstractDungeon
     private const uint UnknownB = 9261;
     private const uint Kyklops = 9263;
 
-    private static readonly HashSet<uint> LuminousRayA = new() { 20007 };
-    private static readonly HashSet<uint> LuminousRayB = new() { 20007 };
-    private static readonly int LuminousRayDuration = 6_000;
-
-    private static readonly HashSet<uint> RagingGlower = new() { 19286, 28266 };
-    private static readonly int RagingGlowerDuration = 6_000;
-
-    private static readonly HashSet<uint> WanderersPyre = new() { 19291, 19295 };
-    private static readonly int WanderersPyreDuration = 6_000;
-
-    private static readonly HashSet<uint> FallingWater = new() { 19325 };
-    private static readonly int FallingWaterDuration = 6_000;
-
-    private static DateTime ragingGlowerTimestamp = DateTime.MinValue;
-    private static DateTime luminousRayTimestamp = DateTime.MinValue;
-
     private static readonly HashSet<uint> NonSidestepSpells = new()
     {
         19289,
@@ -76,6 +60,22 @@ public class AnamnesisAnyder : AbstractDungeon
         20007,
         28266,
     };
+
+    private static readonly HashSet<uint> LuminousRayA = new() { 20007 };
+    private static readonly HashSet<uint> LuminousRayB = new() { 20007 };
+    private static readonly int LuminousRayDuration = 6_000;
+
+    private static readonly HashSet<uint> RagingGlower = new() { 19286, 28266 };
+    private static readonly int RagingGlowerDuration = 6_000;
+
+    private static readonly HashSet<uint> WanderersPyre = new() { 19291, 19295 };
+    private static readonly int WanderersPyreDuration = 6_000;
+
+    private static readonly HashSet<uint> FallingWater = new() { 19325 };
+    private static readonly int FallingWaterDuration = 6_000;
+
+    private static DateTime ragingGlowerTimestamp = DateTime.MinValue;
+    private static DateTime luminousRayTimestamp = DateTime.MinValue;
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.AnamnesisAnyder;

@@ -61,7 +61,15 @@ public class KtisisHyperboreia : AbstractDungeon
     private readonly HashSet<uint> frostBiteAndSeek = new() { 25175 };
 
     // Ladon Lord
-    private readonly HashSet<uint> pyricBreath = new() { 25734, 25735, 25736, 25737, 25738, 25739 };
+    private readonly HashSet<uint> pyricBreath = new()
+    {
+        25734,
+        25735,
+        25736,
+        25737,
+        25738,
+        25739,
+    };
 
     // hermes
     private readonly HashSet<uint> hermetica = new() { 25888, 25893, 25895 };
@@ -73,10 +81,24 @@ public class KtisisHyperboreia : AbstractDungeon
     private readonly HashSet<uint> quadruple = new() { 25894 };
     private readonly HashSet<uint> trueBravery = new() { 25907 };
     private readonly HashSet<uint> trismegistos = new() { 25886 };
+
     private readonly HashSet<uint> anySpellAfterHermetica = new()
     {
-        25891, 25890, 25899, 25901, 25899, 25901, 25902, 25906, 25892, 25894, 25907, 25886,
-        25897, 25896, 25898,
+        25891,
+        25890,
+        25899,
+        25901,
+        25899,
+        25901,
+        25902,
+        25906,
+        25892,
+        25894,
+        25907,
+        25886,
+        25897,
+        25896,
+        25898,
     };
 
     private DateTime frostBiteAndSeekEnds = DateTime.MinValue;
@@ -94,11 +116,16 @@ public class KtisisHyperboreia : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        25234, 25233, 25250, 24145, 25180, 25742,
+        25234,
+        25233,
+        25250,
+        24145,
+        25180,
+        25742,
     };
 
     /// <inheritdoc/>
-    public override async Task<bool> OnEnterDungeonAsync()
+    public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
@@ -117,7 +144,7 @@ public class KtisisHyperboreia : AbstractDungeon
             AvoidanceManager.AddAvoid(hermesArenaEdge);
         }
 
-        return false;
+        return Task.FromResult(false);
     }
 
     /// <inheritdoc/>
@@ -157,13 +184,14 @@ public class KtisisHyperboreia : AbstractDungeon
         {
             // Venat walks to safety ahead of time instead of teleporting last second
             BattleCharacter partyMember = PartyManager.VisibleMembers
-                .Select(pm => pm.BattleCharacter)
-                .FirstOrDefault(bc => bc.NpcId == (uint)PartyMemberId.Venat)
+                                              .Select(pm => pm.BattleCharacter)
+                                              .FirstOrDefault(bc => bc.NpcId == (uint)PartyMemberId.Venat)
 
-                // Can't find specific character. Trusts mode/non-default party setup?
-                ?? PartyManager.VisibleMembers.FirstOrDefault(pm => !pm.IsMe)?.BattleCharacter;
+                                          // Can't find specific character. Trusts mode/non-default party setup?
+                                          ?? PartyManager.VisibleMembers.FirstOrDefault(pm => !pm.IsMe)
+                                              ?.BattleCharacter;
 
-            await partyMember?.Follow();
+            await partyMember?.Follow()!;
         }
 
         return false;
@@ -182,7 +210,7 @@ public class KtisisHyperboreia : AbstractDungeon
 
     private async Task<bool> HandleHermes()
     {
-    	// TODO:
+        // TODO:
         // Hermetica: check NPC facing, cast bar; add line AOE when cast bar low enough?
         // Meteor: Go to middle. Is undamaged meteor detectable? HP? Otherwise follow
         // Double/Quadruple: Might need to manually draw the second line for x seconds as subsequent cast finishes casting.
@@ -212,9 +240,8 @@ public class KtisisHyperboreia : AbstractDungeon
         if (trueAero.IsCasting())
         {
             SidestepPlugin.Enabled = false;
-            Vector3 location = new(-8f, 1f, -50.0f);
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5_000, "Need to spread for True Aero");
-            await CommonTasks.MoveTo(location);
+            await MovementHelpers.Spread(5_000);
             await Coroutine.Sleep(500);
             SidestepPlugin.Enabled = true;
         }
@@ -222,9 +249,8 @@ public class KtisisHyperboreia : AbstractDungeon
         if (trueAeroII.IsCasting())
         {
             SidestepPlugin.Enabled = false;
-            Vector3 location = new(-8f, 1f, -50.0f);
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 5_000, "Need to spread for True Aero II");
-            await CommonTasks.MoveTo(location);
+            await MovementHelpers.Spread(5_000);
             await Coroutine.Sleep(500);
             SidestepPlugin.Enabled = true;
         }

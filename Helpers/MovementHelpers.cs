@@ -109,6 +109,13 @@ internal static class MovementHelpers
         return Task.FromResult(true);
     }
 
+    /// <summary>
+    /// half spread.
+    /// </summary>
+    /// <param name="timeToSpread">time to spread.</param>
+    /// <param name="radius">radius for spread.</param>
+    /// <param name="spbc">spread before character? if 0 it will spread from everyone?.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
     public static async Task<bool> HalfSpread(double timeToSpread, float radius = 6.5f, uint spbc = 0)
     {
         double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
@@ -167,6 +174,13 @@ internal static class MovementHelpers
         return true;
     }
 
+    /// <summary>
+    /// Not sure what SP stand for.
+    /// </summary>
+    /// <param name="timeToSpread">time in ms.</param>
+    /// <param name="vector">vector location.</param>
+    /// <param name="radius">radius for spread.</param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
     public static async Task<bool> SpreadSp(double timeToSpread, Vector3 vector, float radius = 6.5f)
     {
         double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
@@ -214,6 +228,13 @@ internal static class MovementHelpers
         return true;
     }
 
+    /// <summary>
+    /// Spread to a location.
+    /// </summary>
+    /// <param name="timeToSpread">time to spread. </param>
+    /// <param name="vector">location vector. </param>
+    /// <param name="radius">radius distance. </param>
+    /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
     public static async Task<bool> SpreadSpLoc(double timeToSpread, Vector3 vector, float radius = 6.5f)
     {
         double currentMS = DateTime.Now.TimeOfDay.TotalMilliseconds;
