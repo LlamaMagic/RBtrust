@@ -32,6 +32,21 @@ public enum SubZoneId : uint
     LongstopFrontblock = 689,
 
     /// <summary>
+    /// Lv. 41: The Stone Vigil > The Barbican, Chudo-Yudo
+    /// </summary>
+    TheBarbican = 877,
+
+    /// <summary>
+    /// Lv. 41: The Stone Vigil > The Right Brattice, Koshchei
+    /// </summary>
+    TheRightBrattice = 878,
+
+    /// <summary>
+    /// Lv. 41: The Stone Vigil > The Strongroom, Isgebind
+    /// </summary>
+    TheStrongroom = 879,
+
+    /// <summary>
     /// Lv. 44: Dzemael Darkhold > Grand Hall, All-Seeing Eye
     /// </summary>
     GrandHall = 808,
