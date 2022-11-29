@@ -76,7 +76,7 @@ public class StoneVigil : AbstractDungeon
         // Avoid mealstrom npc
         AvoidanceManager.AddAvoidObject<GameObject>(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRightBrattice,
-            6.5f,
+            6.3f,
             MaelstromObj);
 
         // Boss 3: Frostbreath
