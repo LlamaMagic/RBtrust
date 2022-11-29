@@ -45,7 +45,7 @@ public class StoneVigil : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheStoneVigil;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 1026 };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {  };
 
     /// <inheritdoc/>
     public override Task<bool> OnEnterDungeonAsync()
@@ -69,15 +69,30 @@ public class StoneVigil : AbstractDungeon
             leashPointProducer: () => ChudoYudoArenaCenter,
             leashRadius: 40.0f,
             rotationDegrees: 0.0f,
-            radius: 40.0f,
-            arcDegrees: 125.0f);
+            radius: 20.0f,
+            arcDegrees: 180.0f);
+
+        // Boss 1
+        // In general, if not tank stay out of the front to avoid fast casting the Lion's Breath
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheBarbican &&
+                          !Core.Me.IsTank(),
+            objectSelector: (bc) =>
+                bc.NpcId == ChudoYudo &&
+                bc.CanAttack, // Had to use CanAttack here, as there's invisble NPCs all around the room
+            leashPointProducer: () => IsgebindArenaCenter,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 20.0f,
+            arcDegrees: 145.0f);
 
         // Boss 2: Mealstrom
         // Avoid mealstrom npc
-        AvoidanceManager.AddAvoidObject<GameObject>(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRightBrattice,
-            6.3f,
-            MaelstromObj);
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<GameObject>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRightBrattice,
+            objectSelector: obj => obj.NpcId == MaelstromObj,
+            radiusProducer: obj => 6.2f,
+            priority: AvoidancePriority.Medium));
 
         // Boss 3: Frostbreath
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
@@ -91,14 +106,52 @@ public class StoneVigil : AbstractDungeon
 
         // Boss 3: Cauterize
         // Line AOE
-        /* Commenting out for now until we can get it working
+        // There's still line when the AOE covers the north and south side of the room that the bot reads incorrectly, but it looks like all other AOEs are dodged
+        /* Adding it to follow dodge until we can figure out why the north and south aren't working
+         Sidestep appears to be succesfullly dodging this on it's own now.
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheStrongroom,
             objectSelector: bc => bc.CastingSpellId == CauterizeSpell,
-            width: 50f,
-            length: -60f,
+            width: 20f,
+            length: 120f,
             priority: AvoidancePriority.High);
             */
+
+        // Boss 3
+        // In general, if not tank stay out of the front to avoid fast casting Frostbreath
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheStrongroom &&
+                          !Core.Me.IsTank(),
+            objectSelector: (bc) =>
+                bc.NpcId == Isgebind &&
+                bc.CanAttack, // Had to use CanAttack here, as there's invisble NPCs all around the room
+            leashPointProducer: () => IsgebindArenaCenter,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 160.0f);
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheBarbican,
+            () => ChudoYudoArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRightBrattice,
+            () => KoshcheiArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheStrongroom,
+            () => IsgebindArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 23.0f,
+            priority: AvoidancePriority.High);
 
 
         return Task.FromResult(false);
