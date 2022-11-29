@@ -48,10 +48,7 @@ public class KeeperOfTheLake : AbstractDungeon
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
         29272,
-        29278,
-        29279,
         29283,
-        29285
     };
 
     /// <inheritdoc/>
