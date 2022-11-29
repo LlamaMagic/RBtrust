@@ -83,7 +83,7 @@ public class StoneVigil : AbstractDungeon
             leashPointProducer: () => IsgebindArenaCenter,
             leashRadius: 40.0f,
             rotationDegrees: 0.0f,
-            radius: 20.0f,
+            radius: 15.0f,
             arcDegrees: 145.0f);
 
         // Boss 2: Mealstrom
@@ -143,7 +143,7 @@ public class StoneVigil : AbstractDungeon
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRightBrattice,
             () => KoshcheiArenaCenter,
             outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerRadius: 15.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
