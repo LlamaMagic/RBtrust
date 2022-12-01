@@ -28,6 +28,8 @@ public class Vault : AbstractDungeon
     private const uint DimensionalCollapseSmallSpell = 4137;
     private const uint DimensionalCollapseMediumSpell = 4138;
     private const uint DimensionalCollapseLargeSpell = 4139;
+    private const uint BlackKnightsTourSpell = 4153;
+    private const uint WhiteKnightsTourSpell = 4152;
 
     private const uint DawnKnightNpc = 3851;
     private const uint DuskKnightNpc = 3852;
@@ -59,7 +61,7 @@ public class Vault : AbstractDungeon
             radiusProducer: obj => 5.5f,
             priority: AvoidancePriority.Medium));
 
-        // Boss 1
+        // Boss 2
         // In general, if not tank stay out of the front to avoid AOE attacks
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ChapterHouse &&
@@ -138,6 +140,22 @@ public class Vault : AbstractDungeon
             length: 27f,
             yOffset: -7f,
             priority: AvoidancePriority.Medium);
+
+        // Boss 3: White Knight's Tour
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheChancel,
+            objectSelector: bc => bc.CastingSpellId == WhiteKnightsTourSpell,
+            width: 7f,
+            length: 60f,
+            priority: AvoidancePriority.High);
+
+        // Boss 3: Black Knight's Tour
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheChancel,
+            objectSelector: bc => bc.CastingSpellId == BlackKnightsTourSpell,
+            width: 7f,
+            length: 60f,
+            priority: AvoidancePriority.High);
 
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
