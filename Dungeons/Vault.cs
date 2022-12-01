@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
+using Trust.Extensions;
 using Trust.Helpers;
 
 namespace Trust.Dungeons;
@@ -17,9 +18,13 @@ namespace Trust.Dungeons;
 public class Vault : AbstractDungeon
 {
     private const uint BrightsphereNpc = 4385;
+    private const uint SerAdelphelNpc = 3849;
+    private const uint SerGrinnauxNpc = 3850;
+    private const uint SerCharibertNpc = 3642;
 
     private const uint AetherialTearNpc = 3293;
     private const uint DimensionalRipNpc = 2003393;
+    private const uint FaithUnmovingSpell = 4135;
     private const uint DimensionalCollapseSmallSpell = 4137;
     private const uint DimensionalCollapseMediumSpell = 4138;
     private const uint DimensionalCollapseLargeSpell = 4139;
@@ -53,6 +58,26 @@ public class Vault : AbstractDungeon
             objectSelector: obj => obj.NpcId == BrightsphereNpc,
             radiusProducer: obj => 5.5f,
             priority: AvoidancePriority.Medium));
+
+        // Boss 1
+        // In general, if not tank stay out of the front to avoid AOE attacks
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ChapterHouse &&
+                          !Core.Me.IsTank(),
+            objectSelector: (bc) => bc.NpcId == SerGrinnauxNpc && bc.CanAttack,
+            leashPointProducer: () => SerGrinnauxArenaCenter,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 11.0f,
+            arcDegrees: 160.0f);
+
+        // Boss 2 Faith Unmoving
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ChapterHouse,
+            objectSelector: c => c.CastingSpellId == FaithUnmovingSpell,
+            outerRadius: 40.0f,
+            innerRadius: 3.0F,
+            priority: AvoidancePriority.Medium);
 
         // Boss 2: Dimensional Rip / Dark Lightning Puddle
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<GameObject>(
