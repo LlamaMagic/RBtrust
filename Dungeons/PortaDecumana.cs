@@ -40,6 +40,7 @@ public class PortaDecumana : AbstractDungeon
     private static readonly HashSet<uint> CitadelBuster = new() {29020};
     private static readonly HashSet<uint> LaserFocus = new() {29013, 29014};
     private static readonly int CitadelBusterDuration = 5_000;
+    private static readonly int LaserFocusDuration = 5_000;
     private static DateTime citadelBusterTimestamp = DateTime.MinValue;
 
     private static readonly Vector3 UltimaArenaCenter1 = new(-771.9428f, -400.0628f, -600.3899f);
@@ -79,11 +80,10 @@ public class PortaDecumana : AbstractDungeon
 
         // The Ultima Weapon: Eye of the Storm
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ThePortaDecumana &&
-                          DateTime.Now < EyeoftheStormDuration,
+            canRun: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ThePortaDecumana,
             objectSelector: c => c.CastingSpellId == EyeoftheStormSpell,
             outerRadius: 90.0f,
-            innerRadius: 15f,
+            innerRadius: 12f,
             priority: AvoidancePriority.Medium);
 
         // Ultima Ifrit: Vulcan Burst
@@ -136,7 +136,7 @@ public class PortaDecumana : AbstractDungeon
             () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ThePortaDecumana,
             () => UltimaArenaCenter1,
             outerRadius: 90.0f,
-            innerRadius: 14.0f,
+            innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
@@ -155,6 +155,9 @@ public class PortaDecumana : AbstractDungeon
 
         if (LaserFocus.IsCasting())
         {
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, LaserFocusDuration,
+                $"Stacking for Laser Focus");
+
             BattleCharacter laserFocusTarget = PartyManager.AllMembers
                 .Select(pm => pm.BattleCharacter)
                 .OrderBy(obj => obj.Distance(Core.Player))
