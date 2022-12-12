@@ -153,6 +153,20 @@ public class PortaDecumana : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        if (Core.Me.IsHealer())
+        {
+            BattleCharacter tankPlayer = PartyManager.AllMembers
+                .Select(pm => pm.BattleCharacter)
+                .OrderBy(obj => obj.Distance(Core.Player))
+                .FirstOrDefault(obj => !obj.IsMe && obj.IsTank());
+
+            if (Core.Me.Location.Distance2D(tankPlayer.Location) > 25)
+            {
+                await CommonTasks.MoveTo(tankPlayer.Location);
+                await Coroutine.Sleep(30);
+            }
+        }
+
         if (LaserFocus.IsCasting())
         {
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, LaserFocusDuration,
@@ -163,8 +177,12 @@ public class PortaDecumana : AbstractDungeon
                 .OrderBy(obj => obj.Distance(Core.Player))
                 .FirstOrDefault(obj => !obj.IsMe);
 
-            await CommonTasks.MoveTo(laserFocusTarget.Location);
-            await Coroutine.Sleep(30);
+            if (Core.Me.Location.Distance2D(laserFocusTarget.Location) > 3)
+            {
+                await CommonTasks.MoveTo(laserFocusTarget.Location);
+                await Coroutine.Sleep(30);
+            }
+
         }
 
         if (HomingRay.IsCasting())
