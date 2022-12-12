@@ -5,6 +5,7 @@ using ff14bot.Behavior;
 using ff14bot.Managers;
 using ff14bot.NeoProfiles;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TreeSharp;
 using Trust.Helpers;
@@ -131,6 +132,11 @@ public class TrustPlugin : BotPlugin
     private async Task<bool> TryRespawnPlayerAsync()
     {
         if (Core.Player.IsAlive)
+        {
+            return false;
+        }
+
+        if (!PartyManager.AllMembers.Any(pm => pm is TrustPartyMember))
         {
             return false;
         }
