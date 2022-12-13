@@ -28,6 +28,14 @@ internal static class MovementHelpers
         .FirstOrDefault();
 
     /// <summary>
+    /// Gets the nearest Player Character party member.
+    /// </summary>
+    public static BattleCharacter GetClosestPCAlly => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
+        .Where(obj => !obj.IsDead)
+        .OrderBy(r => r.Distance())
+        .FirstOrDefault();
+
+    /// <summary>
     /// Gets the furthest Ally from the Player.
     /// </summary>
     public static BattleCharacter GetFurthestAlly => GameObjectManager
@@ -55,6 +63,14 @@ internal static class MovementHelpers
         .FirstOrDefault();
 
     /// <summary>
+    /// Gets the nearest Player Character Tank party member.
+    /// </summary>
+    public static BattleCharacter GetClosestPCTank => GameObjectManager.GetObjectsOfType<BattleCharacter>(true, false)
+        .Where(obj => !obj.IsDead && ClassJobRoles.Tanks.Contains(obj.CurrentJob))
+        .OrderBy(r => r.Distance())
+        .FirstOrDefault();
+
+    /// <summary>
     /// Gets the nearest melee party member.
     /// </summary>
     public static BattleCharacter GetClosestMelee => GameObjectManager
@@ -76,7 +92,7 @@ internal static class MovementHelpers
             return null;
         }
 
-        return PartyManager.AllMembers
+        return PartyManager.VisibleMembers
             .Select(pm => pm.BattleCharacter)
             .OrderBy(bc => bc.Distance())
             .FirstOrDefault(bc =>
@@ -98,7 +114,7 @@ internal static class MovementHelpers
             AvoidanceManager.RemoveAvoid(spreadInfo);
 
             DateTime spreadEndsAt = DateTime.Now.AddMilliseconds(duration);
-            uint[] partyMemberIds = PartyManager.AllMembers.Select(p => p.BattleCharacter.ObjectId).ToArray();
+            uint[] partyMemberIds = PartyManager.VisibleMembers.Select(p => p.BattleCharacter.ObjectId).ToArray();
 
             spreadInfo = AvoidanceManager.AddAvoidObject<BattleCharacter>(
                 () => Core.Player.InCombat && DateTime.Now < spreadEndsAt,
@@ -116,7 +132,7 @@ internal static class MovementHelpers
 
         if (spbc != 0)
         {
-            BattleCharacter closestPartyMember = PartyManager.AllMembers
+            BattleCharacter closestPartyMember = PartyManager.VisibleMembers
                 .Select(pm => pm.BattleCharacter)
                 .OrderBy(obj => obj.Distance(Core.Player))
                 .FirstOrDefault(obj => !obj.IsMe);

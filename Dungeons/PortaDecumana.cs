@@ -2,6 +2,7 @@ using Buddy.Coroutines;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
@@ -153,37 +154,41 @@ public class PortaDecumana : AbstractDungeon
     {
         await FollowDodgeSpells();
 
-        if (Core.Me.IsHealer())
-        {
-            BattleCharacter tankPlayer = PartyManager.AllMembers
-                .Select(pm => pm.BattleCharacter)
-                .OrderBy(obj => obj.Distance(Core.Player))
-                .FirstOrDefault(obj => !obj.IsMe && obj.IsTank() && obj.IsValid);
 
-            if (Core.Me.Location.Distance2D(tankPlayer.Location) > 25)
+        if ((Core.Me.CurrentJob == ClassJobType.WhiteMage ||
+             Core.Me.CurrentJob == ClassJobType.Scholar
+             || Core.Me.CurrentJob == ClassJobType.Sage ||
+             Core.Me.CurrentJob == ClassJobType.Astrologian) && Core.Me.IsAlive && !CommonBehaviors.IsLoading &&
+            !QuestLogManager.InCutscene && Core.Me.InCombat)
+        {
+            BattleCharacter tankPlayer = PartyManager.VisibleMembers
+                .Select(pm => pm.BattleCharacter)
+                .FirstOrDefault(obj => !obj.IsMe && obj.IsValid
+                                                 && (obj.CurrentJob == ClassJobType.Paladin ||
+                                                     obj.CurrentJob == ClassJobType.DarkKnight
+                                                     || obj.CurrentJob == ClassJobType.Gunbreaker ||
+                                                     obj.CurrentJob == ClassJobType.Warrior));
+
+            if (tankPlayer != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(tankPlayer.Location) > 25)
             {
-                await CommonTasks.MoveTo(tankPlayer.Location);
+                await tankPlayer.Follow(15.0F, 0, true);
                 await Coroutine.Sleep(30);
             }
         }
 
-        if (LaserFocus.IsCasting())
+
+        if (LaserFocus.IsCasting() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene)
         {
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, LaserFocusDuration,
                 $"Stacking for Laser Focus");
 
-            BattleCharacter laserFocusTarget = PartyManager.AllMembers
+            BattleCharacter laserFocusTarget = PartyManager.VisibleMembers
                 .Select(pm => pm.BattleCharacter)
-                .OrderBy(obj => obj.Distance(Core.Player))
-                .FirstOrDefault(obj => !obj.IsMe);
+                .FirstOrDefault(obj => !obj.IsMe && obj.IsAlive);
 
-            if (Core.Me.Location.Distance2D(laserFocusTarget.Location) > 5)
-            {
-                await CommonTasks.MoveTo(laserFocusTarget.Location);
-                await Coroutine.Sleep(30);
-                await CommonTasks.StopMoving();
-            }
-
+            await laserFocusTarget.Follow(5f);
+            await Coroutine.Sleep(30);
         }
 
         if (HomingRay.IsCasting())
