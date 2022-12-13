@@ -158,7 +158,7 @@ public class PortaDecumana : AbstractDungeon
             BattleCharacter tankPlayer = PartyManager.AllMembers
                 .Select(pm => pm.BattleCharacter)
                 .OrderBy(obj => obj.Distance(Core.Player))
-                .FirstOrDefault(obj => !obj.IsMe && obj.IsTank());
+                .FirstOrDefault(obj => !obj.IsMe && obj.IsTank() && obj.IsValid);
 
             if (Core.Me.Location.Distance2D(tankPlayer.Location) > 25)
             {
@@ -177,10 +177,11 @@ public class PortaDecumana : AbstractDungeon
                 .OrderBy(obj => obj.Distance(Core.Player))
                 .FirstOrDefault(obj => !obj.IsMe);
 
-            if (Core.Me.Location.Distance2D(laserFocusTarget.Location) > 3)
+            if (Core.Me.Location.Distance2D(laserFocusTarget.Location) > 5)
             {
                 await CommonTasks.MoveTo(laserFocusTarget.Location);
                 await Coroutine.Sleep(30);
+                await CommonTasks.StopMoving();
             }
 
         }
