@@ -154,29 +154,37 @@ public class PortaDecumana : AbstractDungeon
     {
         await FollowDodgeSpells();
 
-
-        if ((Core.Me.CurrentJob == ClassJobType.WhiteMage ||
-             Core.Me.CurrentJob == ClassJobType.Scholar
-             || Core.Me.CurrentJob == ClassJobType.Sage ||
-             Core.Me.CurrentJob == ClassJobType.Astrologian) && Core.Me.IsAlive && !CommonBehaviors.IsLoading &&
+        // Stay within casting range of the tank if you're the healer
+        if (Core.Me.IsHealer() && Core.Me.IsAlive && !CommonBehaviors.IsLoading &&
             !QuestLogManager.InCutscene && Core.Me.InCombat)
         {
             BattleCharacter tankPlayer = PartyManager.VisibleMembers
                 .Select(pm => pm.BattleCharacter)
                 .FirstOrDefault(obj => !obj.IsMe && obj.IsValid
-                                                 && (obj.CurrentJob == ClassJobType.Paladin ||
-                                                     obj.CurrentJob == ClassJobType.DarkKnight
-                                                     || obj.CurrentJob == ClassJobType.Gunbreaker ||
-                                                     obj.CurrentJob == ClassJobType.Warrior));
+                                                 && obj.IsTank());
 
             if (tankPlayer != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
-                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(tankPlayer.Location) > 25)
+                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(tankPlayer.Location) > 30)
             {
                 await tankPlayer.Follow(15.0F, 0, true);
+                await CommonTasks.StopMoving();
                 await Coroutine.Sleep(30);
             }
         }
 
+        // Soak Aetheroplasms if you're not the tank
+        if (!Core.Me.IsTank() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene && Core.Me.InCombat)
+        {
+            BattleCharacter AetheroplasmSoak = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(AetheroplasmNpc).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible);
+
+            if (AetheroplasmSoak != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(AetheroplasmSoak.Location) > 2)
+            {
+                await AetheroplasmSoak.Follow(2.0F, 0, true);
+                await CommonTasks.StopMoving();
+                await Coroutine.Sleep(30);
+            }
+        }
 
         if (LaserFocus.IsCasting() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene)
         {
@@ -188,6 +196,7 @@ public class PortaDecumana : AbstractDungeon
                 .FirstOrDefault(obj => !obj.IsMe && obj.IsAlive);
 
             await laserFocusTarget.Follow(5f);
+            await CommonTasks.StopMoving();
             await Coroutine.Sleep(30);
         }
 
