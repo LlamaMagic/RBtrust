@@ -122,7 +122,7 @@ In case your repoBuddy config is too old or otherwise missing `RBtrust`, you can
 
 -   **Name:** `RBtrust`
 -   **Type:** `Plugin`
--   **URL:** `https://github.com/TheManta/RBtrust.git/trunk`
+-   **URL:** `https://github.com/LlamaMagic/RBtrust.git/trunk`
 
 ## Usage
 
