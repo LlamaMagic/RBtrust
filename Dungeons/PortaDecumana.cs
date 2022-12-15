@@ -6,6 +6,8 @@ using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
+using ff14bot.RemoteWindows;
+using LlamaLibrary.RemoteWindows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
+using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -153,6 +156,17 @@ public class PortaDecumana : AbstractDungeon
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
+        /*
+        if (Core.Me.IsDPS() && LimitBreak.Percentage == 3 && (Core.Me.HasTarget && Core.Me.CurrentTarget.IsValid && Core.Me.CurrentTarget.CurrentHealthPercent > 1))
+        {
+            Logger.Information($"Using Limit Break on {Core.Me.CurrentTarget.Name}.");
+            if (Core.Me.CurrentJob == ClassJobType.Summoner || Core.Me.CurrentJob == ClassJobType.RedMage || Core.Me.CurrentJob == ClassJobType.BlackMage)
+            {
+                ActionManager.LimitBreak(Core.Me.CurrentTarget);
+                await Coroutine.Wait(10000, () => !Core.Me.IsCasting);
+            }
+        }
+        */
 
         // Stay within casting range of the tank if you're the healer
         if (Core.Me.IsHealer() && Core.Me.IsAlive && !CommonBehaviors.IsLoading &&
@@ -175,12 +189,12 @@ public class PortaDecumana : AbstractDungeon
         // Soak Aetheroplasms if you're not the tank
         if (!Core.Me.IsTank() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene && Core.Me.InCombat)
         {
-            BattleCharacter AetheroplasmSoak = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(AetheroplasmNpc).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible);
+            BattleCharacter AetheroplasmSoak = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(AetheroplasmNpc).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
 
             if (AetheroplasmSoak != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
-                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(AetheroplasmSoak.Location) > 2)
+                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(AetheroplasmSoak.Location) > 1)
             {
-                await AetheroplasmSoak.Follow(2.0F, 0, true);
+                await AetheroplasmSoak.Follow(1F, 0, true);
                 await CommonTasks.StopMoving();
                 await Coroutine.Sleep(30);
             }
