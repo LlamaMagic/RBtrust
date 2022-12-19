@@ -142,6 +142,21 @@ public enum SubZoneId : uint
     TheChancel = 1572,
 
     /// <summary>
+    /// Lv. 60: Baelsar's Wall > Via Praetoria, Magitek Predator
+    /// </summary>
+    ViaPraetoria = 1862,
+
+    /// <summary>
+    /// Lv. 60: Baelsar's Wall > Magitek Installation, Armored Weapon
+    /// </summary>
+    MagitekInstallation = 1863,
+
+    /// <summary>
+    /// Lv. 60: Baelsar's Wall > Airship Landing, Ser Charibert
+    /// </summary>
+    AirshipLanding = 1864,
+
+    /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>
     TeagGye = 2963,

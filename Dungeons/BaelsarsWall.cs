@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Clio.Utilities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
 
@@ -9,6 +10,10 @@ namespace Trust.Dungeons;
 /// </summary>
 public class BaelsarsWall : AbstractDungeon
 {
+    private static readonly Vector3 MagitekPredatorArenaCenter = new(-174.0305f, 2.926746f, 73.21541f);
+    private static readonly Vector3 ArmoredWeaponArenaCenter = new(115.9632f, -299.9743f, 0.05996444f);
+    private static readonly Vector3 TheGriffinArenaCenter = new(351.8701f, 212f, 391.9962f);
+
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.BaelsarsWall;
 
