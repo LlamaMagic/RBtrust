@@ -188,6 +188,21 @@ public enum SubZoneId : uint
     NeurolinkNacelle = 1602,
 
     /// <summary>
+    /// Lv. 60: The Antitower > The Manifest, Zuro Roggo
+    /// </summary>
+    TheManifest = 1696,
+
+    /// <summary>
+    /// Lv. 60: The Antitower > Where Hearts Leap, Ziggy
+    /// </summary>
+    WhereHeartsLeap = 1697,
+
+    /// <summary>
+    /// Lv. 60: The Antitower > Where All Witness, Calcabrina
+    /// </summary>
+    WhereAllWitness = 1698,
+
+    /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>
     TeagGye = 2963,
