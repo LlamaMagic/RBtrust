@@ -142,6 +142,22 @@ public enum SubZoneId : uint
     TheChancel = 1572,
 
     /// <summary>
+    /// Lv. 59 > The Great Gubal Lbrary > Hall of Magicks, Demon Tome
+    /// </summary>
+    HallofMagicks = 1623,
+
+    /// <summary>
+    /// Lv. 59 > The Great Gubal Lbrary > Astrology and Astromancy Camera, Byblos
+    /// </summary>
+    AstrologyandAstromancyCamera = 1624,
+
+    /// <summary>
+    /// <summary>
+    /// Lv. 59 > The Great Gubal Lbrary > Rhapsodies Quadrangle,
+    /// </summary>
+    RhapsodiesQuadrangle = 1625,
+
+    /// <summary>
     /// Lv. 60: Baelsar's Wall > Via Praetoria, Magitek Predator
     /// </summary>
     ViaPraetoria = 1862,
@@ -155,6 +171,21 @@ public enum SubZoneId : uint
     /// Lv. 60: Baelsar's Wall > Airship Landing, Ser Charibert
     /// </summary>
     AirshipLanding = 1864,
+
+    /// <summary>
+    /// Lv. 60: Aetherochemical Research Facility > Analysis and Proving, Regula van Hydrus
+    /// </summary>
+    AnalysisandProving = 1598,
+
+    /// <summary>
+    /// Lv. 60: Aetherochemical Research Facility > Evaluation and Authentication, Harmachis
+    /// </summary>
+    EvaluationandAuthentication = 1599,
+
+    /// <summary>
+    /// Lv. 60: Aetherochemical Research Facility > Neurolink Nacelle, Lahabrea & Igeyorhm
+    /// </summary>
+    NeurolinkNacelle = 1602,
 
     /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
