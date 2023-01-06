@@ -198,6 +198,21 @@ public enum SubZoneId : uint
     WhereHeartsLeap = 1697,
 
     /// <summary>
+    /// Lv. 60: Sohr Khai > Unsevered Despair, Chieftain Moglin
+    /// </summary>
+    UnseveredDespair = 1767,
+
+    /// <summary>
+    /// Lv. 60: Sohr Khai > Unstifled Prayer, Poqhiraj
+    /// </summary>
+    UnstifledPrayer = 1768,
+
+    /// <summary>
+    /// Lv. 60: Sohr Khai > Shattered Remembrance, Hraesvelgr
+    /// </summary>
+    ShatteredRemembrance = 1769,
+
+    /// <summary>
     /// Lv. 60: The Antitower > Where All Witness, Calcabrina
     /// </summary>
     WhereAllWitness = 1698,
