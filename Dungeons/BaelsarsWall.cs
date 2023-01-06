@@ -1,7 +1,12 @@
 ﻿using Clio.Utilities;
+using ff14bot;
+using ff14bot.Managers;
+using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
+using Trust.Helpers;
 
 namespace Trust.Dungeons;
 
@@ -22,6 +27,35 @@ public class BaelsarsWall : AbstractDungeon
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
+    public override Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ViaPraetoria,
+            () => MagitekPredatorArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.MagitekInstallation,
+            () => ArmoredWeaponArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.5f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AirshipLanding,
+            () => TheGriffinArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        return Task.FromResult(false);
+    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
