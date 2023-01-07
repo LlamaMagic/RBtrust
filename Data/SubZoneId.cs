@@ -198,6 +198,11 @@ public enum SubZoneId : uint
     WhereHeartsLeap = 1697,
 
     /// <summary>
+    /// Lv. 60: The Antitower > Where All Witness, Calcabrina
+    /// </summary>
+    WhereAllWitness = 1698,
+
+    /// <summary>
     /// Lv. 60: Sohr Khai > Unsevered Despair, Chieftain Moglin
     /// </summary>
     UnseveredDespair = 1767,
@@ -213,11 +218,21 @@ public enum SubZoneId : uint
     ShatteredRemembrance = 1769,
 
     /// <summary>
-    /// Lv. 60: The Antitower > Where All Witness, Calcabrina
+    /// Lv. 60: Xelphatol > The Cage, Nuzal Hueloc
     /// </summary>
-    WhereAllWitness = 1698,
+    TheCage = 1789,
 
     /// <summary>
+    /// Lv. 60: Xelphatol > The Tlachtli, Dotoli Ciloc
+    /// </summary>
+    TheTlachtli = 1790,
+
+    /// <summary>
+    /// Lv. 60: Xelphatol > The Vortex,Tozol Huatotl
+    /// </summary>
+    TheVortex = 1791,
+
+     /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>
     TeagGye = 2963,
