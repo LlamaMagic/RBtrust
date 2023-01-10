@@ -149,32 +149,32 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 59: The Great Gubal Library
     /// </summary>
-    TheGreatGubalLibrary = 416,
+    TheGreatGubalLibrary = 1109,
 
     /// <summary>
     /// Lv. 60.1: The Aetherochemical Research Facility
     /// </summary>
-    TheAetherochemicalResearchFacility = 438,
+    TheAetherochemicalResearchFacility = 1110,
 
     /// <summary>
     /// Lv. 60.2: The Antitower
     /// </summary>
-    TheAntitower = 516,
+    TheAntitower = 1111,
 
     /// <summary>
     /// Lv. 60.3: Sohr Kai
     /// </summary>
-    SohrKai = 555,
+    SohrKai = 1112,
 
     /// <summary>
     /// Lv. 60.4: Xelphatol
     /// </summary>
-    Xelphatol = 572,
+    Xelphatol = 1113,
 
     /// <summary>
     /// Lv. 60.5: Baelsar's Wall
     /// </summary>
-    BaelsarsWall = 615,
+    BaelsarsWall = 1114,
 
     /// <summary>
     /// Lv. 61: The Sirensong Sea
