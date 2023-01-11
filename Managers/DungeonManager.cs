@@ -46,6 +46,7 @@ internal class DungeonManager
             { ZoneId.ThePortaDecumana, typeof(PortaDecumana) },
             { ZoneId.Snowcloak, typeof(Snowcloak) },
             { ZoneId.TheKeeperOfTheLake, typeof(KeeperOfTheLake) },
+            { ZoneId.TheStepsOfFaith, typeof(StepsOfFaith) },
 
             // 3.0 - Heavensward
             { ZoneId.SohmAl, typeof(SohmAl) },

@@ -132,6 +132,11 @@ public enum ZoneId : ushort
     SyrcusTower = 372,
 
     /// <summary>
+    /// Lv. 50: The Steps of Faith
+    /// </summary>
+    TheStepsOfFaith = 1068,
+
+    /// <summary>
     /// Lv. 53: Sohm Al
     /// </summary>
     SohmAl = 1064,
