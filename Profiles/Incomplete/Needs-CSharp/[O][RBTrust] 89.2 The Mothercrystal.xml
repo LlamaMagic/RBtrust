@@ -14,20 +14,22 @@
       </If>
 
       <If Condition="IsOnMap(995)">
+        <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
         <Grind GrindRef="Hydaelyn" PostCombatDelay="2.0" While="ObjectExistsWithId(10453) or ObjectExistsWithId(10452)"/>
 
         <LeaveDuty/>
+        <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
       </If>
     </While>
   </Order>
   <GrindAreas>
     <GrindArea Name="Hydaelyn">
       <Hotspots>
-        <Hotspot XYZ="99.99231, -4.916372E-12, 90" Radius="250"/>
+        <Hotspot XYZ="100, 0, 100" Radius="250"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Id="10453"/>
-        <TargetMob Id="10452"/>
+        <TargetMob Id="10453" Name="Hydaelyn"/>
+        <TargetMob Id="10452" Name="Crystal of Light"/>
       </TargetMobs>
       <MinLevel/>
       <MaxLevel/>
