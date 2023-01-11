@@ -3,6 +3,7 @@ using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
+using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -59,6 +60,9 @@ public class Aitiascope : AbstractDungeon
     // Amon the Undying NpcId: 10293 CastingSpell [Eruption Forte] [Eruption Forte] SpellId : 25704
     // Ysayle's Spirit NpcId: 10762 CastingSpell [Dreams of Ice] [Dreams of Ice] SpellId : 27756
     // Amon the Undying NpcId: 10293 CastingSpell [Right Firaga Forte] [Right Firaga Forte] SpellId : 25696
+    private static readonly Vector3 LiviaArenaCenter = new(-6f, 164f, 471f);
+    private static readonly Vector3 RhitahtynArenaCenter = new(11f, -211.4f, 144f);
+    private static readonly Vector3 AmonArenaCenter = new(10f, -236f, -487f);
 
     // Livia the Undeterred
     private readonly HashSet<uint> aglaeaClimb = new() { 25668, 25667, 25666 };
@@ -88,6 +92,36 @@ public class Aitiascope : AbstractDungeon
     {
         25234, 25233, 25250, 24145, 25180, 25742, 25677,
     };
+
+    /// <inheritdoc/>
+    public override Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CentralObservatory,
+            () => LiviaArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SaltcrystalStrings,
+            () => RhitahtynArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.MidnightDownwell,
+            () => AmonArenaCenter,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        return Task.FromResult(false);
+    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
