@@ -46,6 +46,8 @@ internal static class PartyMembers
         PartyMemberId.SerpentLancer,
         PartyMemberId.FlameThaumaturge,
         PartyMemberId.SerpentConjurer,
+        PartyMemberId.Zero,
+        PartyMemberId.Varshahn,
     };
 
     /// <summary>
@@ -99,6 +101,7 @@ internal static class PartyMembers
         PartyMemberId.ScionThaumaturge,
         PartyMemberId.SerpentLancer,
         PartyMemberId.FlameThaumaturge,
+        PartyMemberId.Zero,
     };
 
     /// <summary>
@@ -116,6 +119,7 @@ internal static class PartyMembers
         PartyMemberId.EagerMarauder,
         PartyMemberId.ScionMarauder,
         PartyMemberId.StormMarauder,
+        PartyMemberId.Varshahn,
     };
 
     /// <summary>

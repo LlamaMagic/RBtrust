@@ -165,6 +165,16 @@ public enum PartyMemberId : uint
     StormMarauder = 11334,
 
     /// <summary>
+    /// Varshahn: Tank,
+    /// </summary>
+    Varshahn = 11416,
+
+    /// <summary>
+    /// Zero: DPS,
+    /// </summary>
+    Zero = 11418,
+
+    /// <summary>
     /// Serpent Lancer: DPS, LNC.
     /// </summary>
     SerpentLancer = 11335,
