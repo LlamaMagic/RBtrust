@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Profile [
+  <!ENTITY ZoneId "1050">
+  <!ENTITY DutyId "844">
+
+  <!ENTITY Shortcut "2000700">
+  <!ENTITY SaltEncrustedTeleporter "2012779">
+
+  <!ENTITY TheBhaflauRemnants "4161">
+  <!ENTITY UnderseaEntrance "4158">
+  <!ENTITY TheArrapagoRemnants "4162">
+  <!ENTITY TheThresholdOfBounty "4159">
+  <!ENTITY TheZhayolmRemnants "4163">
+  <!ENTITY TheThriceWonHoard "4166">
+  <!ENTITY WeaversWarding "4160">
+
+  <!ENTITY Ambujam "11241">
+  <!ENTITY ArmoredChariot "11239">
+  <!ENTITY Kapikulu "11238">
 ]>
 <Profile>
   <Name>[O][RBTrust] 90.2 Alzadaal's Legacy</Name>
@@ -8,40 +25,43 @@
 
     <While Condition="True">
       <WaitForLoading/>
-      <If Condition="not IsOnMap(1050)">
 
+      <If Condition="not IsOnMap(&ZoneId;)">
         <EquipRecommended/>
-        <JoinSupportDuty DutyId="844"/>
-
+        <JoinSupportDuty DutyId="&DutyId;"/>
       </If>
 
-      <If Condition="IsOnMap(1050)">
+      <If Condition="IsOnMap(&ZoneId;)">
         <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
 
-        <If Condition="ObjectExistsWithId(2000700) and GameObjectManager.GetObjectByNPCId(2000700).IsTargetable">
-          <!-- Shortcut -->
-          <UseTransport NpcId="2000700" XYZ="-150.4448, 304.5, 90.68836"/>
+        <If Condition="ObjectExistsWithId(&Shortcut;) and GameObjectManager.GetObjectByNPCId(&Shortcut;).IsTargetable">
+          <!-- Shortcut available -->
+          <UseTransport NpcId="&Shortcut;" XYZ="-150.4448, 304.5, 90.68836"/>
         </If>
 
-        <If Condition="IsOnSubMap(4161)">
+        <If Condition="IsOnSubMap(&TheBhaflauRemnants;)">
+          <Grind GrindRef="4161_F2FA2520" While="NumAttackableEnemies(30) &gt; 0"/>
+          <Grind GrindRef="4161_E8803D99" While="NumAttackableEnemies(30) &gt; 0"/>
+          <Grind GrindRef="4161_98E3AFC9" While="NumAttackableEnemies(30) &gt; 0"/>
+          <Grind GrindRef="4161_109AFA12" While="NumAttackableEnemies(30) &gt; 0"/>
           <MoveTo XYZ="124.0163, 303, -71.33109" Distance="0.5"/>
         </If>
 
-        <If Condition="IsOnSubMap(4158)">
+        <If Condition="IsOnSubMap(&UnderseaEntrance;)">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
-          <Grind GrindRef="Ambujam" PostCombatDelay="2.0" While="ObjectExistsWithId(11241)"/>
+          <Grind GrindRef="Ambujam" PostCombatDelay="2.0" While="GetInstanceTodo(1) == 0"/>
           <MoveTo XYZ="124.0726, 303.4002, -123.8607" Distance="0.5"/>
           <LLOpenChest/>
 
           <!-- Take Portal -->
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <MoveTo XYZ="123.9738, 305.6002, -145.2243"/>
-          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(2012779).IsTargetable"/>
-          <UseObject NpcId="2012779" XYZ="123.9795, 305.6, -149.9784" Condition="WorldManager.SubZoneId == 4161"/>
+          <WaitWhile Condition="not GameObjectManager.GetObjectByNPCId(&SaltEncrustedTeleporter;).IsTargetable"/>
+          <UseObject NpcId="&SaltEncrustedTeleporter;" XYZ="123.9795, 305.6, -149.9784" Condition="IsOnSubMap(&TheBhaflauRemnants;)"/>
           <WaitForLoading/>
         </If>
 
-        <If Condition="IsOnSubMap(4162)">
+        <If Condition="IsOnSubMap(&TheArrapagoRemnants;)">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <MoveTo XYZ="57.69048, 0.0003038645, 110.795"/>
           <LLOpenChest/>
@@ -52,21 +72,21 @@
           <MoveTo XYZ="0.06374817, -7.145303, -141.0012" Distance="0.5"/>
         </If>
 
-        <If Condition="IsOnSubMap(4159)">
+        <If Condition="IsOnSubMap(&TheThresholdOfBounty;)">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
           <MoveTo XYZ="-0.05154048, -16.00106, -193.1886"/>
-          <Grind GrindRef="Armored Chariot" PostCombatDelay="2.0" While="ObjectExistsWithId(11239)"/>
+          <Grind GrindRef="Armored Chariot" PostCombatDelay="2.0" While="GetInstanceTodo(3) == 0"/>
           <MoveTo XYZ="-0.05154048, -16.00106, -193.1886"/>
           <LLOpenChest/>
 
           <!-- Manual Transition -->
           <MoveTo XYZ="-0.1881048, -18.54502, -243.2915"/>
-          <While Condition="IsOnSubMap(4162)">
+          <While Condition="IsOnSubMap(&TheArrapagoRemnants;)">
             <RunCode Name="Transition"/>
           </While>
         </If>
 
-        <If Condition="IsOnSubMap(4163)">
+        <If Condition="IsOnSubMap(&TheZhayolmRemnants;)">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <MoveTo XYZ="-26.74413, -350.1011, -23.45172"/>
           <LLOpenChest/>
@@ -74,7 +94,7 @@
           <MoveTo XYZ="-34.981, -350, 9.557016" />
         </If>
 
-        <If Condition="IsOnSubMap(4166)">
+        <If Condition="IsOnSubMap(&TheThriceWonHoard;)">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
           <MoveTo XYZ="114.5225, -350.0501, 6.586664"/>
           <LLOpenChest/>
@@ -82,10 +102,10 @@
           <MoveTo XYZ="110.0813, -350, -44.27398" Distance="0.5"/>
         </If>
 
-        <If Condition="IsOnSubMap(4160)">
+        <If Condition="IsOnSubMap(&WeaversWarding;)">
           <SetPlugins PluginNames="SideStep,回避" IsEnabled="false"/>
           <MoveTo XYZ="110, -350, -74" Distance="0.5"/>
-          <Grind GrindRef="Kapikulu" PostCombatDelay="2.0" While="ObjectExistsWithId(11238)"/>
+          <Grind GrindRef="Kapikulu" PostCombatDelay="2.0" While="not IsDutyEnded()"/>
           <MoveTo XYZ="110, -350, -74" Distance="0.5"/>
           <LLOpenChest/>
         </If>
@@ -95,32 +115,66 @@
     </While>
   </Order>
   <GrindAreas>
-    <GrindArea Name="Ambujam">
+    <GrindArea Name="4161_F2FA2520">
       <Hotspots>
-        <Hotspot XYZ="123.5224, 303, -83.47326" Radius="250"/>
+        <Hotspot Radius="30" XYZ="-116.6858, 306.9248, 51.83484"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Id="11241"/>
+        <TargetMob Id="11219" Name="Alzadaal's Langur" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4161_E8803D99">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-18.069, 307.3717, 56.2351"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="11218" Name="Alzadaal's Qutrub" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4161_98E3AFC9">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="59.61694, 306.3256, 44.38843"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="11218" Name="Alzadaal's Qutrub" Weight="1"/>
+        <TargetMob Id="11221" Name="Alzadaal's Vajralangula" Weight="1"/>
+        <TargetMob Id="11220" Name="Alzadaal's Asvattha" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4161_109AFA12">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="115.587, 310.9378, 28.48853"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="11218" Name="Alzadaal's Qutrub" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="Ambujam">
+      <Hotspots>
+        <Hotspot Radius="250" XYZ="123.5224, 303, -83.47326"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="&Ambujam;"/>
       </TargetMobs>
       <MinLevel/>
       <MaxLevel/>
     </GrindArea>
     <GrindArea Name="Armored Chariot">
       <Hotspots>
-        <Hotspot XYZ="0, -16.00106, -190.3089" Radius="250"/>
+        <Hotspot Radius="250" XYZ="0, -16.00106, -190.3089"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Id="11239"/>
+        <TargetMob Id="&ArmoredChariot;"/>
       </TargetMobs>
       <MinLevel/>
       <MaxLevel/>
     </GrindArea>
     <GrindArea Name="Kapikulu">
       <Hotspots>
-        <Hotspot XYZ="110, -350, -74" Radius="250"/>
+        <Hotspot Radius="250" XYZ="110, -350, -74"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Id="11238"/>
+        <TargetMob Id="&Kapikulu;"/>
       </TargetMobs>
       <MinLevel/>
       <MaxLevel/>
@@ -129,11 +183,11 @@
   <CodeChunks>
     <CodeChunk Name="Transition">
       <![CDATA[
-            Core.Me.SetFacing(3.114886f);
-            MovementManager.MoveForwardStart();
-            await Coroutine.Sleep(2000);
-            Navigator.PlayerMover.MoveStop();
-            ]]>
+          Core.Me.SetFacing(3.114886f);
+          MovementManager.MoveForwardStart();
+          await Coroutine.Sleep(2000);
+          Navigator.PlayerMover.MoveStop();
+      ]]>
     </CodeChunk>
   </CodeChunks>
 </Profile>

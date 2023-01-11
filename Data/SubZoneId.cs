@@ -308,7 +308,7 @@ public enum SubZoneId : uint
     GrebuloffPillars = 4108,
 
     /// <summary>
-    /// Lv. 90.1: The Dead Ends > Shell Mound
+    /// Lv. 90.1: The Dead Ends > Shell Mound, Caustic Grebuloff
     /// </summary>
     ShellMound = 4104,
 
@@ -318,7 +318,7 @@ public enum SubZoneId : uint
     JudgmentDay = 4109,
 
     /// <summary>
-    /// Lv. 90.1: The Dead Ends > Deterrence Grounds
+    /// Lv. 90.1: The Dead Ends > Deterrence Grounds, Peacekeepr
     /// </summary>
     DeterrenceGrounds = 4105,
 
@@ -328,22 +328,57 @@ public enum SubZoneId : uint
     ThePlenty = 4110,
 
     /// <summary>
-    /// Lv. 90.1: The Dead Ends > The World Tree
+    /// Lv. 90.1: The Dead Ends > The World Tree, Ra La
     /// </summary>
     TheWorldTree = 4106,
 
     /// <summary>
-    /// Lv. 90.2: The Fell Court of Troia > Penitence, Evil Dreamers
+    /// Lv. 90.2: Alzadaal's Legacy > The Bhaflau Remnants
+    /// </summary>
+    TheBhaflauRemnants = 4161,
+
+    /// <summary>
+    /// Lv. 90.2: Alzadaal's Legacy > Undersea Entrance, Ambujam
+    /// </summary>
+    UnderseaEntrance = 4158,
+
+    /// <summary>
+    /// Lv. 90.2: Alzadaal's Legacy > The Arrapago Remnants
+    /// </summary>
+    TheArrapagoRemnants = 4162,
+
+    /// <summary>
+    /// Lv. 90.2: Alzadaal's Legacy > The Threshold of Bounty, Armored Chariot
+    /// </summary>
+    TheThresholdOfBounty = 4159,
+
+    /// <summary>
+    /// Lv. 90.2: Alzadaal's Legacy > The Zhayolm Remnants
+    /// </summary>
+    TheZhayolmRemnants = 4163,
+
+    /// <summary>
+    /// Lv. 90.2: Alzadaal's Legacy > The Thrice-won Hoard
+    /// </summary>
+    TheThriceWonHoard = 4166,
+
+    /// <summary>
+    /// Lv. 90.2: Alzadaal's Legacy > Weaver's Warding, Kapikulu
+    /// </summary>
+    WeaversWarding = 4160,
+
+    /// <summary>
+    /// Lv. 90.3: The Fell Court of Troia > Penitence, Evil Dreamers
     /// </summary>
     Penitence = 4184,
 
     /// <summary>
-    /// Lv. 90.2: The Fell Court of Troia > Seat of the Foremost, Beatrice
+    /// Lv. 90.3: The Fell Court of Troia > Seat of the Foremost, Beatrice
     /// </summary>
     SeatOfTheForemost = 4185,
 
     /// <summary>
-    /// Lv. 90.2: The Fell Court of Troia > Seat of the Foremost, Scarmiglione
+    /// Lv. 90.3: The Fell Court of Troia > Seat of the Foremost, Scarmiglione
     /// </summary>
     GardenOfEpopts = 4186,
 #pragma warning restore SA1629 // Documentation text should end with a period
