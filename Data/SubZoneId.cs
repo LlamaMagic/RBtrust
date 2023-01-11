@@ -380,5 +380,20 @@ public enum SubZoneId : uint
     /// Lv. 90.3: The Fell Court of Troia > Seat of the Foremost, Scarmiglione
     /// </summary>
     GardenOfEpopts = 4186,
+
+    /// <summary>
+    /// Lv. 90.3: Lapis Manalis > The Silvan Thron, Albion
+    /// </summary>
+    TheSilvanThrone = 4274,
+
+    /// <summary>
+    /// Lv. 90.3: Lapis Manalis > Forum Messorum, Galatea Magna
+    /// </summary>
+    ForumMessorum = 4275,
+
+    /// <summary>
+    /// Lv. 90.3: Lapis Manalis > Deepspine, Cagnazzo
+    /// </summary>
+    Deepspine = 4276,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }
