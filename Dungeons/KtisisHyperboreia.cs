@@ -182,7 +182,7 @@ public class KtisisHyperboreia : AbstractDungeon
 
     private async Task<bool> HandleHermes()
     {
-    	// TODO:
+        // TODO:
         // Hermetica: check NPC facing, cast bar; add line AOE when cast bar low enough?
         // Meteor: Go to middle. Is undamaged meteor detectable? HP? Otherwise follow
         // Double/Quadruple: Might need to manually draw the second line for x seconds as subsequent cast finishes casting.

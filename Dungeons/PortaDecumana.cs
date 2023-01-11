@@ -27,9 +27,9 @@ public class PortaDecumana : AbstractDungeon
     private const uint TheUltimaWeaponNpc = 2137;
     private const int AetheroplasmNpc = 2138;
 
-    private static readonly HashSet<uint> RadiantBlaze = new() {28991};
+    private static readonly HashSet<uint> RadiantBlaze = new() { 28991 };
 
-    private static readonly HashSet<uint> HomingRay = new() {29011, 29012};
+    private static readonly HashSet<uint> HomingRay = new() { 29011, 29012 };
     private static readonly int HomingRayDuration = 5_000;
 
     private const uint GeocrushSpell = 28999;
@@ -41,8 +41,8 @@ public class PortaDecumana : AbstractDungeon
 
     DateTime EyeoftheStormDuration = DateTime.Now.AddMilliseconds(30);
 
-    private static readonly HashSet<uint> CitadelBuster = new() {29020};
-    private static readonly HashSet<uint> LaserFocus = new() {29013, 29014};
+    private static readonly HashSet<uint> CitadelBuster = new() { 29020 };
+    private static readonly HashSet<uint> LaserFocus = new() { 29013, 29014 };
     private static readonly int CitadelBusterDuration = 5_000;
     private static readonly int LaserFocusDuration = 5_000;
     private static DateTime citadelBusterTimestamp = DateTime.MinValue;
@@ -153,6 +153,7 @@ public class PortaDecumana : AbstractDungeon
         return Task.FromResult(false);
     }
 
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
@@ -202,8 +203,7 @@ public class PortaDecumana : AbstractDungeon
 
         if (LaserFocus.IsCasting() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene)
         {
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, LaserFocusDuration,
-                $"Stacking for Laser Focus");
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, LaserFocusDuration, $"Stacking for Laser Focus");
 
             BattleCharacter laserFocusTarget = PartyManager.VisibleMembers
                 .Select(pm => pm.BattleCharacter)

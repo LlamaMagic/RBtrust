@@ -12,8 +12,7 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Snowcloak : AbstractDungeon
 {
-
-    private static readonly HashSet<uint> FrozenSpike = new() {30262};
+    private static readonly HashSet<uint> FrozenSpike = new() { 30262 };
 
     private static readonly int FrozenSpikeDuration = 10_000;
 

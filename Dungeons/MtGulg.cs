@@ -19,9 +19,6 @@ namespace Trust.Dungeons;
 /// </summary>
 public class MtGulg : AbstractDungeon
 {
-    /// <inheritdoc/>
-    public override ZoneId ZoneId => Data.ZoneId.MtGulg;
-
     private const int ForgivenCruelty = 8260;
     private const int ForgivenWhimsy = 8261;
     private const int Brightsphere = 7864;
@@ -53,6 +50,9 @@ public class MtGulg : AbstractDungeon
     private static readonly Vector3 PenancePianissimoCenter = new(-239.9347f, 210.0f, 236.9791f);
     private static readonly int PenancePianissimoDuration = 45_000;
     private static DateTime penancePianissimoTimestamp = DateTime.MinValue;
+
+    /// <inheritdoc/>
+    public override ZoneId ZoneId => Data.ZoneId.MtGulg;
 
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.MtGulg;

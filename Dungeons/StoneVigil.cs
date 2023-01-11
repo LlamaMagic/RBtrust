@@ -36,8 +36,6 @@ public class StoneVigil : AbstractDungeon
     private static readonly Vector3 KoshcheiArenaCenter = new(44.05606f, 4.000032f, -80.10602f);
     private static readonly Vector3 IsgebindArenaCenter = new(0.318293f, 0.04040813f, -248.7385f);
 
-    private AvoidInfo? someTrackedSkill;
-
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.TheStoneVigil;
 
@@ -45,7 +43,7 @@ public class StoneVigil : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheStoneVigil;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {  };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { };
 
     /// <inheritdoc/>
     public override Task<bool> OnEnterDungeonAsync()
@@ -153,11 +151,10 @@ public class StoneVigil : AbstractDungeon
             innerRadius: 23.0f,
             priority: AvoidancePriority.High);
 
-
         return Task.FromResult(false);
     }
 
-
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();

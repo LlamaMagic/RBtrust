@@ -152,7 +152,6 @@ public enum SubZoneId : uint
     AstrologyandAstromancyCamera = 1624,
 
     /// <summary>
-    /// <summary>
     /// Lv. 59 > The Great Gubal Lbrary > Rhapsodies Quadrangle,
     /// </summary>
     RhapsodiesQuadrangle = 1625,
@@ -183,7 +182,7 @@ public enum SubZoneId : uint
     EvaluationandAuthentication = 1599,
 
     /// <summary>
-    /// Lv. 60: Aetherochemical Research Facility > Neurolink Nacelle, Lahabrea & Igeyorhm
+    /// Lv. 60: Aetherochemical Research Facility > Neurolink Nacelle, Lahabrea + Igeyorhm
     /// </summary>
     NeurolinkNacelle = 1602,
 

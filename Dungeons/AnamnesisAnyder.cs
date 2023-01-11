@@ -51,9 +51,6 @@ public class AnamnesisAnyder : AbstractDungeon
     private static readonly HashSet<uint> FallingWater = new() { 19325 };
     private static readonly int FallingWaterDuration = 6_000;
 
-    private static DateTime ragingGlowerTimestamp = DateTime.MinValue;
-    private static DateTime luminousRayTimestamp = DateTime.MinValue;
-
     private static readonly HashSet<uint> NonSidestepSpells = new()
     {
         19289,
@@ -76,6 +73,9 @@ public class AnamnesisAnyder : AbstractDungeon
         20007,
         28266,
     };
+
+    private static DateTime ragingGlowerTimestamp = DateTime.MinValue;
+    private static DateTime luminousRayTimestamp = DateTime.MinValue;
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.AnamnesisAnyder;

@@ -44,7 +44,7 @@ public class SohmAl : AbstractDungeon
 
     private static readonly int MadDashDuration = 7_000;
 
-    private readonly HashSet<uint> fireball = new() {3809};
+    private readonly HashSet<uint> fireball = new() { 3809 };
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.SohmAl;
@@ -55,7 +55,7 @@ public class SohmAl : AbstractDungeon
     /// <summary>
     /// Gets spell IDs to follow-dodge while any contained spell is casting.
     /// </summary>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {29272,3809};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 29272, 3809 };
 
     /// <summary>
     /// Executes dungeon logic.
@@ -70,6 +70,7 @@ public class SohmAl : AbstractDungeon
         return false;
     }
 
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();

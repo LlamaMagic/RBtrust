@@ -41,7 +41,7 @@ public class Aery : AbstractDungeon
      * SpellName: Body Slam SpellId: 31234 Follow
      * SpellName: Crippling Blow SpellId: 30193 Tank Buster
      * (3455) Gyascutus, Dist: 19.42f, Loc: <11.97827, 60.00004, 67.97888>, IsTargetable: True, Target: Temple Knight
-  └─ Casting (31234) Body Slam => (3455) Gyascutus
+     *   └─ Casting (31234) Body Slam => (3455) Gyascutus
 
      * SpellName: Inflammable Fumes SpellId: 30181
      */
@@ -56,10 +56,9 @@ public class Aery : AbstractDungeon
      *   └─ Casting (30202) Horrid Roar => (10013) Estinien
      *   └─ Casting (30198) Cauterize => (3458) Nidhogg - Line AOE
      * (3458) Nidhogg, Dist: 16.03f, Loc: <35.3908, 148.397, -279.6484>, IsTargetable: False, Target: None
-└─ Casting (30200) Horrid Roar => <45.33447, 148.3939, -267.1093>
-
-
+     *   └─ Casting (30200) Horrid Roar => <45.33447, 148.3939, -267.1093>
      */
+
     private const int HorridRoarDuration = 4_250;
 
     private const int RangdaNPCID = 3452;
@@ -76,15 +75,14 @@ public class Aery : AbstractDungeon
     private const uint CauterizeSpell = 30198;
     private const uint HorridRoarGroundSpell = 30200;
 
-    private static readonly HashSet<uint> Cauterize = new() {30198};
-    private static readonly HashSet<uint> HorridRoarGround = new() {30200};
-    private static readonly HashSet<uint> HorridRoar = new() {30202};
-    private static readonly HashSet<uint> HotTail = new() {30196};
-    private static readonly HashSet<uint> HotWing = new() {30195};
+    private static readonly HashSet<uint> Cauterize = new() { 30198 };
+    private static readonly HashSet<uint> HorridRoarGround = new() { 30200 };
+    private static readonly HashSet<uint> HorridRoar = new() { 30202 };
+    private static readonly HashSet<uint> HotTail = new() { 30196 };
+    private static readonly HashSet<uint> HotWing = new() { 30195 };
 
     private static readonly int HotWingDuration = 8_000;
     private static DateTime HotWingTimestamp = DateTime.MinValue;
-
 
     private static readonly Vector3 RangdaArenaCenter = new(334.4144f, 93.99633f, -203.6947f);
     private static readonly Vector3 GyascutusArenaCenter = new(12.21774f, 60.00004f, 68.1711f);
@@ -97,11 +95,9 @@ public class Aery : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheAery;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {30224};
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 30224 };
 
     /// <inheritdoc/>
-    ///
-    ///
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
@@ -210,7 +206,7 @@ public class Aery : AbstractDungeon
         return Task.FromResult(false);
     }
 
-
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();

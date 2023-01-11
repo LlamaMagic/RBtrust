@@ -24,7 +24,7 @@ public class DeadEnds : AbstractDungeon
     private const int Peacekeeper = 10315;
     private const int Rala = 10316;
 
-    private static readonly HashSet<uint> BossIds = new HashSet<uint>
+    private static readonly HashSet<uint> BossIds = new()
     {
         CausticGrebuloff, Peacekeeper, Rala,
     };
