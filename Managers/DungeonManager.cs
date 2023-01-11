@@ -92,6 +92,7 @@ internal class DungeonManager
             { ZoneId.TheDeadEnds, typeof(DeadEnds) },
             { ZoneId.AlzadaalsLegacy, typeof(AlzadaalsLegacy) },
             { ZoneId.TheFellCourtOfTroia, typeof(FellCourtOfTroia) },
+            { ZoneId.LapisManalis, typeof(LapisManalis) },
         };
     }
 
