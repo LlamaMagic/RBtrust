@@ -81,6 +81,8 @@ public class DohnMheg : AbstractDungeon
     /// <inheritdoc/>
     public override Task<bool> OnEnterDungeonAsync()
     {
+        AvoidanceManager.AvoidInfos.Clear();
+
         // Boss 2: Toad Choir
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThroneRoom,
@@ -198,7 +200,7 @@ public class DohnMheg : AbstractDungeon
 
             if (DateTime.Now < fodderEnds && Core.Player.Distance(fodderTetherPoint) > FodderDistance)
             {
-                MoveToParameters parameters = new MoveToParameters
+                MoveToParameters parameters = new()
                 {
                     Location = fodderTetherPoint,
                     DistanceTolerance = FodderDistance,
