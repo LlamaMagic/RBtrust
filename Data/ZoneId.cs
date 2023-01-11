@@ -326,5 +326,10 @@ public enum ZoneId : ushort
     /// </summary>
     TheFellCourtOfTroia = 1070,
 
+    /// <summary>
+    /// Lv. 90.3: Lapis Manalis
+    /// </summary>
+    LapisManalis = 1097,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
 }
