@@ -162,7 +162,7 @@ public class LapisManalis : AbstractDungeon
         /// Icy Throes
         /// Spread AOE targeting players. 6 yalm radius. Also uses IDs 31363 and 32783 to target players
         /// </summary>
-        public const uint IcyThroes = 32783;
+        public const uint IcyThroes = 31363;
 
         /// <summary>
         /// Albion
