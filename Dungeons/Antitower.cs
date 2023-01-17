@@ -1,9 +1,12 @@
 ﻿using Buddy.Coroutines;
+using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
 using ff14bot.Managers;
+using ff14bot.Navigation;
 using ff14bot.Objects;
+using ff14bot.Pathing;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +14,7 @@ using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
+using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -99,16 +103,24 @@ public class Antitower : AbstractDungeon
     {
         if (EnemyAction.JitteringJounce.IsCasting() && !Core.Me.IsTank())
         {
-            BattleCharacter Stardust = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Stardust)
-                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
 
-            if (Stardust != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
-                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(Stardust.Location) > 1)
+            var Ziggy = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Ziggy)
+                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);; // boss
+            var Stardust = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Stardust)
+                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);; // meteor
+
+            var rotation = MathEx.Rotation(Stardust.Location - Ziggy.Location);
+            var point = MathEx.GetPointAt(Stardust.Location, 5f, rotation);
+
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, $"Hiding behind the rock");
+            Logger.Information($"Hiding behind the rock");
+            while (point != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(point) > 1)
             {
-                await Stardust.Follow(0.5F, 0, true);
-                await CommonTasks.StopMoving();
-                await Coroutine.Sleep(30);
+                Navigator.PlayerMover.MoveTowards(point);
+                await Coroutine.Yield();
             }
+            await CommonTasks.StopMoving();
         }
 
         return false;
