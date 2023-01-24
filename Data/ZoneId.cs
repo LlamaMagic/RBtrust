@@ -182,6 +182,11 @@ public enum ZoneId : ushort
     BaelsarsWall = 1114,
 
     /// <summary>
+    /// Lv. 60: Limitless Blue
+    /// </summary>
+    LimitlessBlue  = 436,
+
+    /// <summary>
     /// Lv. 61: The Sirensong Sea
     /// </summary>
     TheSirensongSea = 626,

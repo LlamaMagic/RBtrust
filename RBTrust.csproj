@@ -66,6 +66,7 @@
     <Compile Include="Dungeons\GreatGubalLibrary.cs" />
     <Compile Include="Dungeons\KeeperOfTheLake.cs" />
     <Compile Include="Dungeons\LapisManalis.cs" />
+    <Compile Include="Dungeons\LimitlessBlue.cs" />
     <Compile Include="Dungeons\SirensongSea.cs" />
     <Compile Include="Dungeons\Snowcloak.cs" />
     <Compile Include="Dungeons\SohmAl.cs" />

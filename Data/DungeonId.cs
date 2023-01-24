@@ -127,6 +127,11 @@ public enum DungeonId : uint
     Xelphatol = 222,
 
     /// <summary>
+    /// Lv. 60: Limitless Blue
+    /// </summary>
+    LimitlessBlue = 88,
+
+    /// <summary>
     /// Lv. 60.5: Baelsar's Wall
     /// </summary>
     BaelsarsWall = 223,

@@ -58,6 +58,7 @@ internal class DungeonManager
             { ZoneId.SohrKai, typeof(SohrKai) },
             { ZoneId.Xelphatol, typeof(Xelphatol) },
             { ZoneId.BaelsarsWall, typeof(BaelsarsWall) },
+            { ZoneId.LimitlessBlue, typeof(LimitlessBlue) },
 
             // 4.0 - Stormblood
             { ZoneId.TheSirensongSea, typeof(SirensongSea) },
