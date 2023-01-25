@@ -157,6 +157,21 @@ public enum ZoneId : ushort
     TheGreatGubalLibrary = 1109,
 
     /// <summary>
+    /// Lv. 60: Trial Containment Bay S1T7
+    /// </summary>
+    ContainmentBayS1T7 = 517,
+
+    /// <summary>
+    /// Lv. 60: Trial Containment Bay S1T7
+    /// </summary>
+    ContainmentBayP1T6 = 576,
+
+    /// <summary>
+    /// Lv. 60: Trial Containment Bay S1T7
+    /// </summary>
+    ContainmentBayZ1T9 = 637,
+
+    /// <summary>
     /// Lv. 60.1: The Aetherochemical Research Facility
     /// </summary>
     TheAetherochemicalResearchFacility = 1110,

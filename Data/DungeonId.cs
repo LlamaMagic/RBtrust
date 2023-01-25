@@ -107,6 +107,21 @@ public enum DungeonId : uint
     TheGreatGubalLibrary = 218,
 
     /// <summary>
+    /// Lv. 60: Trial Containment Bay S1T7
+    /// </summary>
+    ContainmentBayS1T7 = 134,
+
+    /// <summary>
+    /// Lv. 60: Trial Containment Bay P1T6
+    /// </summary>
+    ContainmentBayP1T6 = 183,
+
+    /// <summary>
+    /// Lv. 60: Trial Containment Bay Z1T9
+    /// </summary>
+    ContainmentBayZ1T9 = 223,
+
+    /// <summary>
     /// Lv. 60.1: The Aetherochemical Research Facility
     /// </summary>
     TheAetherochemicalResearchFacility = 219,

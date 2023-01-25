@@ -59,6 +59,9 @@
     <Compile Include="Dungeons\BardamsMettle.cs" />
     <Compile Include="Dungeons\Burn.cs" />
     <Compile Include="Dungeons\CastrumAbania.cs" />
+    <Compile Include="Dungeons\ContainmentBayP1T6.cs" />
+    <Compile Include="Dungeons\ContainmentBayS1T7.cs" />
+    <Compile Include="Dungeons\ContainmentBayZ1T9.cs" />
     <Compile Include="Dungeons\DomaCastle.cs" />
     <Compile Include="Dungeons\DrownedCityOfSkalla.cs" />
     <Compile Include="Dungeons\FellCourtOfTroia.cs" />
