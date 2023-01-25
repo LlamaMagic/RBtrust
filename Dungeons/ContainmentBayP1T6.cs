@@ -39,7 +39,7 @@ public class ContainmentBayP1T6 : AbstractDungeon
             () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ContainmentBayP1T6,
             () => ArenaCenter.Sophia,
             outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerRadius: 17.0f,
             priority: AvoidancePriority.High);
 
         return Task.FromResult(false);
