@@ -30,6 +30,21 @@ public class Xelphatol : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 3 WickedWheel
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheVortex,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.WickedWheel,
+            radiusProducer: bc => 7.0f,
+            priority: AvoidancePriority.Medium));
+
+        // Eye of the Storm
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheVortex,
+            objectSelector: c => c.CastingSpellId == EnemyAction.EyeoftheStorm,
+            outerRadius: 90.0f,
+            innerRadius: 10.5f,
+            priority: AvoidancePriority.Medium);
+
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheCage,
@@ -165,6 +180,20 @@ public class Xelphatol : AbstractDungeon
         /// AoE on target, spread.
         /// </summary>
         public static readonly HashSet<uint> Bill = new() {6618};
+
+        /// <summary>
+        /// Boss 3: Tozol Huatotl
+        /// Wicked Wheel
+        /// Small AOE around gardua
+        /// </summary>
+        public const uint WickedWheel = 6621;
+
+        /// <summary>
+        /// Boss 3: Tozol Huatotl
+        /// Eye of the Storm
+        /// donut aoe around gardua
+        /// </summary>
+        public const uint EyeoftheStorm = 6619;
     }
 
     private static class AblityTimers
