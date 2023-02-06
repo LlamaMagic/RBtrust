@@ -34,6 +34,29 @@ public class ContainmentBayZ1T9 : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Attach very wide cone avoid pointing out the boss's right, forcing bot to left side
+        // Boss spins clockwise and front cleave comes quickly, so disallow less-safe right side
+        // Position + rotation will auto-update as the boss moves + turns!
+        /*
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ContainmentBayZ1T9,
+            objectSelector: (obj) => obj.NpcId == EnemyNpc.Zurvan && obj.IsTargetable,
+            leashPointProducer: () => ArenaCenter.Zurvan,
+            leashRadius: 100f,
+            rotationDegrees: 0f,
+            radius: -180f,
+            arcDegrees: 280f,
+            priority: AvoidancePriority.Medium);
+            */
+
+        // Safe Area
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ContainmentBayZ1T9,
+            () => ArenaCenter.SafeArea,
+            outerRadius: 90.0f,
+            innerRadius: 8.5f,
+            priority: AvoidancePriority.High);
+
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ContainmentBayZ1T9,
@@ -67,6 +90,11 @@ public class ContainmentBayZ1T9 : AbstractDungeon
         /// Boss: Sephirot.
         /// </summary>
         public static readonly Vector3 Zurvan = new(0f, 0f, 0f);
+
+        /// <summary>
+        /// Boss: Sephirot.
+        /// </summary>
+        public static readonly Vector3 SafeArea = new(-0.143432f, 1.31130f, 12.7033f);
     }
 
     private static class EnemyAction
