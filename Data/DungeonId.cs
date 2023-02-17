@@ -102,6 +102,26 @@ public enum DungeonId : uint
     TheVault = 217,
 
     /// <summary>
+    /// Lv. 60: Raid Alexander A1 Fist of the Father
+    /// </summary>
+    AlexanderA1FistoftheFather = 112,
+
+    /// <summary>
+    /// Lv. 60: Raid Alexander A2 Cuff of the Father
+    /// </summary>
+    AlexanderA2CuffoftheFather = 113,
+
+    /// <summary>
+    /// Lv. 60: Raid Alexander A3 - The Arm of the Father
+    /// </summary>
+    AlexanderA3ArmoftheFather = 114,
+
+    /// <summary>
+    /// Lv. 60: Raid Alexander A4 - The Burden of the Father
+    /// </summary>
+    AlexanderA4BurdenoftheFather = 115,
+
+    /// <summary>
     /// Lv. 59: The Great Gubal Library
     /// </summary>
     TheGreatGubalLibrary = 218,

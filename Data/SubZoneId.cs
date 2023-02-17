@@ -187,6 +187,26 @@ public enum SubZoneId : uint
     NeurolinkNacelle = 1602,
 
     /// <summary>
+    /// Lv. 60: Alexander 1
+    /// </summary>
+    Hangar8 = 1632,
+
+    /// <summary>
+    /// Lv. 60: Alexander 2
+    /// </summary>
+    Hangar12 = 1637,
+
+    /// <summary>
+    /// Lv. 60: Alexander 3
+    /// </summary>
+    CondensateDemineralizer9 = 1644,
+
+    /// <summary>
+    /// Lv. 60: Alexander 4
+    /// </summary>
+    TheBurdenoftheFather = 1645,
+
+    /// <summary>
     /// Lv. 60: The Antitower > The Manifest, Zuro Roggo
     /// </summary>
     TheManifest = 1696,

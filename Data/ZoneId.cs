@@ -172,6 +172,26 @@ public enum ZoneId : ushort
     ContainmentBayZ1T9 = 637,
 
     /// <summary>
+    /// Lv. 60: Raid Alexander A1 Fist of the Father
+    /// </summary>
+    AlexanderA1FistoftheFather = 442,
+
+    /// <summary>
+    /// Lv. 60: Raid Alexander A2 Cuff of the Father
+    /// </summary>
+    AlexanderA2CuffoftheFather = 443,
+
+    /// <summary>
+    /// Lv. 60: Raid Alexander A3 - The Arm of the Father
+    /// </summary>
+    AlexanderA3ArmoftheFather = 444,
+
+    /// <summary>
+    /// Lv. 60: Raid Alexander A4 - The Burden of the Father
+    /// </summary>
+    AlexanderA4BurdenoftheFather = 445,
+
+    /// <summary>
     /// Lv. 60.1: The Aetherochemical Research Facility
     /// </summary>
     TheAetherochemicalResearchFacility = 1110,

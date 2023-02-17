@@ -62,6 +62,10 @@ internal class DungeonManager
             { ZoneId.ContainmentBayS1T7, typeof(ContainmentBayS1T7) },
             { ZoneId.ContainmentBayP1T6, typeof(ContainmentBayP1T6) },
             { ZoneId.ContainmentBayZ1T9, typeof(ContainmentBayZ1T9) },
+            { ZoneId.AlexanderA1FistoftheFather, typeof(AlexanderA1FistoftheFather) },
+            { ZoneId.AlexanderA2CuffoftheFather, typeof(AlexanderA2CuffoftheFather) },
+            { ZoneId.AlexanderA3ArmoftheFather, typeof(AlexanderA3ArmoftheFather) },
+            { ZoneId.AlexanderA4BurdenoftheFather, typeof(AlexanderA4BurdenoftheFather) },
 
             // 4.0 - Stormblood
             { ZoneId.TheSirensongSea, typeof(SirensongSea) },
