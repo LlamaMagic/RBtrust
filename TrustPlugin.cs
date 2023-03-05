@@ -4,6 +4,7 @@ using ff14bot.AClasses;
 using ff14bot.Behavior;
 using ff14bot.Managers;
 using ff14bot.NeoProfiles;
+using ff14bot.Settings;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -150,7 +151,7 @@ public class TrustPlugin : BotPlugin
 
         if (respawnedInReasonableTime)
         {
-            NeoProfileManager.Load(NeoProfileManager.CurrentProfile.Path, true);
+            NeoProfileManager.Load(CharacterSettings.Instance.LastNeoProfile, true);
             NeoProfileManager.UpdateCurrentProfileBehavior();
         }
         else
