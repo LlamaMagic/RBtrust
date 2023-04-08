@@ -53,8 +53,7 @@ public class SohrKai : AbstractDungeon
             objectSelector: bc => bc.CastingSpellId == EnemyAction.HallowedWingsLeft,
             width: 20f,
             length: 40f,
-            xOffset: -10f,
-            yOffset: 0f,
+            xOffset: 10f,
             priority: AvoidancePriority.High);
 
         // Boss 3: Hallowed Wings Right
@@ -63,8 +62,7 @@ public class SohrKai : AbstractDungeon
             objectSelector: bc => bc.CastingSpellId == EnemyAction.HallowedWingsRight,
             width: 20f,
             length: 40f,
-            xOffset: 10f,
-            yOffset: 0f,
+            xOffset: -10f,
             priority: AvoidancePriority.High);
 
         // Boss Arenas

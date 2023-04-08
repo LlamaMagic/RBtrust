@@ -168,7 +168,7 @@ public class Aery : AbstractDungeon
             objectSelector: bc => bc.CastingSpellId == HotWingSpell,
             width: -33f,
             length: 120f,
-            xOffset: -20f,
+            xOffset: 20f,
             yOffset: -60f,
             priority: AvoidancePriority.High);
 
@@ -177,7 +177,7 @@ public class Aery : AbstractDungeon
             objectSelector: bc => bc.CastingSpellId == HotWingSpell,
             width: 33f,
             length: 120f,
-            xOffset: 20f,
+            xOffset: -20f,
             yOffset: -60f,
             priority: AvoidancePriority.High);
 

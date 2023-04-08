@@ -1,4 +1,5 @@
 ﻿using Clio.Utilities;
+using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
@@ -62,7 +63,7 @@ public static class AvoidanceHelpers
             condition: canRun,
             leashPointProducer: null,
             leashRadius: 50f,
-            rotationProducer: t => 0.0f,
+            rotationProducer: t => -t.Heading,
             scaleProducer: t => 1.0f,
             heightProducer: t => 15.0f,
             pointsProducer: t => rectangle,
@@ -161,11 +162,12 @@ public static class AvoidanceHelpers
         float halfWidth = width / 2.0f;
         Vector2[] rectangle =
         {
-            new Vector2(-halfWidth + xOffset, length + yOffset),
             new Vector2(halfWidth + xOffset, length + yOffset),
-            new Vector2(halfWidth + xOffset, yOffset),
+            new Vector2(-halfWidth + xOffset, length + yOffset),
             new Vector2(-halfWidth + xOffset, yOffset),
+            new Vector2(halfWidth + xOffset, yOffset),
         };
+
         return rectangle;
     }
 
@@ -174,7 +176,7 @@ public static class AvoidanceHelpers
         List<Vector2> outerPoints = new((pointCount * 2) + 1);
         List<Vector2> innerPoints = new(pointCount + 1);
 
-        double tau = 2.0 * Math.PI; // No official Math.Tau before .NET 5
+        const double tau = 2.0 * Math.PI; // No official Math.Tau before .NET 5
         double step = tau / pointCount;
 
         for (double theta = 0; theta < tau; theta += step)
