@@ -162,10 +162,10 @@ public static class AvoidanceHelpers
         float halfWidth = width / 2.0f;
         Vector2[] rectangle =
         {
-            new Vector2(halfWidth + xOffset, length + yOffset),
-            new Vector2(-halfWidth + xOffset, length + yOffset),
-            new Vector2(-halfWidth + xOffset, yOffset),
-            new Vector2(halfWidth + xOffset, yOffset),
+            new Vector2(halfWidth - xOffset, length + yOffset),
+            new Vector2(-halfWidth - xOffset, length + yOffset),
+            new Vector2(-halfWidth - xOffset, yOffset),
+            new Vector2(halfWidth - xOffset, yOffset),
         };
 
         return rectangle;
