@@ -402,17 +402,47 @@ public enum SubZoneId : uint
     GardenOfEpopts = 4186,
 
     /// <summary>
-    /// Lv. 90.3: Lapis Manalis > The Silvan Thron, Albion
+    /// Lv. 90.4: Lapis Manalis > Magitek Snowcraft
+    /// </summary>
+    MagitekSnowcraft = 4294,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis > Via Nivalis XLVII
+    /// </summary>
+    ViaNivalisXlvii = 4285,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis > Tyrannis
+    /// </summary>
+    Tyrannis = 4286,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis > The Silvan Throne, Albion
     /// </summary>
     TheSilvanThrone = 4274,
 
     /// <summary>
-    /// Lv. 90.3: Lapis Manalis > Forum Messorum, Galatea Magna
+    /// Lv. 90.4: Lapis Manalis > Vicus Messorum
+    /// </summary>
+    VicusMessorum = 4279,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis > Lar
+    /// </summary>
+    Lar = 4277,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis > Forum Messorum, Galatea Magna
     /// </summary>
     ForumMessorum = 4275,
 
     /// <summary>
-    /// Lv. 90.3: Lapis Manalis > Deepspine, Cagnazzo
+    /// Lv. 90.4: Lapis Manalis > Fons Manalis
+    /// </summary>
+    FonsManalis = 4280,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis > Deepspine, Cagnazzo
     /// </summary>
     Deepspine = 4276,
 #pragma warning restore SA1629 // Documentation text should end with a period

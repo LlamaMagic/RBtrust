@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Profile [
+  <!ENTITY ZoneId "1097">
+  <!ENTITY DutyId "896">
+
+  <!ENTITY Shortcut "2000700">
+
+  <!ENTITY MagitekSnowcraft "4294">
+  <!ENTITY ViaNivalisXlvii "4285">
+  <!ENTITY Tyrannis "4286">
+  <!ENTITY TheSilvanThrone "4274">
+
+  <!ENTITY VicusMessorum "4279">
+  <!ENTITY Lar "4277">
+  <!ENTITY ForumMessorum "4275">
+
+  <!ENTITY FonsManalis "4280">
+  <!ENTITY Deepspine "4276">
+]>
+<Profile>
+  <Name>[O][RBTrust] 90.4 Lapis Manalis</Name>
+  <Order>
+    <CheckPlugins/>
+
+    <While Condition="True">
+      <WaitForLoading/>
+
+      <If Condition="not IsOnMap(&ZoneId;)">
+        <EquipRecommended/>
+        <JoinSupportDuty DutyId="&DutyId;"/>
+      </If>
+
+      <If Condition="IsOnMap(&ZoneId;)">
+        <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
+
+        <If Condition="IsNearShortcut(&Shortcut;)">
+          <UseShortcut NpcId="&Shortcut;" Distance="20" />
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="IsOnSubMap(&MagitekSnowcraft;)">
+          <MoveTo XYZ="47.02834, 366, -579.013" Distance="0.5"/>
+          <Grind GrindRef="4294_F25467D1" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="34.00311, 366.1209, -591.6586" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&ViaNivalisXlvii;)">
+          <MoveTo XYZ="-17.96596, 390.8616, -664.7416" Distance="0.5"/>
+          <Grind GrindRef="4285_C004B3DC" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="15.31634, 386.0363, -685.3453" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&Tyrannis;) and Core.Player.Location.Z &gt; -744">
+          <MoveTo XYZ="15.31634, 386.0363, -685.3453" Distance="0.5"/>
+          <Grind GrindRef="4286_FBB5F9F1" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="24.39703, 386.0357, -723.379" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&TheSilvanThrone;)">
+          <MoveTo XYZ="23.97186, 386.0476, -744.0146" Distance="0.5"/>
+          <Grind GrindRef="Albion" While="GetInstanceTodo(1) == 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="24.39663, 386.0693, -771.6538" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&Tyrannis;) and Core.Player.Location.Z &lt; -744">
+          <MoveTo XYZ="-18.80102, 398.2682, -820.9764" Distance="0.5"/>
+          <LLChangeZone Heading="3.1650" />
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="IsOnSubMap(&VicusMessorum;) and Core.Player.Location.Z &gt; -394">
+          <MoveTo XYZ="308.7968, 67.91817, -166.9185" Distance="0.5"/>
+          <Grind GrindRef="4279_91818A5E" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="322.2749, 57.69109, -206.3637" Distance="0.5"/>
+          <Grind GrindRef="4279_F4158C27" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="346.7181, 42.64046, -280.2411" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&Lar;)">
+          <MoveTo XYZ="346.7181, 42.64046, -280.2411" Distance="0.5"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="375.9897, 40.10775, -283.1867" Distance="0.5"/>
+          <Grind GrindRef="4277_28FA19AC" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="350.2524, 34.41316, -327.6185" Distance="0.5"/>
+          <Grind GrindRef="4277_B8C9F05A" While="NumAttackableEnemies(30) &gt; 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="350.1648, 33.99946, -374.5348" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&ForumMessorum;)">
+          <Grind GrindRef="Galatea Magna" While="GetInstanceTodo(3) == 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="349.6881, 33.5242, -437.9056" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&VicusMessorum;) and Core.Player.Location.Z &lt; -394">
+          <MoveTo XYZ="343.1952, 30.63045, -458.9498" Distance="0.5"/>
+          <LLChangeZone Heading="3.2735" />
+        </If>
+
+        <If Condition="IsOnSubMap(&FonsManalis;)">
+          <MoveTo XYZ="-389.2728, -135.498, 311.6055" Distance="0.5"/>
+          <Grind GrindRef="4280_DA111BCD" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="-356.3907, -138.7492, 276.7986" Distance="0.5"/>
+          <Grind GrindRef="4280_3208D22D" While="NumAttackableEnemies(30) &gt; 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="-316.0594, -150.309, 199.2487" Distance="0.5"/>
+          <Grind GrindRef="4280_35B0BE24" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="-271.1644, -163.4994, 229.7408" Distance="0.5"/>
+          <Grind GrindRef="4280_ABAD2B52" While="NumAttackableEnemies(30) &gt; 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="-249.8111, -173.3023, 158.3871" Distance="0.5"/>
+        </If>
+
+        <If Condition="IsOnSubMap(&Deepspine;)">
+          <MoveTo XYZ="-250, -173, 145" Distance="0.5"/>
+          <Grind GrindRef="Cagnazzo" While="not IsDutyEnded()"/>
+          <LootTreasure/>
+          
+          <LLLeaveDuty/>
+        </If>
+      </If>
+    </While>
+  </Order>
+
+  <GrindAreas>
+    <GrindArea Name="4294_F25467D1">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="47.02834, 366, -579.013"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12078" Name="Caladrius Maturus" Weight="1"/>
+        <TargetMob Id="12081" Name="Caladrius" Weight="1"/>
+        <TargetMob Id="12245" Name="Albus Griffin" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4285_C004B3DC">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-28.21434, 390.2106, -670.88"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12094" Name="Albus Canis Lupinus" Weight="1"/>
+        <TargetMob Id="12080" Name="Albus Bear" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4286_FBB5F9F1">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="32.08947, 386.0445, -686.2161"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12088" Name="Visitant Bloodguard" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="Albion">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="23.97186, 386.0476, -744.0146"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="11992" Name="Albion" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4279_91818A5E">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="324.1321, 61.13863, -193.2708"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12085" Name="Visitant Vodoriga" Weight="1"/>
+        <TargetMob Id="12079" Name="Rock of Albus" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4279_F4158C27">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="335.7137, 54.29872, -220.4166"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12079" Name="Rock of Albus" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4277_28FA19AC">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="366.2775, 36.38456, -313.0999"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12082" Name="Galatea Parva" Weight="1"/>
+        <TargetMob Id="12095" Name="Visitant Taurus" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4277_B8C9F05A">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="350.576, 34.03273, -335.1339"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12082" Name="Galatea Parva" Weight="1"/>
+        <TargetMob Id="12095" Name="Visitant Taurus" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="Galatea Magna">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="350, 34, -394"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10308" Name="Galatea Magna" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4280_DA111BCD">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-373.8253, -137.3068, 289.1743"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12083" Name="Visitant Satana" Weight="1"/>
+        <TargetMob Id="12086" Name="Albus Craklaw" Weight="1"/>
+        <TargetMob Id="12087" Name="Albus Serpent" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4280_3208D22D">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-350.2666, -143.1014, 257.3236"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12083" Name="Visitant Satana" Weight="1"/>
+        <TargetMob Id="12086" Name="Albus Craklaw" Weight="1"/>
+        <TargetMob Id="12087" Name="Albus Serpent" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4280_35B0BE24">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-310.946, -149.7437, 199.813"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12084" Name="Visitant Monk" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="4280_ABAD2B52">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-269.3746, -164.4354, 230.146"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="12083" Name="Visitant Satana" Weight="1"/>
+        <TargetMob Id="12084" Name="Visitant Monk" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="Cagnazzo">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-250, -173, 120"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="11995" Name="Cagnazzo" Weight="1"/>
+        <TargetMob Id="11996" Name="Fearsome Flotsam" Weight="100"/>
+      </TargetMobs>
+    </GrindArea>
+  </GrindAreas>
+</Profile>
