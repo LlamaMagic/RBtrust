@@ -287,6 +287,21 @@ public enum SubZoneId : uint
     TheWindingFlare = 3000,
 
     /// <summary>
+    /// Lv. 80 Paglth'an > Amhuluk
+    /// </summary>
+    GatheringRing = 2939,
+
+    /// <summary>
+    /// Lv. 80 Paglth'an > Magitek Fortress
+    /// </summary>
+    ScalekinPen = 2940,
+
+    /// <summary>
+    /// Lv. 80 Paglth'an > Lunar Bahamut
+    /// </summary>
+    Sunseat = 2941,
+
+    /// <summary>
     /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
     /// </summary>
     FrozenSphere = 3766,

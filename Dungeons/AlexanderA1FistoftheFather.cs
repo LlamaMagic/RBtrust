@@ -34,6 +34,13 @@ public class AlexanderA1FistoftheFather : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        ff14bot.Managers.AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => true,
+            leashPointProducer: null,
+            leashRadius: 40f,
+            radiusProducer: u => 1f,
+            objectSelector: u => u.NpcId == EnemyNpc.Pilon);
+
         return Task.FromResult(false);
     }
 
@@ -47,6 +54,11 @@ public class AlexanderA1FistoftheFather : AbstractDungeon
 
     private static class EnemyNpc
     {
+        /// <summary>
+        /// Pilons
+        /// </summary>
+        public const uint Pilon = 3747;
+
         /// <summary>
         /// Boss: Left Oppressor
         /// </summary>
@@ -68,10 +80,8 @@ public class AlexanderA1FistoftheFather : AbstractDungeon
     }
 
 
-
     private static class EnemyAction
     {
-
     }
 
     private static class AblityTimers

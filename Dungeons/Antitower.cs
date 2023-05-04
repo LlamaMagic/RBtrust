@@ -105,9 +105,9 @@ public class Antitower : AbstractDungeon
         {
 
             var Ziggy = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Ziggy)
-                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);; // boss
+                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0); // boss
             var Stardust = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Stardust)
-                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);; // meteor
+                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0); // meteor
 
             var rotation = MathEx.Rotation(Stardust.Location - Ziggy.Location);
             var point = MathEx.GetPointAt(Stardust.Location, 5f, rotation);
