@@ -48,12 +48,39 @@ public class Paglthan : AbstractDungeon
             radiusProducer: bc => 10.5f,
             priority: AvoidancePriority.High));
 
+        // Move away from the lamp post after placing lightening rod
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && !Core.Me.HasAura(PlayerAura.LighteningRod) && WorldManager.SubZoneId == (uint)SubZoneId.GatheringRing,
+            objectSelector: bc => bc.NpcId == EnemyNpc.LampPost && bc.IsVisible,
+            radiusProducer: bc => 10.0f,
+            priority: AvoidancePriority.High));
+
         // Magitek Fortress
         // Lazer
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ScalekinPen,
             objectSelector: bc => bc.CastingSpellId == EnemyAction.Lazer,
             width: 10f,
+            length: 40f,
+            xOffset: 0f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Dodge missles
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ScalekinPen,
+            objectSelector: bc => bc.NpcId == EnemyNpc.MagitekMissile && bc.IsVisible,
+            width: 2f,
+            length: 10f,
+            xOffset: 0f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Dodge Fire
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ScalekinPen,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Lazer,
+            width: 5f,
             length: 40f,
             xOffset: 0f,
             yOffset: 0f,
@@ -83,6 +110,21 @@ public class Paglthan : AbstractDungeon
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
+
+        if (WorldManager.SubZoneId == (uint)SubZoneId.GatheringRing && Core.Player.InCombat)
+        {
+            while (Core.Me.HasAura(PlayerAura.LighteningRod))
+            {
+                GameObject lighteningRod = GameObjectManager.GetObjectsByNPCId<GameObject>(108)
+                    .LastOrDefault(bc => bc.IsVisible); // Lightening Rods
+                if (lighteningRod.IsValid)
+                {
+                    await CommonTasks.MoveTo(lighteningRod.Location);
+                    await Coroutine.Sleep(30);
+                }
+            }
+        }
+
 
         if (WorldManager.SubZoneId == (uint)SubZoneId.ScalekinPen && Core.Player.InCombat)
         {
@@ -119,6 +161,11 @@ public class Paglthan : AbstractDungeon
         public const uint DemonTome = 10075;
 
         /// <summary>
+        /// First Boss: Amhuluk.
+        /// </summary>
+        public const uint LampPost = 108;
+
+        /// <summary>
         /// First Boss: Ball of Levin .
         /// </summary>
         public const uint BallofLevin1 = 10065;
@@ -132,6 +179,12 @@ public class Paglthan : AbstractDungeon
         /// Second Boss: Magitek Core .
         /// </summary>
         public const uint MagitekCore = 10076;
+
+        /// <summary>
+        /// Second Boss: Magitek Missile .
+        /// </summary>
+        public const uint MagitekMissile = 10073;
+
 
         /// <summary>
         /// Third Boss: The Everliving Bibliotaph.
@@ -162,6 +215,14 @@ public class Paglthan : AbstractDungeon
         public static readonly Vector3 LunarBahamut = new(799f, -57f, -99f);
     }
 
+    private static class PlayerAura
+    {
+        /// <summary>
+        /// Stunned by pseudo-cutscene.
+        /// </summary>
+        public const uint LighteningRod = 2574;
+    }
+
     private static class EnemyAction
     {
         /// <summary>
@@ -176,7 +237,14 @@ public class Paglthan : AbstractDungeon
         /// Lazer
         /// Line AOE
         /// </summary>
-        public const uint Lazer = 2048;
+        public const uint Lazer = 966;
+
+        /// <summary>
+        /// Magitek Fortress
+        /// Fire
+        /// Line AOE
+        /// </summary>
+        public const uint Fire = 24846;
 
         /// <summary>
         /// Lunar Bahamut
