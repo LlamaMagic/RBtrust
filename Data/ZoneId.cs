@@ -219,17 +219,17 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 60: Limitless Blue
     /// </summary>
-    LimitlessBlue  = 436,
+    LimitlessBlue = 436,
 
     /// <summary>
     /// Lv. 61: The Sirensong Sea
     /// </summary>
-    TheSirensongSea = 626,
+    TheSirensongSea = 1142,
 
     /// <summary>
     /// Lv. 65: Bardam's Mettle
     /// </summary>
-    BardamsMettle = 623,
+    BardamsMettle = 1143,
 
     /// <summary>
     /// Lv. 67: Doma Castle

@@ -187,6 +187,21 @@ public enum SubZoneId : uint
     NeurolinkNacelle = 1602,
 
     /// <summary>
+    /// Lv. 61: Sirensong Sea > SpeaRock, Lugat
+    /// </summary>
+    SpaeRock = 1961,
+
+    /// <summary>
+    /// Lv. 61: Sirensong Sea > Glowering Krautz, The Governor
+    /// </summary>
+    GloweringKrautz = 1963,
+
+    /// <summary>
+    /// Lv. 61: Sirensong Sea > Warden's Delight, Lorelei
+    /// </summary>
+    WardensDelight = 1965,
+
+    /// <summary>
     /// Lv. 60: Alexander 1
     /// </summary>
     Hangar8 = 1632,
@@ -250,6 +265,21 @@ public enum SubZoneId : uint
     /// Lv. 60: Xelphatol > The Vortex,Tozol Huatotl
     /// </summary>
     TheVortex = 1791,
+
+    /// <summary>
+    /// Lv. 65: Bardam's Mettle > Bardam's Hunt , Garula
+    /// </summary>
+    BardamsHunt = 1976,
+
+    /// <summary>
+    /// Lv. 65: Bardam's Mettle > The Rebirth of Bardam the Brave , Bardam's Trial
+    /// </summary>
+    TheRebirthofBardamtheBrave = 1977,
+
+    /// <summary>
+    /// Lv. 65: Bardam's Mettle > The Rebirth of Bardam the Brave , Bardam's Trial
+    /// </summary>
+    TheVoicelessMuse = 1978,
 
      /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
