@@ -90,8 +90,9 @@ public class CopperbellMinesHard : AbstractDungeon
         }
 
         // Gogmagolem
-        if (WorldManager.SubZoneId == (uint)SubZoneId.TheCryingDark && Core.Me.InCombat)
+        if (WorldManager.SubZoneId == (uint)SubZoneId.TheCryingDark && Core.Me.InCombat && !GameObjectManager.Attackers.Contains(KindlingSpriteBC) && (ImprovedBlastingDeviceBC != null && ImprovedBlastingDeviceBC.IsTargetable))
         {
+            /*
             if (!await Coroutine.Wait(
                 10_000,
                 () => ImprovedBlastingDeviceBC != null && ImprovedBlastingDeviceBC.IsTargetable &&
@@ -100,6 +101,7 @@ public class CopperbellMinesHard : AbstractDungeon
                 Logger.Debug("Couldn't Find ImprovedBlastingDeviceBC");
                 return false;
             }
+            */
 
             if (ImprovedBlastingDeviceBC == null || !ImprovedBlastingDeviceBC.IsTargetable)
             {
