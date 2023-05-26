@@ -281,6 +281,21 @@ public enum SubZoneId : uint
     /// </summary>
     TheVoicelessMuse = 1978,
 
+    /// <summary>
+    /// Lv. 67: Doma Castle > The Third Armory , Magitek Rearguard
+    /// </summary>
+    TheThirdArmory = 1985,
+
+    /// <summary>
+    /// Lv. 67: Doma Castle > Training Grounds , Magitek Hexadron
+    /// </summary>
+    TrainingGrounds = 1986,
+
+    /// <summary>
+    /// Lv. 67: Doma Castle > Hall of the Scarlet Swallow , Magitek Hexadron
+    /// </summary>
+    HalloftheScarletSwallow = 1987,
+
      /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>

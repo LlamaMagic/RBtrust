@@ -234,7 +234,7 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 67: Doma Castle
     /// </summary>
-    DomaCastle = 660,
+    DomaCastle = 1144,
 
     /// <summary>
     /// Lv. 69: Castrum Abania
