@@ -8,6 +8,66 @@
 public enum PartyMemberId : uint
 {
     /// <summary>
+    /// Raubahn : DPS, GLD.
+    /// </summary>
+    Raubahn = 4133,
+
+    /// <summary>
+    /// Arenvald : Tank, GLD.
+    /// </summary>
+    Arenvald = 5964,
+
+    /// <summary>
+    /// Resistance Pikedancer : DPS, LNC.
+    /// </summary>
+    ResistancePikedancer = 12470,
+
+    /// <summary>
+    /// Resistance Fighter  : Tank, GLD.
+    /// </summary>
+    ResistanceFighter = 12469,
+
+    /// <summary>
+    /// hien: DPS, SAM.
+    /// </summary>
+    Hien = 6148,
+
+    /// <summary>
+    /// Mol Youth: Healer, CNJ.
+    /// </summary>
+    MolYouth = 12465,
+
+    /// <summary>
+    /// Carvallain: Tank, MRD.
+    /// </summary>
+    Carvallain = 12463,
+
+    /// <summary>
+    /// Lyse: DPS, PUG.
+    /// </summary>
+    Lyse = 5970,
+
+    /// <summary>
+    /// Yugiri: DPS, NIN.
+    /// </summary>
+    Yugiri = 12466,
+
+    /// <summary>
+    /// Yugiri: Tank, SAM.
+    /// </summary>
+    Gosetsu = 12464,
+
+    /// <summary>
+    /// Doman Shaman: Healer, CNJ.
+    /// </summary>
+    DomanShaman = 12468,
+
+    /// <summary>
+    /// Doman Liberator: DPS, SAM.
+    /// </summary>
+    DomanLiberator = 12467,
+
+    /// <summary>
     /// Alisaie: DPS, RDM.
     /// </summary>
     Alisaie = 5239,

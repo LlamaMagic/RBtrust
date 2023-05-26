@@ -48,6 +48,16 @@ internal static class PartyMembers
         PartyMemberId.SerpentConjurer,
         PartyMemberId.Zero,
         PartyMemberId.Varshahn,
+        PartyMemberId.Yugiri,
+        PartyMemberId.Gosetsu,
+        PartyMemberId.DomanShaman,
+        PartyMemberId.DomanLiberator,
+        PartyMemberId.Hien,
+        PartyMemberId.MolYouth,
+        PartyMemberId.Raubahn,
+        PartyMemberId.Arenvald,
+        PartyMemberId.ResistanceFighter,
+        PartyMemberId.ResistancePikedancer,
     };
 
     /// <summary>
@@ -77,6 +87,17 @@ internal static class PartyMembers
         PartyMemberId.SerpentLancer,
         PartyMemberId.FlameThaumaturge,
         PartyMemberId.SerpentConjurer,
+        PartyMemberId.Yugiri,
+        PartyMemberId.Gosetsu,
+        PartyMemberId.DomanShaman,
+        PartyMemberId.Lyse,
+        PartyMemberId.Carvallain,
+        PartyMemberId.Hien,
+        PartyMemberId.MolYouth,
+        PartyMemberId.Raubahn,
+        PartyMemberId.Arenvald,
+        PartyMemberId.ResistanceFighter,
+        PartyMemberId.ResistancePikedancer,
     };
 
     /// <summary>
@@ -102,6 +123,12 @@ internal static class PartyMembers
         PartyMemberId.SerpentLancer,
         PartyMemberId.FlameThaumaturge,
         PartyMemberId.Zero,
+        PartyMemberId.Yugiri,
+        PartyMemberId.DomanLiberator,
+        PartyMemberId.Lyse,
+        PartyMemberId.ResistancePikedancer,
+        PartyMemberId.Raubahn,
+
     };
 
     /// <summary>
@@ -109,6 +136,7 @@ internal static class PartyMembers
     /// </summary>
     public static readonly HashSet<PartyMemberId> PartyTankIds = new()
     {
+        PartyMemberId.Carvallain,
         PartyMemberId.CrystalExarch,
         PartyMemberId.GrahaTia,
         PartyMemberId.Thancred,
@@ -120,6 +148,7 @@ internal static class PartyMembers
         PartyMemberId.ScionMarauder,
         PartyMemberId.StormMarauder,
         PartyMemberId.Varshahn,
+        PartyMemberId.Gosetsu,
     };
 
     /// <summary>
@@ -138,5 +167,8 @@ internal static class PartyMembers
         PartyMemberId.EagerConjurer,
         PartyMemberId.ScionConjurer,
         PartyMemberId.SerpentConjurer,
+        PartyMemberId.DomanShaman,
+        PartyMemberId.MolYouth,
+
     };
 }
