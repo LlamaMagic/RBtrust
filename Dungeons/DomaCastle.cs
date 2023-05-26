@@ -1,8 +1,16 @@
-﻿using Clio.Utilities;
+﻿using Buddy.Coroutines;
+using Clio.Utilities;
+using ff14bot;
+using ff14bot.Behavior;
 using ff14bot.Managers;
+using ff14bot.Navigation;
+using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
+using Trust.Extensions;
+using Trust.Helpers;
 
 namespace Trust.Dungeons;
 
@@ -18,35 +26,50 @@ public class DomaCastle : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.DomaCastle;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.MagitekMissiles };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 2 Hexadrone Bit
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TrainingGrounds,
+            objectSelector: bc => bc.NpcId == EnemyNpc.HexadroneBit,
+            width: 4f,
+            length: 40f,
+            priority: AvoidancePriority.High);
+
+        // Boss 3 Clean Cut
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.CleanCut,
+            width: 8f,
+            length: 40f,
+            priority: AvoidancePriority.High);
+
         // Boss Arenas
-        /*
+
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SpaeRock,
-            () => SirensongSea.ArenaCenter.Lugat,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThirdArmory,
+            () => ArenaCenter.MagitekRearguard,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.GloweringKrautz,
-            () => SirensongSea.ArenaCenter.TheGovernor,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TrainingGrounds,
+            () => ArenaCenter.MagitekHexadron,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.WardensDelight,
-            () => SirensongSea.ArenaCenter.Lorelei,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow,
+            () => ArenaCenter.HypertunedGrynewaht,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
-            */
 
         return Task.FromResult(false);
     }
@@ -56,52 +79,121 @@ public class DomaCastle : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        // Place Thermal Charge detination in a safe spot
+        if (WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow && Core.Player.InCombat)
+        {
+            if (Core.Me.HasAura(PlayerAura.Prey))
+            {
+                ff14bot.Helpers.Logging.WriteDiagnostic("Moving to safe spot");
+                while (Core.Me.HasAura(PlayerAura.Prey) && Core.Me.Location.Distance2D(ArenaCenter.BombDropSpot) > 1)
+                {
+                    Navigator.PlayerMover.MoveTowards(ArenaCenter.BombDropSpot);
+                    await Coroutine.Yield();
+                }
+
+                await CommonTasks.StopMoving();
+            }
+        }
+
+        // Move away from thermal charge location
+        if (WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow && Core.Player.InCombat)
+        {
+            if (EnemyAction.ThermobaricCharge.IsCasting())
+            {
+                ff14bot.Helpers.Logging.WriteDiagnostic("Moving to safe spot");
+                while (Core.Me.Location.Distance2D(ArenaCenter.BombSafeSpot) > 5)
+                {
+                    Navigator.PlayerMover.MoveTowards(ArenaCenter.BombSafeSpot);
+                    await Coroutine.Yield();
+                }
+
+                await CommonTasks.StopMoving();
+            }
+        }
+
         return false;
     }
 
     private static class EnemyNpc
     {
         /// <summary>
-        /// First Boss: Lugat.
+        /// First Boss: Magitek Rearguard.
         /// </summary>
-        public const uint Lugat = 6071;
+        public const uint MagitekRearguard = 6200;
 
         /// <summary>
-        /// Second Boss: The Governor.
+        /// Second Boss: Magitek Hexadron.
         /// </summary>
-        public const uint TheGovernor = 6072;
+        public const uint MagitekHexadron = 6203;
 
         /// <summary>
-        /// Final Boss: Lorelei .
+        /// Second Boss: Hexadron Bit.
         /// </summary>
-        public const uint Lorelei = 6074;
+        public const uint HexadroneBit = 6204;
+
+        /// <summary>
+        /// Final Boss: Hypertuned Grynewaht .
+        /// </summary>
+        public const uint HypertunedGrynewaht = 6205;
     }
 
     private static class ArenaCenter
     {
         /// <summary>
-        /// First Boss: Lugat.
+        /// First Boss: Magitek Rearguard.
         /// </summary>
-        public static readonly Vector3 Lugat = new(-1.791643f, -2.900793f, -215.6073f);
+        public static readonly Vector3 MagitekRearguard = new(125f, 40.5f, 17.5f);
 
         /// <summary>
-        /// Second Boss: The Governor.
+        /// Second Boss: Magitek Hexadron.
         /// </summary>
-        public static readonly Vector3 TheGovernor = new(-7.938193f, 4.440489f, 79.09968f);
+        public static readonly Vector3 MagitekHexadron = new(-240f, 45.5f, 130.5f);
 
         /// <summary>
-        /// Third Boss: Lorelei.
+        /// Third Boss: Hypertuned Grynewaht.
         /// </summary>
-        public static readonly Vector3 Lorelei = new(-44.54654f, 7.751197f, 465.0925f);
+        public static readonly Vector3 HypertunedGrynewaht = new(-240f, 67f, -197f);
+
+        /// <summary>
+        /// Third Boss: Bomb Drop Spot.
+        /// </summary>
+        public static readonly Vector3 BombDropSpot = new(-257.6511f, 67f, -179.8466f);
+
+        /// <summary>
+        /// Third Boss: Bomb Safe Spot.
+        /// </summary>
+        public static readonly Vector3 BombSafeSpot = new(-224.3772f, 67f, -214.2821f);
     }
 
     private static class EnemyAction
     {
         /// <summary>
-        /// Lunar Bahamut
-        /// Akh Morn
+        /// Magitek Hexadron
+        /// Magitek Missiles
         /// Stack
         /// </summary>
-        public const uint AkhMorn = 23381;
+        public const uint MagitekMissiles = 8357;
+
+        /// <summary>
+        /// Hypertuned Grynewaht
+        /// Thermobaric Charge
+        /// Run away
+        /// </summary>
+        public static readonly HashSet<uint> ThermobaricCharge = new() { 8357 };
+
+        /// <summary>
+        /// Hypertuned Grynewaht
+        /// Clean Cut
+        /// Straight line avoid
+        /// </summary>
+        public const uint CleanCut = 8369;
+    }
+
+    private static class PlayerAura
+    {
+        /// <summary>
+        /// Prey. Thermal Charge bomb
+        /// </summary>
+        public const uint Prey = 1253;
     }
 }
