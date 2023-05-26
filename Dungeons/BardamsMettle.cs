@@ -42,6 +42,12 @@ public class BardamsMettle : AbstractDungeon
             radiusProducer: bc => 18.0f,
             priority: AvoidancePriority.High));
 
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRebirthofBardamtheBrave,
+            objectSelector: bc => bc.NpcId == (uint)EnemyNpc.IronSphere,
+            radiusProducer: bc => 10f,
+            priority: AvoidancePriority.High));
+
         // Boss 3: Yol/ Eye of the Fierce single-gaze attack
         // TODO: Since BattleCharacter.FaceAway() can't stay looking away for now,
         // draw a circle avoid at the end of cast so we run/face away from the boss.
@@ -113,6 +119,11 @@ public class BardamsMettle : AbstractDungeon
         /// First Boss: Garula.
         /// </summary>
         public const uint SteppeSheep = 6174;
+
+        /// <summary>
+        /// Iron Sphere .
+        /// </summary>
+        public const uint IronSphere = 6193;
 
         /// <summary>
         /// Final Boss: Lorelei .
