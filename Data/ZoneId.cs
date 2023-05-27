@@ -244,7 +244,7 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 70.1: Ala Mhigo
     /// </summary>
-    AlaMhigo = 689,
+    AlaMhigo = 1146,
 
     /// <summary>
     /// Lv. 70.2: The Drowned City of Skalla

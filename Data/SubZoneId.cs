@@ -296,6 +296,16 @@ public enum SubZoneId : uint
     /// </summary>
     HalloftheScarletSwallow = 1987,
 
+    /// <summary>
+    /// Lv. 70: Ala Mhigo > Rhalgr's Gate ,Magitek Scorpion
+    /// </summary>
+    RhalgrsGate = 2289,
+
+    /// <summary>
+    /// Lv. 70: Ala Mhigo > The Chamber of Knowledge , Aulus mal Asina
+    /// </summary>
+    TheChamberofKnowledge = 2290,
+
      /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>
