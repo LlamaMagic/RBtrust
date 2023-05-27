@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Data\SquadronAction.cs" />
     <Compile Include="Dungeons\Aery.cs" />
+    <Compile Include="Dungeons\Aetherfont.cs" />
     <Compile Include="Dungeons\AetherochemicalResearchFacility.cs" />
     <Compile Include="Dungeons\AlaMhigo.cs" />
     <Compile Include="Dungeons\AlexanderA1FistoftheFather.cs" />

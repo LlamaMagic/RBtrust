@@ -515,5 +515,20 @@ public enum SubZoneId : uint
     /// Lv. 90.4: Lapis Manalis > Deepspine, Cagnazzo
     /// </summary>
     Deepspine = 4276,
+
+    /// <summary>
+    /// Lv. 90.4: Aetherfont > Landfast Floe, Lyngbakr
+    /// </summary>
+    LandfastFloe = 4301,
+
+    /// <summary>
+    /// Lv. 90.4: Aetherfont > Cyancap Cavern, Arkas
+    /// </summary>
+    CyancapCavern = 4302,
+
+    /// <summary>
+    /// Lv. 90.4: Aetherfont > The Deep Below, Octomammoth
+    /// </summary>
+    TheDeepBelow = 4303,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

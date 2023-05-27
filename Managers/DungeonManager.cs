@@ -101,6 +101,7 @@ internal class DungeonManager
             { ZoneId.AlzadaalsLegacy, typeof(AlzadaalsLegacy) },
             { ZoneId.TheFellCourtOfTroia, typeof(FellCourtOfTroia) },
             { ZoneId.LapisManalis, typeof(LapisManalis) },
+            { ZoneId.Aetherfont, typeof(Aetherfont) },
         };
     }
 

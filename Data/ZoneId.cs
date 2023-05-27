@@ -239,7 +239,7 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 69: Castrum Abania
     /// </summary>
-    CastrumAbania = 661,
+    CastrumAbania = 1145,
 
     /// <summary>
     /// Lv. 70.1: Ala Mhigo
@@ -370,6 +370,11 @@ public enum ZoneId : ushort
     /// Lv. 90.3: Lapis Manalis
     /// </summary>
     LapisManalis = 1097,
+
+    /// <summary>
+    /// Lv. 90.4: Aetherfont
+    /// </summary>
+    Aetherfont = 1126,
 
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

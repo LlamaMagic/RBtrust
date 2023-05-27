@@ -315,5 +315,10 @@ public enum DungeonId : uint
     /// Lv. 90.3: Lapis Manalis
     /// </summary>
     LapisManalis = 896,
+
+    /// <summary>
+    /// Lv. 90.4: Lapis Manalis
+    /// </summary>
+    Aetherfont = 822,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }
