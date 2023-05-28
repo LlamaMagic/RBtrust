@@ -297,6 +297,21 @@ public enum SubZoneId : uint
     HalloftheScarletSwallow = 1987,
 
     /// <summary>
+    /// Lv. 69: Castrum Abania > Terrestrial Weaponry ,Magna Roader
+    /// </summary>
+    TerrestrialWeaponry = 1936,
+
+    /// <summary>
+    /// Lv. 69: Castrum Abania > Project Aegis ,Subject Number XXIV
+    /// </summary>
+    ProjectAegis = 1937,
+
+    /// <summary>
+    /// Lv. 69: Castrum Abania > Assessment Grounds ,Subject Number XXIV
+    /// </summary>
+    AssessmentGrounds = 1938,
+
+    /// <summary>
     /// Lv. 70: Ala Mhigo > Rhalgr's Gate ,Magitek Scorpion
     /// </summary>
     RhalgrsGate = 2289,

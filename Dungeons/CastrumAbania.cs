@@ -1,8 +1,13 @@
 ﻿using Clio.Utilities;
+using ff14bot;
 using ff14bot.Managers;
+using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
+using Trust.Extensions;
+using Trust.Helpers;
 
 namespace Trust.Dungeons;
 
@@ -18,35 +23,44 @@ public class CastrumAbania : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.CastrumAbania;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.FireII,EnemyAction.RahuComet,EnemyAction.RahuComet2 };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 3: Ketu Cutter
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AssessmentGrounds,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.KetuCutter,
+            leashPointProducer: () => ArenaCenter.Inferno,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 7f);
+
         // Boss Arenas
-        /*
+
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SpaeRock,
-            () => SirensongSea.ArenaCenter.Lugat,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TerrestrialWeaponry,
+            () => ArenaCenter.MagnaRoader,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.GloweringKrautz,
-            () => SirensongSea.ArenaCenter.TheGovernor,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ProjectAegis,
+            () => ArenaCenter.SubjectNumberXXIV,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.WardensDelight,
-            () => SirensongSea.ArenaCenter.Lorelei,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AssessmentGrounds,
+            () => ArenaCenter.Inferno,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
-            */
 
         return Task.FromResult(false);
     }
@@ -56,52 +70,88 @@ public class CastrumAbania : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        if (EnemyAction.BlizzardII.IsCasting())
+        {
+            await MovementHelpers.Spread(EnemyAction.BlizzardIIDuration);
+        }
+
         return false;
     }
 
     private static class EnemyNpc
     {
         /// <summary>
-        /// First Boss: Lugat.
+        /// First Boss: Magna Roader.
         /// </summary>
-        public const uint Lugat = 6071;
+        public const uint MagnaRoader = 6263;
 
         /// <summary>
-        /// Second Boss: The Governor.
+        /// Second Boss: Subject Number XXIV.
         /// </summary>
-        public const uint TheGovernor = 6072;
+        public const uint SubjectNumberXXIV = 12392;
 
         /// <summary>
-        /// Final Boss: Lorelei .
+        /// Final Boss: Inferno .
         /// </summary>
-        public const uint Lorelei = 6074;
+        public const uint Inferno = 6268;
     }
 
     private static class ArenaCenter
     {
         /// <summary>
-        /// First Boss: Lugat.
+        /// First Boss: Magna Roader.
         /// </summary>
-        public static readonly Vector3 Lugat = new(-1.791643f, -2.900793f, -215.6073f);
+        public static readonly Vector3 MagnaRoader = new(-213f, -2f, 185f);
 
         /// <summary>
-        /// Second Boss: The Governor.
+        /// Second Boss: Subject Number XXIV.
         /// </summary>
-        public static readonly Vector3 TheGovernor = new(-7.938193f, 4.440489f, 79.09968f);
+        public static readonly Vector3 SubjectNumberXXIV = new(10.5f, 14f, 186.5f);
 
         /// <summary>
-        /// Third Boss: Lorelei.
+        /// Third Boss: Inferno.
         /// </summary>
-        public static readonly Vector3 Lorelei = new(-44.54654f, 7.751197f, 465.0925f);
+        public static readonly Vector3 Inferno = new(282.5f, 20f, -27.5f);
     }
 
     private static class EnemyAction
     {
         /// <summary>
-        /// Lunar Bahamut
-        /// Akh Morn
+        /// SubjectNumberXXIV
+        /// Fire II
         /// Stack
         /// </summary>
-        public const uint AkhMorn = 23381;
+        public const uint FireII = 33462;
+
+        /// <summary>
+        /// SubjectNumberXXIV
+        /// Thunder II
+        /// Move to pilon
+        /// </summary>
+        public const uint ThunderII = 33464;
+
+        /// <summary>
+        /// SubjectNumberXXIV
+        /// Blizzard II
+        /// Spread
+        /// </summary>
+        public static readonly HashSet<uint> BlizzardII = new() { 33461 };
+
+        public static readonly int BlizzardIIDuration = 5_000;
+
+        /// <summary>
+        /// Inferno
+        /// Rahu Comet
+        /// Follow
+        /// </summary>
+        public const uint RahuComet = 7979;
+        public const uint RahuComet2 = 8328;
+
+        /// <summary>
+        /// Inferno
+        /// Ketu Cutter
+        /// Multiple small cones
+        /// </summary>
+        public const uint KetuCutter = 7975;
     }
 }
