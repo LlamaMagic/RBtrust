@@ -27,14 +27,33 @@ public class SirensongSea : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheSirensongSea;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Hydroball };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Hydroball, EnemyAction.MorbidAdvance, EnemyAction.MorbidRetreat };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
-        AvoidanceManager.AddAvoidObject<EventObject>(() => Core.Player.InCombat, 6f, EnemyNpc.FirePuddle);
-        AvoidanceManager.AddAvoidObject<EventObject>(() => Core.Player.InCombat, 6f, EnemyNpc.WaterPuddle);
+        // Blue puddles of fire that fall on the player between the first boss and the second
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
+            condition: () => WorldManager.ZoneId == (uint)ZoneId.TheSirensongSea,
+            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.BlueFirePuddle,
+            radiusProducer: eo => 4.0f,
+            priority: AvoidancePriority.High));
+
+        // Boss 2
+        // Shadow clones of the boss spawn and do a black puddle AoE. Stay away from them
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.GloweringKrautz,
+            objectSelector: bc => bc.NpcId == EnemyNpc.TheGroveller,
+            radiusProducer: bc => 7.0f,
+            priority: AvoidancePriority.High));
+
+        // Blue water puddles during the final boss
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.WardensDelight,
+            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.WaterPuddle,
+            radiusProducer: eo => 7.0f,
+            priority: AvoidancePriority.High));
 
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
@@ -94,14 +113,24 @@ public class SirensongSea : AbstractDungeon
         public const uint Lugat = 6071;
 
         /// <summary>
+        /// The Jane Guy casts the Bluefire puddle, the fire puddle is the remaining affect on the ground
+        /// </summary>
+        public const uint TheJaneGuy = 6070;
+
+        /// <summary>
         /// Before second boss.
         /// </summary>
-        public const uint FirePuddle = 2007809;
+        public const uint BlueFirePuddle = 2007809;
 
         /// <summary>
         /// Second Boss: The Governor.
         /// </summary>
         public const uint TheGovernor = 6072;
+
+        /// <summary>
+        /// Second Boss: The Groveller.
+        /// </summary>
+        public const uint TheGroveller = 6073;
 
         /// <summary>
         /// Final Boss: Lorelei .
@@ -152,5 +181,19 @@ public class SirensongSea : AbstractDungeon
         /// Move to edge of arena to break tether
         /// </summary>
         public static readonly HashSet<uint> EnterNight = new() { 8032 };
+
+        /// <summary>
+        /// Lorelei
+        /// Morbid Retreat
+        /// Move to NPCs so you hopefully don't walk through as much bad
+        /// </summary>
+        public const uint MorbidRetreat = 8038;
+
+        /// <summary>
+        /// Lorelei
+        /// Morbid Advance
+        /// Move to NPCs so you hopefully don't walk through as much bad
+        /// </summary>
+        public const uint MorbidAdvance = 8037;
     }
 }
