@@ -33,9 +33,17 @@ public class Aetherfont : AbstractDungeon
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CyancapCavern,
             objectSelector: bc => bc.CastingSpellId == EnemyAction.ForkedFissures,
-            width: 3.5f,
+            width: 4.0f,
             length: 40f,
             priority: AvoidancePriority.High);
+
+        // Boss 3 Vivid Eyes
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDeepBelow,
+            objectSelector: c => c.CastingSpellId == EnemyAction.VividEyes,
+            outerRadius: 2f,
+            innerRadius: 15F,
+            priority: AvoidancePriority.Medium);
 
         // Boss Arenas
 
@@ -177,14 +185,20 @@ public class Aetherfont : AbstractDungeon
         /// Spread
         /// </summary>
         public static readonly HashSet<uint> WaterDrop = new() { 34436 };
-
         public static readonly int WaterDropDuration = 5_000;
 
         /// <summary>
         /// Octomammoth
         /// Clearout
-        /// Adding follow on this one as the avoids are so pinpoint that the nav gets stuck trying to get out of the AoE
+        /// Adding follow on this one as the avoids are so big that the nav gets stuck trying to get out of the AoE
         /// </summary>
         public const uint Clearout = 33348;
+
+        /// <summary>
+        /// Octomammoth
+        /// Vivid Eyes
+        /// Create a small donut of about 5 so we don't stand in this
+        /// </summary>
+        public const uint VividEyes = 33355;
     }
 }
