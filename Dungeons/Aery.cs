@@ -102,6 +102,13 @@ public class Aery : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Levinbolt
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.TheAery,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Levinbolt,
+            radiusProducer: bc => 7.0f,
+            priority: AvoidancePriority.Medium));
+
         // Boss 1 Electric Cachexia
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AkhFahlLye,
@@ -149,7 +156,7 @@ public class Aery : AbstractDungeon
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
             objectSelector: bc => bc.CastingSpellId == HotTailSpell,
-            width: 20f,
+            width: 19f,
             length: 120f,
             yOffset: -60f,
             priority: AvoidancePriority.High);
@@ -166,19 +173,19 @@ public class Aery : AbstractDungeon
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
             objectSelector: bc => bc.CastingSpellId == HotWingSpell,
-            width: -33f,
-            length: 120f,
-            xOffset: 20f,
-            yOffset: -60f,
+            width: 120f,
+            length: 33f,
+            xOffset: -20f,
+            yOffset: 4f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
             objectSelector: bc => bc.CastingSpellId == HotWingSpell,
-            width: 33f,
-            length: 120f,
+            width: 120f,
+            length: -33f,
             xOffset: -20f,
-            yOffset: -60f,
+            yOffset: -4f,
             priority: AvoidancePriority.High);
 
         // Boss Arenas
@@ -266,5 +273,13 @@ public class Aery : AbstractDungeon
         }
 
         return false;
+    }
+
+    private static class EnemyAction
+    {
+        /// <summary>
+        /// Levinbolt
+        /// </summary>
+        public const uint Levinbolt = 4270;
     }
 }
