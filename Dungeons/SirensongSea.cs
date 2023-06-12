@@ -6,7 +6,9 @@ using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -20,6 +22,12 @@ namespace Trust.Dungeons;
 /// </summary>
 public class SirensongSea : AbstractDungeon
 {
+    private static readonly int ShadowflowDuration = 12_500;
+    private static DateTime ShadowflowTimestamp = DateTime.MinValue;
+
+    private static readonly int EnterNightDuration = 15_000;
+    private static DateTime EnterNightTimestamp = DateTime.MinValue;
+
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.TheSirensongSea;
 
@@ -89,16 +97,103 @@ public class SirensongSea : AbstractDungeon
         {
             BattleCharacter TheGovernorNPC = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.TheGovernor)
                 .FirstOrDefault(bc => bc.IsTargetable && bc.IsValid);
+
             if (EnemyAction.EnterNight.IsCasting() && TheGovernorNPC.TargetGameObject == Core.Me)
             {
-                ff14bot.Helpers.Logging.WriteDiagnostic("Running away from Enger Night");
-                while (!CommonBehaviors.IsLoading && !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(ArenaCenter.TheGovernorArenaEdge) > 1)
-                {
-                    Navigator.PlayerMover.MoveTowards(ArenaCenter.TheGovernorArenaEdge);
-                    await Coroutine.Yield();
-                }
+                EnterNightTimestamp = DateTime.Now;
+                Stopwatch enterNightTimer = new();
+                enterNightTimer.Restart();
 
-                await CommonTasks.StopMoving();
+                AvoidanceHelpers.AddAvoidDonut(
+                    () => enterNightTimer.IsRunning && enterNightTimer.ElapsedMilliseconds < EnterNightDuration,
+                    () => ArenaCenter.TheGovernorArenaEdge,
+                    outerRadius: 40.0f,
+                    innerRadius: 3.0F,
+                    priority: AvoidancePriority.High);
+            }
+
+            if (EnemyAction.Shadowflow.IsCasting() && ShadowflowTimestamp.AddMilliseconds(ShadowflowDuration) < DateTime.Now)
+            {
+                Vector3 location = TheGovernorNPC.Location;
+                uint objectId = TheGovernorNPC.ObjectId;
+
+                ShadowflowTimestamp = DateTime.Now;
+                Stopwatch shadowflowTimer = new();
+                shadowflowTimer.Restart();
+
+                AvoidanceManager.AddAvoidObject<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    radius: 6f,
+                    unitIds: objectId);
+
+                AvoidanceManager.AddAvoidUnitCone<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    objectSelector: (obj) => obj.ObjectId == objectId,
+                    leashPointProducer: () => location,
+                    leashRadius: 0f,
+                    rotationDegrees: 30f,
+                    radius: 30f,
+                    arcDegrees: 45f);
+
+
+                AvoidanceManager.AddAvoidUnitCone<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    objectSelector: (obj) => obj.ObjectId == objectId,
+                    leashPointProducer: () => location,
+                    leashRadius: 0f,
+                    rotationDegrees: 90f,
+                    radius: 30f,
+                    arcDegrees: 45f);
+
+                AvoidanceManager.AddAvoidUnitCone<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    objectSelector: (obj) => obj.ObjectId == objectId,
+                    leashPointProducer: () => location,
+                    leashRadius: 0f,
+                    rotationDegrees: 150f,
+                    radius: 30f,
+                    arcDegrees: 45f);
+
+                AvoidanceManager.AddAvoidUnitCone<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    objectSelector: (obj) => obj.ObjectId == objectId,
+                    leashPointProducer: () => location,
+                    leashRadius: 0f,
+                    rotationDegrees: 210f,
+                    radius: 30f,
+                    arcDegrees: 45f);
+
+                AvoidanceManager.AddAvoidUnitCone<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    objectSelector: (obj) => obj.ObjectId == objectId,
+                    leashPointProducer: () => location,
+                    leashRadius: 0f,
+                    rotationDegrees: 270f,
+                    radius: 30f,
+                    arcDegrees: 45f);
+
+                AvoidanceManager.AddAvoidUnitCone<GameObject>(
+                    canRun: () =>
+                        shadowflowTimer.IsRunning &&
+                        shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
+                    objectSelector: (obj) => obj.ObjectId == objectId,
+                    leashPointProducer: () => location,
+                    leashRadius: 0f,
+                    rotationDegrees: 330f,
+                    radius: 30f,
+                    arcDegrees: 45f);
             }
         }
 
@@ -181,6 +276,13 @@ public class SirensongSea : AbstractDungeon
         /// Move to edge of arena to break tether
         /// </summary>
         public static readonly HashSet<uint> EnterNight = new() { 8032 };
+
+        /// <summary>
+        /// The Governor
+        /// Shadowflow
+        /// relative to boss facing, that should be cones aiming at 30, 90, 120, 210, 300 going clockwise
+        /// </summary>
+        public static readonly HashSet<uint> Shadowflow = new() { 8030 };
 
         /// <summary>
         /// Lorelei
