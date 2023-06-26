@@ -321,7 +321,22 @@ public enum SubZoneId : uint
     /// </summary>
     TheChamberofKnowledge = 2290,
 
-     /// <summary>
+    /// <summary>
+    /// Lv. 71: Holminster Switch > The Wound , Forgiven Dissonance
+    /// </summary>
+    TheWound = 3284,
+
+    /// <summary>
+    /// Lv. 71: Holminster Switch > The Auction , Tesleen, the Forgiven
+    /// </summary>
+    TheAuction = 3285,
+
+    /// <summary>
+    /// Lv. 71: Holminster Switch > The Manor House Courtyard , Philia
+    /// </summary>
+    TheManorHouseCourtyard = 3287,
+
+    /// <summary>
     /// Lv. 73: Dohn Mheg > Teag Gye, Lord of the Lingering Gaze
     /// </summary>
     TeagGye = 2963,
@@ -335,6 +350,21 @@ public enum SubZoneId : uint
     /// Lv. 73: Dohn Mheg > The Throne Room, Lord of the Lengthsome Gait
     /// </summary>
     TheThroneRoom = 2968,
+
+    /// <summary>
+    /// Lv. 77: Malikah's Well > Terminus, Greater Armadillo
+    /// </summary>
+    Terminus = 3029,
+
+    /// <summary>
+    /// Lv. 77: Malikah's Well > Malikah's Gift, Amphibious Talos
+    /// </summary>
+    MalikahsGift = 3030,
+
+    /// <summary>
+    /// Lv. 77: Malikah's Well > Unquestioned Acceptance, Storge
+    /// </summary>
+    UnquestionedAcceptance = 3031,
 
     /// <summary>
     /// Lv. 79: Mt. Gulg > The Perished Path
