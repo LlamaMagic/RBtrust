@@ -1,6 +1,11 @@
+using Clio.Utilities;
+using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -14,40 +19,9 @@ namespace Trust.Dungeons;
 /// </summary>
 public class QitanaRavel : AbstractDungeon
 {
-    private const int Lozatl = 8231;
-    private const int Batsquatch = 8232;
-    private const int Eros = 8233;
+    private static DateTime heatUpLeftTimestamp = DateTime.MinValue;
 
-    private static readonly HashSet<uint> ConfessionOfFaith = new()
-    {
-        15521, 15522, 15523, 15524, 15525,
-        15526, 15527,
-    };
-
-    private static readonly HashSet<uint> HeatUp = new()
-    {
-        15502, 15501,
-    };
-
-    private static readonly HashSet<uint> LozatlsScorn = new()
-    {
-        15499,
-    };
-
-    private static readonly HashSet<uint> LozatlsFury = new()
-    {
-        15503, 15504,
-    };
-
-    private static readonly HashSet<uint> RonkanLight = new()
-    {
-        15725, 15500,
-    };
-
-    private static readonly HashSet<uint> Soundwave = new()
-    {
-        15506,
-    };
+    private static DateTime heatUpRightTimestamp = DateTime.MinValue;
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.TheQitanaRavel;
@@ -55,86 +29,305 @@ public class QitanaRavel : AbstractDungeon
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.TheQitanaRavel;
 
-    // removed trash mob / no stack boss spells
-    //          15926 Forgiven Violence - SinSpitter
-    //          16260 Echo of Qitana - Self-destruct
-    //          15502 Lozatl - Heat Up
-    //          15499 Lozatl - Lozatl's Scorn
-
-    // not sure if can detect these two as separate spells?
-    //          15524 Eros - Confession of Faith (Stack)
-    //          15521 Eros - Confession of Faith (Spread)
-
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.WrathoftheRonka, EnemyAction.ConfessionofFaith, EnemyAction.HeavingBreath };
+
+    public override Task<bool> OnEnterDungeonAsync()
     {
-        15918, 15916, 15917, 17223, 15498, 15500, 15725, 15501, 15503, 15504, 15509, 15510, 15511, 15512, 17213, 15570,
-        16263, 14730, 15514, 15516, 15517, 15518, 15519, 15520, 16923, 15523, 15527, 15522, 15526, 15525, 15524,
-    };
+        AvoidanceManager.AvoidInfos.Clear();
+
+        // Boss 1 Lozatl's Fury Right
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDivineThreshold,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.LozatlsFuryRight,
+            leashPointProducer: () => ArenaCenter.Lozatl,
+            leashRadius: 40.0f,
+            rotationDegrees: -90.0f,
+            radius: 60.0f,
+            arcDegrees: 180.0f);
+
+        // Boss 1 Lozatl's Fury Left
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDivineThreshold,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.LozatlsFuryLeft,
+            leashPointProducer: () => ArenaCenter.Lozatl,
+            leashRadius: 40.0f,
+            rotationDegrees: 90.0f,
+            radius: 60.0f,
+            arcDegrees: 180.0f);
+
+        // Boss 2 Towerfall
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ShadowedHollow,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.Towerfall,
+            leashPointProducer: () => ArenaCenter.Lozatl,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 60.0f,
+            arcDegrees: 35.0f);
+
+        // Boss 3, Poison puddles
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheSongofOxGatorl,
+            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.PoisonPuddle,
+            radiusProducer: eo => 6.0f,
+            priority: AvoidancePriority.High));
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDivineThreshold,
+            () => ArenaCenter.Lozatl,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ShadowedHollow,
+            () => ArenaCenter.Batsquatch,
+            outerRadius: 90.0f,
+            innerRadius: 14f,
+            priority: AvoidancePriority.High);
+
+        // No third arena, as this boss arena is a square
+        /*
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheSongofOxGatorl,
+            () => ArenaCenter.Eros,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+            */
+
+        return Task.FromResult(false);
+    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
 
-        BattleCharacter lozatlNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Lozatl)
-            .FirstOrDefault(bc => bc.IsTargetable);
-        if (lozatlNpc != null && lozatlNpc.IsValid)
+        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+        bool result = false;
+
+        switch (currentSubZoneId)
         {
-            if (HeatUp.IsCasting())
-            {
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestDps.Follow();
-            }
-
-            if (LozatlsScorn.IsCasting())
-            {
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestDps.Follow();
-            }
-
-            if (LozatlsFury.IsCasting())
-            {
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestDps.Follow();
-            }
-
-            if (RonkanLight.IsCasting())
-            {
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestDps.Follow();
-            }
-        }
-
-        BattleCharacter batsquatchNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Batsquatch)
-            .FirstOrDefault(bc => bc.IsTargetable);
-        if (batsquatchNpc != null && batsquatchNpc.IsValid)
-        {
-            if (Soundwave.IsCasting())
-            {
-                SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestDps.Follow();
-            }
-        }
-
-        BattleCharacter erosNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(Eros)
-            .FirstOrDefault(bc => bc.IsTargetable);
-        if (erosNpc != null && erosNpc.IsValid)
-        {
-            if (ConfessionOfFaith.IsCasting())
-            {
-                SidestepPlugin.Enabled = false;
-                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
-                await MovementHelpers.GetClosestDps.Follow();
-            }
-        }
-
-        if (!SpellsToFollowDodge.IsCasting())
-        {
-            SidestepPlugin.Enabled = true;
+            case SubZoneId.TheDivineThreshold:
+                result = await HandleLozatlAsync();
+                break;
+            case SubZoneId.ShadowedHollow:
+                result = await HandleBatsquatchAsync();
+                break;
+            case SubZoneId.TheSongofOxGatorl:
+                result = await HandleErosAsync();
+                break;
         }
 
         return false;
+    }
+
+    private async Task<bool> HandleLozatlAsync()
+    {
+        if (EnemyAction.HeatUpLeft.IsCasting())
+        {
+            // Placing a donut on the right side so we move into that area when the left statue casts
+            heatUpLeftTimestamp = DateTime.Now;
+            Stopwatch heatUpLeftTimer = new();
+            heatUpLeftTimer.Restart();
+
+            AvoidanceHelpers.AddAvoidDonut(
+                () => heatUpLeftTimer.IsRunning && heatUpLeftTimer.ElapsedMilliseconds < EnemyAction.HeatUpLeftDuration,
+                () => ArenaCenter.LozatlRightSide,
+                outerRadius: 90.0f,
+                innerRadius: 19.0f,
+                priority: AvoidancePriority.High);
+        }
+
+        if (EnemyAction.HeatUpRight.IsCasting())
+        {
+            // Placing a donut on the right side so we move into that area when the right statue casts
+            heatUpRightTimestamp = DateTime.Now;
+            Stopwatch heatUpRightTimer = new();
+            heatUpRightTimer.Restart();
+
+            AvoidanceHelpers.AddAvoidDonut(
+                () => heatUpRightTimer.IsRunning && heatUpRightTimer.ElapsedMilliseconds < EnemyAction.HeatUpRightDuration,
+                () => ArenaCenter.LozatlLeftSide,
+                outerRadius: 90.0f,
+                innerRadius: 19.0f,
+                priority: AvoidancePriority.High);
+        }
+
+        return false;
+    }
+
+    private async Task<bool> HandleBatsquatchAsync()
+    {
+        return false;
+    }
+
+    private async Task<bool> HandleErosAsync()
+    {
+        BattleCharacter ErosNPC = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Eros)
+            .FirstOrDefault(bc => bc.IsTargetable && bc.IsValid);
+
+        if (EnemyAction.HoundoutofHeaven.IsCasting() && ErosNPC.TargetGameObject == Core.Me)
+        {
+            AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+                condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheSongofOxGatorl,
+                objectSelector: bc => bc.CastingSpellId == 15514,
+                radiusProducer: eo => 25f,
+                priority: AvoidancePriority.High));
+        }
+
+        if (EnemyAction.ConfessionofFaithSpread.IsCasting())
+        {
+            await MovementHelpers.Spread(EnemyAction.ConfessionofFaithSpreadDuration);
+        }
+
+        return false;
+    }
+
+    private static class EnemyNpc
+    {
+        /// <summary>
+        /// First Boss: Lozatl.
+        /// </summary>
+        public const uint Lozatl = 8231;
+
+        /// <summary>
+        /// Second Boss: Batsquatch.
+        /// </summary>
+        public const uint Batsquatch = 8232;
+
+        /// <summary>
+        /// Final Boss: Eros.
+        /// </summary>
+        public const uint Eros = 8233;
+
+        /// <summary>
+        /// Final Boss: Poison Puddle.
+        /// </summary>
+        public const uint PoisonPuddle = 2004780;
+    }
+
+    private static class ArenaCenter
+    {
+        /// <summary>
+        /// First Boss: Lozatl.
+        /// </summary>
+        public static readonly Vector3 Lozatl = new(0, 5f, 315);
+
+        /// <summary>
+        /// First Boss: Lozatl.
+        /// </summary>
+        public static readonly Vector3 LozatlRightSide = new(19.5f, 5f, 316.5f);
+
+        /// <summary>
+        /// First Boss: Lozatl.
+        /// </summary>
+        public static readonly Vector3 LozatlLeftSide = new(-19.5f, 5f, 315f);
+
+        /// <summary>
+        /// Second Boss: Batsquatch.
+        /// </summary>
+        public static readonly Vector3 Batsquatch = new(62f, -21f, -35.5f);
+
+        /// <summary>
+        /// Third Boss: Eros.
+        /// </summary>
+        public static readonly Vector3 Eros = new(17f, -77f, -538f);
+    }
+
+    private static class EnemyAction
+    {
+        /// <summary>
+        /// Trash
+        /// Wrath of the Ronka
+        /// Lazers come out of the statues on the wall
+        /// </summary>
+        public const uint WrathoftheRonka = 17223;
+
+        /// <summary>
+        /// Lozatl
+        /// Lozatl's Fury
+        /// Right side 180 cone
+        /// </summary>
+        public const uint LozatlsFuryRight = 15503;
+
+        /// <summary>
+        /// Lozatl
+        /// Lozatl's Fury
+        /// Left side 180 cone
+        /// </summary>
+        public const uint LozatlsFuryLeft = 15504;
+
+        /// <summary>
+        /// Lozatl
+        /// Heat Up
+        /// Left side status
+        /// </summary>
+        public static readonly HashSet<uint> HeatUpLeft = new() { 15501 };
+
+        public static readonly int HeatUpLeftDuration = 22_000;
+
+        /// <summary>
+        /// Lozatl
+        /// Heat Up
+        /// Right side status
+        /// </summary>
+        public static readonly HashSet<uint> HeatUpRight = new() { 15502 };
+
+        public static readonly int HeatUpRightDuration = 22_000;
+
+        /// <summary>
+        /// Batsquatch
+        /// Towerfall
+        /// Very small cone to dodge the fall
+        /// </summary>
+        public const uint Towerfall = 15512;
+
+        /// <summary>
+        /// Eros
+        /// Confession of Faith
+        /// Stack
+        /// </summary>
+        public const uint ConfessionofFaith = 15525;
+
+        /// <summary>
+        /// Eros
+        /// Confession of Faith
+        /// Spread
+        /// </summary>
+        public static readonly HashSet<uint> ConfessionofFaithSpread = new() { 15523 };
+        public static readonly int ConfessionofFaithSpreadDuration = 6_000;
+
+        /// <summary>
+        /// Eros
+        /// Heaving Breath
+        /// Stack
+        /// </summary>
+        public const uint HeavingBreath = 15520;
+
+        /// <summary>
+        /// Eros
+        /// Hound out of Heaven
+        /// Run away from boss, if you're the target
+        /// </summary>
+        public static readonly HashSet<uint> HoundoutofHeaven = new() { 15514 };
+    }
+
+    private static class TankBusters
+    {
+        /// <summary>
+        /// Lozatl
+        /// Stonefist
+        /// </summary>
+        public const uint Stonefist = 15497;
+
+        /// <summary>
+        /// Eros
+        /// Rend
+        /// </summary>
+        public const uint Rend = 15513;
     }
 }

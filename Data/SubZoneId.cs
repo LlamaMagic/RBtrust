@@ -352,6 +352,21 @@ public enum SubZoneId : uint
     TheThroneRoom = 2968,
 
     /// <summary>
+    /// Lv. 75: The Qitana Ravel > The Divine Threshold, Lozatl
+    /// </summary>
+    TheDivineThreshold = 3020,
+
+    /// <summary>
+    /// Lv. 75: The Qitana Ravel > Shadowed Hollow, Batsquatch
+    /// </summary>
+    ShadowedHollow = 3023,
+
+    /// <summary>
+    /// Lv. 75: The Qitana Ravel > The Song of Ox'Gatorl, Eros
+    /// </summary>
+    TheSongofOxGatorl = 3026,
+
+    /// <summary>
     /// Lv. 77: Malikah's Well > Terminus, Greater Armadillo
     /// </summary>
     Terminus = 3029,
