@@ -322,6 +322,11 @@ public enum SubZoneId : uint
     TheChamberofKnowledge = 2290,
 
     /// <summary>
+    /// Lv. 70: Ala Mhigo > The Hall of the Griffin , Zenos yae Galvus
+    /// </summary>
+    TheHalloftheGriffin = 2291,
+
+    /// <summary>
     /// Lv. 71: Holminster Switch > The Wound , Forgiven Dissonance
     /// </summary>
     TheWound = 3284,

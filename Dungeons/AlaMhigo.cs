@@ -35,7 +35,7 @@ public class AlaMhigo : AbstractDungeon
 
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.RhalgrsGate,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.TailLaser1 && bc.CastingSpellId == EnemyAction.TailLaser2 && bc.CastingSpellId == EnemyAction.TailLaser3,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.TailLaser1 || bc.CastingSpellId == EnemyAction.TailLaser2 || bc.CastingSpellId == EnemyAction.TailLaser3,
             radiusProducer: bc => 8f,
             priority: AvoidancePriority.High));
 
@@ -54,14 +54,13 @@ public class AlaMhigo : AbstractDungeon
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
-/*
+
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.WardensDelight,
-            () => SirensongSea.ArenaCenter.Lorelei,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheHalloftheGriffin,
+            () => ArenaCenter.Zenos,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
-            */
 
         return Task.FromResult(false);
     }
@@ -71,6 +70,34 @@ public class AlaMhigo : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+
+        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+        bool result = false;
+
+        switch (currentSubZoneId)
+        {
+            case SubZoneId.RhalgrsGate:
+                result = await HandleMagitekScorpionAsync();
+                break;
+            case SubZoneId.TheChamberofKnowledge:
+                result = await HandleAulusAsync();
+                break;
+            case SubZoneId.TheHalloftheGriffin:
+                result = await HandleZenosAsync();
+                break;
+        }
+
+        return false;
+    }
+
+
+    private async Task<bool> HandleMagitekScorpionAsync()
+    {
+        return false;
+    }
+
+    private async Task<bool> HandleAulusAsync()
+    {
         // Handle Out of Body experience
         if (WorldManager.SubZoneId == (uint)SubZoneId.TheChamberofKnowledge && Core.Player.InCombat)
         {
@@ -95,6 +122,11 @@ public class AlaMhigo : AbstractDungeon
             await MovementHelpers.Spread(EnemyAction.DemimagicksDuration);
         }
 
+        return false;
+    }
+
+    private async Task<bool> HandleZenosAsync()
+    {
         return false;
     }
 
@@ -136,7 +168,7 @@ public class AlaMhigo : AbstractDungeon
         /// <summary>
         /// Third Boss: Lorelei.
         /// </summary>
-        public static readonly Vector3 Lorelei = new(250f, 106.5f, -70f);
+        public static readonly Vector3 Zenos = new(250f, 122f, -353f);
     }
 
     private static class EnemyAction
@@ -157,6 +189,7 @@ public class AlaMhigo : AbstractDungeon
         /// Spread
         /// </summary>
         public static readonly HashSet<uint> Demimagicks = new() { 8286 };
+
         public static readonly int DemimagicksDuration = 5_000;
     }
 
