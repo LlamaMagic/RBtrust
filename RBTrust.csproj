@@ -72,6 +72,7 @@
     <Compile Include="Dungeons\FellCourtOfTroia.cs" />
     <Compile Include="Dungeons\GhimlytDark.cs" />
     <Compile Include="Dungeons\GreatGubalLibrary.cs" />
+    <Compile Include="Dungeons\HullbreakerIsle.cs" />
     <Compile Include="Dungeons\KeeperOfTheLake.cs" />
     <Compile Include="Dungeons\LapisManalis.cs" />
     <Compile Include="Dungeons\LimitlessBlue.cs" />

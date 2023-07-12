@@ -87,6 +87,11 @@ public enum ZoneId : ushort
     TheAurumVale = 172,
 
     /// <summary>
+    /// Lv. 50: Hullbreaker Isle
+    /// </summary>
+    HullbreakerIsle = 361,
+
+    /// <summary>
     /// Lv. 50.1: Castrum Meridianum
     /// </summary>
     CastrumMeridianum = 1043,

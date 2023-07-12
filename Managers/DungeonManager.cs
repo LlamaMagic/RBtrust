@@ -35,6 +35,7 @@ internal class DungeonManager
             { ZoneId.HaukkeManor, typeof(HaukkeManor) },
             { ZoneId.BrayfloxsLongstop, typeof(BrayfloxsLongstop) },
             { ZoneId.TheNavel, typeof(Navel) },
+            { ZoneId.HullbreakerIsle, typeof(HullbreakerIsle) },
             { ZoneId.TheStoneVigil, typeof(StoneVigil) },
             { ZoneId.TheHowlingEye, typeof(HowlingEye) },
             { ZoneId.TheAurumVale, typeof(AurumVale) },

@@ -62,6 +62,21 @@ public enum SubZoneId : uint
     AltartoSaintDaniffen = 812,
 
     /// <summary>
+    /// Lv. 50: Hullbreaker Isle > Runner's Reel, Sasquatch
+    /// </summary>
+    RunnersReel = 1378,
+
+    /// <summary>
+    /// Lv. 50: Hullbreaker Isle > Hidden Cache, Sjoorm
+    /// </summary>
+    HiddenCache = 1379,
+
+    /// <summary>
+    /// Lv. 50: Hullbreaker Isle > The Haar, Krakenm
+    /// </summary>
+    TheHaar = 1380,
+
+    /// <summary>
     /// Lv. 50: Pharos Sirius > Second Spire, Symond the Unsinkable
     /// </summary>
     SecondSpire = 928,
