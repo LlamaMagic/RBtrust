@@ -7,6 +7,7 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -28,10 +29,16 @@ public class AlaMhigo : AbstractDungeon
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
-
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
+
+        // Blue puddles of fire that fall on the player between the first boss and the second
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.RhalgrsGate,
+            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.FirePuddle,
+            radiusProducer: eo => 5.0f,
+            priority: AvoidancePriority.High));
 
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.RhalgrsGate,
@@ -138,9 +145,9 @@ public class AlaMhigo : AbstractDungeon
         public const uint MagitekScorpion = 6037;
 
         /// <summary>
-        /// Second Boss: The Governor.
+        /// First Boss: Fire puddle.
         /// </summary>
-        public const uint AulusmalAsina = 6038;
+        public const uint FirePuddle = 2008685;
 
         /// <summary>
         /// Second Boss: Empty Vessel.
@@ -182,6 +189,13 @@ public class AlaMhigo : AbstractDungeon
 
         public const uint TailLaser2 = 8265;
         public const uint TailLaser3 = 8266;
+
+        /// <summary>
+        /// Magitek Scorpion
+        /// Target Search
+        /// Follow for 10 seconds after cast happens
+        /// </summary>
+        public static readonly HashSet<uint> TargetSearch = new() { 8262 };
 
         /// <summary>
         /// Aulus mal Asina
