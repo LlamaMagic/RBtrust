@@ -70,7 +70,7 @@ namespace Trust.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Localization changed to &quot;{cultureCode}&quot;..
+        ///   Looks up a localized string similar to Localization changed to &quot;{0}&quot;..
         /// </summary>
         internal static string LOCALIZATION_CHANGED {
             get {
@@ -79,7 +79,7 @@ namespace Trust.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to load localization &quot;{cultureCode}&quot;: resource file not found..
+        ///   Looks up a localized string similar to Failed to load localization &quot;{0}&quot;: resource file not found..
         /// </summary>
         internal static string LOCALIZATION_NOT_FOUND {
             get {
@@ -138,6 +138,24 @@ namespace Trust.Localization {
         internal static string PROJECT_URL {
             get {
                 return ResourceManager.GetString("PROJECT_URL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-zone changed to {0}. Adding specialized avoid definitions for this area..
+        /// </summary>
+        internal static string SUBZONE_CHANGED_ADDING_AVOIDS {
+            get {
+                return ResourceManager.GetString("SUBZONE_CHANGED_ADDING_AVOIDS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-zone changed to {0}. Clearing previous avoid definitions..
+        /// </summary>
+        internal static string SUBZONE_CHANGED_CLEARING_AVOIDS {
+            get {
+                return ResourceManager.GetString("SUBZONE_CHANGED_CLEARING_AVOIDS", resourceCulture);
             }
         }
         

@@ -121,10 +121,10 @@
     <value>Certain jobs may have difficulty with some bosses.</value>
   </data>
   <data name="LOCALIZATION_CHANGED" xml:space="preserve">
-    <value>Localization changed to "{cultureCode}".</value>
+    <value>Localization changed to "{0}".</value>
   </data>
   <data name="LOCALIZATION_NOT_FOUND" xml:space="preserve">
-    <value>Failed to load localization "{cultureCode}": resource file not found.</value>
+    <value>Failed to load localization "{0}": resource file not found.</value>
   </data>
   <data name="PLAYER_DIED_RELOADING_PROFILE" xml:space="preserve">
     <value>Player has died. Reloading current profile after respawn.</value>
@@ -143,6 +143,12 @@
   </data>
   <data name="PROJECT_URL" xml:space="preserve">
     <value>https://github.com/LlamaMagic/RBtrust</value>
+  </data>
+  <data name="SUBZONE_CHANGED_ADDING_AVOIDS" xml:space="preserve">
+    <value>Sub-zone changed to {0}. Adding specialized avoid definitions for this area.</value>
+  </data>
+  <data name="SUBZONE_CHANGED_CLEARING_AVOIDS" xml:space="preserve">
+    <value>Sub-zone changed to {0}. Clearing previous avoid definitions.</value>
   </data>
   <data name="TRUST_PLUGIN_MISSING" xml:space="preserve">
     <value>This profile requires the "Trust" plugin to be installed and enabled.  Check your Plugins tab.</value>

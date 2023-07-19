@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE Profile [
+  <!ENTITY ZoneId "969">
+  <!ENTITY DutyId "785">
+
+  <!ENTITY Shortcut "2000700">
+  <!ENTITY MagitekLiftAControlTerminal "2011745">
+  <!ENTITY TheChainControlTerminal "2011746">
+
+  <!ENTITY MarkXlixFreighter "4127">
+  <!ENTITY LoadingDepot "4128">
+  <!ENTITY MagitekServicing "4124">
+  
+  <!ENTITY MagitekLiftA "4129">
+  <!ENTITY ConnectingCorridor "4130">
+  <!ENTITY MartialConditioning "4125">
+  <!ENTITY PalatialCorridor "4131">
+  
+  <!ENTITY TheChain "4132">
+  <!ENTITY AetherialDistortion "4133">
+  <!ENTITY TheIronWomb "4126">
+  <!ENTITY AnimasDimension "4134">
 ]>
 <Profile>
   <Name>[O][RBTrust] 83 The Tower of Babil by y2krazy</Name>
@@ -8,97 +28,128 @@
 
     <While Condition="True">
       <WaitForLoading/>
-      <If Condition="not IsOnMap(969)">
+      <If Condition="not IsOnMap(&ZoneId;)">
 
         <EquipRecommended/>
-        <JoinSupportDuty DutyId="785"/>
+        <JoinSupportDuty DutyId="&DutyId;"/>
 
       </If>
 
-      <If Condition="IsOnMap(969)">
+      <If Condition="IsOnMap(&ZoneId;)">
 
-        <If Condition="ObjectExistsWithId(2000700) and GameObjectManager.GetObjectByNPCId(2000700).IsTargetable">
+        <If Condition="ObjectExistsWithId(&Shortcut;) and GameObjectManager.GetObjectByNPCId(&Shortcut;).IsTargetable">
           <!-- Shortcut available -->
-          <UseTransport NpcId="2000700" XYZ="-264.4764, -199.5, 374.1396"/>
+          <UseTransport NpcId="&Shortcut;" XYZ="-264.4764, -199.5, 374.1396"/>
+          <WaitForLoading/>
         </If>
 
-        <If Condition="IsOnSubMap(4127)">
-          <MoveTo XYZ="-266.1688, -180.5, 280.5665" Distance="0.5"/>
-          <MoveTo XYZ="-267.6622, -200, 258.0513" Distance="0.5" UseMesh="False"/>
-          <MoveTo XYZ="-300.0438, -175, 89.84753" Distance="0.5"/>
+        <If Condition="WorldManager.SubZoneId in {&MarkXlixFreighter;, }">
+          <MoveTo XYZ="-269.9842, -181.5556, 338.6093" Distance="0.5"/>
+          <Grind GrindRef="4127_C92641E" While="NumAttackableEnemies(30) &gt; 0 or Core.Player.InCombat"/>
+
+          <!-- Go down the stairs faster -->
+          <MoveTo XYZ="-266.2756, -180.5, 279.5565" Distance="0.5"/>
+          <MoveTo XYZ="-266.2756, -200, 247.3858" Distance="0.5" UseMesh="False"/>
+
+          <MoveTo XYZ="-251.739, -200, 237.7326" Distance="0.5"/>
         </If>
 
-        <If Condition="IsOnSubMap(4124)">
-          <Grind GrindRef="Barnabas" PostCombatDelay="2.0" While="ObjectExistsWithId(10279)"/>
+        <If Condition="WorldManager.SubZoneId in {&MarkXlixFreighter;, &LoadingDepot;, }">
+          <Grind GrindRef="4128_84B5E9E" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="-254.1035, -180, 147.1971" Distance="0.5"/>
+          <Grind GrindRef="4128_5FC13E17" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="-299.9524, -175, 90.1553" Distance="0.5"/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&LoadingDepot;, &MagitekServicing;, }">
+          <Grind GrindRef="Barnabas" PostCombatDelay="2.0" While="GetInstanceTodo(1) == 0"/>
           <LootTreasure/>
 
           <!-- Post Boss Movement to Next Area -->
-          <MoveTo XYZ="-299.8641, -174.98, 25.57108"/>
-          <While Condition="IsOnSubMap(4128)">
-            <RunCode Name="Transition1"/>
-          </While>
+          <MoveTo XYZ="-300, -175, 25"/>
+          <LLChangeZone Heading="3.1415927" />
+          <WaitForLoading/>
         </If>
 
-        <If Condition="IsOnSubMap(4129)">
-          <If Condition="GameObjectManager.GetObjectByNPCId(2011745).IsVisible">
-            <UseObject NpcId="2011745" XYZ="400, 0.1000001, -177.5" Radius="10" UseTimes="1" />
-            <!--Control Terminal-->
+        <If Condition="WorldManager.SubZoneId in {&MagitekLiftA;, }">
+          <If Condition="GameObjectManager.GetObjectByNPCId(&MagitekLiftAControlTerminal;).IsVisible">
+            <UseObject NpcId="&MagitekLiftAControlTerminal;" XYZ="400, 0, -177.5" Radius="30" UseTimes="1" />
+            <MoveTo XYZ="400, 0, -170"/>
+            <WaitTimer WaitTime="12"/>
           </If>
-          <MoveTo XYZ="399.9814, 0.001791358, -177.6551"/>
-          <WaitTimer WaitTime="12"/>
+
           <Grind GrindRef="ElevatorWave1" PostCombatDelay="12.0" While="ObjectExistsWithId(10878) or ObjectExistsWithId(10879)"/>
           <Grind GrindRef="ElevatorWave2" PostCombatDelay="12.0" While="ObjectExistsWithId(10881) or ObjectExistsWithId(10880)"/>
           <Grind GrindRef="ElevatorWave3" PostCombatDelay="12.0" While="ObjectExistsWithId(10882) or ObjectExistsWithId(10883)"/>
 
           <!-- Post Object Movement to Next Area -->
-          <MoveTo XYZ="400.1074, 0, -155.7414"/>
-          <While Condition="IsOnSubMap(4129)">
-            <RunCode Name="Transition2"/>
-          </While>
+          <MoveTo XYZ="400, 0, -155"/>
+          <LLChangeZone Heading="0" />
+          <WaitForLoading/>
         </If>
 
-        <If Condition="IsOnSubMap(4130)">
+        <If Condition="WorldManager.SubZoneId in {&ConnectingCorridor;, }">
           <LootTreasure/>
 
-          <MoveTo XYZ="220.7072, -7.510185E-06, 372.184"/>
+          <MoveTo XYZ="303.0695, 8.34465E-07, 372.8557" Distance="0.5"/>
+          <Grind GrindRef="4130_D4B1E42E" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="226.613, 0.08191323, 369.1724" Distance="0.5"/>
           <LootTreasure/>
 
-          <MoveTo XYZ="220.7229, 0.9999998, 322.8848" Distance="0.5"/>
+          <MoveTo XYZ="220, 1.102583, 330" Distance="0.5"/>
         </If>
 
-        <If Condition="IsOnSubMap(4125)">
-          <Grind GrindRef="Lugae" PostCombatDelay="2.0" While="ObjectExistsWithId(10282)"/>
+        <If Condition="WorldManager.SubZoneId in {&ConnectingCorridor;, &MartialConditioning;, }">
+          <MoveTo XYZ="220, 1, 305"/>
+          <Grind GrindRef="Lugae" PostCombatDelay="2.0" While="GetInstanceTodo(3) == 0"/>
           <LootTreasure/>
 
           <!-- Post Boss Movement to Next Area -->
-          <MoveTo XYZ="149.9771, 1.597404E-05, 201.5869"/>
-          <While Condition="IsOnSubMap(4131)">
-            <RunCode Name="Transition3"/>
-          </While>
+          <MoveTo XYZ="220, 0.3436129, 240"/>
         </If>
 
-        <While Condition="IsOnSubMap(4132)">
-          <If Condition="GameObjectManager.GetObjectByNPCId(2011746).IsVisible">
-            <UseObject NpcId="2011746" XYZ="0, 499.9999, 1.192093E-07" Radius="10" UseTimes="1" />
-            <WaitTimer WaitTime="15"/>
-            <!--Control Terminal-->
+        <If Condition="WorldManager.SubZoneId in {&MartialConditioning;, &PalatialCorridor;, }">
+          <MoveTo XYZ="150, 0, 205"/>
+          <LLChangeZone Heading="3.1415927" />
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&TheChain;, }">
+          <If Condition="GameObjectManager.GetObjectByNPCId(&TheChainControlTerminal;).IsVisible">
+            <UseObject NpcId="&TheChainControlTerminal;" XYZ="0, 499.9999, 1.192093E-07" Radius="40" UseTimes="1" />
+            <WaitTimer WaitTime="20"/>
           </If>
-          <RunCode Name="WalkOffPlatform"/>
-        </While>
 
-        <If Condition="IsOnSubMap(4133)">
-          <MoveTo XYZ="-0.002707131, 493, -61.90952" Distance="0.5"/>
-          <LootTreasure/>
-
-          <MoveTo XYZ="-42.88587, 484, -115.8765" Distance="0.5"/>
-          <LootTreasure/>
-
-          <MoveTo XYZ="-0.08154679, 480, -184.8952" Distance="0.5"/>
+          <!-- Walk off-mesh due to elevator door "blocking" pathing -->
+          <MoveTo XYZ="0.09094657, 492.9994, -39.59113" UseMesh="False"/>
         </If>
 
-        <If Condition="IsOnSubMap(4126)">
-          <SetPlugins PluginNames="SideStep,回避" IsEnabled="true"/>
-          <Grind GrindRef="Anima" PostCombatDelay="2.0" While="ObjectExistsWithId(10285) or ObjectExistsWithId(10288)"/>
+        <If Condition="WorldManager.SubZoneId in {&TheChain;, &AetherialDistortion;, }">
+          <MoveTo XYZ="10.29737, 492.8333, -53.97419" Distance="0.5"/>
+          <Grind GrindRef="4133_F7DA100" While="NumAttackableEnemies(30) &gt; 0"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="21.6388, 487, -85.51785" Distance="0.5"/>
+          <Grind GrindRef="4133_7064278B" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="-14.78979, 486.9, -86.49129" Distance="0.5"/>
+          <Grind GrindRef="4133_729BE3CC" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="-30.00795, 484.4581, -106.0656" Distance="0.5"/>
+          <LootTreasure/>
+
+          <MoveTo XYZ="-16.32881, 482.5753, -117.8797" Distance="0.5"/>
+          <Grind GrindRef="4133_B836F579" While="NumAttackableEnemies(30) &gt; 0"/>
+
+          <MoveTo XYZ="0, 480, -162" Distance="0.5"/>
+        </If>
+        
+        <If Condition="WorldManager.SubZoneId in {&AetherialDistortion;, &TheIronWomb;, &AnimasDimension;, }">
+          <MoveTo XYZ="0, 480, -175" Distance="0.5"/>
+          <Grind GrindRef="Anima" PostCombatDelay="2.0" While="not IsDutyEnded()"/>
           <LootTreasure/>
         </If>
 
@@ -107,105 +158,133 @@
     </While>
   </Order>
   <GrindAreas>
+    <GrindArea Name="4127_C92641E">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-268.04, -180.2703, 311.5739"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10869" Weight="1"/>
+        <TargetMob Id="10870" Weight="1"/>
+        <TargetMob Id="10871" Weight="1"/>
+        <TargetMob Id="10872" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4128_84B5E9E">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-252.8993, -191.1739, 178.2319"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10873" Weight="1"/>
+        <TargetMob Id="10874" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4128_5FC13E17">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="-268.5903, -180, 143.237"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10876" Weight="1"/>
+        <TargetMob Id="10872" Weight="1"/>
+        <TargetMob Id="10877" Weight="1"/>
+        <TargetMob Id="10901" Weight="1"/>
+        <TargetMob Id="10875" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
     <GrindArea Name="Barnabas">
       <Hotspots>
         <Hotspot XYZ="-300, -175, 71" Radius="250"/>
       </Hotspots>
       <TargetMobs>
-        <TargetMob Id="10279"/>
+        <TargetMob Id="10279" Weight="1"/>
       </TargetMobs>
-      <MinLevel/>
-      <MaxLevel/>
-    </GrindArea>
-    <GrindArea Name="Lugae">
-      <Hotspots>
-        <Hotspot XYZ="221, 1, 295" Radius="250"/>
-      </Hotspots>
-      <TargetMobs>
-        <TargetMob Id="10282"/>
-      </TargetMobs>
-      <MinLevel/>
-      <MaxLevel/>
-    </GrindArea>
-    <GrindArea Name="Anima">
-      <Hotspots>
-        <Hotspot XYZ="-0.01531982, 480, -199.5117" Radius="250"/>
-      </Hotspots>
-      <TargetMobs>
-        <TargetMob Id="10288"/>
-        <!--Anima (Phase 1)-->
-        <TargetMob Id="10285"/>
-        <!--Anima (Phase 2)-->
-      </TargetMobs>
-      <MinLevel/>
-      <MaxLevel/>
     </GrindArea>
     <GrindArea Name="ElevatorWave1">
       <Hotspots>
-        <Hotspot XYZ="399.9814, 0.001791358, -177.6551" Radius="250"/>
+        <Hotspot XYZ="399.9814, 0.001791358, -177.6551" Radius="40"/>
       </Hotspots>
       <TargetMobs>
         <TargetMob Id="10878" Weight="2"/>
         <TargetMob Id="10879" Weight="1"/>
       </TargetMobs>
-      <MinLevel/>
-      <MaxLevel/>
     </GrindArea>
     <GrindArea Name="ElevatorWave2">
       <Hotspots>
-        <Hotspot XYZ="399.9814, 0.001791358, -177.6551" Radius="250"/>
+        <Hotspot XYZ="399.9814, 0.001791358, -177.6551" Radius="40"/>
       </Hotspots>
       <TargetMobs>
         <TargetMob Id="10880" Weight="2"/>
         <TargetMob Id="10881" Weight="1"/>
       </TargetMobs>
-      <MinLevel/>
-      <MaxLevel/>
     </GrindArea>
     <GrindArea Name="ElevatorWave3">
       <Hotspots>
-        <Hotspot XYZ="399.9814, 0.001791358, -177.6551" Radius="250"/>
+        <Hotspot XYZ="399.9814, 0.001791358, -177.6551" Radius="40"/>
       </Hotspots>
       <TargetMobs>
         <TargetMob Id="10882" Weight="2"/>
         <TargetMob Id="10883" Weight="1"/>
       </TargetMobs>
-      <MinLevel/>
-      <MaxLevel/>
+    </GrindArea>
+    <GrindArea Name="4130_D4B1E42E">
+      <Hotspots>
+        <Hotspot Radius="30" XYZ="278.0289, 0.004997472, 368.7735"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10885" Weight="1"/>
+        <TargetMob Id="10884" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="Lugae">
+      <Hotspots>
+        <Hotspot XYZ="221, 1, 306" Radius="250"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10282"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4133_F7DA100">
+      <Hotspots>
+        <Hotspot Radius="15" XYZ="7.333761, 487.675, -79.13783"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10886" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4133_7064278B">
+      <Hotspots>
+        <Hotspot Radius="10" XYZ="-0.4572489, 486.9, -87.04652"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10889" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4133_729BE3CC">
+      <Hotspots>
+        <Hotspot Radius="15" XYZ="-18.02859, 483.8851, -101.5793"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10888" Weight="1"/>
+        <TargetMob Id="10890" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="4133_B836F579">
+      <Hotspots>
+        <Hotspot Radius="15" XYZ="-2.651757, 481.0327, -115.5327"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10887" Weight="1"/>
+        <TargetMob Id="10891" Weight="1"/>
+      </TargetMobs>
+    </GrindArea>
+    <GrindArea Name="Anima">
+      <Hotspots>
+        <Hotspot XYZ="0, 480, -180" Radius="60"/>
+        <Hotspot XYZ="0, 120, -400" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="10288"/>
+        <TargetMob Id="10285"/>
+      </TargetMobs>
     </GrindArea>
   </GrindAreas>
-  <CodeChunks>
-    <CodeChunk Name="Transition1">
-      <![CDATA[
-            Core.Me.SetFacing(3.136657f);
-            MovementManager.MoveForwardStart();
-            await Coroutine.Sleep(2000);
-            Navigator.PlayerMover.MoveStop();
-            ]]>
-    </CodeChunk>
-    <CodeChunk Name="Transition2">
-      <![CDATA[
-            Core.Me.SetFacing(0.003331661f);
-            MovementManager.MoveForwardStart();
-            await Coroutine.Sleep(2000);
-            Navigator.PlayerMover.MoveStop();
-            ]]>
-    </CodeChunk>
-    <CodeChunk Name="Transition3">
-      <![CDATA[
-            Core.Me.SetFacing(3.154251f);
-            MovementManager.MoveForwardStart();
-            await Coroutine.Sleep(2000);
-            Navigator.PlayerMover.MoveStop();
-            ]]>
-    </CodeChunk>
-    <CodeChunk Name="WalkOffPlatform">
-      <![CDATA[
-            Core.Me.SetFacing(3.143022f);
-            MovementManager.MoveForwardStart();
-            await Coroutine.Sleep(5000);
-            Navigator.PlayerMover.MoveStop();
-            ]]>
-    </CodeChunk>
-  </CodeChunks>
 </Profile>

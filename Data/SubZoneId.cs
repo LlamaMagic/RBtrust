@@ -437,6 +437,36 @@ public enum SubZoneId : uint
     Sunseat = 2941,
 
     /// <summary>
+    /// Lv. 83 The Tower of Babil > Magitek Servicing
+    /// </summary>
+    MagitekServicing = 4124,
+
+    /// <summary>
+    /// Lv. 83 The Tower of Babil > Magitek Lift A
+    /// </summary>
+    MagitekLiftA = 4129,
+
+    /// <summary>
+    /// Lv. 83 The Tower of Babil > Martial Conditioning
+    /// </summary>
+    MartialConditioning = 4125,
+
+    /// <summary>
+    /// Lv. 83 The Tower of Babil > Aetherial Distortion
+    /// </summary>
+    AetherialDistortion = 4133,
+
+    /// <summary>
+    /// Lv. 83 The Tower of Babil > The Iron Womb
+    /// </summary>
+    TheIronWomb = 4126,
+
+    /// <summary>
+    /// Lv. 83 The Tower of Babil > Anima's Dimension
+    /// </summary>
+    AnimasDimension = 4134,
+
+    /// <summary>
     /// Lv. 87: Ktisis Hyperboreia > Frozen Sphere, Lyssa
     /// </summary>
     FrozenSphere = 3766,
