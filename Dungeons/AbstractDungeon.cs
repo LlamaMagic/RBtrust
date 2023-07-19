@@ -45,6 +45,9 @@ public abstract class AbstractDungeon
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
     public virtual Task<bool> OnEnterDungeonAsync()
     {
+        AvoidanceManager.AvoidInfos.Clear();
+        SidestepPlugin.Enabled = true;
+
         return Task.FromResult(false);
     }
 
@@ -54,6 +57,9 @@ public abstract class AbstractDungeon
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
     public virtual Task<bool> OnExitDungeonAsync()
     {
+        AvoidanceManager.AvoidInfos.Clear();
+        SidestepPlugin.Enabled = true;
+
         return Task.FromResult(false);
     }
 
