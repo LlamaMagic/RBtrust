@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Dungeons;
+using Trust.Helpers;
 
 namespace Trust.Managers;
 
@@ -127,6 +128,8 @@ internal class DungeonManager
             {
                 currentDungeon = default;
             }
+
+            await LoadingHelpers.WaitForLoadingAsync();
         }
 
         return await (currentDungeon?.RunAsync() ?? Task.FromResult(false));
