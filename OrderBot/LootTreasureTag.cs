@@ -66,6 +66,7 @@ public class LootTreasureTag : AbstractTaskTag
             chest.Interact();
 
             await Coroutine.Sleep(LootingCooldown);
+            Core.Player.ClearTarget();
         }
 
         if (ShouldEquipRecommended)
