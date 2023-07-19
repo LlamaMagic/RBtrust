@@ -52,9 +52,10 @@ public static class AvoidanceHelpers
     /// <param name="length">Total length of the rectangle.</param>
     /// <param name="xOffset">Left/right offset from caster's center.</param>
     /// <param name="yOffset">Front/back offset from caster's center.</param>
+    /// <param name="rotationProducer">(Optional) Rotation function that returns radians to rotate the avoid by. 0 rad = True South. Defaults to spell target's facing.</param>
     /// <param name="priority">Avoidance priority. Higher is scarier.</param>
     /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
-    public static AvoidInfo AddAvoidRectangle<T>(Func<bool> canRun, Predicate<T> objectSelector, float width, float length, float xOffset = 0.0f, float yOffset = 0.0f, AvoidancePriority priority = AvoidancePriority.Medium)
+    public static AvoidInfo AddAvoidRectangle<T>(Func<bool> canRun, Predicate<T> objectSelector, float width, float length, float xOffset = 0.0f, float yOffset = 0.0f, Func<T, float> rotationProducer = null, AvoidancePriority priority = AvoidancePriority.Medium)
         where T : GameObject
     {
         Vector2[] rectangle = GenerateRectangle(width, length, xOffset, yOffset);
@@ -63,11 +64,41 @@ public static class AvoidanceHelpers
             condition: canRun,
             leashPointProducer: null,
             leashRadius: 50f,
-            rotationProducer: t => -t.Heading,
+            rotationProducer: t => rotationProducer != null ? rotationProducer(t) : -t.Heading,
             scaleProducer: t => 1.0f,
             heightProducer: t => 15.0f,
             pointsProducer: t => rectangle,
             locationProducer: t => t.Location,
+            collectionProducer: () => GameObjectManager.GetObjectsOfType<T>(allowInheritance: true).Where(t => objectSelector(t)),
+            priority: priority);
+    }
+
+    /// <summary>
+    /// Creates an <see cref="AvoidInfo"/> for a cross ("plus") and adds it to <see cref="AvoidanceManager"/>.
+    /// </summary>
+    /// <typeparam name="T">Any descendant of <see cref="GameObject"/>.</typeparam>
+    /// <param name="canRun">Condition function that returns <see langword="true"/> when the avoid should be active.</param>
+    /// <param name="objectSelector">Filter function that returns <see langword="true"/> to select <see cref="GameObject"/>s the avoid is related to.</param>
+    /// <param name="thickness">Total width of each cross arm.</param>
+    /// <param name="length">Length of each cross arm, from center of the cross.</param>
+    /// <param name="locationProducer">(Optional) Position function that returns a <see cref="Vector3"/> to center the avoid on. Defaults to spell target's location.</param>
+    /// <param name="rotationProducer">(Optional) Rotation function that returns radians to rotate the avoid by. 0 rad = True South. Defaults to spell target's facing.</param>
+    /// <param name="priority">Avoidance priority. Higher is scarier.</param>
+    /// <returns><see cref="AvoidInfo"/> for the new cross.</returns>
+    public static AvoidInfo AddAvoidCross<T>(Func<bool> canRun, Predicate<T> objectSelector, float thickness, float length, Func<T, Vector3> locationProducer = null, Func<T, float> rotationProducer = null, AvoidancePriority priority = AvoidancePriority.Medium)
+        where T : GameObject
+    {
+        Vector2[] cross = GenerateCross(thickness, length);
+
+        return AvoidanceManager.AddAvoidPolygon(
+            condition: canRun,
+            leashPointProducer: null,
+            leashRadius: 60f,
+            rotationProducer: t => rotationProducer != null ? rotationProducer(t) : -t.Heading,
+            scaleProducer: t => 1.0f,
+            heightProducer: t => 15.0f,
+            pointsProducer: t => cross,
+            locationProducer: t => locationProducer != null ? locationProducer(t) : t.Location,
             collectionProducer: () => GameObjectManager.GetObjectsOfType<T>(allowInheritance: true).Where(t => objectSelector(t)),
             priority: priority);
     }
@@ -148,11 +179,11 @@ public static class AvoidanceHelpers
             condition: canRun,
             leashPointProducer: locationProducer,
             leashRadius: (float)outerRadius * 1.5f,
-            rotationProducer: bc => 0.0f,
-            scaleProducer: bc => 1.0f,
-            heightProducer: bc => 15.0f,
-            pointsProducer: bc => donut,
-            locationProducer: (Vector3 location) => location,
+            rotationProducer: location => 0.0f,
+            scaleProducer: location => 1.0f,
+            heightProducer: location => 15.0f,
+            pointsProducer: location => donut,
+            locationProducer: location => location,
             collectionProducer: () => new Vector3[1] { locationProducer() },
             priority: priority);
     }
@@ -160,6 +191,7 @@ public static class AvoidanceHelpers
     private static Vector2[] GenerateRectangle(float width, float length, float xOffset, float yOffset)
     {
         float halfWidth = width / 2.0f;
+
         Vector2[] rectangle =
         {
             new Vector2(halfWidth - xOffset, length + yOffset),
@@ -169,6 +201,30 @@ public static class AvoidanceHelpers
         };
 
         return rectangle;
+    }
+
+    private static Vector2[] GenerateCross(float thickness, float length)
+    {
+        float halfThickness = thickness / 2.0f;
+
+        // https://www.desmos.com/calculator/uql6hp3ldg
+        Vector2[] cross =
+        {
+            new Vector2(halfThickness, length),
+            new Vector2(halfThickness, halfThickness),
+            new Vector2(length, halfThickness),
+            new Vector2(length, -halfThickness),
+            new Vector2(halfThickness, -halfThickness),
+            new Vector2(halfThickness, -length),
+            new Vector2(-halfThickness, -length),
+            new Vector2(-halfThickness, -halfThickness),
+            new Vector2(-length, -halfThickness),
+            new Vector2(-length, halfThickness),
+            new Vector2(-halfThickness, halfThickness),
+            new Vector2(-halfThickness, length),
+        };
+
+        return cross;
     }
 
     private static Vector2[] GenerateDonut(double outerRadius, double innerRadius, int pointCount = 64)
