@@ -54,7 +54,7 @@ internal static class BattleCharacterExtensions
     /// <param name="msWait">Time between movement ticks, in milliseconds.</param>
     /// <param name="useMesh">Whether to use Nav Mesh or move blindly.</param>
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
-    public static async Task<bool> Follow(this BattleCharacter bc, float followDistance = 0.3f, int msWait = 0, bool useMesh = false)
+    public static async Task<bool> Follow(this BattleCharacter bc, float followDistance = 0.5f, int msWait = 0, bool useMesh = false)
     {
         if (bc == null)
         {

@@ -75,7 +75,7 @@ public abstract class AbstractDungeon
     /// <returns><see langword="true"/> if this behavior expected/handled execution.</returns>
     protected async Task<bool> FollowDodgeSpells()
     {
-        if (SpellsToFollowDodge == null || SpellsToFollowDodge.Count == 0)
+        if (SpellsToFollowDodge == null || !SpellsToFollowDodge.Any())
         {
             return false;
         }
