@@ -381,5 +381,10 @@ public enum ZoneId : ushort
     /// </summary>
     TheAetherfont = 1126,
 
+    /// <summary>
+    /// Lv. 90.6: The Lunar Subterrane
+    /// </summary>
+    TheLunarSubterrane = ushort.MaxValue,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

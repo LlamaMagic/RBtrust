@@ -76,6 +76,7 @@
     <Compile Include="Dungeons\KeeperOfTheLake.cs" />
     <Compile Include="Dungeons\LapisManalis.cs" />
     <Compile Include="Dungeons\LimitlessBlue.cs" />
+    <Compile Include="Dungeons\LunarSubterrane.cs" />
     <Compile Include="Dungeons\SirensongSea.cs" />
     <Compile Include="Dungeons\Snowcloak.cs" />
     <Compile Include="Dungeons\SohmAl.cs" />
@@ -174,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.5 Matoya%27s Relict.xml" />
+    <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 90.6 The Lunar Subterrane.xml" />
     <Content Include="Profiles\[O][RBTrust] 90.4 Lapis Manalis.xml" />
     <Content Include="Profiles\[O][RBTrust] 90.3 The Fell Court of Troia.xml" />
     <Content Include="Profiles\Incomplete\Needs-CSharp\[O][RBTrust] 80.2 The Grand Cosmos.xml" />

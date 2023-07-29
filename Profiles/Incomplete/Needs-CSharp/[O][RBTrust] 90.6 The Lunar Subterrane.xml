@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Profile [
+  <!ENTITY ZoneId "0">
+  <!ENTITY DutyId "0">
+
+  <!ENTITY Shortcut "2000700">
+
+  <!ENTITY SubZoneA "0">
+  <!ENTITY BossOneSubZone "0">
+
+  <!ENTITY SubZoneB "0">
+  <!ENTITY BossTwoSubZone "0">
+
+  <!ENTITY SubZoneC "0">
+  <!ENTITY BossThreeSubZone "0">
+  
+]>
+<Profile>
+  <Name>[O][RBTrust] 90.6 The Lunar Subterrane</Name>
+  <Order>
+    <CheckPlugins/>
+
+    <While Condition="True">
+      <WaitForLoading/>
+      <If Condition="not IsOnMap(&ZoneId;)">
+
+        <EquipRecommended/>
+        <JoinSupportDuty DutyId="&DutyId;"/>
+
+      </If>
+
+      <If Condition="IsOnMap(&ZoneId;)">
+
+        <If Condition="ObjectExistsWithId(&Shortcut;) and GameObjectManager.GetObjectByNPCId(&Shortcut;).IsTargetable">
+          <!-- Shortcut available -->
+          <UseTransport NpcId="&Shortcut;" XYZ="-264.4764, -199.5, 374.1396"/>
+          <WaitForLoading/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&SubZoneA;, }">
+          
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&SubZoneA;, &BossOneSubZone;, }">
+          <StopBot/>
+          <Grind GrindRef="BossOne" PostCombatDelay="2.0" While="GetInstanceTodo(1) == 0"/>
+          <LootTreasure/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&SubZoneB;, }">
+
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&SubZoneB;, &BossTwoSubZone;, }">
+          <StopBot/>
+          <Grind GrindRef="BossTwo" PostCombatDelay="2.0" While="GetInstanceTodo(3) == 0"/>
+          <LootTreasure/>
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&SubZoneC;, }">
+
+        </If>
+
+        <If Condition="WorldManager.SubZoneId in {&SubZoneC;, &BossThreeSubZone;, }">
+          <StopBot/>
+          <Grind GrindRef="BossThree" PostCombatDelay="2.0" While="not IsDutyEnded()"/>
+          <LootTreasure/>
+        </If>
+        
+        <LeaveDuty/>
+      </If>
+    </While>
+  </Order>
+
+  <GrindAreas>
+    <GrindArea Name="BossOne">
+      <Hotspots>
+        <Hotspot XYZ="0, 0, 0" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="0"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="BossTwo">
+      <Hotspots>
+        <Hotspot XYZ="0, 0, 0" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="0"/>
+      </TargetMobs>
+    </GrindArea>
+
+    <GrindArea Name="BossThree">
+      <Hotspots>
+        <Hotspot XYZ="0, 0, 0" Radius="60"/>
+      </Hotspots>
+      <TargetMobs>
+        <TargetMob Id="0"/>
+      </TargetMobs>
+    </GrindArea>
+  </GrindAreas>
+</Profile>

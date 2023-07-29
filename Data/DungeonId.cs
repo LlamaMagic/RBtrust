@@ -320,5 +320,10 @@ public enum DungeonId : uint
     /// Lv. 90.5: The Aetherfont
     /// </summary>
     TheAetherfont = 822,
+
+    /// <summary>
+    /// Lv. 90.6: The Lunar Subterrane
+    /// </summary>
+    TheLunarSubterrane = uint.MaxValue,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }
