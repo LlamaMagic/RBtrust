@@ -30,7 +30,8 @@ public class Aetherfont : AbstractDungeon
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
         EnemyAction.ExplosiveFrequency, EnemyAction.ResonantFrequency, EnemyAction.Tidalspout,
-        EnemyAction.LightningClaw, EnemyAction.LightningRampage,
+        EnemyAction.LightningClaw, EnemyAction.LightningRampage, EnemyAction.LightningRampage2,
+        EnemyAction.LightningRampage3,
     };
 
     /// <inheritdoc/>
@@ -271,6 +272,16 @@ public class Aetherfont : AbstractDungeon
         /// <see cref="EnemyNpc.Arkas"/>'s Lightning Rampage.
         /// </summary>
         public const uint LightningRampage = 34319;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Arkas"/>'s Lightning Rampage.
+        /// </summary>
+        public const uint LightningRampage2 = 34318;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Arkas"/>'s Lightning Rampage.
+        /// </summary>
+        public const uint LightningRampage3 = 34714;
 
         /// <summary>
         /// <see cref="EnemyNpc.Arkas"/>'s Forked Fissures.
