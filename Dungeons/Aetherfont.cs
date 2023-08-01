@@ -31,7 +31,7 @@ public class Aetherfont : AbstractDungeon
     {
         EnemyAction.ExplosiveFrequency, EnemyAction.ResonantFrequency, EnemyAction.Tidalspout,
         EnemyAction.LightningClaw, EnemyAction.LightningRampage, EnemyAction.LightningRampage2,
-        EnemyAction.LightningRampage3,
+        EnemyAction.LightningRampage3, EnemyAction.LightningRampage4,
     };
 
     /// <inheritdoc/>
@@ -282,6 +282,11 @@ public class Aetherfont : AbstractDungeon
         /// <see cref="EnemyNpc.Arkas"/>'s Lightning Rampage.
         /// </summary>
         public const uint LightningRampage3 = 34714;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Arkas"/>'s Lightning Rampage.
+        /// </summary>
+        public const uint LightningRampage4 = 34721;
 
         /// <summary>
         /// <see cref="EnemyNpc.Arkas"/>'s Forked Fissures.
