@@ -437,6 +437,21 @@ public enum SubZoneId : uint
     Sunseat = 2941,
 
     /// <summary>
+    /// Lv. 80 The Heroes' Gauntlet > Mount Argai Mines > Spectral Thief
+    /// </summary>
+    MountArgaiMines = 3515,
+
+    /// <summary>
+    /// Lv. 80 The Heroes' Gauntlet > Summer Ballroom > Spectral Necromancer
+    /// </summary>
+    SummerBallroom = 3516,
+
+    /// <summary>
+    /// Lv. 80 The Heroes' Gauntlet > Illuminated Plaza > Spectral Berserker
+    /// </summary>
+    IlluminatedPlaza = 3517,
+
+    /// <summary>
     /// Lv. 83 The Tower of Babil > Magitek Servicing
     /// </summary>
     MagitekServicing = 4124,
