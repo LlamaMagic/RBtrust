@@ -131,7 +131,7 @@ public class Aetherfont : AbstractDungeon
         SidestepPlugin.Enabled = currentSubZoneId switch
         {
             SubZoneId.TheDeepBelow => false,
-            _ => Core.Me.InCombat,
+            _ => true,
         };
 
         return false;
