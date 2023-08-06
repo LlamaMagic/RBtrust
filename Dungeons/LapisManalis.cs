@@ -122,6 +122,14 @@ public class LapisManalis : AbstractDungeon
             collectionProducer: () => GameObjectManager.GetObjectsOfType<BattleCharacter>()
                 .Where(bc => bc.CastingSpellId is EnemyAction.SoulScythe));
 
+        // Boss 2: Scarecrow Chase
+        AvoidanceHelpers.AddAvoidCross<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.ScarecrowChase,
+            thickness: 10.0f,
+            length: 60.0f,
+            rotationProducer: bc => (float)(1.0 / 4.0 * Math.PI));
+
         // Boss 2: Tenebrism > Glassy-Eyed gaze debuff
         AvoidanceManager.AddAvoidLocation(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum
@@ -327,6 +335,13 @@ public class LapisManalis : AbstractDungeon
         /// Ground-targeted Circle AOE.
         /// </summary>
         public const uint SoulScythe = 31386;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GalateaMagna"/>'s Scarecrow Chase.
+        ///
+        /// Cross AOE.
+        /// </summary>
+        public const uint ScarecrowChase = 32703;
 
         /// <summary>
         /// <see cref="EnemyNpc.Cagnazzo"/>'s Antediluvian.
