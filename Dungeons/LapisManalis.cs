@@ -137,6 +137,30 @@ public class LapisManalis : AbstractDungeon
             radius: 18.0f,
             locationProducer: () => ArenaCenter.GalateaMagna);
 
+        // Boss 3: Antediluvian
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Antediluvian && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds > 3500,
+            radiusProducer: bc => 9.5f);
+
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Antediluvian && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds <= 3500,
+            radiusProducer: bc => 15.0f);
+
+        // Boss 3: Body Slam
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.BodySlamCircle,
+            radiusProducer: bc => 9.0f);
+
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.BodySlamCircle && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds <= 2000,
+            outerRadius: 90.0f,
+            innerRadius: 11.0f,
+            priority: AvoidancePriority.Medium);
+
         // Boss 3: Neap Tide
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
@@ -149,8 +173,35 @@ public class LapisManalis : AbstractDungeon
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
             objectSelector: bc => bc.GetAuraById(PartyAura.SpringTide)?.TimeLeft < 6.0f,
             outerRadius: 90.0f,
-            innerRadius: 6.0f,
+            innerRadius: 3.0f,
             priority: AvoidancePriority.Medium);
+
+        // Boss 3: Hydrovent
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Hydrovent,
+            radius: 6.0f,
+            locationProducer: bc => bc.SpellCastInfo.CastLocation);
+
+        // Boss 3: Void Miasma
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.VoidMiasma,
+            leashPointProducer: () => ArenaCenter.Cagnazzo,
+            leashRadius: 60.0f,
+            rotationDegrees: 0f,
+            radius: 60.0f,
+            arcDegrees: 24f);
+
+        // Boss 3: Lifescleaver
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Lifescleaver,
+            leashPointProducer: () => ArenaCenter.Cagnazzo,
+            leashRadius: 60.0f,
+            rotationDegrees: 0f,
+            radius: 60.0f,
+            arcDegrees: 24f);
 
         // Boss 3: Void Torrent linear AOE tank buster
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
@@ -353,9 +404,9 @@ public class LapisManalis : AbstractDungeon
         /// <summary>
         /// <see cref="EnemyNpc.Cagnazzo"/>'s Body Slam.
         ///
-        /// Make small reverse donut to avoid being pushed into poison water.
+        /// Make small donut to avoid being pushed into poison water.
         /// </summary>
-        public const uint BodySlam = 31122;
+        public const uint BodySlamCircle = 31123;
 
         /// <summary>
         /// <see cref="EnemyNpc.Cagnazzo"/>'s Hydrofall.
@@ -363,6 +414,13 @@ public class LapisManalis : AbstractDungeon
         /// Spread AOE targeting players. 6 yalm radius.
         /// </summary>
         public const uint Hydrofall = 31376;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Cagnazzo"/>'s Hydrovent.
+        ///
+        /// Ground-targeted circle AOE. 6 yalm radius.
+        /// </summary>
+        public const uint Hydrovent = 31136;
 
         /// <summary>
         /// <see cref="EnemyNpc.Cagnazzo"/>'s Hydraulic Ram.
@@ -374,6 +432,20 @@ public class LapisManalis : AbstractDungeon
         public const uint HydraulicRam1 = 32693;
 
         public const uint HydraulicRam2 = 32695;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Cagnazzo"/>'s Void Miasma.
+        ///
+        /// Cone AOE from each purple ball towards each purple tether.
+        /// </summary>
+        public const uint VoidMiasma = 0x7FB3;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Cagnazzo"/>'s Lifescleaver.
+        ///
+        /// Alternating cone AOE from center -> outward. 22.5 degrees each.
+        /// </summary>
+        public const uint Lifescleaver = 0x7989;
 
         /// <summary>
         /// <see cref="EnemyNpc.Cagnazzo"/>'s Void Torrent.
