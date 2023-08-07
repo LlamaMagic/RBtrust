@@ -122,6 +122,16 @@ public class LapisManalis : AbstractDungeon
             collectionProducer: () => GameObjectManager.GetObjectsOfType<BattleCharacter>()
                 .Where(bc => bc.CastingSpellId is EnemyAction.SoulScythe));
 
+        // Boss 2: Scarecrow Chase Dummy Cast Pre-position
+        // TODO: Detect head markers 1-4 to determine order sooner and pre-position independently from party
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum
+                && GameObjectManager.GetObjectsOfType<BattleCharacter>()
+                    .Any(bc => bc.CastingSpellId == EnemyAction.ScarecrowChaseDummy),
+            objectSelector: bc => PartyManager.VisibleMembers.Any(pm => pm.BattleCharacter.ObjectId == bc.ObjectId),
+            outerRadius: 90.0f,
+            innerRadius: 8.0f);
+
         // Boss 2: Scarecrow Chase
         AvoidanceHelpers.AddAvoidCross<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum,
@@ -130,11 +140,41 @@ public class LapisManalis : AbstractDungeon
             length: 60.0f,
             rotationProducer: bc => (float)(1.0 / 4.0 * Math.PI));
 
+        // Boss 2: Tenebrism > Towers
+        AvoidanceHelpers.AddAvoidDonut(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum
+                && Core.Player.GetAuraById(PartyAura.GlassyEyed)?.TimeLeft > 2.0f,
+            collectionProducer: () => new[]
+            {
+                MechanicLocation.TenebrismTowerNorth,
+                MechanicLocation.TenebrismTowerSouth,
+                MechanicLocation.TenebrismTowerEast,
+                MechanicLocation.TenebrismTowerWest,
+            },
+            outerRadius: 10.0f,
+            innerRadius: 5.0f,
+            priority: AvoidancePriority.High);
+
+        // Take up space outside of towers so we end up in a tower
+        AvoidanceHelpers.AddAvoidDonut(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum
+                && Core.Player.GetAuraById(PartyAura.GlassyEyed)?.TimeLeft > 2.0f,
+            locationProducer: () => ArenaCenter.GalateaMagna,
+            outerRadius: 90.0f,
+            innerRadius: 12.0f,
+            priority: AvoidancePriority.High);
+
+        // Block towers occupied by other players
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum,
+            objectSelector: bc => bc.HasAura(PartyAura.GlassyEyed),
+            radiusProducer: bc => 8.0f);
+
         // Boss 2: Tenebrism > Glassy-Eyed gaze debuff
         AvoidanceManager.AddAvoidLocation(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum
-                && Core.Player.GetAuraById(PartyAura.GlassyEyed)?.TimeLeft < 1.0f,
-            radius: 18.0f,
+                && Core.Player.GetAuraById(PartyAura.GlassyEyed)?.TimeLeft <= 2.0f,
+            radius: 17.0f,
             locationProducer: () => ArenaCenter.GalateaMagna);
 
         // Boss 3: Antediluvian
@@ -290,6 +330,29 @@ public class LapisManalis : AbstractDungeon
         public static readonly Vector3 Cagnazzo = new(-250f, -173f, 130f);
     }
 
+    private static class MechanicLocation
+    {
+        /// <summary>
+        /// <see cref="EnemyNpc.GalateaMagna"/>'s Tenebrism Tower, North.
+        /// </summary>
+        public static readonly Vector3 TenebrismTowerNorth = new(350.00f, 34.00f, -404.00f);
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GalateaMagna"/>'s Tenebrism Tower, South.
+        /// </summary>
+        public static readonly Vector3 TenebrismTowerSouth = new(350f, 34.00f, -384.00f);
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GalateaMagna"/>'s Tenebrism Tower, East.
+        /// </summary>
+        public static readonly Vector3 TenebrismTowerEast = new(360.00f, 34.00f, -394.00f);
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GalateaMagna"/>'s Tenebrism Tower, West.
+        /// </summary>
+        public static readonly Vector3 TenebrismTowerWest = new(340.00f, 34.00f, -394.00f);
+    }
+
     private static class EnemyAura
     {
     }
@@ -386,6 +449,13 @@ public class LapisManalis : AbstractDungeon
         /// Ground-targeted Circle AOE.
         /// </summary>
         public const uint SoulScythe = 31386;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GalateaMagna"/>'s Scarecrow Chase (Dummy).
+        ///
+        /// Dummy cast for <see cref="ScarecrowChase"/>. Useful for pre-positioning.
+        /// </summary>
+        public const uint ScarecrowChaseDummy = 31387;
 
         /// <summary>
         /// <see cref="EnemyNpc.GalateaMagna"/>'s Scarecrow Chase.
