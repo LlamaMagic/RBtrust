@@ -168,6 +168,25 @@ public static class AvoidanceHelpers
     /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
     public static AvoidInfo AddAvoidDonut(Func<bool> canRun, Func<Vector3> locationProducer, double outerRadius, double innerRadius = 6.0, AvoidancePriority priority = AvoidancePriority.Medium)
     {
+        return AddAvoidDonut(
+            canRun,
+            collectionProducer: () => new[] { locationProducer() },
+            outerRadius,
+            innerRadius,
+            priority);
+    }
+
+    /// <summary>
+    /// Creates a donut-shaped avoid at the given locations.
+    /// </summary>
+    /// <param name="canRun">Condition function that returns <see langword="true"/> when the avoid should be active.</param>
+    /// <param name="collectionProducer">Position function that returns a <see cref="Vector3"/> of the donut's center.</param>
+    /// <param name="outerRadius">Radius of entire donut.</param>
+    /// <param name="innerRadius">Radius of inner safe zone.</param>
+    /// <param name="priority">Avoidance priority. Higher is scarier.</param>
+    /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
+    public static AvoidInfo AddAvoidDonut(Func<bool> canRun, Func<Vector3[]> collectionProducer, double outerRadius, double innerRadius = 6.0, AvoidancePriority priority = AvoidancePriority.Medium)
+    {
         Vector2[] donut = GenerateDonut(outerRadius, innerRadius);
 
         // RB avoidance ultimately expects Collection to be populated with objects it checks against
@@ -177,14 +196,14 @@ public static class AvoidanceHelpers
         // run-time for us to simply return as-is, per one of RB's own AddAvoidLocation() overloads.
         return AvoidanceManager.AddAvoidPolygon(
             condition: canRun,
-            leashPointProducer: locationProducer,
+            leashPointProducer: () => Core.Player.Location,
             leashRadius: (float)outerRadius * 1.5f,
             rotationProducer: location => 0.0f,
             scaleProducer: location => 1.0f,
             heightProducer: location => 15.0f,
             pointsProducer: location => donut,
             locationProducer: location => location,
-            collectionProducer: () => new Vector3[1] { locationProducer() },
+            collectionProducer: collectionProducer,
             priority: priority);
     }
 
