@@ -5,7 +5,6 @@ using ff14bot.Behavior;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
-using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,30 +33,27 @@ public class HolminsterSwitch : AbstractDungeon
     /// </summary>
     private static readonly HashSet<uint> BossIds = new()
     {
-        ForgivenDissonance, TesleenTheForgiven, Philia, IronChainObj,
+        ForgivenDissonance,
+        TesleenTheForgiven,
+        Philia,
+        IronChainObj,
     };
 
-    private static readonly HashSet<uint> FierceBeating = new()
-    {
-        15834,
-        15835,
-        15836,
-        15837,
-        15838,
-        15839,
-    };
+    private static readonly HashSet<uint> Thumbscrew = new() { 15814, 16850 };
+    private static readonly HashSet<uint> BrazenBull = new() { 15817, 15820 };
+    private static readonly HashSet<uint> Exorcise = new() { 15826, 15827 };
+    private static readonly HashSet<uint> FeveredFlagellation = new() { 15829, 15830, 17440 };
+    private static readonly HashSet<uint> RightKnout = new() { 15846 };
+    private static readonly HashSet<uint> LeftKnout = new() { 15847 };
+    private static readonly HashSet<uint> IntotheLight = new() { 15847, 17232 };
+    private static readonly HashSet<uint> Taphephobia = new() { 15842, 16769 };
+    private static readonly HashSet<uint> FierceBeating = new() { 15834, 15835, 15836, 15837, 15838, 15839, };
 
     private static readonly Vector3 ExorciseStackLoc = new(79.35034f, 0f, -81.01664f);
     private static readonly int ExorciseDuration = 25_000;
 
-    private static readonly HashSet<uint> Pendulum = new()
-    {
-        15833,
-        15842,
-        16769,
-        16777,
-        16790,
-    };
+    private static readonly HashSet<uint> Pendulum = new() { 15833, 15842, 16769, 16777, 16790, };
+    private static readonly Vector3 PendulumDodgeLoc = new(117.1188f, 23f, -474.0881f);
 
     private static readonly int FierceBeatingDuration = 32_000;
     private static DateTime fierceBeatingTimestamp = DateTime.MinValue;
@@ -71,159 +67,145 @@ public class HolminsterSwitch : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        //EnemyAction.Thumbscrew,
-        //EnemyAction.HereticsFork,
-        //EnemyAction.RightKnout,
-        //EnemyAction.LeftKnout,
-        EnemyAction.Exorcise, EnemyAction.Exorcise2, EnemyAction.HolyWater, EnemyAction.IntotheLight,
+        15602, 15609, 15814, 15815, 15816, 15817, 15818, 15819, 15820, 15822, 15843, 15845, 15846, 15847, 15848, 15849,
+        15886, 16765, 16779, 16780, 16781, 16782, 16850, 16851, 16852, 17232, 17552,
     };
-
-    public override Task<bool> OnEnterDungeonAsync()
-    {
-        AvoidanceManager.AvoidInfos.Clear();
-
-        // Boss 1 Gibbet Cage
-        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
-            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.GibbetCage,
-            radiusProducer: bc => 8.5f,
-            priority: AvoidancePriority.High));
-
-        // Boss 1 Heretic's Fork
-        AvoidanceHelpers.AddAvoidCross<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.HereticsFork,
-            thickness: 8.0f,
-            length: 60.0f);
-
-        // Boss 1 Light Shot
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.LightShot,
-            width: 4f,
-            length: 40f,
-            priority: AvoidancePriority.High);
-
-        // Boss 1 Thumbscrew
-        // This one doesn't always go in the direction the boss is facing. At the last second the boss turns toward the area it's casted on
-        // But follow dodging causes jittering since so many other abilities are going off at this time
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.Thumbscrew && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds > 1000,
-            width: 6f,
-            length: 40f,
-            priority: AvoidancePriority.High);
-
-        // Boss 1 Wooden Horse
-        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.WoodenHorse,
-            leashPointProducer: () => ArenaCenter.ForgivenDissonance,
-            leashRadius: 40.0f,
-            rotationDegrees: 0.0f,
-            radius: 60.0f,
-            arcDegrees: 90.0f);
-
-        // Boss 2, Ice puddles
-        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
-            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheAuction,
-            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.IcePuddles,
-            radiusProducer: eo => 7.0f,
-            priority: AvoidancePriority.High));
-
-        // Boss 3 Left Knout
-        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheManorHouseCourtyard,
-            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.LeftKnout,
-            leashPointProducer: () => ArenaCenter.Philia,
-            leashRadius: 40f,
-            rotationDegrees: 90f,
-            radius: 25f,
-            arcDegrees: 250f);
-
-        // Boss 3 Right Knout
-        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheManorHouseCourtyard,
-            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.RightKnout,
-            leashPointProducer: () => ArenaCenter.Philia,
-            leashRadius: 40f,
-            rotationDegrees: -90f,
-            radius: 25f,
-            arcDegrees: 250f);
-
-        // Boss Arenas
-        AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            () => ArenaCenter.ForgivenDissonance,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
-            priority: AvoidancePriority.High);
-
-        AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheAuction,
-            () => ArenaCenter.TesleentheForgiven,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
-            priority: AvoidancePriority.High);
-
-        AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheManorHouseCourtyard,
-            () => ArenaCenter.Philia,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
-            priority: AvoidancePriority.High);
-
-        return Task.FromResult(false);
-    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
 
-        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
-        bool result = false;
+        BattleCharacter forgivenDissonanceNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: ForgivenDissonance)
+            .FirstOrDefault(bc => bc.IsTargetable);
 
-        switch (currentSubZoneId)
+        if (forgivenDissonanceNpc != null && forgivenDissonanceNpc.IsValid)
         {
-            case SubZoneId.TheWound:
-                result = await HandleForgivenDissonanceAsync();
-                break;
-            case SubZoneId.TheAuction:
-                result = await HandleTesleentheForgivenAsync();
-                break;
-            case SubZoneId.TheManorHouseCourtyard:
-                result = await HandlePhiliaAsync();
-                break;
+            if (Thumbscrew.IsCasting())
+            {
+                SidestepPlugin.Enabled = false;
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestDps.Follow();
+            }
+
+            if (BrazenBull.IsCasting())
+            {
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestDps.Follow();
+            }
         }
 
+        BattleCharacter tesleenNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: TesleenTheForgiven)
+            .FirstOrDefault(bc => bc.IsTargetable);
 
-        return false;
-    }
-
-    private async Task<bool> HandleForgivenDissonanceAsync()
-    {
-        return false;
-    }
-
-    private async Task<bool> HandleTesleentheForgivenAsync()
-    {
-        if (EnemyAction.FeveredFlagellation.IsCasting())
+        if (tesleenNpc != null && tesleenNpc.IsValid)
         {
-            await MovementHelpers.Spread(EnemyAction.FeveredFlagellationDuration, 9f);
+            if (Exorcise.IsCasting())
+            {
+                if (Core.Me.Distance(ExorciseStackLoc) > 1f && Core.Me.IsCasting)
+                {
+                    ActionManager.StopCasting();
+                }
+
+                while (Core.Me.Distance(ExorciseStackLoc) > 1f)
+                {
+                    await CommonTasks.MoveTo(ExorciseStackLoc);
+                    await Coroutine.Yield();
+                }
+
+                // Wait in-place for stack marker to go off
+                Navigator.PlayerMover.MoveStop();
+                await Coroutine.Sleep(5_000);
+
+                Stopwatch exorciseTimer = new();
+                exorciseTimer.Restart();
+
+                // Create an AOE avoid for the ice puddle where the stack marker went off
+                AvoidanceManager.AddAvoidLocation(
+                    () => exorciseTimer.IsRunning && exorciseTimer.ElapsedMilliseconds < ExorciseDuration,
+                    radius: 6.5f * 1.5f, // Expand to account for stack target maybe standing to the side
+                    () => ExorciseStackLoc);
+
+                // Non-targetable but technically .IsVisible copies of Tesleen with the same .NpcId are used to place the outer ice puddles
+                // Create AOE avoids on top of them since SideStep doesn't do this automatically
+                IEnumerable<GameObject> fakeTesleens =
+                    GameObjectManager.GetObjectsByNPCId(TesleenTheForgiven).Where(obj => !obj.IsTargetable);
+                foreach (GameObject fake in fakeTesleens)
+                {
+                    Vector3 location = fake.Location;
+
+                    ff14bot.Pathing.Avoidance.AvoidInfo a = AvoidanceManager.AddAvoidLocation(
+                        () => exorciseTimer.IsRunning && exorciseTimer.ElapsedMilliseconds < ExorciseDuration,
+                        radius: 6.5f,
+                        () => location);
+                }
+            }
+
+            if (FeveredFlagellation.IsCasting())
+            {
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.Spread(10_000, 10);
+            }
+
+            if (Core.Me.HasAura(BleedingAura))
+            {
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestDps.Follow();
+            }
         }
 
-        return false;
-    }
-
-    private async Task<bool> HandlePhiliaAsync()
-    {
-        BattleCharacter philiaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: EnemyNpc.Philia)
+        BattleCharacter philiaNpc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(NpcId: Philia)
             .FirstOrDefault(bc => bc.IsTargetable);
 
         if (philiaNpc != null && philiaNpc.IsValid)
         {
-            if (FierceBeating.IsCasting() && fierceBeatingTimestamp.AddMilliseconds(FierceBeatingDuration) < DateTime.Now)
+            if (RightKnout.IsCasting())
+            {
+                SidestepPlugin.Enabled = false;
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestDps.Follow();
+            }
+
+            if (LeftKnout.IsCasting())
+            {
+                SidestepPlugin.Enabled = false;
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestDps.Follow();
+            }
+
+            if (IntotheLight.IsCasting())
+            {
+                SidestepPlugin.Enabled = false;
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.GetClosestDps.Follow();
+            }
+
+            if (Taphephobia.IsCasting())
+            {
+                AvoidanceManager.RemoveAllAvoids(i => i.CanRun);
+                await MovementHelpers.Spread(10_000, 9.0f);
+            }
+
+            if (Pendulum.IsCasting())
+            {
+                if (Core.Me.Distance(PendulumDodgeLoc) > 1 && Core.Me.IsCasting)
+                {
+                    ActionManager.StopCasting();
+                }
+
+                while (Core.Me.Distance(PendulumDodgeLoc) > 1.0f)
+                {
+                    CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 3_000, "Pendulum Avoid");
+                    await CommonTasks.MoveTo(PendulumDodgeLoc);
+                    await Coroutine.Yield();
+                }
+
+                await CommonTasks.StopMoving();
+                await Coroutine.Sleep(100);
+            }
+
+            if (FierceBeating.IsCasting() &&
+                fierceBeatingTimestamp.AddMilliseconds(FierceBeatingDuration) < DateTime.Now)
             {
                 if (philiaNpc != null)
                 {
@@ -257,185 +239,10 @@ public class HolminsterSwitch : AbstractDungeon
                         arcDegrees: 345f);
                 }
             }
-
-            if (Pendulum.IsCasting())
-            {
-                if (Core.Me.Distance(ArenaCenter.PendulumDodgeLoc) > 1 && Core.Me.IsCasting)
-                {
-                    ActionManager.StopCasting();
-                }
-
-                while (Core.Me.Distance(ArenaCenter.PendulumDodgeLoc) > 1.0f)
-                {
-                    CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 3_000, "Pendulum Avoid");
-                    await CommonTasks.MoveTo(ArenaCenter.PendulumDodgeLoc);
-                    await Coroutine.Yield();
-                }
-
-                await CommonTasks.StopMoving();
-                await Coroutine.Sleep(100);
-            }
         }
 
+        BossIds.ToggleSideStep();
+
         return false;
-    }
-
-    private static class EnemyNpc
-    {
-        /// <summary>
-        /// First Boss: Forgiven Dissonance.
-        /// </summary>
-        public const uint ForgivenDissonance = 8299;
-
-        /// <summary>
-        /// Second Boss: Tesleen, the Forgiven.
-        /// </summary>
-        public const uint TesleentheForgiven = 8300;
-
-        /// <summary>
-        /// Second Boss: Ice Puddles.
-        /// </summary>
-        public const uint IcePuddles = 2010105;
-
-        /// <summary>
-        /// Final Boss: Philia .
-        /// </summary>
-        public const uint Philia = 8301;
-
-        /// <summary>
-        /// Final Boss: Iron Chain .
-        /// </summary>
-        public const uint IronChain = 8570;
-    }
-
-    private static class ArenaCenter
-    {
-        /// <summary>
-        /// First Boss: Forgiven Dissonance.
-        /// </summary>
-        public static readonly Vector3 ForgivenDissonance = new(-15f, 0f, 240f);
-
-        /// <summary>
-        /// Second Boss: Tesleen, the Forgive.
-        /// </summary>
-        public static readonly Vector3 TesleentheForgiven = new(78f, 0f, -82f);
-
-
-        /// <summary>
-        /// Third Boss: Philia.
-        /// </summary>
-        public static readonly Vector3 Philia = new(134f, 23f, -464.5f);
-
-        /// <summary>
-        /// Third Boss: Philia.
-        /// Pendulum Dodge Location
-        /// </summary>
-        public static readonly Vector3 PendulumDodgeLoc = new(117.1188f, 23f, -474.0881f);
-    }
-
-    private static class EnemyAction
-    {
-        /// <summary>
-        /// Forgiven Dissonance
-        /// Gibbet Cage
-        /// Circle AoE around boss
-        /// </summary>
-        public const uint GibbetCage = 15816;
-
-        /// <summary>
-        /// Forgiven Dissonance
-        /// Heretic's Fork
-        /// Line AOE
-        /// </summary>
-        public const uint HereticsFork = 15822;
-
-        /// <summary>
-        /// Forgiven Dissonance
-        /// Thumbscrew
-        /// Line AOE
-        /// </summary>
-        public const uint Thumbscrew = 15814;
-
-        /// <summary>
-        /// Forgiven Dissonance
-        /// Light Shot
-        /// Line AOE
-        /// </summary>
-        public const uint LightShot = 15819;
-
-        /// <summary>
-        /// Forgiven Dissonance
-        /// Wooden Horse
-        /// Cone AOE
-        /// </summary>
-        public const uint WoodenHorse = 15815;
-
-        /// <summary>
-        /// Tesleen, the Forgiven
-        /// Exorcise
-        /// Stack
-        /// </summary>
-        public const uint Exorcise = 15826;
-
-        public const uint Exorcise2 = 15827;
-
-        /// <summary>
-        /// Tesleen, the Forgiven
-        /// Fevered Flagellation
-        /// Spread
-        /// </summary>
-        public static readonly HashSet<uint> FeveredFlagellation = new() { 15829, 15830, 17440 };
-
-        public static readonly int FeveredFlagellationDuration = 10_000;
-
-        /// <summary>
-        /// Tesleen, the Forgiven
-        /// Holy Water
-        /// Stack
-        /// </summary>
-        public const uint HolyWater = 15828;
-
-        /// <summary>
-        /// Philia
-        /// Right Knout
-        /// Follow dodge
-        /// </summary>
-        public const uint RightKnout = 15846;
-
-        /// <summary>
-        /// Philia
-        /// Left Knout
-        /// Follow dodge
-        /// </summary>
-        public const uint LeftKnout = 15847;
-
-        /// <summary>
-        /// Philia
-        /// Intothe Light
-        /// Stack
-        /// </summary>
-        public const uint IntotheLight = 17232;
-
-        private static readonly HashSet<uint> Taphephobia = new() { 15842, 16769 };
-
-        /// <summary>
-        /// Philia
-        /// FierceBeating
-        /// Attach very wide cone avoid pointing out the boss's right, forcing bot to left side
-        /// Boss spins clockwise and front cleave comes quickly, so disallow less-safe right side
-        /// Position + rotation will auto-update as the boss moves + turns!
-        /// </summary>
-        private static readonly HashSet<uint> FierceBeating = new()
-        {
-            15834,
-            15835,
-            15836,
-            15837,
-            15838,
-            15839,
-        };
-
-        private static readonly int FierceBeatingDuration = 32_000;
-        private static DateTime fierceBeatingTimestamp = DateTime.MinValue;
     }
 }
