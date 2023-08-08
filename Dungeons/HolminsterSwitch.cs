@@ -90,42 +90,11 @@ public class HolminsterSwitch : AbstractDungeon
             priority: AvoidancePriority.High));
 
         // Boss 1 Heretic's Fork
-        // This isn't perfect. There's still an area that causes issues, but it should be good enough to survive reliably.
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+        AvoidanceHelpers.AddAvoidCross<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
             objectSelector: bc => bc.CastingSpellId == EnemyAction.HereticsFork,
-            width: 7f,
-            length: 80f,
-            xOffset: 0f,
-            yOffset: 0f,
-            priority: AvoidancePriority.High);
-
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.HereticsFork,
-            width: 7f,
-            length: -80f,
-            xOffset: 0f,
-            yOffset: 0f,
-            priority: AvoidancePriority.High);
-
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.HereticsFork,
-            width: 80f,
-            length: 7f,
-            xOffset: 0f,
-            yOffset: 0f,
-            priority: AvoidancePriority.High);
-
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.HereticsFork,
-            width: -80f,
-            length: 7f,
-            xOffset: 0f,
-            yOffset: 0f,
-            priority: AvoidancePriority.High);
+            thickness: 8.0f,
+            length: 60.0f);
 
         // Boss 1 Light Shot
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
@@ -136,14 +105,14 @@ public class HolminsterSwitch : AbstractDungeon
             priority: AvoidancePriority.High);
 
         // Boss 1 Thumbscrew
-        // This one doesn't always go in the direction the boss is facing, seems random. But follow dodging causes jittering since so many other abilities are going off at this time
+        // This one doesn't always go in the direction the boss is facing. At the last second the boss turns toward the area it's casted on
+        // But follow dodging causes jittering since so many other abilities are going off at this time
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWound,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.Thumbscrew,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Thumbscrew && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds > 1000,
             width: 6f,
             length: 40f,
             priority: AvoidancePriority.High);
-
 
         // Boss 1 Wooden Horse
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
