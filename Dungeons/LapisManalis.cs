@@ -1,4 +1,5 @@
-﻿using Clio.Utilities;
+﻿using Clio.Common;
+using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
@@ -168,12 +169,12 @@ public class LapisManalis : AbstractDungeon
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum,
             objectSelector: bc => bc.HasAura(PartyAura.GlassyEyed),
-            radiusProducer: bc => 8.0f);
+            radiusProducer: bc => 9.0f);
 
         // Boss 2: Tenebrism > Glassy-Eyed gaze debuff
         AvoidanceManager.AddAvoidLocation(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ForumMessorum
-                && Core.Player.GetAuraById(PartyAura.GlassyEyed)?.TimeLeft <= 2.0f,
+                && Core.Player.GetAuraById(PartyAura.GlassyEyed)?.TimeLeft <= 1.0f,
             radius: 17.0f,
             locationProducer: () => ArenaCenter.GalateaMagna);
 
@@ -181,7 +182,8 @@ public class LapisManalis : AbstractDungeon
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
             objectSelector: bc => bc.CastingSpellId == EnemyAction.Antediluvian && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds > 3500,
-            radiusProducer: bc => 9.5f);
+            radiusProducer: bc => 12.0f,
+            ignoreIfBlocking: true);
 
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
@@ -231,7 +233,7 @@ public class LapisManalis : AbstractDungeon
             leashRadius: 60.0f,
             rotationDegrees: 0f,
             radius: 60.0f,
-            arcDegrees: 24f);
+            arcDegrees: 25f);
 
         // Boss 3: Lifescleaver
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
@@ -241,22 +243,24 @@ public class LapisManalis : AbstractDungeon
             leashRadius: 60.0f,
             rotationDegrees: 0f,
             radius: 60.0f,
-            arcDegrees: 24f);
+            arcDegrees: 25f);
 
         // Boss 3: Void Torrent linear AOE tank buster
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.VoidTorrent,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.VoidTorrent && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             width: 7f,
             length: 60f,
-            priority: AvoidancePriority.High);
+            rotationProducer: bc => MathEx.CalculateNeededFacing(bc.Location, GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId).Location));
 
         // Boss Arenas
-        AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheSilvanThrone,
-            () => ArenaCenter.Albion,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+        AvoidanceHelpers.AddAvoidSquareDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
+            innerWidth: 38.0f,
+            innerHeight: 38.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Albion },
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
@@ -266,11 +270,13 @@ public class LapisManalis : AbstractDungeon
             innerRadius: 19f,
             priority: AvoidancePriority.High);
 
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Deepspine,
-            () => ArenaCenter.Cagnazzo,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 38.0f,
+            innerHeight: 38.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Cagnazzo },
             priority: AvoidancePriority.High);
 
         return Task.FromResult(false);
