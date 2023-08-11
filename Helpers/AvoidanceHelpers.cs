@@ -64,7 +64,7 @@ public static class AvoidanceHelpers
             condition: canRun,
             leashPointProducer: null,
             leashRadius: 50f,
-            rotationProducer: t => rotationProducer != null ? rotationProducer(t) : -t.Heading,
+            rotationProducer: rotationProducer ?? ((t) => -t.Heading),
             scaleProducer: t => 1.0f,
             heightProducer: t => 15.0f,
             pointsProducer: t => rectangle,
@@ -94,11 +94,11 @@ public static class AvoidanceHelpers
             condition: canRun,
             leashPointProducer: null,
             leashRadius: 60f,
-            rotationProducer: t => rotationProducer != null ? rotationProducer(t) : -t.Heading,
+            rotationProducer: rotationProducer ?? ((t) => -t.Heading),
             scaleProducer: t => 1.0f,
             heightProducer: t => 15.0f,
             pointsProducer: t => cross,
-            locationProducer: t => locationProducer != null ? locationProducer(t) : t.Location,
+            locationProducer: locationProducer ?? ((t) => t.Location),
             collectionProducer: () => GameObjectManager.GetObjectsOfType<T>(allowInheritance: true).Where(t => objectSelector(t)),
             priority: priority);
     }
@@ -207,6 +207,34 @@ public static class AvoidanceHelpers
             priority: priority);
     }
 
+    /// <summary>
+    /// Creates a square donut-shaped avoid at the given locations.
+    /// </summary>
+    /// <param name="canRun">Condition function that returns <see langword="true"/> when the avoid should be active.</param>
+    /// <param name="innerWidth">Width of the inner safe zone.</param>
+    /// <param name="innerHeight">Height of the inner safe zone.</param>
+    /// <param name="outerWidth">Width of the overall rectangle.</param>
+    /// <param name="outerHeight">Height of the overall rectangle.</param>
+    /// <param name="collectionProducer">Position function that returns a <see cref="Vector3"/> of the square donut's center.</param>
+    /// <param name="priority">Avoidance priority. Higher is scarier.</param>
+    /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
+    public static AvoidInfo AddAvoidSquareDonut(Func<bool> canRun, float innerWidth, float innerHeight, float outerWidth, float outerHeight, Func<Vector3[]> collectionProducer, AvoidancePriority priority = AvoidancePriority.Medium)
+    {
+        Vector2[] squareDonut = GenerateSquareDonut(innerWidth, innerHeight, outerWidth, outerHeight);
+
+        return AvoidanceManager.AddAvoidPolygon(
+            condition: canRun,
+            leashPointProducer: () => Core.Player.Location,
+            leashRadius: (float)Math.Max(outerWidth, outerHeight) * 1.5f,
+            rotationProducer: location => 0.0f,
+            scaleProducer: location => 1.0f,
+            heightProducer: location => 15.0f,
+            pointsProducer: location => squareDonut,
+            locationProducer: location => location,
+            collectionProducer: collectionProducer,
+            priority: priority);
+    }
+
     private static Vector2[] GenerateRectangle(float width, float length, float xOffset, float yOffset)
     {
         float halfWidth = width / 2.0f;
@@ -261,5 +289,32 @@ public static class AvoidanceHelpers
         }
 
         return outerPoints.Concat(innerPoints).ToArray();
+    }
+
+    private static Vector2[] GenerateSquareDonut(float innerWidth, float innerHeight, float outerWidth, float outerHeight)
+    {
+        float halfOuterWidth = outerWidth / 2f;
+        float halfOuterHeight = outerHeight / 2f;
+
+        float halfInnerWidth = innerWidth / 2f;
+        float halfInnerHeight = innerHeight / 2f;
+
+        // https://www.desmos.com/calculator/l70fgnow9a
+        Vector2[] squareDonut =
+        {
+            new Vector2(halfOuterWidth, halfOuterHeight),
+            new Vector2(halfOuterWidth, -halfOuterHeight),
+            new Vector2(-halfOuterWidth, -halfOuterHeight),
+            new Vector2(-halfOuterWidth, halfOuterHeight),
+            new Vector2(halfOuterWidth, halfOuterHeight),
+
+            new Vector2(halfInnerWidth, halfInnerHeight),
+            new Vector2(-halfInnerWidth, halfInnerHeight),
+            new Vector2(-halfInnerWidth, -halfInnerHeight),
+            new Vector2(halfInnerWidth, -halfInnerHeight),
+            new Vector2(halfInnerWidth, halfInnerHeight),
+        };
+
+        return squareDonut;
     }
 }
