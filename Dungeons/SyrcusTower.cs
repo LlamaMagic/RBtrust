@@ -7,6 +7,7 @@ using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
+using ff14bot.RemoteWindows;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -43,14 +44,6 @@ public class SyrcusTower : AbstractDungeon
             objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.ClockworkWright,
             radiusProducer: eo => 4.0f,
             priority: AvoidancePriority.High));
-
-        // Boss 4: Atherial Mine
-        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheEmperorsThrone,
-            objectSelector: eo => eo.NpcId == EnemyNpc.AetherialMine && eo.IsVisible,
-            outerRadius: 90.0f,
-            innerRadius: 6.0f,
-            priority: AvoidancePriority.Medium);
 
         // Boss 4: Ancient Quaga
         AvoidanceHelpers.AddAvoidDonut<EventObject>(
@@ -98,6 +91,36 @@ public class SyrcusTower : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        // This will accept the teleport to sealed off area window
+        if (LlamaLibrary.RemoteWindows.NotificationIcLockoutWar.Instance.IsOpen)
+        {
+            var window = RaptureAtkUnitManager.GetWindowByName("_Notification");
+
+            if (!SelectYesno.IsOpen)
+            {
+                window.SendAction(2, 3, 0, 3, 0xA);
+            }
+
+            if (SelectYesno.IsOpen)
+            {
+                Logger.Information($"Selecting yes on teleport window.");
+                SelectYesno.Yes();
+                await Coroutine.Wait(-1, () => CommonBehaviors.IsLoading);
+                Logger.Information($"Waiting for loading to finish...");
+                await Coroutine.Wait(-1, () => !CommonBehaviors.IsLoading);
+            }
+        }
+
+        // This will press yes on ReadyCheck
+        if (LlamaLibrary.RemoteWindows.NotificationReadyCheck.Instance.IsOpen)
+        {
+            if (SelectYesno.IsOpen)
+            {
+                Logger.Information($"Selecting yes to ready check");
+                SelectYesno.Yes();
+            }
+        }
+
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
         bool result = false;
 
@@ -139,13 +162,18 @@ public class SyrcusTower : AbstractDungeon
             var IceCage = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.IceCage)
                 .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0); // IceCage
 
+            if (!GameObjectManager.GetObjectByNPCId(EnemyNpc.IceCage).IsValid)
+            {
+                Logger.Information($"Ice Cage doesn't exist. You're all going to die down here.");
+            }
+
             var rotation = MathEx.Rotation(IceCage.Location - Amon.Location);
-            var point = MathEx.GetPointAt(IceCage.Location, 5f, rotation);
+            var point = MathEx.GetPointAt(IceCage.Location, 2f, rotation);
 
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, $"Hiding behind the ice");
             Logger.Information($"Hiding behind the ice");
             while (point != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
-                   !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(point) > 1)
+                   !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(point) > 2)
             {
                 Navigator.PlayerMover.MoveTowards(point);
                 await Coroutine.Yield();
@@ -162,7 +190,7 @@ public class SyrcusTower : AbstractDungeon
         // Soak AetherialMine if you're not the tank
         if (!Core.Me.IsTank() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene && Core.Me.InCombat)
         {
-            BattleCharacter AetherialMine = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.AetherialMine).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
+            BattleCharacter AetherialMine = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.AetherialMine).OrderBy(bc => bc.Distance2D()).LastOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
 
             if (AetherialMine != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
                 !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(AetherialMine.Location) > 2)
@@ -251,12 +279,6 @@ public class SyrcusTower : AbstractDungeon
         /// </summary>
         public static readonly HashSet<uint> CurtainCall = new() { 2441, 2821 };
 
-        /// <summary>
-        /// <see cref="EnemyNpc.SpectralBerserker"/>'s Wild Rampage.
-        ///
-        /// Follow.
-        /// </summary>
-        public const uint WildRampage1 = 20998;
     }
 
     private static class PlayerAura
