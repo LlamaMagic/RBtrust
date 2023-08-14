@@ -127,6 +127,26 @@ public enum SubZoneId : uint
     TheColdThrone = 681,
 
     /// <summary>
+    /// Lv. 50: Syrcus Tower > The Gathering, Scylla
+    /// </summary>
+    TheGathering = 1357,
+
+    /// <summary>
+    /// Lv. 50: Syrcus Tower > The Ring of the Protector, Glasya Labolas
+    /// </summary>
+    TheRingoftheProtector = 1359,
+
+    /// <summary>
+    /// Lv. 50: Syrcus Tower > The Final Curtain, Amon
+    /// </summary>
+    TheFinalCurtain = 1361,
+
+    /// <summary>
+    /// Lv. 50: Syrcus Tower > The Emperor's Throne, Xande
+    /// </summary>
+    TheEmperorsThrone = 1362,
+
+    /// <summary>
     /// Lv. 55: The Aery > Akh Fahl Lye, Rangda
     /// </summary>
     AkhFahlLye = 1577,

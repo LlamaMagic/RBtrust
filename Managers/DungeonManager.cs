@@ -50,6 +50,9 @@ internal class DungeonManager
             { ZoneId.TheKeeperOfTheLake, typeof(KeeperOfTheLake) },
             { ZoneId.TheStepsOfFaith, typeof(StepsOfFaith) },
 
+            // 2.0 Alliance Raids
+            { ZoneId.SyrcusTower, typeof(SyrcusTower) },
+
             // 3.0 - Heavensward
             { ZoneId.SohmAl, typeof(SohmAl) },
             { ZoneId.TheAery, typeof(Aery) },
