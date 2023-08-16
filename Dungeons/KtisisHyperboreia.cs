@@ -61,7 +61,15 @@ public class KtisisHyperboreia : AbstractDungeon
     private readonly HashSet<uint> frostBiteAndSeek = new() { 25175 };
 
     // Ladon Lord
-    private readonly HashSet<uint> pyricBreath = new() { 25734, 25735, 25736, 25737, 25738, 25739 };
+    private readonly HashSet<uint> pyricBreath = new()
+    {
+        25734,
+        25735,
+        25736,
+        25737,
+        25738,
+        25739
+    };
 
     // hermes
     private readonly HashSet<uint> hermetica = new() { 25888, 25893, 25895 };
@@ -73,10 +81,24 @@ public class KtisisHyperboreia : AbstractDungeon
     private readonly HashSet<uint> quadruple = new() { 25894 };
     private readonly HashSet<uint> trueBravery = new() { 25907 };
     private readonly HashSet<uint> trismegistos = new() { 25886 };
+
     private readonly HashSet<uint> anySpellAfterHermetica = new()
     {
-        25891, 25890, 25899, 25901, 25899, 25901, 25902, 25906, 25892, 25894, 25907, 25886,
-        25897, 25896, 25898,
+        25891,
+        25890,
+        25899,
+        25901,
+        25899,
+        25901,
+        25902,
+        25906,
+        25892,
+        25894,
+        25907,
+        25886,
+        25897,
+        25896,
+        25898,
     };
 
     private DateTime frostBiteAndSeekEnds = DateTime.MinValue;
@@ -94,7 +116,12 @@ public class KtisisHyperboreia : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        25234, 25233, 25250, 24145, 25180, 25742,
+        25234,
+        25233,
+        25250,
+        24145,
+        25180,
+        25742,
     };
 
     /// <inheritdoc/>
@@ -116,6 +143,29 @@ public class KtisisHyperboreia : AbstractDungeon
         {
             AvoidanceManager.AddAvoid(hermesArenaEdge);
         }
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.FrozenSphere,
+            () => ArenaCenter.Lyssa,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ConceptReview,
+            () => ArenaCenter.LadonLord,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CelestialSphere,
+            () => ArenaCenter.Hermes,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
 
         return false;
     }
@@ -157,11 +207,11 @@ public class KtisisHyperboreia : AbstractDungeon
         {
             // Venat walks to safety ahead of time instead of teleporting last second
             BattleCharacter partyMember = PartyManager.VisibleMembers
-                .Select(pm => pm.BattleCharacter)
-                .FirstOrDefault(bc => bc.NpcId == (uint)PartyMemberId.Venat)
+                                              .Select(pm => pm.BattleCharacter)
+                                              .FirstOrDefault(bc => bc.NpcId == (uint)PartyMemberId.Venat)
 
-                // Can't find specific character. Trusts mode/non-default party setup?
-                ?? PartyManager.VisibleMembers.FirstOrDefault(pm => !pm.IsMe)?.BattleCharacter;
+                                          // Can't find specific character. Trusts mode/non-default party setup?
+                                          ?? PartyManager.VisibleMembers.FirstOrDefault(pm => !pm.IsMe)?.BattleCharacter;
 
             await partyMember?.Follow();
         }
@@ -238,5 +288,23 @@ public class KtisisHyperboreia : AbstractDungeon
         }
 
         return false;
+    }
+
+    private static class ArenaCenter
+    {
+        /// <summary>
+        /// First Boss: Lyssa.
+        /// </summary>
+        public static readonly Vector3 Lyssa = new(-144f, 496f, 48f);
+
+        /// <summary>
+        /// Second Boss: Ladon Lord.
+        /// </summary>
+        public static readonly Vector3 LadonLord = new(0f, 630f, 48f);
+
+        /// <summary>
+        /// Third Boss: Hermes.
+        /// </summary>
+        public static readonly Vector3 Hermes = new(0f, 0f, -50f);
     }
 }
