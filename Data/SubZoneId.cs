@@ -472,6 +472,21 @@ public enum SubZoneId : uint
     IlluminatedPlaza = 3517,
 
     /// <summary>
+    /// Lv. 81 The Tower of Zot > Ingenuity's Ingress, Minduruva
+    /// </summary>
+    IngenuitysIngress = 3733,
+
+    /// <summary>
+    /// Lv. 81 The Tower of Zot > Prosperity's Promise, Sanduruva
+    /// </summary>
+    ProsperitysPromise = 3734,
+
+    /// <summary>
+    /// Lv. 81 The Tower of Zot > Wisdom's Ward, Cinduruva
+    /// </summary>
+    WisdomsWard = 3735,
+
+    /// <summary>
     /// Lv. 83 The Tower of Babil > Magitek Servicing
     /// </summary>
     MagitekServicing = 4124,

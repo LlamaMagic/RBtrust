@@ -2,6 +2,7 @@
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -102,6 +103,37 @@ public class TowerOfZot : AbstractDungeon
     };
 
     /// <inheritdoc/>
+    public override async Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.IngenuitysIngress,
+            () => ArenaCenter.Minduruva,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ProsperitysPromise,
+            () => ArenaCenter.Sanduruva,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.WisdomsWard,
+            () => ArenaCenter.Cinduruva,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+
+        return false;
+    }
+
+    /// <inheritdoc/>
     public override async Task<bool> RunAsync()
     {
         await FollowDodgeSpells();
@@ -190,5 +222,23 @@ public class TowerOfZot : AbstractDungeon
         }
 
         return false;
+    }
+
+    private static class ArenaCenter
+    {
+        /// <summary>
+        /// First Boss: Minduruva.
+        /// </summary>
+        public static readonly Vector3 Minduruva = new(68f, -443f, -124.5f);
+
+        /// <summary>
+        /// Second Boss: Sanduruva.
+        /// </summary>
+        public static readonly Vector3 Sanduruva = new(-258f, -169f, -26f);
+
+        /// <summary>
+        /// Third Boss: Cinduruva.
+        /// </summary>
+        public static readonly Vector3 Cinduruva = new(-23f, 546f, -54f);
     }
 }
