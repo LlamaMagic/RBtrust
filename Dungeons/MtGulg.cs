@@ -3,6 +3,7 @@ using Clio.Utilities;
 using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
+using ff14bot.Pathing.Avoidance;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -63,6 +64,39 @@ public class MtGulg : AbstractDungeon
         15614, 15615, 15616, 15617, 15618, 15622, 15623, 15638, 15640, 15641, 15642, 15643, 15644, 15645, 15648, 15649,
         16247, 16248, 16249, 16250, 16521, 16818, 16987, 16988, 16989, 17153, 18025,
     };
+
+    /// <inheritdoc/>
+    public override async Task<bool> OnEnterDungeonAsync()
+    {
+        AvoidanceManager.AvoidInfos.Clear();
+
+        // Boss Arenas
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ThePerishedPath,
+            () => ArenaCenter.ForgivenCruelty,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWhiteGate,
+            () => ArenaCenter.ForgivenWhimsy,
+            outerRadius: 90.0f,
+            innerRadius: 19.0f,
+            priority: AvoidancePriority.High);
+
+        AvoidanceHelpers.AddAvoidSquareDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheWindingFlare,
+            innerWidth: 38.0f,
+            innerHeight: 38.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.ForgivenObscenity },
+            priority: AvoidancePriority.High);
+
+
+        return false;
+    }
 
     /// <inheritdoc/>
     public override async Task<bool> RunAsync()
@@ -150,5 +184,23 @@ public class MtGulg : AbstractDungeon
         }
 
         return false;
+    }
+
+    private static class ArenaCenter
+    {
+        /// <summary>
+        /// First Boss: Forgiven Cruelty.
+        /// </summary>
+        public static readonly Vector3 ForgivenCruelty = new(188f, -48f, -170f);
+
+        /// <summary>
+        /// Second Boss: Forgiven Whimsy.
+        /// </summary>
+        public static readonly Vector3 ForgivenWhimsy = new(-240f, 210f, -49.5f);
+
+        /// <summary>
+        /// Third Boss: Forgiven Obscenity.
+        /// </summary>
+        public static readonly Vector3 ForgivenObscenity = new(-240f, 210f, 237f);
     }
 }
