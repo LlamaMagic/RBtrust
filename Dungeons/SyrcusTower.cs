@@ -3,6 +3,7 @@ using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
@@ -38,11 +39,25 @@ public class SyrcusTower : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 1: Water puddles
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheGathering,
+            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.WaterPuddle,
+            radiusProducer: eo => 8.0f,
+            priority: AvoidancePriority.High));
+
         // Boss 2: Electric puddles on the ground
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheRingoftheProtector,
             objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.ClockworkWright,
             radiusProducer: eo => 4.0f,
+            priority: AvoidancePriority.High));
+
+        // Boss 3: Avoid Kichinebiks if we have Fire Toad and it's after us
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheFinalCurtain && Core.Player.HasAura(PlayerAura.FireToad),
+            objectSelector: bc => bc.IsVisible && bc.NpcId == EnemyNpc.Kichiknebik && bc.CurrentTargetId == Core.Player.ObjectId,
+            radiusProducer: bc => 8.0f,
             priority: AvoidancePriority.High));
 
         // Boss 4: Ancient Quaga
@@ -145,6 +160,13 @@ public class SyrcusTower : AbstractDungeon
 
     private async Task<bool> HandleScyllaAsync()
     {
+        /*
+        var SmolderingSoul = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.SmolderingSoul)
+            .Where(bc => bc.CurrentTargetId == Core.Player.ObjectId);
+        var ShiveringSoul = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.ShiveringSoul)
+            .Where(bc => bc.CurrentTargetId == Core.Player.ObjectId);
+            */
+
         return false;
     }
 
@@ -155,6 +177,7 @@ public class SyrcusTower : AbstractDungeon
 
     private async Task<bool> HandleAmonAsync()
     {
+        // Hide behind the ice pillar during curtain call to avoid death
         if (EnemyAction.CurtainCall.IsCasting() && !Core.Me.HasAura(PlayerAura.DeepFreeze))
         {
             var Amon = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Amon)
@@ -170,16 +193,48 @@ public class SyrcusTower : AbstractDungeon
             var rotation = MathEx.Rotation(IceCage.Location - Amon.Location);
             var point = MathEx.GetPointAt(IceCage.Location, 2f, rotation);
 
-            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, $"Hiding behind the ice");
-            Logger.Information($"Hiding behind the ice");
-            while (point != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
-                   !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(point) > 2)
+            if (Core.Me.Location.Distance2D(point) > 2)
             {
-                Navigator.PlayerMover.MoveTowards(point);
-                await Coroutine.Yield();
-            }
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, $"Hiding behind the ice");
+                Logger.Information($"Hiding behind the ice");
+                while (point != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                       !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(point) > 2)
+                {
+                    Navigator.PlayerMover.MoveTowards(point);
+                    await Coroutine.Yield();
+                }
 
-            await CommonTasks.StopMoving();
+                await CommonTasks.StopMoving();
+            }
+        }
+
+        var kumKum = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.KumKum)
+            .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
+        var dimensionalCompression = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.DimensionalCompression)
+            .Any(bc => bc.IsVisible && bc.CurrentHealth > 0 && bc.CurrentTargetId == Core.Player.ObjectId);
+
+        // If we're being targeted by purple orb, take it to snake man
+        if (dimensionalCompression && kumKum != null)
+        {
+            var dimensionalCompressionBc = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.DimensionalCompression)
+                .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0 && bc.CurrentTargetId == Core.Player.ObjectId);
+
+            var rotation = MathEx.Rotation(kumKum.Location - dimensionalCompressionBc.Location);
+            var point = MathEx.GetPointAt(kumKum.Location, 6f, rotation);
+
+            if (Core.Me.Location.Distance2D(point) > 3)
+            {
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 10000, $"Running away from Dimensional Compression");
+                Logger.Information($"Running away from Dimensional Compression");
+                while (point != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                       !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(point) > 3)
+                {
+                    Navigator.PlayerMover.MoveTowards(point);
+                    await Coroutine.Yield();
+                }
+
+                await CommonTasks.StopMoving();
+            }
         }
 
         return false;
@@ -190,14 +245,26 @@ public class SyrcusTower : AbstractDungeon
         // Soak AetherialMine if you're not the tank
         if (!Core.Me.IsTank() && Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene && Core.Me.InCombat)
         {
-            BattleCharacter AetherialMine = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.AetherialMine).OrderBy(bc => bc.Distance2D()).LastOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
+            var aetherialMines = GameObjectManager.GetObjectsByNPCId(EnemyNpc.AetherialMine).ToList();
 
-            if (AetherialMine != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
-                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(AetherialMine.Location) > 2)
+            var playerLocations = GameObjectManager.GetObjectsOfType<BattleCharacter>()
+                .Where(bc => bc.Type == GameObjectType.Pc)
+                .Select(bc => bc.Location).ToList();
+
+            var lonelyMines = aetherialMines
+                .Where(mine => !playerLocations.Any(playerLoc => playerLoc.Distance3D(mine.Location) < 3f) && mine.IsVisible && mine.CurrentHealth > 0).ToList();
+
+            if (lonelyMines.Any())
             {
-                await AetherialMine.Follow(1F, 0, true);
+                var closestLonely = lonelyMines.OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
+                while (closestLonely != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                       !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(closestLonely.Location) > 2)
+                {
+                    Navigator.PlayerMover.MoveTowards(closestLonely.Location);
+                    await Coroutine.Yield();
+                }
+
                 await CommonTasks.StopMoving();
-                await Coroutine.Sleep(30);
             }
         }
 
@@ -210,6 +277,21 @@ public class SyrcusTower : AbstractDungeon
         /// First Boss: Scylla.
         /// </summary>
         public const uint Scylla = 2809;
+
+        /// <summary>
+        /// First Boss: Shivering Soul
+        /// </summary>
+        public const uint ShiveringSoul = 2806;
+
+        /// <summary>
+        /// First Boss: Smoldering Soul
+        /// </summary>
+        public const uint SmolderingSoul = 2805;
+
+        /// <summary>
+        /// First Boss: Water Puddle
+        /// </summary>
+        public const uint WaterPuddle = 2004237;
 
         /// <summary>
         /// Second Boss: Glasya Labolas.
@@ -230,6 +312,21 @@ public class SyrcusTower : AbstractDungeon
         /// Second Boss: IceCage.
         /// </summary>
         public const uint IceCage = 2820;
+
+        /// <summary>
+        /// Second Boss: Kum Kum.
+        /// </summary>
+        public const uint KumKum = 2886;
+
+        /// <summary>
+        /// Second Boss: Kichiknebik.
+        /// </summary>
+        public const uint Kichiknebik = 2826;
+
+        /// <summary>
+        /// Second Boss: Dimensional Compression .
+        /// </summary>
+        public const uint DimensionalCompression = 2819;
 
         /// <summary>
         /// Final Boss: Xande.
@@ -278,7 +375,6 @@ public class SyrcusTower : AbstractDungeon
         /// Spread.
         /// </summary>
         public static readonly HashSet<uint> CurtainCall = new() { 2441, 2821 };
-
     }
 
     private static class PlayerAura
@@ -287,5 +383,11 @@ public class SyrcusTower : AbstractDungeon
         /// Deep Freeze
         /// </summary>
         public const uint DeepFreeze = 487;
+
+        /// <summary>
+        /// Amon
+        /// Fire Toad
+        /// </summary>
+        public const uint FireToad = 511;
     }
 }
