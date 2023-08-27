@@ -134,11 +134,10 @@ public class SirensongSea : AbstractDungeon
                         shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
                     objectSelector: (obj) => obj.ObjectId == objectId,
                     leashPointProducer: () => location,
-                    leashRadius: 0f,
+                    leashRadius: 60f,
                     rotationDegrees: 30f,
                     radius: 30f,
                     arcDegrees: 45f);
-
 
                 AvoidanceManager.AddAvoidUnitCone<GameObject>(
                     canRun: () =>
@@ -146,7 +145,7 @@ public class SirensongSea : AbstractDungeon
                         shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
                     objectSelector: (obj) => obj.ObjectId == objectId,
                     leashPointProducer: () => location,
-                    leashRadius: 0f,
+                    leashRadius: 60f,
                     rotationDegrees: 90f,
                     radius: 30f,
                     arcDegrees: 45f);
@@ -157,7 +156,7 @@ public class SirensongSea : AbstractDungeon
                         shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
                     objectSelector: (obj) => obj.ObjectId == objectId,
                     leashPointProducer: () => location,
-                    leashRadius: 0f,
+                    leashRadius: 60f,
                     rotationDegrees: 150f,
                     radius: 30f,
                     arcDegrees: 45f);
@@ -168,7 +167,7 @@ public class SirensongSea : AbstractDungeon
                         shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
                     objectSelector: (obj) => obj.ObjectId == objectId,
                     leashPointProducer: () => location,
-                    leashRadius: 0f,
+                    leashRadius: 60f,
                     rotationDegrees: 210f,
                     radius: 30f,
                     arcDegrees: 45f);
@@ -179,7 +178,7 @@ public class SirensongSea : AbstractDungeon
                         shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
                     objectSelector: (obj) => obj.ObjectId == objectId,
                     leashPointProducer: () => location,
-                    leashRadius: 0f,
+                    leashRadius: 60f,
                     rotationDegrees: 270f,
                     radius: 30f,
                     arcDegrees: 45f);
@@ -190,7 +189,7 @@ public class SirensongSea : AbstractDungeon
                         shadowflowTimer.ElapsedMilliseconds < ShadowflowDuration,
                     objectSelector: (obj) => obj.ObjectId == objectId,
                     leashPointProducer: () => location,
-                    leashRadius: 0f,
+                    leashRadius: 60f,
                     rotationDegrees: 330f,
                     radius: 30f,
                     arcDegrees: 45f);
