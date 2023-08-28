@@ -248,6 +248,8 @@ public class SyrcusTower : AbstractDungeon
     private async Task<bool> HandleXandeAsync()
     {
         // Soak AetherialMine if you're not the tank
+        // Removing this for now. It looks suspicious, especially when multiple people are doing it
+        /*
         if (!Core.Me.IsTank() && ShouldDoMechanics())
         {
             var aetherialMines = GameObjectManager.GetObjectsByNPCId(EnemyNpc.AetherialMine).ToList();
@@ -273,6 +275,7 @@ public class SyrcusTower : AbstractDungeon
                 await CommonTasks.StopMoving();
             }
         }
+        */
 
         return false;
     }
