@@ -39,6 +39,13 @@ public class SyrcusTower : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // General avoid while in combat to avoid standing on top of people
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && !Core.Player.IsMelee() && WorldManager.ZoneId == (uint)ZoneId.SyrcusTower && !EnemyAction.CurtainCall.IsCasting(),
+            objectSelector: bc => bc.Type == GameObjectType.Pc,
+            radiusProducer: bc => 1.0f,
+            priority: AvoidancePriority.Low));
+
         // Boss 1: Water puddles
         /*AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheGathering,
@@ -390,6 +397,7 @@ public class SyrcusTower : AbstractDungeon
     {
         /// <summary>
         /// Deep Freeze
+        /// This is also the Aura you get when frozen during Scylla
         /// </summary>
         public const uint DeepFreeze = 487;
 

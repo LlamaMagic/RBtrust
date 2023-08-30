@@ -47,6 +47,16 @@ internal static class BattleCharacterExtensions
     }
 
     /// <summary>
+    /// Determines if <see cref="BattleCharacter"/> is in Melee role.
+    /// </summary>
+    /// <param name="bc"><see cref="BattleCharacter"/> to be classified.</param>
+    /// <returns><see langword="true"/> if in Melee role.</returns>
+    public static bool IsMelee(this BattleCharacter bc)
+    {
+        return ClassJobRoles.Melee.Contains(bc.CurrentJob);
+    }
+
+    /// <summary>
     /// Follows the specified <see cref="BattleCharacter"/>.
     /// </summary>
     /// <param name="bc">Character to follow.</param>
