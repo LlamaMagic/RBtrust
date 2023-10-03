@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TreeSharp;
+using Trust.Data;
 using Trust.Helpers;
 using Trust.Localization;
 using Trust.Logging;
@@ -31,7 +32,7 @@ public class TrustPlugin : BotPlugin
     public override string Name => Translations.PROJECT_NAME;
 
     /// <inheritdoc/>
-    public override Version Version => new(1, 2, 0);
+    public override Version Version => new(1, 2, 3);
 
     /// <inheritdoc/>
     public override bool WantButton => false;
@@ -112,7 +113,12 @@ public class TrustPlugin : BotPlugin
 
     private bool CanTrust()
     {
-        return LoadingHelpers.IsInInstance;
+        if (LoadingHelpers.IsInInstance || WorldManager.ZoneId == (uint)ZoneId.UltimaThule)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private async Task<bool> RunTrust()

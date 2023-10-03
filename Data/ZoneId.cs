@@ -384,7 +384,12 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 90.6: The Lunar Subterrane
     /// </summary>
-    TheLunarSubterrane = ushort.MaxValue,
+    TheLunarSubterrane = 1164,
+
+    /// <summary>
+    /// Zone UltimaThule for fates
+    /// </summary>
+    UltimaThule = 960,
 
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

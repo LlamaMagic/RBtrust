@@ -12,7 +12,22 @@ public enum SubZoneId : uint
     NONE = 0,
 
     /// <summary>
-    /// Lv. 32: The Thousand Maws of Toto-Rak > Confession Chamber, Coeurl O' Nine Tails
+    /// Lv. 28: Haukke Manor > Confession Chamber, Coeurl O' Nine Tails
+    /// </summary>
+    WhiteHall = 608,
+
+    /// <summary>
+    /// Lv. 28: Haukke Manor > Yellow Hall, Manor Jester
+    /// </summary>
+    YellowHall = 609,
+
+    /// <summary>
+    /// Lv. 28: Haukke Manor > Red Hall, Manor Claviger
+    /// </summary>
+    RedHall = 604,
+
+    /// <summary>
+    /// Lv. 32: The Thousand Maws of Toto-Rak > White Hall, Lady Amandine
     /// </summary>
     ConfessionChamber = 523,
 
@@ -690,5 +705,20 @@ public enum SubZoneId : uint
     /// Lv. 90.5: The Aetherfont > The Deep Below, Octomammoth
     /// </summary>
     TheDeepBelow = 4303,
+
+    /// <summary>
+    /// Lv. 90.6: The Lunar Subterrane > Cloven Crystal Square, Dark Elf
+    /// </summary>
+    ClovenCrystalSquare = 4435,
+
+    /// <summary>
+    /// Lv. 90.6: The Lunar Subterrane > Bloodied Barbican, Damcyan Antlion
+    /// </summary>
+    BloodiedBarbican = 4436,
+
+    /// <summary>
+    /// Lv. 90.6: The Lunar Subterrane > Carnelian Courtyard, Durante
+    /// </summary>
+    CarnelianCourtyard = 4437,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

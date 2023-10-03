@@ -108,6 +108,9 @@ internal class DungeonManager
             { ZoneId.LapisManalis, typeof(LapisManalis) },
             { ZoneId.TheAetherfont, typeof(Aetherfont) },
             { ZoneId.TheLunarSubterrane, typeof(LunarSubterrane) },
+
+            // 6.0 - Endwalker - Fates
+            { ZoneId.UltimaThule, typeof(UltimaThule) },
         };
     }
 
