@@ -33,7 +33,10 @@ public class LunarSubterrane : AbstractDungeon
 
     private static readonly int AntlionMarchDuration = 20_500;
 
-    private static DateTime AntlionMarchTimestamp = DateTime.MinValue;
+    private DateTime AntlionMarchEnds = DateTime.MinValue;
+
+    private readonly Stopwatch AntlionMarchSw = new();
+
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
@@ -41,7 +44,6 @@ public class LunarSubterrane : AbstractDungeon
         EnemyAction.RuinousHex,
         EnemyAction.ShadowySigil,
         EnemyAction.Landslip,
-        EnemyAction.AntlionMarch,
         EnemyAction.EarthenGeyser2,
         EnemyAction.AntipodalAssault,
     };
@@ -112,10 +114,9 @@ public class LunarSubterrane : AbstractDungeon
 
         bool result = currentSubZoneId switch
         {
-            // TODO: Add sub-zone IDs and update this switch.
-            SubZoneId.NONE + 1 => await HandleDarkElf(),
-            SubZoneId.NONE + 2 => await HandleDamcyanAntlion(),
-            SubZoneId.NONE + 3 => await HandleDurante(),
+            SubZoneId.ClovenCrystalSquare => await HandleDarkElf(),
+            SubZoneId.BloodiedBarbican => await HandleDamcyanAntlion(),
+            SubZoneId.CarnelianCourtyard => await HandleDurante(),
             _ => false,
         };
 
@@ -137,6 +138,18 @@ public class LunarSubterrane : AbstractDungeon
     /// </summary>
     private async Task<bool> HandleDamcyanAntlion()
     {
+        if (EnemyAction.AntlionMarch.IsCasting() && AntlionMarchEnds < DateTime.Now)
+        {
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, AntlionMarchDuration, $"Dodging Antlion March");
+            AntlionMarchEnds = DateTime.Now.AddMilliseconds(AntlionMarchDuration);
+        }
+
+        if (DateTime.Now < AntlionMarchEnds)
+        {
+            await MovementHelpers.GetClosestAlly.FollowTimed(AntlionMarchSw, AntlionMarchDuration);
+        }
+
+
         return false;
     }
 
@@ -160,8 +173,6 @@ public class LunarSubterrane : AbstractDungeon
         /// </summary>
         public static readonly Vector3 DamcyanAntlion = new(2f, 200f, 61f);
 
-        public static readonly Vector3 SandPitLocation = new(0f, 199.9388f, 70f);
-
         /// <summary>
         /// Boss 3: Name.
         /// </summary>
@@ -178,8 +189,6 @@ public class LunarSubterrane : AbstractDungeon
         public const uint DarkElf = 12500;
         public const uint DamcyanAntlion = 12484;
         public const uint SandPit = 2013454;
-        public const uint SandPit2 = 2002872;
-        public const uint SandPit3 = 2007791;
         public const uint Durante = 12584;
     }
 
@@ -235,9 +244,9 @@ public class LunarSubterrane : AbstractDungeon
         ///
         /// Stack
         /// </summary>
-        /// public static readonly HashSet<uint> AntlionMarch = new() { 34816 };
-        public const uint AntlionMarch = 34816;
+        public static readonly HashSet<uint> AntlionMarch = new() { 34816 };
 
+        /// public const uint AntlionMarch = 34816;
         /// <summary>
         /// <see cref="EnemyNpc.Durante"/>'s Antipodal Assault.
         ///
