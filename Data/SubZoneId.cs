@@ -377,6 +377,36 @@ public enum SubZoneId : uint
     TheHalloftheGriffin = 2291,
 
     /// <summary>
+    /// Lv. 70: The Drowned City of Skalla > The Green Screams, Kelpie
+    /// </summary>
+    TheGreenScreams = 2362,
+
+    /// <summary>
+    /// Lv. 70: The Drowned City of Skalla > A Door Unopened, The Old One
+    /// </summary>
+    ADoorUnopened = 2364,
+
+    /// <summary>
+    /// Lv. 70: The Drowned City of Skalla > The Golden Walls of Ruin,Hrodric Poisontongue
+    /// </summary>
+    TheGoldenWallsofRuin = 2366,
+
+    /// <summary>
+    /// Lv. 70: The Burn > The Scorpions Den, Hedetet
+    /// </summary>
+    TheScorpionsDen = 2487,
+
+    /// <summary>
+    /// Lv. 70: The Burn > The Gamma Segregate, Defective Drone
+    /// </summary>
+    TheGammaSegregate = 2490,
+
+    /// <summary>
+    /// Lv. 70: The Burn > The Aspersory, Mist Dragon
+    /// </summary>
+    TheAspersory = 2493,
+
+    /// <summary>
     /// Lv. 71: Holminster Switch > The Wound , Forgiven Dissonance
     /// </summary>
     TheWound = 3284,

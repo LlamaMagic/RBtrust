@@ -254,12 +254,12 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 70.2: The Drowned City of Skalla
     /// </summary>
-    TheDrownedCityOfSkalla = 731,
+    TheDrownedCityOfSkalla = 1172,
 
     /// <summary>
     /// Lv. 70.3: The Burn
     /// </summary>
-    TheBurn = 789,
+    TheBurn = 1173,
 
     /// <summary>
     /// Lv. 70.4: The Ghimlyt Dark
