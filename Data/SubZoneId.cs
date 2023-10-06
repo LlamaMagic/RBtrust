@@ -419,7 +419,7 @@ public enum SubZoneId : uint
     /// <summary>
     /// Lv. 70: The Ghimlyt Dark > Provisional Imperial Landing, Annia quo Soranus
     /// </summary>
-    ProvisionalImperialLanding = 7858,
+    ProvisionalImperialLanding = 2749,
 
     /// <summary>
     /// Lv. 71: Holminster Switch > The Wound , Forgiven Dissonance
