@@ -407,6 +407,21 @@ public enum SubZoneId : uint
     TheAspersory = 2493,
 
     /// <summary>
+    /// Lv. 70: The Ghimlyt Dark > The Field of Dust, Mark III-B Magitek
+    /// </summary>
+    TheFieldofDust = 2744,
+
+    /// <summary>
+    /// Lv. 70: The Ghimlyt Dark > Impact Crater, Prometheus
+    /// </summary>
+    ImpactCrater = 2747,
+
+    /// <summary>
+    /// Lv. 70: The Ghimlyt Dark > Provisional Imperial Landing, Annia quo Soranus
+    /// </summary>
+    ProvisionalImperialLanding = 7858,
+
+    /// <summary>
     /// Lv. 71: Holminster Switch > The Wound , Forgiven Dissonance
     /// </summary>
     TheWound = 3284,
