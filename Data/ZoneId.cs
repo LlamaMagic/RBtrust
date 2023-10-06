@@ -264,7 +264,7 @@ public enum ZoneId : ushort
     /// <summary>
     /// Lv. 70.4: The Ghimlyt Dark
     /// </summary>
-    TheGhimlytDark = 793,
+    TheGhimlytDark = 1174,
 
     /// <summary>
     /// Lv. 70: Hells' Lid
