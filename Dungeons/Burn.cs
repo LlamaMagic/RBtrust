@@ -40,13 +40,6 @@ public class Burn : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
-        // Boss 1: Shardstrike
-        AvoidanceManager.AddAvoidObject<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheScorpionsDen,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.Shardstrike && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
-            radiusProducer: bc => 8.0f,
-            locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
-
         // Boss 1: Dissonance
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheScorpionsDen,
@@ -69,7 +62,16 @@ public class Burn : AbstractDungeon
             objectSelector: bc => bc.CastingSpellId == EnemyAction.AditDriver,
             width: 8f,
             length: 40f,
+            xOffset: 0f,
+            yOffset: -20f,
             priority: AvoidancePriority.Medium);
+
+        // Boss 2: Stay out of the poison
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
+            condition: () => Core.Player.InCombat,
+            objectSelector: eo => eo.IsVisible && eo.NpcId == EnemyNpc.PoisonPuddle,
+            radiusProducer: eo => 5.0f,
+            priority: AvoidancePriority.High));
 
         // Boss 3: Stay out of the ice
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
@@ -174,6 +176,11 @@ public class Burn : AbstractDungeon
             }
         }
 
+        if (EnemyAction.Shardstrike.IsCasting())
+        {
+            await MovementHelpers.Spread(10000);
+        }
+
         return false;
     }
 
@@ -191,12 +198,17 @@ public class Burn : AbstractDungeon
     private async Task<bool> HandleMistDragon()
     {
         var mistDragon = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.MistDragon)
-            .FirstOrDefault(bc => bc.IsVisible && bc.IsTargetable && bc.CurrentHealth > 0); // boss
+            .FirstOrDefault(bc => bc.CanAttack); // boss
 
         var icePuddle = GameObjectManager.GetObjectsByNPCId<EventObject>(EnemyNpc.IcePuddle)
             .FirstOrDefault(bc => bc.IsVisible); // boss
 
-        if (Core.Player.InCombat && Core.Me.IsTank() && mistDragon != null && icePuddle == null)
+        if (Core.Me.InCombat && mistDragon == null)
+        {
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+
+        if (Core.Player.InCombat && Core.Me.IsTank() && mistDragon != null && icePuddle == null && !mistDragon.HasAura(EnemyAura.Transfiguration))
         {
             var yShtola = GameObjectManager.GetObjectsByNPCId<BattleCharacter>((uint)PartyMemberId.Yshtola)
                 .OrderBy(bc => bc.Distance2D())
@@ -238,6 +250,7 @@ public class Burn : AbstractDungeon
         public const uint Hedetet = 7667;
         public const uint DimCrystal = 7668;
         public const uint DefectiveDrone = 7669;
+        public const uint PoisonPuddle = 2009583;
         public const uint MistDragon = 7672;
         public const uint IcePuddle = 2000659;
     }
@@ -274,7 +287,8 @@ public class Burn : AbstractDungeon
         ///
         /// Spread
         /// </summary>
-        public const uint Shardstrike = 12693;
+        public static readonly HashSet<uint> Shardstrike = new() { 12693 };
+
 
         /// <summary>
         /// <see cref="EnemyNpc.Hedetet"/>'s Shardfall.
@@ -305,5 +319,15 @@ public class Burn : AbstractDungeon
         /// Touchdown in the center, move to edge
         /// </summary>
         public const uint Touchdown = 12618;
+    }
+
+    private static class EnemyAura
+    {
+        /// <summary>
+        /// <see cref="EnemyNpc.MistDragon"/>'s Transfiguration.
+        ///
+        /// When boss has this aura we don't want to try to hide behind him.
+        /// </summary>
+        public const uint Transfiguration = 705;
     }
 }
