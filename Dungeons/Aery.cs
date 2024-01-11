@@ -22,10 +22,10 @@ namespace Trust.Dungeons;
 public class Aery : AbstractDungeon
 {
     /*
-    * 1. Rangda NPCID: 3452 SubzoneID: 1577
-    * 2. Gyascutus NPCID: 3455 SubzoneID: 1580
-    * 3. Nidhogg NPCID: 3458 SubzoneID: 1582
-    */
+     * 1. Rangda NPCID: 3452 SubzoneID: 1577
+     * 2. Gyascutus NPCID: 3455 SubzoneID: 1580
+     * 3. Nidhogg NPCID: 3458 SubzoneID: 1582
+     */
 
     /* Rangda
      * SpellName: Electric Cachexia SpellId: 3889 Follow
@@ -59,35 +59,6 @@ public class Aery : AbstractDungeon
      *   └─ Casting (30200) Horrid Roar => <45.33447, 148.3939, -267.1093>
      */
 
-    private const int HorridRoarDuration = 4_250;
-
-    private const int RangdaNPCID = 3452;
-    private const int BlackenedStatueNPCID = 3454;
-    private const int GyascutusNPCID = 3455;
-    private const int NidhoggNPCID = 3458;
-
-    private const uint LightningRodAuraID = 2574;
-    private const uint ElectricCachexiaSpell = 3889;
-    private const uint AshenOuroborosSpell = 30190;
-    private const uint BodySlamSpell = 31234;
-    private const uint HotTailSpell = 30196;
-    private const uint HotWingSpell = 30195;
-    private const uint CauterizeSpell = 30198;
-    private const uint HorridRoarGroundSpell = 30200;
-
-    private static readonly HashSet<uint> Cauterize = new() { 30198 };
-    private static readonly HashSet<uint> HorridRoarGround = new() { 30200 };
-    private static readonly HashSet<uint> HorridRoar = new() { 30202 };
-    private static readonly HashSet<uint> HotTail = new() { 30196 };
-    private static readonly HashSet<uint> HotWing = new() { 30195 };
-
-    private static readonly int HotWingDuration = 8_000;
-    private static DateTime HotWingTimestamp = DateTime.MinValue;
-
-    private static readonly Vector3 RangdaArenaCenter = new(334.4144f, 93.99633f, -203.6947f);
-    private static readonly Vector3 GyascutusArenaCenter = new(12.21774f, 60.00004f, 68.1711f);
-    private static readonly Vector3 NidhoggArenaCenter = new(35.22111f, 148.397f, -264.9391f);
-
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.TheAery;
 
@@ -95,7 +66,7 @@ public class Aery : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.TheAery;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { 30224 };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.HorridBlaze };
 
     /// <inheritdoc/>
     public override Task<bool> OnEnterDungeonAsync()
@@ -112,7 +83,7 @@ public class Aery : AbstractDungeon
         // Boss 1 Electric Cachexia
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AkhFahlLye,
-            objectSelector: c => c.CastingSpellId == ElectricCachexiaSpell,
+            objectSelector: c => c.CastingSpellId == EnemyAction.ElectricCachexia,
             outerRadius: 40.0f,
             innerRadius: 7.5f,
             priority: AvoidancePriority.High);
@@ -122,8 +93,8 @@ public class Aery : AbstractDungeon
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AkhFahlLye &&
                           !Core.Me.IsTank(),
-            objectSelector: (bc) => bc.NpcId == RangdaNPCID && bc.CanAttack,
-            leashPointProducer: () => RangdaArenaCenter,
+            objectSelector: (bc) => bc.NpcId == EnemyNpc.Rangda && bc.CanAttack,
+            leashPointProducer: () => ArenaCenter.Gyascutus,
             leashRadius: 40.0f,
             rotationDegrees: 0.0f,
             radius: 11.0f,
@@ -132,7 +103,7 @@ public class Aery : AbstractDungeon
         // Boss 2 Ashen Ouroboros
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TenOohr,
-            objectSelector: c => c.CastingSpellId == AshenOuroborosSpell,
+            objectSelector: c => c.CastingSpellId == EnemyAction.AshenOuroboros,
             outerRadius: 40.0f,
             innerRadius: 10.0f,
             priority: AvoidancePriority.High);
@@ -140,39 +111,32 @@ public class Aery : AbstractDungeon
         // Boss 2 Body Slam
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TenOohr,
-            objectSelector: c => c.CastingSpellId == BodySlamSpell,
+            objectSelector: c => c.CastingSpellId == EnemyAction.BodySlam,
             outerRadius: 40.0f,
             innerRadius: 3.0F,
             priority: AvoidancePriority.Medium);
 
-        // Boss 3 Horrid Roar
-        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
-            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
-            objectSelector: bc => bc.CastingSpellId == HorridRoarGroundSpell,
-            radiusProducer: bc => 8.0f,
-            priority: AvoidancePriority.Medium));
-
-        // Boss 3 Hot Tail
+        // Boss 3: Hot Tail
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
-            objectSelector: bc => bc.CastingSpellId == HotTailSpell,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.HotTail,
             width: 19f,
             length: 120f,
             yOffset: -60f,
             priority: AvoidancePriority.High);
 
-        // Boss 3 Cauterize
+        // Boss 3: Cauterize
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
-            objectSelector: bc => bc.CastingSpellId == CauterizeSpell,
-            width: 21f,
-            length: 120f,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Cauterize,
+            width: 25f,
+            length: 200f,
             priority: AvoidancePriority.High);
 
         // Boss 3: Hot Wing
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
-            objectSelector: bc => bc.CastingSpellId == HotWingSpell,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.HotWing,
             width: 120f,
             length: 33f,
             xOffset: -20f,
@@ -181,31 +145,42 @@ public class Aery : AbstractDungeon
 
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
-            objectSelector: bc => bc.CastingSpellId == HotWingSpell,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.HotWing,
             width: 120f,
             length: -33f,
             xOffset: -20f,
             yOffset: -4f,
             priority: AvoidancePriority.High);
 
+        // Boss 3: Horrid Roar
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
+            objectSelector: bc =>
+                bc.CastingSpellId is EnemyAction.HorridRoar or EnemyAction.HorridRoarGround &&
+                bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
+            locationProducer: bc =>
+                GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ??
+                bc.SpellCastInfo.CastLocation);
+
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AkhFahlLye,
-            () => RangdaArenaCenter,
+            () => ArenaCenter.Rangda,
             outerRadius: 90.0f,
             innerRadius: 25.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TenOohr,
-            () => GyascutusArenaCenter,
+            () => ArenaCenter.Gyascutus,
             outerRadius: 90.0f,
             innerRadius: 19.5f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.NidhoggAn,
-            () => NidhoggArenaCenter,
+            () => ArenaCenter.Nidhogg,
             outerRadius: 90.0f,
             innerRadius: 30.0f,
             priority: AvoidancePriority.High);
@@ -242,9 +217,9 @@ public class Aery : AbstractDungeon
         SidestepPlugin.Enabled = true;
 
         while (Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.AkhFahlLye &&
-               Core.Me.HasAura(LightningRodAuraID))
+               Core.Me.HasAura(PlayerAura.LightningRod))
         {
-            GameObject notUsedStatue = GameObjectManager.GetObjectsByNPCId<GameObject>(BlackenedStatueNPCID)
+            GameObject notUsedStatue = GameObjectManager.GetObjectsByNPCId<GameObject>(EnemyNpc.BlackenedStatue)
                 .LastOrDefault(bc => bc.IsVisible);
             if (notUsedStatue.IsValid)
             {
@@ -265,21 +240,134 @@ public class Aery : AbstractDungeon
 
     private async Task<bool> HandleNidhoggAsync()
     {
+        // We're turning off Sidestep here as it ends up causing us to get killed by Cauterize when it fights RB trying to get out of the avoid we create.
         SidestepPlugin.Enabled = false;
 
-        if (HorridRoar.IsCasting())
-        {
-            await MovementHelpers.Spread(HorridRoarDuration);
-        }
-
         return false;
+    }
+
+    private static class EnemyNpc
+    {
+        /// <summary>
+        /// First Boss: Rangda.
+        /// </summary>
+        public const uint Rangda = 3452;
+
+        /// <summary>
+        /// First Boss: Rangda.
+        /// Statues that get hit by lightning bolts
+        /// </summary>
+        public const uint BlackenedStatue = 3454;
+
+        /// <summary>
+        /// Second Boss: Gyascutus.
+        /// </summary>
+        public const uint Gyascutus = 3455;
+
+        /// <summary>
+        /// Final Boss: Nidhogg .
+        /// </summary>
+        public const uint Nidhogg = 3458;
+    }
+
+    private static class ArenaCenter
+    {
+        /// <summary>
+        /// First Boss: Rangda.
+        /// </summary>
+        internal static readonly Vector3 Rangda = new(334.4144f, 93.99633f, -203.6947f);
+
+        /// <summary>
+        /// Second Boss: Gyascutus.
+        /// </summary>
+        internal static readonly Vector3 Gyascutus = new(12.21774f, 60.00004f, 68.1711f);
+
+        /// <summary>
+        /// Third Boss: Nidhogg.
+        /// </summary>
+        internal static readonly Vector3 Nidhogg = new(35.22111f, 148.397f, -264.9391f);
+    }
+
+    private static class PlayerAura
+    {
+        /// <summary>
+        /// <see cref="EnemyNpc.MistDragon"/>'s Lightning Rod.
+        ///
+        /// This aura is placed on the target of the fire boss's ability causing lightning to strike the target
+        /// Dispell the aura by moving to a near by statue
+        /// </summary>
+        public const uint LightningRod = 2574;
     }
 
     private static class EnemyAction
     {
         /// <summary>
+        /// <see cref="EnemyNpc.Rangda"/>'s Levinbolt.
         /// Levinbolt
         /// </summary>
         public const uint Levinbolt = 4270;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Rangda"/>'s Electric Cachexia.
+        ///
+        /// Creates an AOE lightning storm around the boss, safe area about 5f around the boss
+        /// </summary>
+        public const uint ElectricCachexia = 30202;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Gyascutus"/>'s Ashen Ouroboros.
+        ///
+        ///
+        /// </summary>
+        public const uint AshenOuroboros = 30190;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Gyascutus"/>'s BodySlam.
+        ///
+        /// Boss jumps in the air and slams down, safe spot under the boss.
+        /// </summary>
+        public const uint BodySlam = 31234;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Nidhogg"/>'s Hot Tail.
+        ///
+        ///
+        /// </summary>
+        public const uint HotTail = 30196;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Nidhogg"/>'s Horrid Roar.
+        ///
+        /// Spread
+        /// </summary>
+        public const uint HorridRoar = 30202;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Nidhogg"/>'s Horrid Roar.
+        ///
+        /// Spread
+        /// </summary>
+        public const uint HorridRoarGround = 30200;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Nidhogg"/>'s Hot Wing.
+        ///
+        /// Create two rectangle avoids, one on the left and right of the boss with an empty spot in the middle
+        /// </summary>
+        public const uint HotWing = 30195;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Nidhogg"/>'s Cauterize.
+        ///
+        /// Big laser AOE in the center of the arena. Dodge it
+        /// </summary>
+        public const uint Cauterize = 30198;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.Nidhogg"/>'s Horrid Blaze.
+        ///
+        /// Stack on this one
+        /// </summary>
+        public const uint HorridBlaze = 30224;
     }
 }
