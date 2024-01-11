@@ -33,11 +33,13 @@ public class DrownedCityOfSkalla : AbstractDungeon
         AvoidanceManager.AvoidInfos.Clear();
 
         // Boss Arenas
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheGreenScreams,
-            () => ArenaCenter.Kelpie,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 38.0f,
+            innerHeight: 38.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Kelpie },
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
