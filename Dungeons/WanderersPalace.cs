@@ -1,4 +1,5 @@
 ﻿using Buddy.Coroutines;
+using ff14bot;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ public class WanderersPalace : AbstractDungeon
         GameObject tStalker = GameObjectManager.GetObjectsByNPCId<GameObject>(NpcId: TonberryStalker)
             .FirstOrDefault(bc => bc.Distance() < 10 && bc.IsVisible);
 
-        if (tStalker != null)
+        if (tStalker != null && Core.Me.ClassLevel < 89)
         {
             AvoidanceManager.AddAvoidObject<GameObject>(() => true, 8f, tStalker.ObjectId);
         }
