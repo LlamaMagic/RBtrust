@@ -397,6 +397,6 @@ public class Aetherfont : AbstractDungeon
         ///
         /// Large rectangle AOE
         /// </summary>
-        public const uint Swoop = 35888;
+        public const uint Swoop = 35717;
     }
 }
