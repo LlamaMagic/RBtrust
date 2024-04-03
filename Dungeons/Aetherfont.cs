@@ -4,6 +4,7 @@ using ff14bot.Helpers;
 using ff14bot.Managers;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
+using ff14bot.RemoteWindows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,10 +30,19 @@ public class Aetherfont : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        EnemyAction.ExplosiveFrequency, EnemyAction.ResonantFrequency, EnemyAction.Tidalspout,
-        EnemyAction.LightningClaw, EnemyAction.LightningRampage, EnemyAction.LightningRampage2,
-        EnemyAction.LightningRampage3, EnemyAction.LightningRampage4,
+        EnemyAction.ExplosiveFrequency,
+        EnemyAction.ResonantFrequency,
+        EnemyAction.Tidalspout,
+        EnemyAction.LightningClaw,
+        EnemyAction.LightningRampage,
+        EnemyAction.LightningRampage2,
+        EnemyAction.LightningRampage3,
+        EnemyAction.LightningRampage4,
+        EnemyAction.StickySpit,
     };
+
+    private BattleCharacter Whirlwinds => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Whirlwind)
+        .FirstOrDefault(bc => bc.IsTargetable);
 
     /// <inheritdoc/>
     public override Task<bool> OnEnterDungeonAsync()
@@ -46,6 +56,20 @@ public class Aetherfont : AbstractDungeon
             width: 4.0f,
             length: 40f,
             priority: AvoidancePriority.High);
+
+        // A Game Is Afoot: Giant Colibri, Deadly Swoop
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CyancapCavern && Whirlwinds == null,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.DeadlySwoop,
+            width: 16.0f,
+            length: 60.0f);
+
+        // A Game Is Afoot: Giant Colibri, Swoop
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CyancapCavern,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Swoop,
+            width: 16.0f,
+            length: 60.0f);
 
         // Boss 3: Tidal Breath, Breathstroke
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
@@ -84,12 +108,16 @@ public class Aetherfont : AbstractDungeon
             outerRadius: 26f,
             innerRadius: 20f);
 
-        // Boss 1: Water Spout / Boss 3: Water Drop
+        // Boss 1: Water Spout / Boss 3: Water Drop / A Game Is Afoot: Furling Flapping
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is ((uint)SubZoneId.LandfastFloe or (uint)SubZoneId.TheDeepBelow),
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.Waterspout or EnemyAction.WaterDrop && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is ((uint)SubZoneId.LandfastFloe or (uint)SubZoneId.TheDeepBelow or (uint)SubZoneId.CyancapCavern),
+            objectSelector: bc =>
+                bc.CastingSpellId is EnemyAction.Waterspout or EnemyAction.WaterDrop or EnemyAction.FurlingFlapping &&
+                bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
-            locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
+            locationProducer: bc =>
+                GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ??
+                bc.SpellCastInfo.CastLocation);
 
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
@@ -158,6 +186,16 @@ public class Aetherfont : AbstractDungeon
         /// Final Boss Add: Mammoth Tentacle.
         /// </summary>
         public const uint MammothTentacle = 12335;
+
+        /// <summary>
+        /// Boss from 'The Game Is Afoot' quest: Giant Colibri .
+        /// </summary>
+        public const uint GiantColibri = 12499;
+
+        /// <summary>
+        /// Whirlwinds created by Giant Colibri .
+        /// </summary>
+        public const uint Whirlwind = 12498;
     }
 
     private static class ArenaCenter
@@ -182,52 +220,8 @@ public class Aetherfont : AbstractDungeon
     {
         public static readonly Vector2[] Octomammoth = new Vector2[]
         {
-            new Vector2(-100.000f, 100.000f),
-            new Vector2(-30.657f, -19.343f),
-            new Vector2(-33.000f, -25.000f),
-            new Vector2(-30.657f, -30.657f),
-            new Vector2(-25.000f, -33.000f),
-            new Vector2(-19.343f, -30.657f),
-            new Vector2(-17.000f, -25.000f),
-            new Vector2(-19.343f, -19.343f),
-            new Vector2(-17.678f, -15.322f),
-            new Vector2(-12.021f, -12.979f),
-            new Vector2(-9.678f, -7.322f),
-            new Vector2(-5.657f, -5.657f),
-            new Vector2(0.000f, -8.000f),
-            new Vector2(5.657f, -5.657f),
-            new Vector2(9.678f, -7.322f),
-            new Vector2(12.021f, -12.979f),
-            new Vector2(17.678f, -15.322f),
-            new Vector2(19.343f, -19.343f),
-            new Vector2(17.000f, -25.000f),
-            new Vector2(19.343f, -30.657f),
-            new Vector2(25.000f, -33.000f),
-            new Vector2(30.657f, -30.657f),
-            new Vector2(33.000f, -25.000f),
-            new Vector2(30.657f, -19.343f),
-            new Vector2(25.000f, -17.000f),
-            new Vector2(23.335f, -12.979f),
-            new Vector2(25.678f, -7.322f),
-            new Vector2(23.335f, -1.665f),
-            new Vector2(17.678f, 0.678f),
-            new Vector2(12.021f, -1.665f),
-            new Vector2(8.000f, 0.000f),
-            new Vector2(5.657f, 5.657f),
-            new Vector2(0.000f, 8.000f),
-            new Vector2(-5.657f, 5.657f),
-            new Vector2(-8.000f, 0.000f),
-            new Vector2(-12.021f, -1.665f),
-            new Vector2(-17.678f, 0.678f),
-            new Vector2(-23.335f, -1.665f),
-            new Vector2(-25.678f, -7.322f),
-            new Vector2(-23.335f, -12.979f),
-            new Vector2(-25.000f, -17.000f),
-            new Vector2(-30.657f, -19.343f),
-            new Vector2(-100.000f, 100.000f),
-            new Vector2(100.000f, 100.000f),
-            new Vector2(100.000f, -70.000f),
-            new Vector2(-100.000f, -70.000f),
+            new Vector2(-100.000f, 100.000f), new Vector2(-30.657f, -19.343f), new Vector2(-33.000f, -25.000f), new Vector2(-30.657f, -30.657f), new Vector2(-25.000f, -33.000f), new Vector2(-19.343f, -30.657f), new Vector2(-17.000f, -25.000f), new Vector2(-19.343f, -19.343f), new Vector2(-17.678f, -15.322f), new Vector2(-12.021f, -12.979f), new Vector2(-9.678f, -7.322f), new Vector2(-5.657f, -5.657f), new Vector2(0.000f, -8.000f), new Vector2(5.657f, -5.657f), new Vector2(9.678f, -7.322f), new Vector2(12.021f, -12.979f), new Vector2(17.678f, -15.322f), new Vector2(19.343f, -19.343f), new Vector2(17.000f, -25.000f), new Vector2(19.343f, -30.657f), new Vector2(25.000f, -33.000f), new Vector2(30.657f, -30.657f), new Vector2(33.000f, -25.000f), new Vector2(30.657f, -19.343f), new Vector2(25.000f, -17.000f), new Vector2(23.335f, -12.979f), new Vector2(25.678f, -7.322f), new Vector2(23.335f, -1.665f), new Vector2(17.678f, 0.678f), new Vector2(12.021f, -1.665f), new Vector2(8.000f, 0.000f), new Vector2(5.657f, 5.657f), new Vector2(0.000f, 8.000f), new Vector2(-5.657f, 5.657f), new Vector2(-8.000f, 0.000f), new Vector2(-12.021f, -1.665f), new Vector2(-17.678f, 0.678f),
+            new Vector2(-23.335f, -1.665f), new Vector2(-25.678f, -7.322f), new Vector2(-23.335f, -12.979f), new Vector2(-25.000f, -17.000f), new Vector2(-30.657f, -19.343f), new Vector2(-100.000f, 100.000f), new Vector2(100.000f, 100.000f), new Vector2(100.000f, -70.000f), new Vector2(-100.000f, -70.000f),
         };
     }
 
@@ -376,5 +370,33 @@ public class Aetherfont : AbstractDungeon
         /// Self-targeted donut. 20 yalms inner radius, 26 yalms outer radius.
         /// </summary>
         public const uint VividEyes = 33355;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GiantColibri"/>'s Sticky Spit.
+        ///
+        /// Stack.
+        /// </summary>
+        public const uint StickySpit = 34890;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GiantColibri"/>'s Furling Flapping.
+        ///
+        /// Player-targeted spread circles.
+        /// </summary>
+        public const uint FurlingFlapping = 34893;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GiantColibri"/>'s Deadly Swoop.
+        ///
+        /// Large rectangle AOE that we only want to dodge after Whirlwinds are dead
+        /// </summary>
+        public const uint DeadlySwoop = 35888;
+
+        /// <summary>
+        /// <see cref="EnemyNpc.GiantColibri"/>'s Swoop.
+        ///
+        /// Large rectangle AOE
+        /// </summary>
+        public const uint Swoop = 35888;
     }
 }

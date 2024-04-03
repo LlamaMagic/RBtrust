@@ -248,4 +248,14 @@ public enum PartyMemberId : uint
     /// Serpent Conjurer: Healer, CNJ.
     /// </summary>
     SerpentConjurer = 11337,
+
+    /// <summary>
+    /// G'raha Tia, used in quest 'The Game Is Afoot'
+    /// </summary>
+    GrahaTiaGameAfoot = 12488,
+
+    /// <summary>
+    /// Wuk Lamat, used in quest 'The Game Is Afoot'
+    /// </summary>
+    WukLamat = 12487,
 }

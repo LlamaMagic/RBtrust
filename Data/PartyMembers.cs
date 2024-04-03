@@ -58,6 +58,8 @@ internal static class PartyMembers
         PartyMemberId.Arenvald,
         PartyMemberId.ResistanceFighter,
         PartyMemberId.ResistancePikedancer,
+        PartyMemberId.GrahaTiaGameAfoot,
+        PartyMemberId.WukLamat,
     };
 
     /// <summary>
@@ -98,6 +100,8 @@ internal static class PartyMembers
         PartyMemberId.Arenvald,
         PartyMemberId.ResistanceFighter,
         PartyMemberId.ResistancePikedancer,
+        PartyMemberId.GrahaTiaGameAfoot,
+        PartyMemberId.WukLamat,
     };
 
     /// <summary>
@@ -128,6 +132,8 @@ internal static class PartyMembers
         PartyMemberId.Lyse,
         PartyMemberId.ResistancePikedancer,
         PartyMemberId.Raubahn,
+        PartyMemberId.GrahaTiaGameAfoot,
+        PartyMemberId.WukLamat,
 
     };
 
@@ -149,6 +155,8 @@ internal static class PartyMembers
         PartyMemberId.StormMarauder,
         PartyMemberId.Varshahn,
         PartyMemberId.Gosetsu,
+        PartyMemberId.GrahaTiaGameAfoot,
+        PartyMemberId.WukLamat,
     };
 
     /// <summary>
@@ -169,6 +177,7 @@ internal static class PartyMembers
         PartyMemberId.SerpentConjurer,
         PartyMemberId.DomanShaman,
         PartyMemberId.MolYouth,
-
+        PartyMemberId.GrahaTiaGameAfoot,
+        PartyMemberId.WukLamat,
     };
 }
