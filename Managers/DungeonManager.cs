@@ -76,6 +76,7 @@ internal class DungeonManager
             { ZoneId.TheSirensongSea, typeof(SirensongSea) },
             { ZoneId.BardamsMettle, typeof(BardamsMettle) },
             { ZoneId.DomaCastle, typeof(DomaCastle) },
+            { ZoneId.Emanation, typeof(Emanation) },
             { ZoneId.CastrumAbania, typeof(CastrumAbania) },
             { ZoneId.AlaMhigo, typeof(AlaMhigo) },
             { ZoneId.TheDrownedCityOfSkalla, typeof(DrownedCityOfSkalla) },

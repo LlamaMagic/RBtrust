@@ -242,6 +242,11 @@ public enum ZoneId : ushort
     DomaCastle = 1144,
 
     /// <summary>
+    /// Lv. 67: Emanation
+    /// </summary>
+    Emanation = 719,
+
+    /// <summary>
     /// Lv. 69: Castrum Abania
     /// </summary>
     CastrumAbania = 1145,

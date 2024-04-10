@@ -187,6 +187,11 @@ public enum DungeonId : uint
     DomaCastle = 226,
 
     /// <summary>
+    /// Lv. 67: Emanation
+    /// </summary>
+    Emanation = 263,
+
+    /// <summary>
     /// Lv. 69: Castrum Abania
     /// </summary>
     CastrumAbania = 227,

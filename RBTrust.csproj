@@ -69,6 +69,7 @@
     <Compile Include="Dungeons\ContainmentBayZ1T9.cs" />
     <Compile Include="Dungeons\DomaCastle.cs" />
     <Compile Include="Dungeons\DrownedCityOfSkalla.cs" />
+    <Compile Include="Dungeons\Emanation.cs" />
     <Compile Include="Dungeons\FellCourtOfTroia.cs" />
     <Compile Include="Dungeons\GhimlytDark.cs" />
     <Compile Include="Dungeons\GreatGubalLibrary.cs" />
