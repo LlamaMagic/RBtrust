@@ -29,6 +29,7 @@ public class AlaMhigo : AbstractDungeon
 
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = null;
+
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
@@ -42,9 +43,16 @@ public class AlaMhigo : AbstractDungeon
 
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.RhalgrsGate,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.TailLaser1 || bc.CastingSpellId == EnemyAction.TailLaser2 || bc.CastingSpellId == EnemyAction.TailLaser3,
-            radiusProducer: bc => 8f,
+            objectSelector: bc => bc.NpcId == EnemyNpc.LockOn && bc.IsVisible,
+            radiusProducer: bc => 7.0f,
             priority: AvoidancePriority.High));
+
+        // Boss 2: Demimagicks
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == ((uint)SubZoneId.TheChamberofKnowledge),
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Demimagicks,
+            radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
+            locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
         // Boss Arenas
 
@@ -113,20 +121,18 @@ public class AlaMhigo : AbstractDungeon
                 var emptyVessle = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.EmptyVessel)
                     .OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsValid && bc.IsTargetable); // our lifeless body
 
-                while (Core.Me.HasAura(PlayerAura.OutOfBody) && Core.Me.Location.Distance2D(emptyVessle.Location) > 0.5f)
+                if (emptyVessle != null)
                 {
-                    ff14bot.Helpers.Logging.WriteDiagnostic($"Moving to our lifeless body. Distance: {Core.Me.Location.Distance2D(emptyVessle.Location)}");
-                    await LlamaLibrary.Helpers.Navigation.GroundMove(emptyVessle.Location, 0.5f);
+                    while (Core.Me.HasAura(PlayerAura.OutOfBody) && Core.Me.Location.Distance2D(emptyVessle.Location) > 0.5f)
+                    {
+                        ff14bot.Helpers.Logging.WriteDiagnostic($"Moving to our lifeless body. Distance: {Core.Me.Location.Distance2D(emptyVessle.Location)}");
+                        await LlamaLibrary.Helpers.Navigation.GroundMove(emptyVessle.Location, 0.5f);
+                    }
+
+                    await CommonTasks.StopMoving();
+                    await Coroutine.Wait(5000, () => Core.Me.Location.Distance2D(emptyVessle.Location) > 0.5 || !Core.Me.HasAura(PlayerAura.OutOfBody));
                 }
-
-                await CommonTasks.StopMoving();
-                await Coroutine.Wait(5000, () => Core.Me.Location.Distance2D(emptyVessle.Location) > 0.5 || !Core.Me.HasAura(PlayerAura.OutOfBody));
             }
-        }
-
-        if (EnemyAction.Demimagicks.IsCasting())
-        {
-            await MovementHelpers.Spread(EnemyAction.DemimagicksDuration);
         }
 
         return false;
@@ -143,6 +149,11 @@ public class AlaMhigo : AbstractDungeon
         /// First Boss: Magitek Scorpion.
         /// </summary>
         public const uint MagitekScorpion = 6037;
+
+        /// <summary>
+        /// First Boss: Magitek Scorpion.
+        /// </summary>
+        public const uint LockOn = 108;
 
         /// <summary>
         /// First Boss: Fire puddle.
@@ -202,7 +213,7 @@ public class AlaMhigo : AbstractDungeon
         /// Demimagicks
         /// Spread
         /// </summary>
-        public static readonly HashSet<uint> Demimagicks = new() { 8286 };
+        public const uint Demimagicks = 8286;
 
         public static readonly int DemimagicksDuration = 5_000;
     }

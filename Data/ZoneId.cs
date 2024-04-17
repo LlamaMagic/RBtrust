@@ -252,6 +252,11 @@ public enum ZoneId : ushort
     CastrumAbania = 1145,
 
     /// <summary>
+    /// Lv. 70: The Royal Menagerie
+    /// </summary>
+    TheRoyalMenagerie = 679,
+
+    /// <summary>
     /// Lv. 70.1: Ala Mhigo
     /// </summary>
     AlaMhigo = 1146,

@@ -79,6 +79,7 @@ internal class DungeonManager
             { ZoneId.Emanation, typeof(Emanation) },
             { ZoneId.CastrumAbania, typeof(CastrumAbania) },
             { ZoneId.AlaMhigo, typeof(AlaMhigo) },
+            { ZoneId.TheRoyalMenagerie, typeof(TheRoyalMenagerie) },
             { ZoneId.TheDrownedCityOfSkalla, typeof(DrownedCityOfSkalla) },
             { ZoneId.TheBurn, typeof(Burn) },
             { ZoneId.TheGhimlytDark, typeof(GhimlytDark) },

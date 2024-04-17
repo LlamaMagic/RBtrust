@@ -197,6 +197,11 @@ public enum DungeonId : uint
     CastrumAbania = 227,
 
     /// <summary>
+    /// Lv. 70: TheRoyalManagerie
+    /// </summary>
+    TheRoyalMenagerie = 239,
+
+    /// <summary>
     /// Lv. 70.1: Ala Mhigo
     /// </summary>
     AlaMhigo = 228,
