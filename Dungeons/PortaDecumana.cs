@@ -75,6 +75,13 @@ public class PortaDecumana : AbstractDungeon
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // General avoid while in combat to avoid standing on top of people
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && !Core.Player.IsMelee() && WorldManager.ZoneId == (uint)ZoneId.ThePortaDecumana && !LaserFocus.IsCasting(),
+            objectSelector: bc => bc.Type == GameObjectType.Pc,
+            radiusProducer: bc => 1.0f,
+            priority: AvoidancePriority.Low));
+
         // Ultima Titan: GeoCrush
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.ThePortaDecumana,
