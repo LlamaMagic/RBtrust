@@ -401,5 +401,35 @@ public enum ZoneId : ushort
     /// </summary>
     UltimaThule = 960,
 
+    /// <summary>
+    /// Lv. 91: Ihuykatumu
+    /// </summary>
+    Ihuykatumu = 1167,
+
+    /// <summary>
+    /// Lv. 93: Worqor Zormor
+    /// </summary>
+    WorqorZormor = 1193,
+
+    /// <summary>
+    /// Lv. 95: Skydeep Cenote
+    /// </summary>
+    SkydeepCenote = 1194,
+
+    /// <summary>
+    /// Lv. 97: Vanguard
+    /// </summary>
+    Vanguard = 1198,
+
+    /// <summary>
+    /// Lv. 99: Origenics
+    /// </summary>
+    Origenics = 1208,
+
+    /// <summary>
+    /// Lv. 100: Alexandria
+    /// </summary>
+    Alexandria = 1199,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

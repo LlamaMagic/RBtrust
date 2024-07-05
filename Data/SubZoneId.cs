@@ -764,6 +764,97 @@ public enum SubZoneId : uint
     /// <summary>
     /// Lv. 90.6: The Lunar Subterrane > Carnelian Courtyard, Durante
     /// </summary>
-    CarnelianCourtyard = 4437,
+    CarnelianCourtyard = 4906,
+
+    /// <summary>
+    /// Lv. 91: Ihuykatumu > Punutiy Pool, Prime Punutiy
+    /// </summary>
+    PunutiyPool = 4356,
+
+    /// <summary>
+    /// Lv. 91: Ihuykatumu > Drowsie's Grotto, Drowsie
+    /// </summary>
+    DrowsiesGrotto = 4907,
+
+    /// <summary>
+    /// Lv. 91: Ihuykatumu > Breathcatch, Apollyon
+    /// </summary>
+    Breathcatch = 4908,
+
+    /// <summary>
+    /// Lv. 93: Worqor Zormor > Calmgrounds, Ryoqor Terteh
+    /// </summary>
+    Calmgrounds = 4482,
+
+    /// <summary>
+    /// Lv. 93: Worqor Zormor > Morgardar Ridge, Kahderyor
+    /// </summary>
+    MorgardarRidge = 4488,
+
+    /// <summary>
+    /// Lv. 93: Worqor Zormor > Karryor the Resting, Gurfurlur
+    /// </summary>
+    KarryortheResting = 4494,
+
+    /// <summary>
+    /// Lv. 95: The Skydeep Cenote > Unsung Elegy, Feather Ray
+    /// </summary>
+    UnsungElegy = 5031,
+
+    /// <summary>
+    /// Lv. 95: The Skydeep Cenote > Vurgar Mettlegrounds, Firearms
+    /// </summary>
+    VurgarMettlegrounds = 5032,
+
+    /// <summary>
+    /// Lv. 95: The Skydeep Cenote > Gatekeep's Anvil, Maulskull
+    /// </summary>
+    GatekeepsAnvil = 5033,
+
+    /// <summary>
+    /// Lv. 97: Vanguard > Central Garage, Vanguard Commander R8
+    /// </summary>
+    CentralGarage = 4915,
+
+    /// <summary>
+    /// Lv. 97: Vanguard > Safety Inspection Chamber, Protector
+    /// </summary>
+    SafetyInspectionChamber = 4916,
+
+    /// <summary>
+    /// Lv. 97: Vanguard > Vanguard Control Room, Zander the Snakeskinner
+    /// </summary>
+    VanguardControlRoom = 4917,
+
+    /// <summary>
+    /// Lv. 99: Origenics > Resource Transport Elevator, Herpekaris
+    /// </summary>
+    ResourceTransportElevator = 5020,
+
+    /// <summary>
+    /// Lv. 99: Origenics > Surveillance Room, Deceiver
+    /// </summary>
+    SurveillanceRoom = 5024,
+
+    /// <summary>
+    /// Lv. 99: Origenics > Enhancement Testing Grounds, Ambrose the Undeparted
+    /// </summary>
+    EnhancementTestingGrounds = 5026,
+
+    /// <summary>
+    /// Lv. 100: Alexandria > Volatile Memory, Antivirus X
+    /// </summary>
+    VolatileMemory = 4356,
+
+    /// <summary>
+    /// Lv. 100: Alexandria > Corrupted Memory Cache, Amalgam
+    /// </summary>
+    CorruptedMemoryCache = 4495,
+
+    /// <summary>
+    /// Lv. 100: Alexandria > Reascension, Eliminator
+    /// </summary>
+    Reascension = 4499,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

@@ -335,5 +335,35 @@ public enum DungeonId : uint
     /// Lv. 90.6: The Lunar Subterrane
     /// </summary>
     TheLunarSubterrane = uint.MaxValue,
+
+    /// <summary>
+    /// Lv. 91: Ihuykatumu
+    /// </summary>
+    Ihuykatumu = 826,
+
+    /// <summary>
+    /// Lv. 93: Worqor Zormor
+    /// </summary>
+    WorqorZormor = 824,
+
+    /// <summary>
+    /// Lv. 95: Skydeep Cenote
+    /// </summary>
+    SkydeepCenote = 829,
+
+    /// <summary>
+    /// Lv. 97: Vanguard
+    /// </summary>
+    Vanguard = 831,
+
+    /// <summary>
+    /// Lv. 99: Origenics
+    /// </summary>
+    Origenics = 825,
+
+    /// <summary>
+    /// Lv. 100: Alexandria
+    /// </summary>
+    Alexandria = 827,
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

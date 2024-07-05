@@ -113,6 +113,14 @@ internal class DungeonManager
 
             // 6.0 - Endwalker - Fates
             { ZoneId.UltimaThule, typeof(UltimaThule) },
+
+            // 7.0 - Dawntrail
+            { ZoneId.Ihuykatumu, typeof(Ihuykatumu) },
+            { ZoneId.WorqorZormor, typeof(WorqorZormor) },
+            { ZoneId.SkydeepCenote, typeof(SkydeepCenote) },
+            { ZoneId.Vanguard, typeof(Vanguard) },
+            { ZoneId.Origenics, typeof(Origenics) },
+            { ZoneId.Alexandria, typeof(Alexandria) },
         };
     }
 
