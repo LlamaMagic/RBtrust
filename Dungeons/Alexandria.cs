@@ -34,7 +34,7 @@ public class Alexandria : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Alexandria;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
@@ -59,6 +59,13 @@ public class Alexandria : AbstractDungeon
             rotationDegrees: -180.0f,
             radius: 40.0f,
             arcDegrees: 255f);
+
+        // Boss 2: Static Spark
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.StaticSpark && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
+            locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
@@ -212,13 +219,6 @@ public class Alexandria : AbstractDungeon
         public static readonly HashSet<uint> Quarantine = new() { 36384 };
 
         /// <summary>
-        /// Hypertuned Grynewaht
-        /// Immune Response
-        /// Run away
-        /// </summary>
-        public static readonly HashSet<uint> ImmuneResponse = new() { 8357 };
-
-        /// <summary>
         /// Antivirus X
         /// Immune Response
         /// Frontal cone
@@ -231,6 +231,27 @@ public class Alexandria : AbstractDungeon
         ///  Cone damage on both left and right side
         /// </summary>
         public const uint ImmuneResponseSides = 36380;
+
+        /// <summary>
+        /// Amalgam
+        /// Static Spark
+        /// Spread
+        /// </summary>
+        public const uint StaticSpark = 36334;
+
+        /// <summary>
+        /// Amalgam
+        /// Superbolt
+        /// Stack
+        /// </summary>
+        public const uint Superbolt = 36333;
+
+        /// <summary>
+        /// Eliminator
+        /// Compression
+        /// We want to move to the edge of the blue circle with the other NPCs
+        /// </summary>
+        public const uint Compression = 36792;
     }
 
     private static class PlayerAura
