@@ -34,7 +34,7 @@ public class Alexandria : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Alexandria;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
@@ -61,32 +61,48 @@ public class Alexandria : AbstractDungeon
             arcDegrees: 255f);
 
         // Boss 2: Static Spark
+        // Boss 3: Electray
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CorruptedMemoryCache,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.StaticSpark && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CorruptedMemoryCache or (uint)SubZoneId.Reascension,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.StaticSpark or EnemyAction.Electray && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
+        // Boss 3: Unknown Lazer
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Unknown,
+            width: 6f,
+            length: 120f,
+            yOffset: -60f,
+            priority: AvoidancePriority.High);
+
         // Boss Arenas
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory,
-            () => ArenaCenter.AntivirusX,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 39.0f,
+            innerHeight: 29.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.AntivirusX },
             priority: AvoidancePriority.High);
 
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
-            () => ArenaCenter.Amalgam,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 39.0f,
+            innerHeight: 29.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Amalgam },
             priority: AvoidancePriority.High);
 
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
-            () => ArenaCenter.Eliminator,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 39.0f,
+            innerHeight: 29.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Eliminator },
             priority: AvoidancePriority.High);
 
         return Task.FromResult(false);
@@ -128,7 +144,7 @@ public class Alexandria : AbstractDungeon
             // Otherwise you want to stack.
             if (Core.Player.IsTank())
             {
-                await MovementHelpers.Spread(QuarantineDuration, 10f);
+                await MovementHelpers.Spread(QuarantineDuration, 7f);
             }
             else
             {
@@ -194,7 +210,7 @@ public class Alexandria : AbstractDungeon
     private static class ArenaCenter
     {
         /// <summary>
-        /// First Boss: Antivirus X.
+        /// First Boss: <see cref="EnemyNpc.AntivirusX"/>.
         /// </summary>
         public static readonly Vector3 AntivirusX = new(852f, 46f, 823f);
 
@@ -248,10 +264,38 @@ public class Alexandria : AbstractDungeon
 
         /// <summary>
         /// Eliminator
+        /// Electray
+        /// Spread
+        /// </summary>
+        public const uint Electray = 36333;
+
+        /// <summary>
+        /// Eliminator
+        /// Unkown
+        /// Small line AOE
+        /// </summary>
+        public const uint Unknown = 36783;
+
+        /// <summary>
+        /// Eliminator
         /// Compression
         /// We want to move to the edge of the blue circle with the other NPCs
         /// </summary>
         public const uint Compression = 36792;
+
+        /// <summary>
+        /// Eliminator
+        /// Overexposure
+        /// Stack
+        /// </summary>
+        public const uint Overexposure = 36779;
+
+        /// <summary>
+        /// Eliminator
+        /// Light of Devotion
+        /// Stack
+        /// </summary>
+        public const uint LightofDevotion = 36785;
     }
 
     private static class PlayerAura
