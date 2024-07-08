@@ -7,6 +7,7 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
@@ -19,6 +20,13 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Alexandria : AbstractDungeon
 {
+    private const int QuarantineDuration = 10_000;
+
+    /// <summary>
+    /// Tracks sub-zone since last tick for environmental decision making.
+    /// </summary>
+    private SubZoneId lastSubZoneId = SubZoneId.NONE;
+
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.Alexandria;
 
@@ -26,36 +34,54 @@ public class Alexandria : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Alexandria;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {  };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 1: Immune Response Front
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImmuneResponseFront,
+            leashPointProducer: () => ArenaCenter.AntivirusX,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 125f);
+
+        // Boss 1: Immune Response Sides
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImmuneResponseSides,
+            leashPointProducer: () => ArenaCenter.AntivirusX,
+            leashRadius: 40.0f,
+            rotationDegrees: -180.0f,
+            radius: 40.0f,
+            arcDegrees: 255f);
+
         // Boss Arenas
-
-        /*
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThirdArmory,
-            () => ArenaCenter.MagitekRearguard,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory,
+            () => ArenaCenter.AntivirusX,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TrainingGrounds,
-            () => ArenaCenter.MagitekHexadron,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            () => ArenaCenter.Amalgam,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow,
-            () => ArenaCenter.HypertunedGrynewaht,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            () => ArenaCenter.Eliminator,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
-            */
+
         return Task.FromResult(false);
     }
 
@@ -64,82 +90,147 @@ public class Alexandria : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+
+        bool result = currentSubZoneId switch
+        {
+            SubZoneId.VolatileMemory => await AntivirusX(),
+            SubZoneId.CorruptedMemoryCache => await Amalgam(),
+            SubZoneId.Reascension => await Eliminator(),
+            _ => false,
+        };
+
+        lastSubZoneId = currentSubZoneId;
+
+        return result;
+    }
+
+    /// <summary>
+    /// Boss 1: Antivirus X.
+    /// </summary>
+    private async Task<bool> AntivirusX()
+    {
+        var interferonC = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonC)
+            .FirstOrDefault(bc => bc.IsVisible); // +
+        var interferonR = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonR)
+            .FirstOrDefault(bc => bc.IsVisible); // O
+
+        if (EnemyAction.Quarantine.IsCasting())
+        {
+            // If you're on tank you want to spread during Quarantine as it does an AOE tank buster on the tank
+            // Otherwise you want to stack.
+            if (Core.Player.IsTank())
+            {
+                await MovementHelpers.Spread(QuarantineDuration, 10f);
+            }
+            else
+            {
+                await MovementHelpers.GetClosestAlly.Follow(3f);
+            }
+        }
+
+        // Follow the NPCs while the intererons are present.
+        // Sidestep detects the omens, but the spell cast is so fast that the character can't move into position quick enough if you rely only on spell cast.
+        // The NPCs are good at dodging
+        if (Core.Me.InCombat && (interferonC != null || interferonR != null))
+        {
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Boss 2: Amalgam.
+    /// </summary>
+    private async Task<bool> Amalgam()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Boss 3: Eliminator.
+    /// </summary>
+    private async Task<bool> Eliminator()
+    {
         return false;
     }
 
     private static class EnemyNpc
     {
         /// <summary>
-        /// First Boss: Magitek Rearguard.
+        /// First Boss: Antivirus X.
         /// </summary>
-        public const uint MagitekRearguard = 6200;
+        public const uint AntivirusX = 12844;
 
         /// <summary>
-        /// Second Boss: Magitek Hexadron.
+        /// First Boss: Interferon R
         /// </summary>
-        public const uint MagitekHexadron = 6203;
+        public const uint InterferonR = 12843;
 
         /// <summary>
-        /// Second Boss: Hexadron Bit.
+        /// First Boss: Interferon C
         /// </summary>
-        public const uint HexadroneBit = 6204;
+        public const uint InterferonC = 12842;
 
         /// <summary>
-        /// Final Boss: Hypertuned Grynewaht .
+        /// Second Boss: Amalgam.
         /// </summary>
-        public const uint HypertunedGrynewaht = 6205;
+        public const uint Amalgam = 12864;
+
+        /// <summary>
+        /// Final Boss: Eliminator .
+        /// </summary>
+        public const uint Eliminator = 12729;
     }
 
     private static class ArenaCenter
     {
         /// <summary>
-        /// First Boss: Magitek Rearguard.
+        /// First Boss: Antivirus X.
         /// </summary>
-        public static readonly Vector3 MagitekRearguard = new(125f, 40.5f, 17.5f);
+        public static readonly Vector3 AntivirusX = new(852f, 46f, 823f);
 
         /// <summary>
-        /// Second Boss: Magitek Hexadron.
+        /// Second Boss: Amalgam.
         /// </summary>
-        public static readonly Vector3 MagitekHexadron = new(-240f, 45.5f, 130.5f);
+        public static readonly Vector3 Amalgam = new(-533f, -466f, -373f);
 
         /// <summary>
-        /// Third Boss: Hypertuned Grynewaht.
+        /// Third Boss: Eliminator.
         /// </summary>
-        public static readonly Vector3 HypertunedGrynewaht = new(-240f, 67f, -197f);
-
-        /// <summary>
-        /// Third Boss: Bomb Drop Spot.
-        /// </summary>
-        public static readonly Vector3 BombDropSpot = new(-257.6511f, 67f, -179.8466f);
-
-        /// <summary>
-        /// Third Boss: Bomb Safe Spot.
-        /// </summary>
-        public static readonly Vector3 BombSafeSpot = new(-224.3772f, 67f, -214.2821f);
+        public static readonly Vector3 Eliminator = new(-760f, -474f, -648f);
     }
 
     private static class EnemyAction
     {
         /// <summary>
-        /// Magitek Hexadron
-        /// Magitek Missiles
+        /// Antivirus X
+        /// Quarantine
         /// Stack
         /// </summary>
-        public const uint MagitekMissiles = 8357;
+        public static readonly HashSet<uint> Quarantine = new() { 36384 };
 
         /// <summary>
         /// Hypertuned Grynewaht
-        /// Thermobaric Charge
+        /// Immune Response
         /// Run away
         /// </summary>
-        public static readonly HashSet<uint> ThermobaricCharge = new() { 8357 };
+        public static readonly HashSet<uint> ImmuneResponse = new() { 8357 };
 
         /// <summary>
-        /// Hypertuned Grynewaht
-        /// Clean Cut
-        /// Straight line avoid
+        /// Antivirus X
+        /// Immune Response
+        /// Frontal cone
         /// </summary>
-        public const uint CleanCut = 8369;
+        public const uint ImmuneResponseFront = 36378;
+
+        /// <summary>
+        /// Antivirus X
+        /// Immune Response
+        ///  Cone damage on both left and right side
+        /// </summary>
+        public const uint ImmuneResponseSides = 36380;
     }
 
     private static class PlayerAura
