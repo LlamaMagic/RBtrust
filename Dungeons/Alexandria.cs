@@ -36,13 +36,21 @@ public class Alexandria : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
 
+    private static GameObject interferonC => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonC)
+        .FirstOrDefault(bc => bc.IsVisible); // +
+
+    private static GameObject interferonR => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonR)
+        .FirstOrDefault(bc => bc.IsVisible); // O
+
+    private static bool InterfornPresent => interferonC != null || interferonR != null;
+
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
         // Boss 1: Immune Response Front
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory && !InterfornPresent,
             objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImmuneResponseFront,
             leashPointProducer: () => ArenaCenter.AntivirusX,
             leashRadius: 40.0f,
@@ -52,7 +60,7 @@ public class Alexandria : AbstractDungeon
 
         // Boss 1: Immune Response Sides
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory && !InterfornPresent,
             objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImmuneResponseSides,
             leashPointProducer: () => ArenaCenter.AntivirusX,
             leashRadius: 40.0f,
@@ -133,11 +141,6 @@ public class Alexandria : AbstractDungeon
     /// </summary>
     private async Task<bool> AntivirusX()
     {
-        var interferonC = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonC)
-            .FirstOrDefault(bc => bc.IsVisible); // +
-        var interferonR = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonR)
-            .FirstOrDefault(bc => bc.IsVisible); // O
-
         if (EnemyAction.Quarantine.IsCasting())
         {
             // If you're on tank you want to spread during Quarantine as it does an AOE tank buster on the tank
@@ -155,7 +158,7 @@ public class Alexandria : AbstractDungeon
         // Follow the NPCs while the intererons are present.
         // Sidestep detects the omens, but the spell cast is so fast that the character can't move into position quick enough if you rely only on spell cast.
         // The NPCs are good at dodging
-        if (Core.Me.InCombat && (interferonC != null || interferonR != null))
+        if (Core.Me.InCombat && InterfornPresent)
         {
             await MovementHelpers.GetClosestAlly.Follow();
         }
