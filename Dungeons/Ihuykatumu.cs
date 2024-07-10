@@ -35,7 +35,7 @@ public class Ihuykatumu : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Ihuykatumu;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Bladedance, EnemyAction.WingofLightning, EnemyAction.ShoreShaker };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.ShoreShaker };
 
     private static GameObject whirlWind => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Whirlwind)
         .FirstOrDefault(bc => bc.IsVisible); // +
@@ -142,14 +142,25 @@ public class Ihuykatumu : AbstractDungeon
     /// </summary>
     private async Task<bool> Apollyon()
     {
-        if (EnemyAction.ThunderIII.IsCasting())
+        if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.Spread(10_0000);
+            await MovementHelpers.Spread(4_0000);
         }
 
-        if (whirlWind != null)
+        // Moved BladeDance and Wings logic down here so we could prevent ThunderIII spread mechanic from causing mechanics to fight each other
+        if (EnemyAction.Bladedance.IsCasting())
         {
-            await MovementHelpers.GetClosestDps.Follow(3f);
+            await MovementHelpers.GetClosestAlly.Follow(3f);
+        }
+
+        if (EnemyAction.WingofLightning.IsCasting())
+        {
+            await MovementHelpers.GetClosestAlly.Follow(3f);
+        }
+
+        if (whirlWind != null && !EnemyAction.ThunderIII.IsCasting())
+        {
+            await MovementHelpers.GetClosestAlly.Follow(3f);
         }
 
         return false;
@@ -270,14 +281,16 @@ public class Ihuykatumu : AbstractDungeon
         /// Bladedance
         /// Follow NPC
         /// </summary>
-        public const uint Bladedance = 17998;
+        public static readonly HashSet<uint> Bladedance = new() { 17998 };
+
 
         /// <summary>
         /// Apollyon
         /// Wing of Lightning
         /// Follow NPC
         /// </summary>
-        public const uint WingofLightning = 36351;
+        public static readonly HashSet<uint> WingofLightning = new() { 36351 };
+
 
         /// <summary>
         /// Apollyon
@@ -285,13 +298,6 @@ public class Ihuykatumu : AbstractDungeon
         /// AoE Spread
         /// </summary>
         public static readonly HashSet<uint> ThunderIII = new() { 36353 };
-
-        /// <summary>
-        /// Apollyon
-        /// Blizzard II
-        /// AoE Spread
-        /// </summary>
-        public static readonly HashSet<uint> BlizzardII = new() { 38970 };
     }
 
     private static class PlayerAura
