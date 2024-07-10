@@ -764,12 +764,12 @@ public enum SubZoneId : uint
     /// <summary>
     /// Lv. 90.6: The Lunar Subterrane > Carnelian Courtyard, Durante
     /// </summary>
-    CarnelianCourtyard = 4906,
+    CarnelianCourtyard = 4356,
 
     /// <summary>
     /// Lv. 91: Ihuykatumu > Punutiy Pool, Prime Punutiy
     /// </summary>
-    PunutiyPool = 4356,
+    PunutiyPool = 4906,
 
     /// <summary>
     /// Lv. 91: Ihuykatumu > Drowsie's Grotto, Drowsie
