@@ -57,7 +57,7 @@ public class Ihuykatumu : AbstractDungeon
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
             objectSelector: c => c.CastingSpellId == EnemyAction.WindSickle,
             outerRadius: 40.0f,
-            innerRadius: 6.0F,
+            innerRadius: 5.0F,
             priority: AvoidancePriority.Medium);
 
         // Boss 1: Punutiy Flop
@@ -146,13 +146,13 @@ public class Ihuykatumu : AbstractDungeon
             }
             else
             {
-                await MovementHelpers.GetClosestDps.Follow(3f);
+                await MovementHelpers.GetClosestDps.Follow();
             }
         }
 
         if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.Spread(4_000);
+            await MovementHelpers.Spread(3_000);
         }
 
         // Moved BladeDance and Wings logic down here so we could prevent ThunderIII spread mechanic from causing mechanics to fight each other
