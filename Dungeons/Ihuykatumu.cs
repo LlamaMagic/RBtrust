@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
+using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -178,13 +179,20 @@ public class Ihuykatumu : AbstractDungeon
             }
             else
             {
-                await MovementHelpers.GetClosestDps.Follow();
+                //Logger.Information("Following the nearest DPS to dodge Blade");
+                //await MovementHelpers.GetClosestDps.Follow();
+                AvoidanceManager.AddAvoidObject<BattleCharacter>(
+                    canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.Breathcatch && EnemyAction.Blade.IsCasting(),
+                    objectSelector: bc => bc.CastingSpellId is 36356 or 36357 && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+                    radiusProducer: bc => 7f,
+                    locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
+
             }
         }
 
         if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.Spread(2_500);
+            await MovementHelpers.Spread(3_000);
         }
 
         // Moved BladeDance and Wings logic down here so we could prevent ThunderIII spread mechanic from causing mechanics to fight each other
