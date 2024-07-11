@@ -206,9 +206,14 @@ public class Ihuykatumu : AbstractDungeon
             await MovementHelpers.GetClosestAlly.Follow();
         }
 
-        if (whirlWind != null && !EnemyAction.ThunderIII.IsCasting() && !EnemyAction.RazorZephyr.IsCasting())
+        if (whirlWind != null && !EnemyAction.ThunderIII.IsCasting())
         {
+            SidestepPlugin.Enabled = false;
             await MovementHelpers.GetClosestAlly.Follow();
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
         }
 
         return false;
