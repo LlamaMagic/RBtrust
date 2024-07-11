@@ -52,6 +52,16 @@ public class Ihuykatumu : AbstractDungeon
             innerRadius: 6.0F,
             priority: AvoidancePriority.Medium);
 
+        // Boss 1: Hydrowave
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.Hydrowave,
+            leashPointProducer: () => ArenaCenter.PrimePunutiy,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 4f);
+
         // Boss 3: Wind Sickle
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
@@ -146,7 +156,7 @@ public class Ihuykatumu : AbstractDungeon
             }
             else
             {
-                await MovementHelpers.GetClosestDps.Follow();
+                await MovementHelpers.GetClosestAlly.Follow();
             }
         }
 
