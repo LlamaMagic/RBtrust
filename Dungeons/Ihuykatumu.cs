@@ -35,7 +35,17 @@ public class Ihuykatumu : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Ihuykatumu;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.ShoreShaker };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        EnemyAction.ShoreShaker, EnemyAction.Decay,
+        /*
+        EnemyAction.Bury,
+        EnemyAction.Bury2,
+        EnemyAction.Bury3,
+        EnemyAction.Bury4,
+        EnemyAction.Bury5,
+        */
+    };
 
     private static GameObject whirlWind => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.Whirlwind)
         .FirstOrDefault(bc => bc.IsVisible); // +
@@ -45,12 +55,14 @@ public class Ihuykatumu : AbstractDungeon
         AvoidanceManager.AvoidInfos.Clear();
 
         // Boss 1: Decay
+        /*
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool,
             objectSelector: c => c.CastingSpellId == EnemyAction.Decay,
             outerRadius: 40.0f,
             innerRadius: 6.0F,
             priority: AvoidancePriority.Medium);
+            */
 
         // Boss 1: Hydrowave
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
@@ -60,14 +72,14 @@ public class Ihuykatumu : AbstractDungeon
             leashRadius: 40.0f,
             rotationDegrees: 0f,
             radius: 40.0f,
-            arcDegrees: 4f);
+            arcDegrees: 10f);
 
         // Boss 3: Wind Sickle
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
             objectSelector: c => c.CastingSpellId == EnemyAction.WindSickle,
             outerRadius: 40.0f,
-            innerRadius: 5.0F,
+            innerRadius: 4.0F,
             priority: AvoidancePriority.Medium);
 
         // Boss 1: Punutiy Flop
@@ -130,6 +142,16 @@ public class Ihuykatumu : AbstractDungeon
     /// </summary>
     private async Task<bool> PrimePunutiy()
     {
+        if (EnemyAction.Bury.IsCasting())
+        {
+            SidestepPlugin.Enabled = false;
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
+
         return false;
     }
 
@@ -156,13 +178,13 @@ public class Ihuykatumu : AbstractDungeon
             }
             else
             {
-                await MovementHelpers.GetClosestAlly.Follow();
+                await MovementHelpers.GetClosestDps.Follow();
             }
         }
 
         if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.Spread(3_000);
+            await MovementHelpers.Spread(2_500);
         }
 
         // Moved BladeDance and Wings logic down here so we could prevent ThunderIII spread mechanic from causing mechanics to fight each other
@@ -243,7 +265,23 @@ public class Ihuykatumu : AbstractDungeon
         /// Might have to follow npc on these as too many are happening at once for sidestep to dodgge affectively
         /// 36497,36498,36499,36500,36503
         /// </summary>
-        public const uint Bury = 36505;
+        public static readonly HashSet<uint> Bury = new()
+        {
+            36497,
+            36498,
+            36499,
+            36500,
+            36501,
+            36502,
+            36503,
+        };
+
+        /// <summary>
+        /// Prime Punutiy
+        /// Resurface
+        /// This ability is cast right before debris starts to fall
+        /// </summary>
+        public static readonly HashSet<uint> Resurface = new() { 36494 };
 
         /// <summary>
         /// Prime Punutiy
@@ -313,7 +351,7 @@ public class Ihuykatumu : AbstractDungeon
         /// Blade
         /// AoE tank buster
         /// </summary>
-        public static readonly HashSet<uint> Blade = new() { 36356 };
+        public static readonly HashSet<uint> Blade = new() { 36356, 36357 };
 
         /// <summary>
         /// Apollyon

@@ -258,4 +258,9 @@ public enum PartyMemberId : uint
     /// Wuk Lamat, used in quest 'The Game Is Afoot'
     /// </summary>
     WukLamat = 12487,
+
+    /// <summary>
+    /// Krile
+    /// </summary>
+    Krile = 4846,
 }

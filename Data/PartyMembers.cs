@@ -60,6 +60,7 @@ internal static class PartyMembers
         PartyMemberId.ResistancePikedancer,
         PartyMemberId.GrahaTiaGameAfoot,
         PartyMemberId.WukLamat,
+        PartyMemberId.Krile,
     };
 
     /// <summary>
