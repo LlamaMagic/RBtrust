@@ -52,11 +52,19 @@ public class Ihuykatumu : AbstractDungeon
             innerRadius: 6.0F,
             priority: AvoidancePriority.Medium);
 
+        // Boss 1: Wind Sickle
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
+            objectSelector: c => c.CastingSpellId == EnemyAction.WindSickle,
+            outerRadius: 40.0f,
+            innerRadius: 6.0F,
+            priority: AvoidancePriority.Medium);
+
         // Boss 1: Punutiy Flop
         // Boss 2: FlagrantSpread
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.Breathcatch or (uint)SubZoneId.PunutiyPool or (uint)SubZoneId.DrowsiesGrotto,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.Hydrowave or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
@@ -142,25 +150,30 @@ public class Ihuykatumu : AbstractDungeon
     /// </summary>
     private async Task<bool> Apollyon()
     {
+        if (EnemyAction.Blade.IsCasting())
+        {
+            await MovementHelpers.Spread(7_000, 7f);
+        }
+
         if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.Spread(4_0000);
+            await MovementHelpers.Spread(4_000);
         }
 
         // Moved BladeDance and Wings logic down here so we could prevent ThunderIII spread mechanic from causing mechanics to fight each other
         if (EnemyAction.Bladedance.IsCasting())
         {
-            await MovementHelpers.GetClosestAlly.Follow(3f);
+            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         if (EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.GetClosestAlly.Follow(3f);
+            await MovementHelpers.GetClosestAlly.Follow();
         }
 
-        if (whirlWind != null && !EnemyAction.ThunderIII.IsCasting())
+        if (whirlWind != null && !EnemyAction.ThunderIII.IsCasting() && !EnemyAction.RazorZephyr.IsCasting())
         {
-            await MovementHelpers.GetClosestAlly.Follow(3f);
+            await MovementHelpers.GetClosestAlly.Follow();
         }
 
         return false;
@@ -242,6 +255,13 @@ public class Ihuykatumu : AbstractDungeon
         public const uint Decay = 36505;
 
         /// <summary>
+        /// Hydrowave
+        /// Punutiy Flop
+        /// Big AoE avoid centered on players
+        /// </summary>
+        public const uint Hydrowave = 36509;
+
+        /// <summary>
         /// Prime Punutiy
         /// Punutiy Flop
         /// Big AoE avoid centered on players
@@ -268,6 +288,20 @@ public class Ihuykatumu : AbstractDungeon
         /// Dodge
         /// </summary>
         public const uint FlagrantSpread = 36522;
+
+        /// <summary>
+        /// Apollyon
+        /// Razor Zephyr
+        /// Straight Line AOE
+        /// </summary>
+        public static readonly HashSet<uint> RazorZephyr = new() { 36340 };
+
+        /// <summary>
+        /// Apollyon
+        /// Wind Sickle
+        /// Donut AoE
+        /// </summary>
+        public const uint WindSickle = 36358;
 
         /// <summary>
         /// Apollyon
