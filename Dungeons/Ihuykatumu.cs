@@ -20,7 +20,7 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Ihuykatumu : AbstractDungeon
 {
-    private const int BladeDuration = 10_000;
+    private const int BladeDuration = 7_000;
 
 
     /// <summary>
@@ -52,7 +52,7 @@ public class Ihuykatumu : AbstractDungeon
             innerRadius: 6.0F,
             priority: AvoidancePriority.Medium);
 
-        // Boss 1: Wind Sickle
+        // Boss 3: Wind Sickle
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
             objectSelector: c => c.CastingSpellId == EnemyAction.WindSickle,
@@ -64,7 +64,7 @@ public class Ihuykatumu : AbstractDungeon
         // Boss 2: FlagrantSpread
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.Breathcatch or (uint)SubZoneId.PunutiyPool or (uint)SubZoneId.DrowsiesGrotto,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.Hydrowave or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
@@ -120,20 +120,6 @@ public class Ihuykatumu : AbstractDungeon
     /// </summary>
     private async Task<bool> PrimePunutiy()
     {
-        if (EnemyAction.Blade.IsCasting())
-        {
-            // If you're on tank you want to spread during Blade as it does an AOE tank buster on the tank
-            // Otherwise you want to stack.
-            if (Core.Player.IsTank())
-            {
-                await MovementHelpers.Spread(BladeDuration, 7f);
-            }
-            else
-            {
-                await MovementHelpers.GetClosestDps.Follow(3f);
-            }
-        }
-
         return false;
     }
 
@@ -152,7 +138,16 @@ public class Ihuykatumu : AbstractDungeon
     {
         if (EnemyAction.Blade.IsCasting())
         {
-            await MovementHelpers.Spread(7_000, 7f);
+            // If you're on tank you want to spread during Blade as it does an AOE tank buster on the tank
+            // Otherwise you want to stack.
+            if (Core.Player.IsTank())
+            {
+                await MovementHelpers.Spread(BladeDuration, 7f);
+            }
+            else
+            {
+                await MovementHelpers.GetClosestDps.Follow(3f);
+            }
         }
 
         if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
