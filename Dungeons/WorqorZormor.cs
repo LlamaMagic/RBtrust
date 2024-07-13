@@ -8,11 +8,13 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
+using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -25,6 +27,8 @@ public class WorqorZormor : AbstractDungeon
     /// Tracks sub-zone since last tick for environmental decision making.
     /// </summary>
     private SubZoneId lastSubZoneId = SubZoneId.NONE;
+
+    private readonly Stopwatch flufflyUpTimer = new();
 
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.WorqorZormor;
@@ -108,13 +112,9 @@ public class WorqorZormor : AbstractDungeon
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
 
-        if (WorldManager.SubZoneId is (uint)SubZoneId.Calmgrounds or (uint)SubZoneId.KarryortheResting)
+        if (WorldManager.SubZoneId is (uint)SubZoneId.KarryortheResting)
         {
             SidestepPlugin.Enabled = false;
-        }
-        else
-        {
-            SidestepPlugin.Enabled = true;
         }
 
         bool result = currentSubZoneId switch
@@ -135,16 +135,31 @@ public class WorqorZormor : AbstractDungeon
     /// </summary>
     private async Task<bool> RyoqorTerteh()
     {
-        bool dodgeSparle = EnemyAction.SnowBoulder.IsCasting() || EnemyAction.FrozenSwirl.IsCasting() || EnemyAction.IceScream.IsCasting();
+        BattleCharacter smallBunnies = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.QorrlohTehSmall).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible);
+        
+        if (!Core.Me.InCombat)
+        {
+            flufflyUpTimer.Reset();
+        }
 
-        if (EnemyAction.SnowBoulder.IsCasting() || EnemyAction.FrozenSwirl.IsCasting() || EnemyAction.IceScream.IsCasting())
+        if (smallBunnies != null || EnemyAction.FrozenSwirl.IsCasting() || EnemyAction.IceScream.IsCasting())
         {
             await MovementHelpers.GetClosestAlly.Follow();
         }
 
-        if (EnemyAction.SparklingSprinkling.IsCasting() && dodgeSparle)
+        if (EnemyAction.SparklingSprinkling.IsCasting() && !EnemyAction.SnowBoulder.IsCasting())
         {
             await MovementHelpers.Spread(7_000, 8f);
+        }
+
+        if (EnemyAction.SnowBoulder.IsCasting())
+        {
+            Logger.Information("Enable sidestep for SnowBoulder");
+            SidestepPlugin.Enabled = true;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = false;
         }
 
         return false;
@@ -155,6 +170,8 @@ public class WorqorZormor : AbstractDungeon
     /// </summary>
     private async Task<bool> Kahderyor()
     {
+        SidestepPlugin.Enabled = false;
+
         return false;
     }
 
@@ -198,9 +215,14 @@ public class WorqorZormor : AbstractDungeon
         public const uint RyoqorTerteh = 12699;
 
         /// <summary>
-        /// First Boss: Snowball.
+        /// First Boss: Qorrloh Teh .
         /// </summary>
-        public const uint Snowball = 12702;
+        public const uint QorrlohTehBig = 12700;
+
+        /// <summary>
+        /// First Boss: Qorrloh Teh .
+        /// </summary>
+        public const uint QorrlohTehSmall = 12701;
 
         /// <summary>
         /// Second Boss: Kahderyor.
@@ -265,6 +287,13 @@ public class WorqorZormor : AbstractDungeon
         /// Avoids that happen all at the same time, so going to have to follow trusts
         /// </summary>
         public static readonly HashSet<uint> FrozenSwirl = new() { 36271, 36272 };
+
+        /// <summary>
+        /// RyoqorTerteh
+        /// Fluffle Up
+        /// Causes the big bunnies to spawn
+        /// </summary>
+        public static readonly HashSet<uint> FluffleUp = new() { 36265 };
 
         /// <summary>
         /// Kahderyor
