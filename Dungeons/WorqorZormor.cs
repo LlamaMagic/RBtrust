@@ -1,4 +1,5 @@
 ﻿using Buddy.Coroutines;
+using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
@@ -7,6 +8,7 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
@@ -19,6 +21,11 @@ namespace Trust.Dungeons;
 /// </summary>
 public class WorqorZormor : AbstractDungeon
 {
+    /// <summary>
+    /// Tracks sub-zone since last tick for environmental decision making.
+    /// </summary>
+    private SubZoneId lastSubZoneId = SubZoneId.NONE;
+
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.WorqorZormor;
 
@@ -26,36 +33,71 @@ public class WorqorZormor : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.WorqorZormor;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.WindShot, EnemyAction.CrystallineCrush, EnemyAction.Sledgehammer };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 2: Earthen Shot
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CouncilofMorgar,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.EarthenShotLine && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            width: 10f,
+            length: 60f,
+            rotationProducer: bc => MathEx.CalculateNeededFacing(bc.Location, GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId).Location));
+
+        // Boss 1: Sparkling Sprinkling
+        // Boss 2: Seed Crystaals
+        // Boss 2: Earthen Shot
+        // Boss 3: Volcanic Drop
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.Calmgrounds or (uint)SubZoneId.CouncilofMorgar or (uint)SubZoneId.KarryortheResting && !EnemyAction.SnowBoulder.IsCasting(),
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.EarthenShot or EnemyAction.SeedCrystals && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
+            locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
+
+        // Boss 2: Cyclonic Ring
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CouncilofMorgar,
+            objectSelector: c => c.CastingSpellId == EnemyAction.EyeoftheFierce,
+            outerRadius: 40.0f,
+            innerRadius: 4.0F,
+            priority: AvoidancePriority.Medium);
+
+        // Boss 2: EyeoftheFierce
+        // TODO: Since BattleCharacter.FaceAway() can't stay looking away for now,
+        // draw a circle avoid at the end of cast so we run/face away from the boss.
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CouncilofMorgar,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.EyeoftheFierce && bc.SpellCastInfo.RemainingCastTime.TotalMilliseconds <= 500,
+            radiusProducer: bc => 18.0f,
+            priority: AvoidancePriority.High));
+
         // Boss Arenas
-
-        /*
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThirdArmory,
-            () => ArenaCenter.MagitekRearguard,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Calmgrounds,
+            () => ArenaCenter.RyoqorTerteh,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TrainingGrounds,
-            () => ArenaCenter.MagitekHexadron,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CouncilofMorgar,
+            () => ArenaCenter.Kahderyor,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
-        AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow,
-            () => ArenaCenter.HypertunedGrynewaht,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+        AvoidanceHelpers.AddAvoidSquareDonut(
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.KarryortheResting,
+            innerWidth: 39.0f,
+            innerHeight: 39.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Gurfurlur },
             priority: AvoidancePriority.High);
-            */
+
         return Task.FromResult(false);
     }
 
@@ -64,82 +106,249 @@ public class WorqorZormor : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+
+        if (WorldManager.SubZoneId is (uint)SubZoneId.Calmgrounds or (uint)SubZoneId.KarryortheResting)
+        {
+            SidestepPlugin.Enabled = false;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
+
+        bool result = currentSubZoneId switch
+        {
+            SubZoneId.Calmgrounds => await RyoqorTerteh(),
+            SubZoneId.CouncilofMorgar => await Kahderyor(),
+            SubZoneId.KarryortheResting => await Gurfurlur(),
+            _ => false,
+        };
+
+        lastSubZoneId = currentSubZoneId;
+
+        return result;
+    }
+
+    /// <summary>
+    /// Boss 1: Ryoqor Terteh.
+    /// </summary>
+    private async Task<bool> RyoqorTerteh()
+    {
+        bool dodgeSparle = EnemyAction.SnowBoulder.IsCasting() || EnemyAction.FrozenSwirl.IsCasting() || EnemyAction.IceScream.IsCasting();
+
+        if (EnemyAction.SnowBoulder.IsCasting() || EnemyAction.FrozenSwirl.IsCasting() || EnemyAction.IceScream.IsCasting())
+        {
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+
+        if (EnemyAction.SparklingSprinkling.IsCasting() && dodgeSparle)
+        {
+            await MovementHelpers.Spread(7_000, 8f);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Boss 2: Kahderyor.
+    /// </summary>
+    private async Task<bool> Kahderyor()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Boss 3: Gurfurlur.
+    /// </summary>
+    private async Task<bool> Gurfurlur()
+    {
+        if ((EnemyAction.Allfire.IsCasting() || EnemyAction.Windswrath.IsCasting() || EnemyAction.GreatFlood.IsCasting()) && !EnemyAction.VolcanicDrop.IsCasting())
+        {
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+
+        if (EnemyAction.VolcanicDrop.IsCasting())
+        {
+            await MovementHelpers.Spread(7_000, 7f);
+        }
+
+        // Soak Aura Sphere
+        if (Core.Me.IsAlive && !CommonBehaviors.IsLoading && !QuestLogManager.InCutscene && Core.Me.InCombat)
+        {
+            BattleCharacter auraSphere = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.AuraSphere).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible && bc.CurrentHealth > 0);
+
+            if (auraSphere != null && PartyManager.IsInParty && !CommonBehaviors.IsLoading &&
+                !QuestLogManager.InCutscene && Core.Me.Location.Distance2D(auraSphere.Location) > 1)
+            {
+                await auraSphere.Follow(1F, 0, true);
+                await CommonTasks.StopMoving();
+                await Coroutine.Sleep(30);
+            }
+        }
+
         return false;
     }
 
     private static class EnemyNpc
     {
         /// <summary>
-        /// First Boss: Magitek Rearguard.
+        /// First Boss: Ryoqor Terteh.
         /// </summary>
-        public const uint MagitekRearguard = 6200;
+        public const uint RyoqorTerteh = 12699;
 
         /// <summary>
-        /// Second Boss: Magitek Hexadron.
+        /// First Boss: Snowball.
         /// </summary>
-        public const uint MagitekHexadron = 6203;
+        public const uint Snowball = 12702;
 
         /// <summary>
-        /// Second Boss: Hexadron Bit.
+        /// Second Boss: Kahderyor.
         /// </summary>
-        public const uint HexadroneBit = 6204;
+        public const uint Kahderyor = 12703;
 
         /// <summary>
-        /// Final Boss: Hypertuned Grynewaht .
+        /// Final Boss: Gurfurlur.
         /// </summary>
-        public const uint HypertunedGrynewaht = 6205;
+        public const uint Gurfurlur = 12705;
+
+        /// <summary>
+        /// Final Boss: Aura Sphere.
+        /// </summary>
+        public const uint AuraSphere = 12708;
     }
 
     private static class ArenaCenter
     {
         /// <summary>
-        /// First Boss: Magitek Rearguard.
+        /// First Boss: Ryoqor Terteh.
         /// </summary>
-        public static readonly Vector3 MagitekRearguard = new(125f, 40.5f, 17.5f);
+        public static readonly Vector3 RyoqorTerteh = new(-108f, 11f, 119f);
 
         /// <summary>
-        /// Second Boss: Magitek Hexadron.
+        /// Second Boss: Kahderyor.
         /// </summary>
-        public static readonly Vector3 MagitekHexadron = new(-240f, 45.5f, 130.5f);
+        public static readonly Vector3 Kahderyor = new(-53f, 323, -57f);
 
         /// <summary>
-        /// Third Boss: Hypertuned Grynewaht.
+        /// Third Boss: Gurfurlur.
         /// </summary>
-        public static readonly Vector3 HypertunedGrynewaht = new(-240f, 67f, -197f);
-
-        /// <summary>
-        /// Third Boss: Bomb Drop Spot.
-        /// </summary>
-        public static readonly Vector3 BombDropSpot = new(-257.6511f, 67f, -179.8466f);
-
-        /// <summary>
-        /// Third Boss: Bomb Safe Spot.
-        /// </summary>
-        public static readonly Vector3 BombSafeSpot = new(-224.3772f, 67f, -214.2821f);
+        public static readonly Vector3 Gurfurlur = new(-54f, 378f, -195f);
     }
 
     private static class EnemyAction
     {
         /// <summary>
-        /// Magitek Hexadron
-        /// Magitek Missiles
+        /// RyoqorTerteh
+        /// Sparkling Sprinkling
+        /// Avoid on players
+        /// </summary>
+        public static readonly HashSet<uint> SparklingSprinkling = new() { 36281 };
+
+        /// <summary>
+        /// RyoqorTerteh
+        /// Ice Scream
+        /// Avoids that happen all at the same time, so going to have to follow trusts
+        /// </summary>
+        public static readonly HashSet<uint> IceScream = new() { 36270 };
+
+        /// <summary>
+        /// RyoqorTerteh
+        /// Snow Boulder
+        /// Avoids that happen all at the same time, so going to have to follow trusts
+        /// </summary>
+        public static readonly HashSet<uint> SnowBoulder = new() { 36278 };
+
+        /// <summary>
+        /// RyoqorTerteh
+        /// Frozen Swirl
+        /// Avoids that happen all at the same time, so going to have to follow trusts
+        /// </summary>
+        public static readonly HashSet<uint> FrozenSwirl = new() { 36271, 36272 };
+
+        /// <summary>
+        /// Kahderyor
+        /// Wind Shot
+        /// Follow Dodge
+        /// </summary>
+        public const uint WindShot = 36296;
+
+        /// <summary>
+        /// Kahderyor
+        /// Earthen Shot
+        /// Spread
+        /// </summary>
+        public const uint EarthenShot = 36295;
+
+        /// <summary>
+        /// Kahderyor
+        /// Seed Crystals
+        /// Spread
+        /// </summary>
+        public const uint SeedCrystals = 36298;
+
+        /// <summary>
+        /// Kahderyor
+        /// Crystalline Crush
+        /// Follow Dodge
+        /// </summary>
+        public const uint CrystallineCrush = 36285;
+
+        /// <summary>
+        /// Kahderyor
+        /// Cyclonic Ring
+        /// Small donut
+        /// </summary>
+        public const uint CyclonicRing = 36289;
+
+        /// <summary>
+        /// Kahderyor
+        /// Eye of the Fierce
+        /// Need to turn away
+        /// </summary>
+        public const uint EyeoftheFierce = 36297;
+
+        /// <summary>
+        /// Kahderyor
+        /// Earthen Shot
+        /// Line AOE that also fire
+        /// </summary>
+        public const uint EarthenShotLine = 36283;
+
+        /// <summary>
+        /// Gurfurlur
+        /// Allfire
+        ///
+        /// </summary>
+        public static readonly HashSet<uint> Allfire = new() { 36303, 36304, 36305 };
+
+        /// <summary>
+        /// Gurfurlur
+        /// Windswrath
+        ///
+        /// </summary>
+        public static readonly HashSet<uint> Windswrath = new() { 36310, 39074 };
+
+        /// <summary>
+        /// Gurfurlur
+        /// Volcanic Drop
+        ///
+        /// </summary>
+        public static readonly HashSet<uint> VolcanicDrop = new() { 36306 };
+
+        /// <summary>
+        /// Gurfurlur
+        /// Great Flood
+        ///
+        /// </summary>
+        public static readonly HashSet<uint> GreatFlood = new() { 36307 };
+
+        /// <summary>
+        /// Gurfurlur
+        /// Sledgehammer
         /// Stack
         /// </summary>
-        public const uint MagitekMissiles = 8357;
-
-        /// <summary>
-        /// Hypertuned Grynewaht
-        /// Thermobaric Charge
-        /// Run away
-        /// </summary>
-        public static readonly HashSet<uint> ThermobaricCharge = new() { 8357 };
-
-        /// <summary>
-        /// Hypertuned Grynewaht
-        /// Clean Cut
-        /// Straight line avoid
-        /// </summary>
-        public const uint CleanCut = 8369;
+        public const uint Sledgehammer = 36313;
     }
 
     private static class PlayerAura

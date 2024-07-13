@@ -784,12 +784,12 @@ public enum SubZoneId : uint
     /// <summary>
     /// Lv. 93: Worqor Zormor > Calmgrounds, Ryoqor Terteh
     /// </summary>
-    Calmgrounds = 4482,
+    Calmgrounds = 4488,
 
     /// <summary>
-    /// Lv. 93: Worqor Zormor > Morgardar Ridge, Kahderyor
+    /// Lv. 93: Worqor Zormor > Council of Morgar, Kahderyor
     /// </summary>
-    MorgardarRidge = 4488,
+    CouncilofMorgar = 4493,
 
     /// <summary>
     /// Lv. 93: Worqor Zormor > Karryor the Resting, Gurfurlur
