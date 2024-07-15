@@ -28,8 +28,6 @@ public class WorqorZormor : AbstractDungeon
     /// </summary>
     private SubZoneId lastSubZoneId = SubZoneId.NONE;
 
-    private readonly Stopwatch flufflyUpTimer = new();
-
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.WorqorZormor;
 
@@ -136,11 +134,6 @@ public class WorqorZormor : AbstractDungeon
     private async Task<bool> RyoqorTerteh()
     {
         BattleCharacter smallBunnies = GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.QorrlohTehSmall).OrderBy(bc => bc.Distance2D()).FirstOrDefault(bc => bc.IsVisible);
-        
-        if (!Core.Me.InCombat)
-        {
-            flufflyUpTimer.Reset();
-        }
 
         if (smallBunnies != null || EnemyAction.FrozenSwirl.IsCasting() || EnemyAction.IceScream.IsCasting())
         {
