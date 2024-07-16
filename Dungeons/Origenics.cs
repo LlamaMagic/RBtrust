@@ -19,6 +19,11 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Origenics : AbstractDungeon
 {
+    /// <summary>
+    /// Tracks sub-zone since last tick for environmental decision making.
+    /// </summary>
+    private SubZoneId lastSubZoneId = SubZoneId.NONE;
+
     /// <inheritdoc/>
     public override ZoneId ZoneId => Data.ZoneId.Origenics;
 
@@ -34,28 +39,27 @@ public class Origenics : AbstractDungeon
 
         // Boss Arenas
 
-        /*
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheThirdArmory,
-            () => ArenaCenter.MagitekRearguard,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ResourceTransportElevator,
+            () => ArenaCenter.Herpekaris,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TrainingGrounds,
-            () => ArenaCenter.MagitekHexadron,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
+            () => ArenaCenter.Deceiver,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
-            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.HalloftheScarletSwallow,
-            () => ArenaCenter.HypertunedGrynewaht,
+            () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.EnhancementTestingGrounds,
+            () => ArenaCenter.AmbrosetheUndeparted,
             outerRadius: 90.0f,
             innerRadius: 19.0f,
             priority: AvoidancePriority.High);
-            */
+
         return Task.FromResult(false);
     }
 
@@ -64,58 +68,82 @@ public class Origenics : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+
+        bool result = currentSubZoneId switch
+        {
+            SubZoneId.ResourceTransportElevator => await Herpekaris(),
+            SubZoneId.SurveillanceRoom => await Deceiver(),
+            SubZoneId.EnhancementTestingGrounds => await AmbrosetheUndeparted(),
+            _ => false,
+        };
+
+        lastSubZoneId = currentSubZoneId;
+
+        return result;
+    }
+
+    /// <summary>
+    /// Boss 1: Herpekaris.
+    /// </summary>
+    private async Task<bool> Herpekaris()
+    {
+
+        return false;
+    }
+
+    /// <summary>
+    /// Boss 2: Deceiver.
+    /// </summary>
+    private async Task<bool> Deceiver()
+    {
+
+        return false;
+    }
+
+    /// <summary>
+    /// Boss 3: Ambrose the Undeparted.
+    /// </summary>
+    private async Task<bool> AmbrosetheUndeparted()
+    {
+
         return false;
     }
 
     private static class EnemyNpc
     {
         /// <summary>
-        /// First Boss: Magitek Rearguard.
+        /// First Boss: Herpekaris.
         /// </summary>
-        public const uint MagitekRearguard = 6200;
+        public const uint Herpekaris = 12741;
 
         /// <summary>
-        /// Second Boss: Magitek Hexadron.
+        /// Second Boss: Deceiver.
         /// </summary>
-        public const uint MagitekHexadron = 6203;
+        public const uint Deceiver = 12693;
 
         /// <summary>
-        /// Second Boss: Hexadron Bit.
+        /// Final Boss: Ambrose the Undeparted .
         /// </summary>
-        public const uint HexadroneBit = 6204;
-
-        /// <summary>
-        /// Final Boss: Hypertuned Grynewaht .
-        /// </summary>
-        public const uint HypertunedGrynewaht = 6205;
+        public const uint AmbrosetheUndeparted = 12695;
     }
 
     private static class ArenaCenter
     {
         /// <summary>
-        /// First Boss: Magitek Rearguard.
+        /// First Boss: Herpekaris.
         /// </summary>
-        public static readonly Vector3 MagitekRearguard = new(125f, 40.5f, 17.5f);
+        public static readonly Vector3 Herpekaris = new(-88f, -120f, -180f);
 
         /// <summary>
-        /// Second Boss: Magitek Hexadron.
+        /// Second Boss: Deceiver.
         /// </summary>
-        public static readonly Vector3 MagitekHexadron = new(-240f, 45.5f, 130.5f);
-
-        /// <summary>
-        /// Third Boss: Hypertuned Grynewaht.
-        /// </summary>
-        public static readonly Vector3 HypertunedGrynewaht = new(-240f, 67f, -197f);
-
-        /// <summary>
-        /// Third Boss: Bomb Drop Spot.
-        /// </summary>
-        public static readonly Vector3 BombDropSpot = new(-257.6511f, 67f, -179.8466f);
+        public static readonly Vector3 Deceiver = new(-172f, -94f, -142f);
 
         /// <summary>
         /// Third Boss: Bomb Safe Spot.
         /// </summary>
-        public static readonly Vector3 BombSafeSpot = new(-224.3772f, 67f, -214.2821f);
+        public static readonly Vector3 AmbrosetheUndeparted = new(190f, 0f, 0f);
     }
 
     private static class EnemyAction

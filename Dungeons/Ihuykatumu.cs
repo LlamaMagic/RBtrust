@@ -186,7 +186,6 @@ public class Ihuykatumu : AbstractDungeon
                     objectSelector: bc => bc.CastingSpellId is 36356 or 36357 && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
                     radiusProducer: bc => 7f,
                     locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
-
             }
         }
 
