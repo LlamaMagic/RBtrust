@@ -31,33 +31,61 @@ public class Origenics : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Origenics;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() {  };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.CollectiveAgony, EnemyAction.ExtrasensoryField, EnemyAction.Psychokinesis };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
+        // Boss 1: Poison boils that form on the ground, want to avoid them
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<EventObject>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ResourceTransportElevator,
+            objectSelector: eo => eo.NpcId == EnemyNpc.PoisonBoil,
+            radiusProducer: eo => 4.0f,
+            priority: AvoidancePriority.High));
+
+        // Hard Stomp
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)5017,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.HardStomp,
+            radiusProducer: bc => 17.0f,
+            priority: AvoidancePriority.Medium));
+
+        // Boss 1: Poison Heart
+        // Boss 2: Electray
+        // Boss 3: Whorl of the Mind
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.ResourceTransportElevator or (uint)SubZoneId.SurveillanceRoom or (uint)SubZoneId.EnhancementTestingGrounds && !EnemyAction.Surge.IsCasting(),
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.Electray or EnemyAction.PoisonHeart or EnemyAction.WhorloftheMind && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
+            locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
+
         // Boss Arenas
-
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.ResourceTransportElevator,
-            () => ArenaCenter.Herpekaris,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 30.0f,
+            innerHeight: 30.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Herpekaris },
             priority: AvoidancePriority.High);
 
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
-            () => ArenaCenter.Deceiver,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 39.0f,
+            innerHeight: 39.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.Deceiver },
             priority: AvoidancePriority.High);
 
-        AvoidanceHelpers.AddAvoidDonut(
+        AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.EnhancementTestingGrounds,
-            () => ArenaCenter.AmbrosetheUndeparted,
-            outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerWidth: 29.0f,
+            innerHeight: 37.0f,
+            outerWidth: 90.0f,
+            outerHeight: 90.0f,
+            collectionProducer: () => new[] { ArenaCenter.AmbrosetheUndeparted },
             priority: AvoidancePriority.High);
 
         return Task.FromResult(false);
@@ -88,6 +116,15 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> Herpekaris()
     {
+        if (EnemyAction.Surge.IsCasting() || EnemyAction.LaserLash.IsCasting())
+        {
+            SidestepPlugin.Enabled = false;
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
 
         return false;
     }
@@ -97,6 +134,15 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> Deceiver()
     {
+        if (EnemyAction.LaserLash.IsCasting())
+        {
+            SidestepPlugin.Enabled = false;
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
 
         return false;
     }
@@ -106,7 +152,6 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> AmbrosetheUndeparted()
     {
-
         return false;
     }
 
@@ -116,6 +161,11 @@ public class Origenics : AbstractDungeon
         /// First Boss: Herpekaris.
         /// </summary>
         public const uint Herpekaris = 12741;
+
+        /// <summary>
+        /// First Boss: Herpekaris.
+        /// </summary>
+        public const uint PoisonBoil = 2006588;
 
         /// <summary>
         /// Second Boss: Deceiver.
@@ -141,7 +191,7 @@ public class Origenics : AbstractDungeon
         public static readonly Vector3 Deceiver = new(-172f, -94f, -142f);
 
         /// <summary>
-        /// Third Boss: Bomb Safe Spot.
+        /// Third Boss: Ambrose the Undeparted.
         /// </summary>
         public static readonly Vector3 AmbrosetheUndeparted = new(190f, 0f, 0f);
     }
@@ -149,25 +199,67 @@ public class Origenics : AbstractDungeon
     private static class EnemyAction
     {
         /// <summary>
-        /// Magitek Hexadron
-        /// Magitek Missiles
+        /// Herpekaris
+        /// Collective Agony
         /// Stack
         /// </summary>
-        public const uint MagitekMissiles = 8357;
+        public const uint CollectiveAgony = 8357;
 
         /// <summary>
-        /// Hypertuned Grynewaht
-        /// Thermobaric Charge
-        /// Run away
+        /// Herpekaris
+        /// Poison Heart
+        /// Spread
         /// </summary>
-        public static readonly HashSet<uint> ThermobaricCharge = new() { 8357 };
+        public const uint PoisonHeart = 37921;
 
         /// <summary>
-        /// Hypertuned Grynewaht
-        /// Clean Cut
-        /// Straight line avoid
+        /// Deceiver
+        /// Surge
+        /// Follow NPC
         /// </summary>
-        public const uint CleanCut = 8369;
+        public static readonly HashSet<uint> Surge = new() { 39736 };
+
+        /// <summary>
+        /// Deceiver
+        /// Electray
+        /// Spread
+        /// </summary>
+        public const uint Electray = 38320;
+
+        /// <summary>
+        /// Deceiver
+        /// Laser Lash
+        /// Lasers from the left and right come out, two are broken. Easiest
+        /// </summary>
+        public static readonly HashSet<uint> LaserLash = new() { 36366 };
+
+        /// <summary>
+        /// Origenics Automatoise
+        /// Hard Stomp
+        /// Large AOE that SideStep doesn't pick up
+        /// </summary>
+        public const uint HardStomp = 39149;
+
+        /// <summary>
+        /// Ambrose the Undeparted
+        /// Whorl of the Mind
+        /// Spread
+        /// </summary>
+        public const uint WhorloftheMind = 36438;
+
+        /// <summary>
+        /// Ambrose the Undeparted
+        /// Extrasensory Field
+        /// Follow
+        /// </summary>
+        public const uint ExtrasensoryField = 36432;
+
+        /// <summary>
+        /// Ambrose the Undeparted
+        /// Psychokinesis
+        /// Orders a spear to swing across the battlefield, easiest to just follow dodge
+        /// </summary>
+        public const uint Psychokinesis = 38929;
     }
 
     private static class PlayerAura
