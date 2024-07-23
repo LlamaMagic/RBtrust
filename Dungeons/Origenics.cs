@@ -44,6 +44,34 @@ public class Origenics : AbstractDungeon
             radiusProducer: eo => 4.0f,
             priority: AvoidancePriority.High));
 
+        // Boss 2: Synchroshot
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.LaserLash,
+            width: 10f,
+            length: 40f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Laser Lash
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Synchroshot,
+            width: 5f,
+            length: 40f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Bionic Thrash
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.BionicThrash or EnemyAction.BionicThrash2,
+            leashPointProducer: () => ArenaCenter.Deceiver,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 90f);
+
         // Hard Stomp
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
             condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)5017,
@@ -72,7 +100,7 @@ public class Origenics : AbstractDungeon
 
         AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
-            innerWidth: 39.0f,
+            innerWidth: 31.0f,
             innerHeight: 39.0f,
             outerWidth: 90.0f,
             outerHeight: 90.0f,
@@ -98,6 +126,15 @@ public class Origenics : AbstractDungeon
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
 
+        if (WorldManager.SubZoneId is (uint)SubZoneId.SurveillanceRoom)
+        {
+            SidestepPlugin.Enabled = false;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
+
         bool result = currentSubZoneId switch
         {
             SubZoneId.ResourceTransportElevator => await Herpekaris(),
@@ -116,16 +153,6 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> Herpekaris()
     {
-        if (EnemyAction.Surge.IsCasting() || EnemyAction.LaserLash.IsCasting())
-        {
-            SidestepPlugin.Enabled = false;
-            await MovementHelpers.GetClosestAlly.Follow();
-        }
-        else
-        {
-            SidestepPlugin.Enabled = true;
-        }
-
         return false;
     }
 
@@ -134,14 +161,9 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> Deceiver()
     {
-        if (EnemyAction.LaserLash.IsCasting())
+        if (EnemyAction.Surge.IsCasting())
         {
-            SidestepPlugin.Enabled = false;
             await MovementHelpers.GetClosestAlly.Follow();
-        }
-        else
-        {
-            SidestepPlugin.Enabled = true;
         }
 
         return false;
@@ -228,10 +250,31 @@ public class Origenics : AbstractDungeon
 
         /// <summary>
         /// Deceiver
-        /// Laser Lash
-        /// Lasers from the left and right come out, two are broken. Easiest
+        /// Bionic Thrash
+        /// Cone AoE
         /// </summary>
-        public static readonly HashSet<uint> LaserLash = new() { 36366 };
+        public const uint BionicThrash = 36369;
+
+        /// <summary>
+        /// Deceiver
+        /// Bionic Thrash
+        /// Cone AoE
+        /// </summary>
+        public const uint BionicThrash2 = 36370;
+
+        /// <summary>
+        /// Deceiver
+        /// Synchroshot
+        /// Line AoE
+        /// </summary>
+        public const uint Synchroshot = 36372;
+
+        /// <summary>
+        /// Deceiver
+        /// Laser Lash
+        /// Lasers from the left and right come out, two are broken. Maybe 38807
+        /// </summary>
+        public const uint LaserLash = 36366;
 
         /// <summary>
         /// Origenics Automatoise
