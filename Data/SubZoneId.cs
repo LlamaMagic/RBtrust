@@ -807,6 +807,12 @@ public enum SubZoneId : uint
     VurgarMettlegrounds = 5032,
 
     /// <summary>
+    /// Lv. 95: The Skydeep Cenote > Path of Dying Light
+    /// Used to stop sprint during this section so we don't pass over the jump pads
+    /// </summary>
+    PathofDyingLight = 5036,
+
+    /// <summary>
     /// Lv. 95: The Skydeep Cenote > Gatekeep's Anvil, Maulskull
     /// </summary>
     GatekeepsAnvil = 5033,

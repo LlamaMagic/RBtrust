@@ -6,6 +6,7 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -18,6 +19,14 @@ namespace Trust.Helpers;
 internal static class MovementHelpers
 {
     private static AvoidInfo spreadInfo = default;
+
+    /// <summary>
+    /// List of subzones where we don't want Movement speed to be used.
+    /// </summary>
+    private static List<uint> dontUseSprint = new()
+    {
+        (uint)SubZoneId.PathofDyingLight,
+    };
 
     /// <summary>
     /// Gets the nearest party member.
@@ -272,7 +281,7 @@ internal static class MovementHelpers
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public static async Task TryIncreaseMovementSpeedAsync()
     {
-        if (!Core.Me.InCombat && MovementManager.IsMoving)
+        if (!Core.Me.InCombat && MovementManager.IsMoving && !dontUseSprint.Contains(WorldManager.SubZoneId))
         {
             if (ActionManager.IsSprintReady)
             {
