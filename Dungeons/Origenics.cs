@@ -7,10 +7,12 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Trust.Data;
 using Trust.Extensions;
 using Trust.Helpers;
+using Trust.Logging;
 
 namespace Trust.Dungeons;
 
@@ -19,6 +21,12 @@ namespace Trust.Dungeons;
 /// </summary>
 public class Origenics : AbstractDungeon
 {
+    private readonly Stopwatch WrithingRiotTimer = new();
+    private static readonly int WrithingRiotDuration = 15_000;
+
+    private readonly Stopwatch PsychokinesisTimer = new();
+    private static readonly int PsychokinesisDuration = 15_000;
+
     /// <summary>
     /// Tracks sub-zone since last tick for environmental decision making.
     /// </summary>
@@ -31,7 +39,7 @@ public class Origenics : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Origenics;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.CollectiveAgony, EnemyAction.ExtrasensoryField, EnemyAction.Psychokinesis };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.CollectiveAgony };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
@@ -53,15 +61,6 @@ public class Origenics : AbstractDungeon
             yOffset: 0f,
             priority: AvoidancePriority.High);
 
-        // Boss 2: Laser Lash
-        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.Synchroshot,
-            width: 5f,
-            length: 40f,
-            yOffset: 0f,
-            priority: AvoidancePriority.High);
-
         // Boss 2: Bionic Thrash
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SurveillanceRoom,
@@ -72,19 +71,30 @@ public class Origenics : AbstractDungeon
             radius: 40.0f,
             arcDegrees: 90f);
 
+        // Boss 3: Overwhelming Charge
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.EnhancementTestingGrounds,
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.OverwhelmingCharge or EnemyAction.BionicThrash2,
+            leashPointProducer: () => ArenaCenter.AmbrosetheUndeparted,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 180f);
+
         // Hard Stomp
         AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
-            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)5017,
+            condition: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.Origenics,
             objectSelector: bc => bc.CastingSpellId is EnemyAction.HardStomp,
             radiusProducer: bc => 17.0f,
-            priority: AvoidancePriority.Medium));
+            priority: AvoidancePriority.High));
 
         // Boss 1: Poison Heart
         // Boss 2: Electray
         // Boss 3: Whorl of the Mind
+        // Boss 3: Electrolance
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.ResourceTransportElevator or (uint)SubZoneId.SurveillanceRoom or (uint)SubZoneId.EnhancementTestingGrounds && !EnemyAction.Surge.IsCasting(),
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.Electray or EnemyAction.PoisonHeart or EnemyAction.WhorloftheMind && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.ResourceTransportElevator or (uint)SubZoneId.SurveillanceRoom or (uint)SubZoneId.EnhancementTestingGrounds && !EnemyAction.Surge.IsCasting() && !EnemyAction.PsychokinesisLines.IsCasting() && !EnemyAction.ExtrasensoryField.IsCasting(),
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.Electray or EnemyAction.PoisonHeart or EnemyAction.WhorloftheMind or EnemyAction.Electrolance && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
@@ -124,9 +134,16 @@ public class Origenics : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        if (!Core.Me.InCombat)
+        {
+            CapabilityManager.Clear();
+            WrithingRiotTimer.Reset();
+            PsychokinesisTimer.Reset();
+        }
+
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
 
-        if (WorldManager.SubZoneId is (uint)SubZoneId.SurveillanceRoom)
+        if (WorldManager.SubZoneId is (uint)SubZoneId.SurveillanceRoom or (uint)SubZoneId.EnhancementTestingGrounds)
         {
             SidestepPlugin.Enabled = false;
         }
@@ -153,6 +170,29 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> Herpekaris()
     {
+        if (EnemyAction.WrithingRiot.IsCasting() || WrithingRiotTimer.IsRunning)
+        {
+            if (!WrithingRiotTimer.IsRunning)
+            {
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, WrithingRiotDuration, "Writhing Riot Avoid");
+                //Logger.Information($"Starting Timer.");
+                WrithingRiotTimer.Start();
+            }
+
+            if (WrithingRiotTimer.ElapsedMilliseconds < WrithingRiotDuration)
+            {
+                //Logger.Information($"Avoiding Writing Riot.");
+                await MovementHelpers.GetClosestAlly.FollowTimed(WrithingRiotTimer, WrithingRiotDuration, 1f);
+            }
+
+            if (WrithingRiotTimer.ElapsedMilliseconds >= WrithingRiotDuration)
+            {
+                //Logger.Information($"Stopping Timer.");
+                WrithingRiotTimer.Reset();
+            }
+        }
+
+
         return false;
     }
 
@@ -174,6 +214,33 @@ public class Origenics : AbstractDungeon
     /// </summary>
     private async Task<bool> AmbrosetheUndeparted()
     {
+        if (EnemyAction.ExtrasensoryField.IsCasting() || EnemyAction.PsychokinesisLines.IsCasting())
+        {
+            await MovementHelpers.GetClosestAlly.Follow();
+        }
+
+        if (EnemyAction.Psychokinesis.IsCasting() || PsychokinesisTimer.IsRunning)
+        {
+            if (!PsychokinesisTimer.IsRunning)
+            {
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, PsychokinesisDuration, "Psychokinesis Avoid");
+                //Logger.Information($"Starting Timer.");
+                PsychokinesisTimer.Start();
+            }
+
+            if (PsychokinesisTimer.ElapsedMilliseconds < PsychokinesisDuration)
+            {
+                //Logger.Information($"Avoiding Writing Riot.");
+                await MovementHelpers.GetClosestAlly.FollowTimed(PsychokinesisTimer, PsychokinesisDuration, 1f);
+            }
+
+            if (PsychokinesisTimer.ElapsedMilliseconds >= PsychokinesisDuration)
+            {
+                //Logger.Information($"Stopping Timer.");
+                PsychokinesisTimer.Reset();
+            }
+        }
+
         return false;
     }
 
@@ -225,7 +292,7 @@ public class Origenics : AbstractDungeon
         /// Collective Agony
         /// Stack
         /// </summary>
-        public const uint CollectiveAgony = 8357;
+        public const uint CollectiveAgony = 36473;
 
         /// <summary>
         /// Herpekaris
@@ -233,6 +300,13 @@ public class Origenics : AbstractDungeon
         /// Spread
         /// </summary>
         public const uint PoisonHeart = 37921;
+
+        /// <summary>
+        /// Herpekaris
+        /// Writhing Riot
+        /// Boss does a three fold attack with a large AOE, front, side, then back alternating. Follow NPC to dodge easiest
+        /// </summary>
+        public static readonly HashSet<uint> WrithingRiot = new() { 36463 };
 
         /// <summary>
         /// Deceiver
@@ -292,17 +366,46 @@ public class Origenics : AbstractDungeon
 
         /// <summary>
         /// Ambrose the Undeparted
+        /// Overwhelming Charge
+        /// 180 arc
+        /// </summary>
+        public const uint OverwhelmingCharge = 39233;
+
+        /// <summary>
+        /// Ambrose the Undeparted
         /// Extrasensory Field
         /// Follow
         /// </summary>
-        public const uint ExtrasensoryField = 36432;
+        public static readonly HashSet<uint> ExtrasensoryField = new() { 36432, 36433, 36434 };
 
         /// <summary>
         /// Ambrose the Undeparted
         /// Psychokinesis
-        /// Orders a spear to swing across the battlefield, easiest to just follow dodge
+        /// Throws a straight line spear in front of boss. Also cast LanceDash at the same time
         /// </summary>
-        public const uint Psychokinesis = 38929;
+        public static readonly HashSet<uint> Psychokinesis = new() { 38929 };
+
+        /// <summary>
+        /// Ambrose the Undeparted
+        /// Lance Daash
+        /// Lance Zooms across the room in multiple spots while casing Psychokinesis
+        /// </summary>
+        public const uint LanceDash = 38953;
+
+        /// <summary>
+        /// Ambrose the Undeparted
+        /// Psychokinesis
+        /// Causes large Line AoEs. They're not cast by actual NPCs so we can't create avoids for them, follow instead
+        /// </summary>
+        public static readonly HashSet<uint> PsychokinesisLines = new() { 36427 };
+
+
+        /// <summary>
+        /// Ambrose the Undeparted
+        /// Electrolance
+        /// Throws his lance and then a big AoE detonates
+        /// </summary>
+        public const uint Electrolance = 36429;
     }
 
     private static class PlayerAura
