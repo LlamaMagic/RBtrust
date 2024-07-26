@@ -74,7 +74,7 @@ public class Origenics : AbstractDungeon
         // Boss 3: Overwhelming Charge
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.EnhancementTestingGrounds,
-            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.OverwhelmingCharge or EnemyAction.BionicThrash2,
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.OverwhelmingCharge,
             leashPointProducer: () => ArenaCenter.AmbrosetheUndeparted,
             leashRadius: 40.0f,
             rotationDegrees: 0f,
