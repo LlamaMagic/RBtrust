@@ -123,10 +123,12 @@ public class TrustPlugin : BotPlugin
 
     private async Task<bool> RunTrust()
     {
+        /*
         if (await TryRespawnPlayerAsync())
         {
             return true;
         }
+        */
 
         await MovementHelpers.TryIncreaseMovementSpeedAsync();
 
