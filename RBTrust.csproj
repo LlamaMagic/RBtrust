@@ -71,6 +71,7 @@
     <Compile Include="Dungeons\DomaCastle.cs" />
     <Compile Include="Dungeons\DrownedCityOfSkalla.cs" />
     <Compile Include="Dungeons\Emanation.cs" />
+    <Compile Include="Dungeons\Everkeep.cs" />
     <Compile Include="Dungeons\FellCourtOfTroia.cs" />
     <Compile Include="Dungeons\GhimlytDark.cs" />
     <Compile Include="Dungeons\GreatGubalLibrary.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Dungeons\UltimaThule.cs" />
     <Compile Include="Dungeons\Vanguard.cs" />
     <Compile Include="Dungeons\Vault.cs" />
+    <Compile Include="Dungeons\WorqorLarDor.cs" />
     <Compile Include="Dungeons\WorqorZormor.cs" />
     <Compile Include="Dungeons\Xelphatol.cs" />
     <Compile Include="GlobalSuppressions.cs" />

@@ -117,9 +117,11 @@ internal class DungeonManager
             // 7.0 - Dawntrail
             { ZoneId.Ihuykatumu, typeof(Ihuykatumu) },
             { ZoneId.WorqorZormor, typeof(WorqorZormor) },
+            { ZoneId.WorqorLarDor, typeof(WorqorLarDor) },
             { ZoneId.SkydeepCenote, typeof(SkydeepCenote) },
             { ZoneId.Vanguard, typeof(Vanguard) },
             { ZoneId.Origenics, typeof(Origenics) },
+            { ZoneId.Everkeep, typeof(Everkeep) },
             { ZoneId.Alexandria, typeof(Alexandria) },
         };
     }

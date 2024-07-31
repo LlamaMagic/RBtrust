@@ -43,6 +43,8 @@ internal static class ClassJobRoles
         ClassJobType.RedMage,
         ClassJobType.Dancer,
         ClassJobType.Reaper,
+        (ClassJobType)0x29, //Viper
+        (ClassJobType)0x2A, // Pictormancer
     };
 
     /// <summary>

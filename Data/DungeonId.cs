@@ -347,9 +347,14 @@ public enum DungeonId : uint
     WorqorZormor = 824,
 
     /// <summary>
+    /// Lv. 93: Worqor Lar Dor
+    /// </summary>
+    WorqorLarDor = 824,
+
+    /// <summary>
     /// Lv. 95: Skydeep Cenote
     /// </summary>
-    SkydeepCenote = 829,
+    SkydeepCenote = 832,
 
     /// <summary>
     /// Lv. 97: Vanguard
@@ -360,6 +365,11 @@ public enum DungeonId : uint
     /// Lv. 99: Origenics
     /// </summary>
     Origenics = 825,
+
+    /// <summary>
+    /// Lv. 99: Everkeep
+    /// </summary>
+    Everkeep = 995,
 
     /// <summary>
     /// Lv. 100: Alexandria

@@ -412,6 +412,11 @@ public enum ZoneId : ushort
     WorqorZormor = 1193,
 
     /// <summary>
+    /// Lv. 93: Worqor Lar Dor
+    /// </summary>
+    WorqorLarDor = 1195,
+
+    /// <summary>
     /// Lv. 95: Skydeep Cenote
     /// </summary>
     SkydeepCenote = 1194,
@@ -425,6 +430,11 @@ public enum ZoneId : ushort
     /// Lv. 99: Origenics
     /// </summary>
     Origenics = 1208,
+
+    /// <summary>
+    /// Lv. 93: Everkeep
+    /// </summary>
+    Everkeep = 1200,
 
     /// <summary>
     /// Lv. 100: Alexandria
