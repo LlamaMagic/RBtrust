@@ -73,7 +73,7 @@ public class WorqorLarDor : AbstractDungeon
             await MovementHelpers.Spread(4_500, 4f);
         }
 
-        if (arcaneSphere != null || EnemyAction.CalamitousEcho.IsCasting() || EnemyAction.HailofFeathers.IsCasting() || EnemyAction.SlitheringStrike.IsCasting() || EnemyAction.StranglingCoil.IsCasting())
+        if (arcaneSphere != null || EnemyAction.SusurrantBreath.IsCasting() || EnemyAction.CalamitousEcho.IsCasting() || EnemyAction.HailofFeathers.IsCasting() || EnemyAction.SlitheringStrike.IsCasting() || EnemyAction.StranglingCoil.IsCasting())
         {
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 4_500, "Doing boss mechanics");
             await MovementHelpers.GetClosestAlly.Follow();
@@ -175,6 +175,13 @@ public class WorqorLarDor : AbstractDungeon
         ///
         /// </summary>
         public static readonly HashSet<uint> SlitheringStrike = new() { 36157, 36158 };
+
+        /// <summary>
+        /// Valigarmanda
+        /// Susurrant Breath
+        ///
+        /// </summary>
+        public static readonly HashSet<uint> SusurrantBreath = new() { 36155, 36156 };
 
         /// <summary>
         /// Valigarmanda
