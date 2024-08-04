@@ -32,7 +32,7 @@ public class TrustPlugin : BotPlugin
     public override string Name => Translations.PROJECT_NAME;
 
     /// <inheritdoc/>
-    public override Version Version => new(1, 2, 3);
+    public override Version Version => new(7, 0, 04082024);
 
     /// <inheritdoc/>
     public override bool WantButton => false;
