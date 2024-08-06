@@ -52,6 +52,13 @@ public class Everkeep : AbstractDungeon
             yOffset: -60f,
             priority: AvoidancePriority.High);
 
+        // Burst
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.Everkeep,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.Burst,
+            radiusProducer: bc => 8.0f,
+            priority: AvoidancePriority.High));
+
         // Double Edged Swords back attack
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.ZoneId == (uint)ZoneId.Everkeep,
@@ -206,6 +213,13 @@ public class Everkeep : AbstractDungeon
         /// Swords appear and make a small frontal laser AoE to dodge
         /// </summary>
         public const uint VorpalTrail = 37712;
+
+        /// <summary>
+        /// Zoraal Ja
+        /// Burst
+        /// Little guys explode
+        /// </summary>
+        public const uint Burst = 37709;
 
         /// <summary>
         /// Zoraal Ja
