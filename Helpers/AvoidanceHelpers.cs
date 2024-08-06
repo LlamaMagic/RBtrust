@@ -217,8 +217,9 @@ public static class AvoidanceHelpers
     /// <param name="outerHeight">Height of the overall rectangle.</param>
     /// <param name="collectionProducer">Position function that returns a <see cref="Vector3"/> of the square donut's center.</param>
     /// <param name="priority">Avoidance priority. Higher is scarier.</param>
+    /// <param name="rotation"> How much to rotate the function.</param>
     /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
-    public static AvoidInfo AddAvoidSquareDonut(Func<bool> canRun, float innerWidth, float innerHeight, float outerWidth, float outerHeight, Func<Vector3[]> collectionProducer, AvoidancePriority priority = AvoidancePriority.Medium)
+    public static AvoidInfo AddAvoidSquareDonut(Func<bool> canRun, float innerWidth, float innerHeight, float outerWidth, float outerHeight, Func<Vector3[]> collectionProducer, AvoidancePriority priority = AvoidancePriority.Medium, float rotation = 0.0f)
     {
         Vector2[] squareDonut = GenerateSquareDonut(innerWidth, innerHeight, outerWidth, outerHeight);
 
@@ -226,7 +227,7 @@ public static class AvoidanceHelpers
             condition: canRun,
             leashPointProducer: () => Core.Player.Location,
             leashRadius: (float)Math.Max(outerWidth, outerHeight) * 1.5f,
-            rotationProducer: location => 0.0f,
+            rotationProducer: location => rotation,
             scaleProducer: location => 1.0f,
             heightProducer: location => 15.0f,
             pointsProducer: location => squareDonut,
