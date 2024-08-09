@@ -115,6 +115,8 @@ internal class DungeonManager
             { ZoneId.UltimaThule, typeof(UltimaThule) },
 
             // 7.0 - Dawntrail
+            { ZoneId.AFatherFirst, typeof(FatherFirst) },
+
             { ZoneId.Ihuykatumu, typeof(Ihuykatumu) },
             { ZoneId.WorqorZormor, typeof(WorqorZormor) },
             { ZoneId.WorqorLarDor, typeof(WorqorLarDor) },

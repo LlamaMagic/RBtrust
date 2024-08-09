@@ -87,6 +87,7 @@
     <Compile Include="Dungeons\Snowcloak.cs" />
     <Compile Include="Dungeons\SohmAl.cs" />
     <Compile Include="Dungeons\SohrKai.cs" />
+    <Compile Include="Dungeons\FatherFirst.cs" />
     <Compile Include="Dungeons\StepsOfFaith.cs" />
     <Compile Include="Dungeons\TheRoyalMenagerie.cs" />
     <Compile Include="Dungeons\UltimaThule.cs" />

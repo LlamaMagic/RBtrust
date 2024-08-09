@@ -135,11 +135,12 @@ public static class AvoidanceHelpers
     /// <typeparam name="T">Any descendant of <see cref="GameObject"/>.</typeparam>
     /// <param name="canRun">Condition function that returns <see langword="true"/> when the avoid should be active.</param>
     /// <param name="objectSelector">Filter function that returns <see langword="true"/> for objects the avoid should be centered on.</param>
+    /// <param name="locationProducer">(Optional) Position function that returns a <see cref="Vector3"/> to center the avoid on. Defaults to spell caster's location.</param>
     /// <param name="outerRadius">Radius of entire donut.</param>
     /// <param name="innerRadius">Radius of inner safe zone.</param>
     /// <param name="priority">Avoidance priority. Higher is scarier.</param>
     /// <returns><see cref="AvoidInfo"/> for the new donut.</returns>
-    public static AvoidInfo AddAvoidDonut<T>(Func<bool> canRun, Predicate<T> objectSelector, double outerRadius, double innerRadius = 6.0, AvoidancePriority priority = AvoidancePriority.Medium)
+    public static AvoidInfo AddAvoidDonut<T>(Func<bool> canRun, Predicate<T> objectSelector, Func<T, Vector3> locationProducer = null, double outerRadius = 12.0, double innerRadius = 6.0, AvoidancePriority priority = AvoidancePriority.Medium)
         where T : GameObject
     {
         Vector2[] donut = GenerateDonut(outerRadius, innerRadius);
@@ -152,7 +153,7 @@ public static class AvoidanceHelpers
             scaleProducer: t => 1.0f,
             heightProducer: t => 15.0f,
             pointsProducer: t => donut,
-            locationProducer: t => t.Location,
+            locationProducer: locationProducer ?? ((t) => t.Location),
             collectionProducer: () => GameObjectManager.GetObjectsOfType<T>(allowInheritance: true).Where(t => objectSelector(t)),
             priority: priority);
     }

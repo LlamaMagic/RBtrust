@@ -407,6 +407,11 @@ public enum ZoneId : ushort
     Ihuykatumu = 1167,
 
     /// <summary>
+    /// Lv. 92: A Father First
+    /// </summary>
+    AFatherFirst = 1170,
+
+    /// <summary>
     /// Lv. 93: Worqor Zormor
     /// </summary>
     WorqorZormor = 1193,
