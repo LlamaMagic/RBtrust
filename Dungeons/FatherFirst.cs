@@ -153,6 +153,15 @@ public class FatherFirst : AbstractDungeon
     {
         await FollowDodgeSpells();
 
+        if (WorldManager.ZoneId == (uint)ZoneId.AFatherFirst)
+        {
+            SidestepPlugin.Enabled = false;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
+
         return false;
     }
 
