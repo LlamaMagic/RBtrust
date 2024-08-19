@@ -153,6 +153,11 @@ public class Ihuykatumu : AbstractDungeon
             SidestepPlugin.Enabled = true;
         }
 
+        if (!Core.Me.InCombat)
+        {
+            AvoidanceManager.AvoidInfos.Clear();
+        }
+
         return false;
     }
 
