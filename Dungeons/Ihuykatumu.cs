@@ -38,8 +38,8 @@ public class Ihuykatumu : AbstractDungeon
     /// <inheritdoc/>
     protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
     {
-        EnemyAction.ShoreShaker, EnemyAction.Decay,
         /*
+         EnemyAction.Decay,
         EnemyAction.Bury,
         EnemyAction.Bury2,
         EnemyAction.Bury3,
@@ -56,14 +56,28 @@ public class Ihuykatumu : AbstractDungeon
         AvoidanceManager.AvoidInfos.Clear();
 
         // Boss 1: Decay
-        /*
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool,
-            objectSelector: c => c.CastingSpellId == EnemyAction.Decay,
+            objectSelector: c => c.CastingSpellId == EnemyAction.Decay && !EnemyAction.Bury.IsCasting(),
             outerRadius: 40.0f,
-            innerRadius: 6.0F,
+            innerRadius: 4.0F,
             priority: AvoidancePriority.Medium);
-            */
+
+        // Boss 1: Shore Shaker Inner
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.ShoreShakerInner,
+            radiusProducer: eo => 11.0f,
+            priority: AvoidancePriority.High));
+
+        // Boss 1: Shore Shaker Middle
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool && !EnemyAction.ShoreShakerInnerHash.IsCasting(),
+            objectSelector: c => c.CastingSpellId == EnemyAction.ShoreShakerOuter,
+            outerRadius: 40.0f,
+            innerRadius: 9.0F,
+            priority: AvoidancePriority.Medium);
+
 
         // Boss 1: Hydrowave
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
@@ -75,6 +89,26 @@ public class Ihuykatumu : AbstractDungeon
             radius: 40.0f,
             arcDegrees: 10f);
 
+        // Boss 1: Hydrowave Small
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.HydrowaveSmall,
+            leashPointProducer: () => ArenaCenter.PrimePunutiy,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 45f);
+
+        // Boss 1: Resurface
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.PunutiyPool,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.Resurface,
+            leashPointProducer: () => ArenaCenter.PrimePunutiy,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 70f);
+
         // Boss 3: Wind Sickle
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
@@ -83,11 +117,40 @@ public class Ihuykatumu : AbstractDungeon
             innerRadius: 4.0F,
             priority: AvoidancePriority.Medium);
 
+        // Boss 3: Razor Storm
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.RazorStorm,
+            leashPointProducer: () => ArenaCenter.Apollyon,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 180f);
+
+        // Boss 3: Blades of Famine
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.BladesofFamine,
+            width: 12.5f,
+            length: 50f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Boss 3: Razor Zephyr
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Breathcatch,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.RazorZephyr && whirlWind == null,
+            width: 12.5f,
+            length: 30f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
         // Boss 1: Punutiy Flop
         // Boss 2: FlagrantSpread
+        // Boss 3: Levinsickle
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.Breathcatch or (uint)SubZoneId.PunutiyPool or (uint)SubZoneId.DrowsiesGrotto,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.Levinsickle or EnemyAction.Levinsickle2 or EnemyAction.Levinsickle3 or EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
@@ -125,6 +188,15 @@ public class Ihuykatumu : AbstractDungeon
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
 
+        if (WorldManager.SubZoneId is (uint)SubZoneId.PunutiyPool or (uint)SubZoneId.Breathcatch)
+        {
+            SidestepPlugin.Enabled = false;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
+
         bool result = currentSubZoneId switch
         {
             SubZoneId.PunutiyPool => await PrimePunutiy(),
@@ -145,17 +217,7 @@ public class Ihuykatumu : AbstractDungeon
     {
         if (EnemyAction.Bury.IsCasting())
         {
-            SidestepPlugin.Enabled = false;
-            await MovementHelpers.GetClosestAlly.Follow();
-        }
-        else
-        {
-            SidestepPlugin.Enabled = true;
-        }
-
-        if (!Core.Me.InCombat)
-        {
-            AvoidanceManager.AvoidInfos.Clear();
+            await MovementHelpers.GetClosestDps.Follow();
         }
 
         return false;
@@ -196,7 +258,7 @@ public class Ihuykatumu : AbstractDungeon
 
         if (EnemyAction.ThunderIII.IsCasting() && !EnemyAction.Bladedance.IsCasting() && !EnemyAction.WingofLightning.IsCasting())
         {
-            await MovementHelpers.Spread(3_000);
+            await MovementHelpers.Spread(2_700);
         }
 
         // Moved BladeDance and Wings logic down here so we could prevent ThunderIII spread mechanic from causing mechanics to fight each other
@@ -214,10 +276,6 @@ public class Ihuykatumu : AbstractDungeon
         {
             SidestepPlugin.Enabled = false;
             await MovementHelpers.GetClosestAlly.Follow();
-        }
-        else
-        {
-            SidestepPlugin.Enabled = true;
         }
 
         return false;
@@ -277,6 +335,13 @@ public class Ihuykatumu : AbstractDungeon
 
         /// <summary>
         /// Prime Punutiy
+        /// Hydrowave
+        /// Small cone AoE
+        /// </summary>
+        public const uint HydrowaveSmall = 36493;
+
+        /// <summary>
+        /// Prime Punutiy
         /// Bury
         /// Massive amounts of debris drop from the ceiling.
         /// Might have to follow npc on these as too many are happening at once for sidestep to dodgge affectively
@@ -298,7 +363,7 @@ public class Ihuykatumu : AbstractDungeon
         /// Resurface
         /// This ability is cast right before debris starts to fall
         /// </summary>
-        public static readonly HashSet<uint> Resurface = new() { 36494 };
+        public const uint Resurface = 36494;
 
         /// <summary>
         /// Prime Punutiy
@@ -315,11 +380,34 @@ public class Ihuykatumu : AbstractDungeon
         public const uint Decay = 36505;
 
         /// <summary>
-        /// Hydrowave
+        /// Prime Punutiy
         /// Punutiy Flop
         /// Big AoE avoid centered on players
         /// </summary>
         public const uint Hydrowave = 36509;
+
+        /// <summary>
+        /// Prime Punutiy
+        /// Shore Shaker
+        /// Three wave attack
+        /// </summary>
+        public const uint ShoreShakerInner = 36514;
+
+        public static readonly HashSet<uint> ShoreShakerInnerHash = new() { 36514 };
+
+        /// <summary>
+        /// Prime Punutiy
+        /// Shore Shaker
+        /// Three wave attack
+        /// </summary>
+        public const uint ShoreShakerMiddle = 36515;
+
+        /// <summary>
+        /// Prime Punutiy
+        /// Shore Shaker
+        /// Three wave attack
+        /// </summary>
+        public const uint ShoreShakerOuter = 36516;
 
         /// <summary>
         /// Prime Punutiy
@@ -351,10 +439,45 @@ public class Ihuykatumu : AbstractDungeon
 
         /// <summary>
         /// Apollyon
+        /// Razor Storm
+        /// Large cone AoE
+        /// </summary>
+        public const uint RazorStorm = 36355;
+
+        /// <summary>
+        /// Apollyon
+        /// Blades of Famine
+        /// Large line AoE
+        /// </summary>
+        public const uint BladesofFamine = 36346;
+
+        /// <summary>
+        /// Apollyon
+        /// Levinsickle
+        /// Small AoE ground targets
+        /// </summary>
+        public const uint Levinsickle = 36349;
+
+        /// <summary>
+        /// Apollyon
+        /// Levinsickle
+        /// Small AoE ground targets
+        /// </summary>
+        public const uint Levinsickle2 = 36350;
+
+        /// <summary>
+        /// Apollyon
+        /// Levinsickle
+        /// Small AoE ground targets
+        /// </summary>
+        public const uint Levinsickle3 = 36348;
+
+        /// <summary>
+        /// Apollyon
         /// Razor Zephyr
         /// Straight Line AOE
         /// </summary>
-        public static readonly HashSet<uint> RazorZephyr = new() { 36340 };
+        public const uint RazorZephyr = 36340;
 
         /// <summary>
         /// Apollyon
