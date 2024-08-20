@@ -34,7 +34,7 @@ public class Alexandria : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Alexandria;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Impact, EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
 
     private static GameObject interferonC => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonC)
         .FirstOrDefault(bc => bc.IsVisible); // +
@@ -51,7 +51,7 @@ public class Alexandria : AbstractDungeon
         // Boss 1: Immune Response Front
         AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.VolatileMemory && !InterfornPresent,
-            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImmuneResponseFront,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImmuneResponseFront && !InterfornPresent,
             leashPointProducer: () => ArenaCenter.AntivirusX,
             leashRadius: 40.0f,
             rotationDegrees: 0.0f,
@@ -68,22 +68,129 @@ public class Alexandria : AbstractDungeon
             radius: 40.0f,
             arcDegrees: 255f);
 
+        // Boss 1: Quantine
+        AvoidanceManager.AddAvoidObject<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && !Core.Player.IsTank() && WorldManager.SubZoneId is (uint)SubZoneId.VolatileMemory,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.QuarantineConst && bc.SpellCastInfo.TargetId != Core.Player.ObjectId && Core.Player.Distance2D(MovementHelpers.GetClosestTank.Location) < 9f,
+            radiusProducer: bc => 20f,
+            locationProducer: bc => MovementHelpers.GetClosestTank.Location);
+
         // Boss 2: Static Spark
+        // Boss 2: Voltburst
         // Boss 3: Electray
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CorruptedMemoryCache or (uint)SubZoneId.Reascension,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.StaticSpark or EnemyAction.Electray && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.Voltburst or EnemyAction.StaticSpark or EnemyAction.Electray && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
+        // Boss 2: Supercell Matrix
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.SupercellMatrix,
+            width: 60f,
+            length: 28.5f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Supercell Matrix Lines
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.SupercellMatrixLine,
+            width: 8.5f,
+            length: 120f,
+            yOffset: 0f,
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Split Current
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.SplitCurrent,
+            width: 20.5f,
+            length: 120f,
+            yOffset: -20f,
+            xOffset: 15f,
+            priority: AvoidancePriority.High);
+        // Boss 2: Split Current
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.SplitCurrent,
+            width: 20.5f,
+            length: 120f,
+            yOffset: -20f,
+            xOffset: -15f,
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Centralized Current
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.CentralizedCurrent,
+            width: 16f,
+            length: 120f,
+            yOffset: -40f,
+            priority: AvoidancePriority.High);
+
+        // Boss 2: Ternary Charge Inner
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.TernaryChargeInner,
+            radiusProducer: eo => 11.0f,
+            priority: AvoidancePriority.High));
+
+        // Boss 2: Ternary Charge Outer
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache && !EnemyAction.TernaryChargeHash.IsCasting(),
+            objectSelector: c => c.CastingSpellId == EnemyAction.TernaryChargeOuter,
+            outerRadius: 40.0f,
+            innerRadius: 9.0F,
+            priority: AvoidancePriority.Medium);
+
         // Boss 3: Unknown Lazer
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.Unknown,
+            leashPointProducer: () => ArenaCenter.Eliminator,
+            leashRadius: 40.0f,
+            rotationDegrees: 0f,
+            radius: 40.0f,
+            arcDegrees: 30f);
+
+        // Boss 3: Terminate
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
-            objectSelector: bc => bc.CastingSpellId == EnemyAction.Unknown,
-            width: 6f,
-            length: 120f,
-            yOffset: -60f,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Terminate,
+            width: 12f,
+            length: 40f,
+            yOffset: 0f,
             priority: AvoidancePriority.High);
+
+        // Boss 3: Halo of Destruction
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: c => c.CastingSpellId == EnemyAction.HaloofDestruction,
+            outerRadius: 40.0f,
+            innerRadius: 4.0F,
+            priority: AvoidancePriority.Medium);
+
+        // Boss 3: Partition Left
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.PartitionLeft or EnemyAction.PartitionLeft2,
+            leashPointProducer: () => ArenaCenter.AntivirusX,
+            leashRadius: 40.0f,
+            rotationDegrees: -90f,
+            radius: 40.0f,
+            arcDegrees: 180f);
+
+        // Boss 3: Partition Right
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.PartitionRight,
+            leashPointProducer: () => ArenaCenter.AntivirusX,
+            leashRadius: 40.0f,
+            rotationDegrees: 90f,
+            radius: 40.0f,
+            arcDegrees: 180f);
 
         // Boss Arenas
         AvoidanceHelpers.AddAvoidSquareDonut(
@@ -98,7 +205,7 @@ public class Alexandria : AbstractDungeon
         AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CorruptedMemoryCache,
             innerWidth: 39.0f,
-            innerHeight: 29.0f,
+            innerHeight: 39.0f,
             outerWidth: 90.0f,
             outerHeight: 90.0f,
             collectionProducer: () => new[] { ArenaCenter.Amalgam },
@@ -106,7 +213,7 @@ public class Alexandria : AbstractDungeon
 
         AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
-            innerWidth: 39.0f,
+            innerWidth: 29.0f,
             innerHeight: 29.0f,
             outerWidth: 90.0f,
             outerHeight: 90.0f,
@@ -122,6 +229,15 @@ public class Alexandria : AbstractDungeon
         await FollowDodgeSpells();
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+
+        if (WorldManager.SubZoneId is (uint)SubZoneId.VolatileMemory or (uint)SubZoneId.CorruptedMemoryCache or (uint)SubZoneId.Reascension)
+        {
+            SidestepPlugin.Enabled = false;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
 
         bool result = currentSubZoneId switch
         {
@@ -147,11 +263,12 @@ public class Alexandria : AbstractDungeon
             // Otherwise you want to stack.
             if (Core.Player.IsTank())
             {
-                await MovementHelpers.Spread(QuarantineDuration, 7f);
+                await MovementHelpers.Spread(QuarantineDuration, 7.5f);
             }
-            else
+
+            if (Core.Player.Distance2D(MovementHelpers.GetClosestTank.Location) > 7.5f)
             {
-                await MovementHelpers.GetClosestAlly.Follow(3f);
+                await MovementHelpers.GetClosestDps.Follow();
             }
         }
 
@@ -160,7 +277,7 @@ public class Alexandria : AbstractDungeon
         // The NPCs are good at dodging
         if (Core.Me.InCombat && InterfornPresent)
         {
-            await MovementHelpers.GetClosestAlly.Follow();
+            await MovementHelpers.GetClosestDps.Follow();
         }
 
         return false;
@@ -225,7 +342,7 @@ public class Alexandria : AbstractDungeon
         /// <summary>
         /// Third Boss: Eliminator.
         /// </summary>
-        public static readonly Vector3 Eliminator = new(-760f, -474f, -648f);
+        public static readonly Vector3 Eliminator = new(-759f, -474f, -648f);
     }
 
     private static class EnemyAction
@@ -236,6 +353,8 @@ public class Alexandria : AbstractDungeon
         /// Stack
         /// </summary>
         public static readonly HashSet<uint> Quarantine = new() { 36384 };
+
+        public const uint QuarantineConst = 36384;
 
         /// <summary>
         /// Antivirus X
@@ -260,17 +379,61 @@ public class Alexandria : AbstractDungeon
 
         /// <summary>
         /// Amalgam
+        /// Supercell Matrix
+        /// Cone type AoE starting from bottom right of arena
+        /// </summary>
+        public const uint SupercellMatrix = 39136;
+
+        /// <summary>
+        /// Amalgam
+        /// Supercell Matrix
+        /// Straight line AoEs
+        /// </summary>
+        public const uint SupercellMatrixLine = 39138;
+
+        /// <summary>
+        /// Amalgam
+        /// Split Current
+        /// Line AoE, could also be 36329, or 36330, or 36331
+        /// </summary>
+        public const uint SplitCurrent = 36331;
+
+        /// <summary>
+        /// Amalgam
+        /// Centralized Current
+        /// Line AoE right through the middle of the arena
+        /// </summary>
+        public const uint CentralizedCurrent = 36327;
+
+        /// <summary>
+        /// Amalgam
         /// Superbolt
         /// Stack
         /// </summary>
         public const uint Superbolt = 36333;
 
         /// <summary>
-        /// Eliminator
-        /// Electray
-        /// Spread
+        /// Amalgam
+        /// Voltburst
+        /// Small AoEs to dodge
         /// </summary>
-        public const uint Electray = 36333;
+        public const uint Voltburst = 36336;
+
+        /// <summary>
+        /// Amalgam
+        /// Ternary Charge
+        /// Three wave attack
+        /// </summary>
+        public const uint TernaryChargeInner = 39253;
+
+        public static readonly HashSet<uint> TernaryChargeHash = new() { 39253 };
+
+        /// <summary>
+        /// Amalgam
+        /// Ternary Charge
+        /// Three wave attack
+        /// </summary>
+        public const uint TernaryChargeOuter = 39256;
 
         /// <summary>
         /// Eliminator
@@ -288,6 +451,13 @@ public class Alexandria : AbstractDungeon
 
         /// <summary>
         /// Eliminator
+        /// Electray
+        /// Spread
+        /// </summary>
+        public const uint Electray = 39243;
+
+        /// <summary>
+        /// Eliminator
         /// Overexposure
         /// Stack
         /// </summary>
@@ -299,6 +469,48 @@ public class Alexandria : AbstractDungeon
         /// Stack
         /// </summary>
         public const uint LightofDevotion = 36785;
+
+        /// <summary>
+        /// Eliminator
+        /// Halo of Destruction
+        /// Donut AoE
+        /// </summary>
+        public const uint HaloofDestruction = 36776;
+
+        /// <summary>
+        /// Eliminator
+        /// Partition
+        /// Left Half of room
+        /// </summary>
+        public const uint PartitionLeft = 39007;
+
+        /// <summary>
+        /// Eliminator
+        /// Partition
+        /// Right Half Room Wide Cone AoE
+        /// </summary>
+        public const uint PartitionRight = 39249;
+
+        /// <summary>
+        /// Eliminator
+        /// Partition
+        /// Right Half Room Wide Cone AoE
+        /// </summary>
+        public const uint PartitionLeft2 = 39238;
+
+        /// <summary>
+        /// Eliminator
+        /// Terminate
+        /// Line AoE to dodge
+        /// </summary>
+        public const uint Terminate = 36773;
+
+        /// <summary>
+        /// Eliminator
+        /// Impact
+        /// Stand on the edge of impact to get pushed back
+        /// </summary>
+        public const uint Impact = 36794;
     }
 
     private static class PlayerAura
