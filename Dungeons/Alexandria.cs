@@ -263,10 +263,10 @@ public class Alexandria : AbstractDungeon
             // Otherwise you want to stack.
             if (Core.Player.IsTank())
             {
-                await MovementHelpers.Spread(QuarantineDuration, 7.5f);
+                await MovementHelpers.Spread(QuarantineDuration, 10f);
             }
 
-            if (Core.Player.Distance2D(MovementHelpers.GetClosestTank.Location) > 7.5f)
+            if (!Core.Player.IsTank() && Core.Player.Distance2D(MovementHelpers.GetClosestTank.Location) > 7.5f)
             {
                 await MovementHelpers.GetClosestDps.Follow();
             }
