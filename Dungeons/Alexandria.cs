@@ -1,4 +1,5 @@
 ﻿using Buddy.Coroutines;
+using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
@@ -34,7 +35,7 @@ public class Alexandria : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Alexandria;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Impact, EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
 
     private static GameObject interferonC => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonC)
         .FirstOrDefault(bc => bc.IsVisible); // +
@@ -146,14 +147,12 @@ public class Alexandria : AbstractDungeon
             priority: AvoidancePriority.Medium);
 
         // Boss 3: Unknown Lazer
-        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
-            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.Unknown,
-            leashPointProducer: () => ArenaCenter.Eliminator,
-            leashRadius: 40.0f,
-            rotationDegrees: 0f,
-            radius: 40.0f,
-            arcDegrees: 30f);
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension && !EnemyAction.Impact.IsCasting(),
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Unknown && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            width: 7f,
+            length: 100f,
+            rotationProducer: bc => -MathEx.CalculateNeededFacing(bc.Location, GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId).Location));
 
         // Boss 3: Terminate
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
@@ -296,6 +295,11 @@ public class Alexandria : AbstractDungeon
     /// </summary>
     private async Task<bool> Eliminator()
     {
+        if (EnemyAction.Impact.IsCasting())
+        {
+            await MovementHelpers.GetClosestDps.Follow();
+        }
+
         return false;
     }
 
@@ -510,7 +514,7 @@ public class Alexandria : AbstractDungeon
         /// Impact
         /// Stand on the edge of impact to get pushed back
         /// </summary>
-        public const uint Impact = 36794;
+        public static readonly HashSet<uint> Impact = new() { 36794 };
     }
 
     private static class PlayerAura
