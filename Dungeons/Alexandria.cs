@@ -35,7 +35,7 @@ public class Alexandria : AbstractDungeon
     public override DungeonId DungeonId => DungeonId.Alexandria;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Compression, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Superbolt, EnemyAction.Overexposure, EnemyAction.LightofDevotion };
 
     private static GameObject interferonC => GameObjectManager.GetObjectsByNPCId<BattleCharacter>(EnemyNpc.InterferonC)
         .FirstOrDefault(bc => bc.IsVisible); // +
@@ -154,6 +154,15 @@ public class Alexandria : AbstractDungeon
             length: 100f,
             rotationProducer: bc => -MathEx.CalculateNeededFacing(bc.Location, GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId).Location));
 
+        // Boss 3: Explosion
+        AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: bc => bc.CastingSpellId == EnemyAction.Explosion,
+            width: 8f,
+            length: 100f,
+            yOffset: -40f,
+            priority: AvoidancePriority.High);
+
         // Boss 3: Terminate
         AvoidanceHelpers.AddAvoidRectangle<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
@@ -162,6 +171,28 @@ public class Alexandria : AbstractDungeon
             length: 40f,
             yOffset: 0f,
             priority: AvoidancePriority.High);
+
+        // Boss 3: Impact
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: c => c.CastingSpellId == EnemyAction.ImpactConst,
+            outerRadius: 40.0f,
+            innerRadius: 8F,
+            priority: AvoidancePriority.Medium);
+        AvoidanceManager.AddAvoid(new AvoidObjectInfo<BattleCharacter>(
+            condition: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.ImpactConst,
+            radiusProducer: eo => 6.5f,
+            priority: AvoidancePriority.High));
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
+            objectSelector: (bc) => bc.CastingSpellId == EnemyAction.ImpactConst,
+            leashPointProducer: () => ArenaCenter.Eliminator,
+            leashRadius: 40.0f,
+            rotationDegrees: -220.0f,
+            radius: 40.0f,
+            arcDegrees: 320f);
+
 
         // Boss 3: Halo of Destruction
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
@@ -212,8 +243,8 @@ public class Alexandria : AbstractDungeon
 
         AvoidanceHelpers.AddAvoidSquareDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.Reascension,
-            innerWidth: 29.0f,
-            innerHeight: 29.0f,
+            innerWidth: 28.0f,
+            innerHeight: 28.0f,
             outerWidth: 90.0f,
             outerHeight: 90.0f,
             collectionProducer: () => new[] { ArenaCenter.Eliminator },
@@ -295,11 +326,6 @@ public class Alexandria : AbstractDungeon
     /// </summary>
     private async Task<bool> Eliminator()
     {
-        if (EnemyAction.Impact.IsCasting())
-        {
-            await MovementHelpers.GetClosestDps.Follow();
-        }
-
         return false;
     }
 
@@ -347,6 +373,11 @@ public class Alexandria : AbstractDungeon
         /// Third Boss: Eliminator.
         /// </summary>
         public static readonly Vector3 Eliminator = new(-759f, -474f, -648f);
+
+        /// <summary>
+        /// Third Boss: Impact Safe Spot.
+        /// </summary>
+        public static readonly Vector3 ImpactSafeSpot = new(-761.9357f, -473.9999f, -645.7164f);
     }
 
     private static class EnemyAction
@@ -511,10 +542,19 @@ public class Alexandria : AbstractDungeon
 
         /// <summary>
         /// Eliminator
+        /// Explosion
+        /// Multiple line AoEs around the room
+        /// </summary>
+        public const uint Explosion = 39239;
+
+        /// <summary>
+        /// Eliminator
         /// Impact
         /// Stand on the edge of impact to get pushed back
         /// </summary>
         public static readonly HashSet<uint> Impact = new() { 36794 };
+
+        public const uint ImpactConst = 36794;
     }
 
     private static class PlayerAura
