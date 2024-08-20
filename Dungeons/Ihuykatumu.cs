@@ -150,7 +150,7 @@ public class Ihuykatumu : AbstractDungeon
         // Boss 3: Levinsickle
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.Breathcatch or (uint)SubZoneId.PunutiyPool or (uint)SubZoneId.DrowsiesGrotto,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.Levinsickle or EnemyAction.Levinsickle2 or EnemyAction.Levinsickle3 or EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.Levinsickle or EnemyAction.Levinsickle2 or EnemyAction.PunutiyFlopBig or EnemyAction.PunutiyFlopSmall or EnemyAction.FlagrantSpread && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
