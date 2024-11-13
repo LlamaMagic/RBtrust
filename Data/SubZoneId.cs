@@ -862,5 +862,20 @@ public enum SubZoneId : uint
     /// </summary>
     Reascension = 4499,
 
+    /// <summary>
+    /// Lv. 100: Yuweyawata > Crystal Quarry, Lindblum Zaghnal
+    /// </summary>
+    CrystalQuarry = 5128,
+
+    /// <summary>
+    /// Lv. 100: Yuweyawata > Soul Center, Overseer Kanilokka
+    /// </summary>
+    SoulCenter = 5129,
+
+    /// <summary>
+    /// Lv. 100: Yuweyawata > The Dust Yoke, Lunipyati
+    /// </summary>
+    TheDustYoke = 5130,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
 }

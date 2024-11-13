@@ -446,5 +446,10 @@ public enum ZoneId : ushort
     /// </summary>
     Alexandria = 1199,
 
+    /// <summary>
+    /// Lv. 100: Yuweyawata Field Station
+    /// </summary>
+    YuweyawataFieldStation = 1242,
+
 #pragma warning restore SA1629 // Documentation text should end with a period
 }
