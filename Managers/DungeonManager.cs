@@ -31,6 +31,7 @@ internal class DungeonManager
             { ZoneId.CopperbellMines, typeof(CopperbellMines) },
             { ZoneId.TheBowlOfEmbers, typeof(BowlOfEmbers) },
             { ZoneId.Halatali, typeof(Halatali) },
+            { ZoneId.Halatali7_1, typeof(Halatali7_1) },
             { ZoneId.DzemaelDarkhold, typeof(DzemaelDarkhold) },
             { ZoneId.TheThousandMawsOfTotoRak, typeof(ThousandMawsOfTotoRak) },
             { ZoneId.HaukkeManor, typeof(HaukkeManor) },

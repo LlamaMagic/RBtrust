@@ -47,6 +47,11 @@ public enum ZoneId : ushort
     Halatali = 162,
 
     /// <summary>
+    /// Lv. 20.2: Halatali
+    /// </summary>
+    Halatali7_1 = 1245,
+
+    /// <summary>
     /// Lv. 24: The Thousand Maws of Toto-Rak
     /// </summary>
     TheThousandMawsOfTotoRak = 1039,

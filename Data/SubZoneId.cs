@@ -12,6 +12,21 @@ public enum SubZoneId : uint
     NONE = 0,
 
     /// <summary>
+    /// Lv. 20: Halatali > Hall of the Cesti, Firemane
+    /// </summary>
+    HalloftheCesti = 692,
+
+    /// <summary>
+    /// Lv. 20: Halatali > Hall of the Secutores, Thunderclap Guivre
+    /// </summary>
+    HalloftheSecutores = 693,
+
+    /// <summary>
+    /// Lv. 20: Halatali > Hall of the Bestiarii, Tangata
+    /// </summary>
+    HalloftheBestiarii = 694,
+
+    /// <summary>
     /// Lv. 28: Haukke Manor > Confession Chamber, Coeurl O' Nine Tails
     /// </summary>
     WhiteHall = 608,
