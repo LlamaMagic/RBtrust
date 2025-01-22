@@ -38,8 +38,6 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.YuweyawataFieldStation;
 
-    private static uint reprisal = 7535;
-    private static uint rampart = 7531;
 
     private AvoidInfo craterAvoid = default;
 
@@ -61,7 +59,7 @@ public class YuweyawataFieldStation : AbstractDungeon
         // Boss 1: Lightning Storm
         // Boss 3: Jagged Edge
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CrystalQuarry or (uint)SubZoneId.SoulCenter or (uint)SubZoneId.TheDustYoke,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CrystalQuarry or (uint)SubZoneId.SoulCenter or (uint)SubZoneId.TheDustYoke && !EnemyAction.SoulweaveHash.IsCasting(),
             objectSelector: bc => bc.CastingSpellId is EnemyAction.LightningBolt or EnemyAction.TelltaleTears or EnemyAction.JaggedEdge && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
@@ -85,6 +83,7 @@ public class YuweyawataFieldStation : AbstractDungeon
             radius: 40.0f,
             arcDegrees: 30.0f);
 
+        /*
         // Boss 2: Phantom Flood
         AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
             canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SoulCenter,
@@ -92,7 +91,7 @@ public class YuweyawataFieldStation : AbstractDungeon
             outerRadius: 40.0f,
             innerRadius: 5.0F,
             priority: AvoidancePriority.Medium);
-
+        */
 
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
@@ -172,13 +171,13 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// </summary>
     private async Task<bool> OverseerKanilokka()
     {
-        if (EnemyAction.SoulweaveHash.IsCasting() && !EnemyAction.TelltaleTearsHash.IsCasting())
+        if (EnemyAction.SoulweaveHash.IsCasting())
         {
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 4_500, "Doing boss mechanics");
-            await MovementHelpers.GetClosestAlly.Follow(1f);
+            await MovementHelpers.GetClosestMelee.Follow(1f);
         }
 
-        if (Core.Me.HasAura(PlayerAura.TemporaryMisdirection) && Core.Me.GetAuraById(PlayerAura.TemporaryMisdirection).TimeLeft < 5)
+        if (Core.Me.HasAura(PlayerAura.TemporaryMisdirection) && Core.Me.GetAuraById(PlayerAura.TemporaryMisdirection).TimeLeft < 3)
         {
             if (TankInvul.TryGetValue(Core.Player.CurrentJob, out uint actionId))
             {
@@ -194,7 +193,7 @@ public class YuweyawataFieldStation : AbstractDungeon
 
         if (EnemyAction.DarkSouls.IsCasting())
         {
-            await HandleTankBuster();
+            await CombatHelpers.HandleTankBuster();
         }
 
         return false;
@@ -244,31 +243,7 @@ public class YuweyawataFieldStation : AbstractDungeon
 
         if (EnemyAction.Slabber.IsCasting())
         {
-            await HandleTankBuster();
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Logic for handling tank busters
-    /// </summary>
-    private async Task<bool> HandleTankBuster()
-    {
-        if (ActionManager.CanCast(rampart, Core.Player))
-        {
-            SpellData action = DataManager.GetSpellData(rampart);
-            Logger.Information($"Casting {action.Name} ({action.Id})");
-            ActionManager.DoAction(action, Core.Player);
-            await Coroutine.Sleep(1_500);
-        }
-
-        if (ActionManager.CanCast(reprisal, Core.Player.CurrentTarget))
-        {
-            SpellData action = DataManager.GetSpellData(reprisal);
-            Logger.Information($"Casting {action.Name} ({action.Id})");
-            ActionManager.DoAction(action, Core.Player.CurrentTarget);
-            await Coroutine.Sleep(1_500);
+            await CombatHelpers.HandleTankBuster();
         }
 
         return false;
@@ -389,6 +364,13 @@ public class YuweyawataFieldStation : AbstractDungeon
         public static readonly HashSet<uint> DarkSouls = new() { 40658 };
 
         /// <summary>
+        /// Overseer Kanilokka
+        /// Soul Douse
+        /// Stack
+        /// </summary>
+        public const uint SoulDouse = 40651;
+
+        /// <summary>
         /// Lunipyati
         /// UnnamedLines
         /// Follow to dodge these
@@ -429,6 +411,7 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// Spread
         /// </summary>
         public const uint JaggedEdge = 40615;
+
         public static readonly HashSet<uint> JaggedEdgeHash = new() { 40615 };
 
         /// <summary>
