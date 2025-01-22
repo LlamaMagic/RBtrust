@@ -9,6 +9,7 @@ using ff14bot.Navigation;
 using ff14bot.Objects;
 using ff14bot.Pathing.Avoidance;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Trust.Data;
@@ -23,6 +24,9 @@ namespace Trust.Dungeons;
 /// </summary>
 public class YuweyawataFieldStation : AbstractDungeon
 {
+    private readonly Stopwatch BeastlyRoarTimer = new();
+    private static readonly int BeastlyRoarDuration = 30_000;
+
     /// <summary>
     /// Tracks sub-zone since last tick for environmental decision making.
     /// </summary>
@@ -122,6 +126,12 @@ public class YuweyawataFieldStation : AbstractDungeon
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
 
+        if (!Core.Me.InCombat)
+        {
+            CapabilityManager.Clear();
+            BeastlyRoarTimer.Reset();
+        }
+
         if (WorldManager.SubZoneId is (uint)SubZoneId.SoulCenter or (uint)SubZoneId.TheDustYoke)
         {
             SidestepPlugin.Enabled = false;
@@ -184,20 +194,7 @@ public class YuweyawataFieldStation : AbstractDungeon
 
         if (EnemyAction.DarkSouls.IsCasting())
         {
-            if (!Core.Me.HasAura(PlayerAura.Rampart) && ActionManager.CanCast(rampart, Core.Player))
-            {
-                SpellData action = DataManager.GetSpellData(rampart);
-                Logger.Information($"Casting {action.Name} ({action.Id})");
-                ActionManager.DoAction(action, Core.Player);
-                await Coroutine.Sleep(1_500);
-            }
-            if (!Core.Me.HasAura(PlayerAura.Rampart) && ActionManager.CanCast(reprisal, Core.Player.CurrentTarget))
-            {
-                SpellData action = DataManager.GetSpellData(rampart);
-                Logger.Information($"Casting {action.Name} ({action.Id})");
-                ActionManager.DoAction(action, Core.Player.CurrentTarget);
-                await Coroutine.Sleep(1_500);
-            }
+            await HandleTankBuster();
         }
 
         return false;
@@ -208,7 +205,7 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// </summary>
     private async Task<bool> Lunipyati()
     {
-        if (EnemyAction.CraterCarve.IsCasting() && craterAvoid == default)
+        if (EnemyAction.CraterCarve.IsCasting() && !AvoidanceManager.AvoidInfos.Contains(craterAvoid))
         {
             craterAvoid = AvoidanceHelpers.AddAvoidDonut(
                 () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDustYoke,
@@ -220,14 +217,63 @@ public class YuweyawataFieldStation : AbstractDungeon
             AvoidanceManager.AddAvoid(craterAvoid);
         }
 
-        if (EnemyAction.RagingClaw.IsCasting() || EnemyAction.TuraliStoneIV.IsCasting() || EnemyAction.BeastlyRoar.IsCasting() || EnemyAction.UnnamedLines.IsCasting())
+        if (EnemyAction.LeapingEarth.IsCasting() || EnemyAction.RagingClaw.IsCasting() || EnemyAction.TuraliStoneIV.IsCasting() || (EnemyAction.UnnamedLines.IsCasting() && !EnemyAction.JaggedEdgeHash.IsCasting()))
         {
             CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 4_500, "Doing boss mechanics");
-            await MovementHelpers.GetClosestAlly.Follow(useMesh: true, followDistance: 1f);
+            await MovementHelpers.GetClosestMelee.Follow(useMesh: true, followDistance: 1f);
+        }
+
+        if (EnemyAction.BeastlyRoar.IsCasting() || BeastlyRoarTimer.IsRunning)
+        {
+            if (!BeastlyRoarTimer.IsRunning)
+            {
+                CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, BeastlyRoarDuration, "Beastly Roar Avoid");
+                BeastlyRoarTimer.Start();
+            }
+
+            if (BeastlyRoarTimer.ElapsedMilliseconds < BeastlyRoarDuration)
+            {
+                await MovementHelpers.GetClosestMelee.FollowTimed(BeastlyRoarTimer, BeastlyRoarDuration, 1f, useMesh: true);
+            }
+
+            if (BeastlyRoarTimer.ElapsedMilliseconds >= BeastlyRoarDuration)
+            {
+                BeastlyRoarTimer.Reset();
+            }
+        }
+
+        if (EnemyAction.Slabber.IsCasting())
+        {
+            await HandleTankBuster();
         }
 
         return false;
     }
+
+    /// <summary>
+    /// Logic for handling tank busters
+    /// </summary>
+    private async Task<bool> HandleTankBuster()
+    {
+        if (ActionManager.CanCast(rampart, Core.Player))
+        {
+            SpellData action = DataManager.GetSpellData(rampart);
+            Logger.Information($"Casting {action.Name} ({action.Id})");
+            ActionManager.DoAction(action, Core.Player);
+            await Coroutine.Sleep(1_500);
+        }
+
+        if (ActionManager.CanCast(reprisal, Core.Player.CurrentTarget))
+        {
+            SpellData action = DataManager.GetSpellData(reprisal);
+            Logger.Information($"Casting {action.Name} ({action.Id})");
+            ActionManager.DoAction(action, Core.Player.CurrentTarget);
+            await Coroutine.Sleep(1_500);
+        }
+
+        return false;
+    }
+
 
     private static class EnemyNpc
     {
@@ -351,6 +397,13 @@ public class YuweyawataFieldStation : AbstractDungeon
 
         /// <summary>
         /// Lunipyati
+        /// Leaping Earth
+        /// Follow to dodge these
+        /// </summary>
+        public static readonly HashSet<uint> LeapingEarth = new() { 40606 };
+
+        /// <summary>
+        /// Lunipyati
         /// RagingClaw
         /// Straight line aoe
         /// </summary>
@@ -376,6 +429,15 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// Spread
         /// </summary>
         public const uint JaggedEdge = 40615;
+        public static readonly HashSet<uint> JaggedEdgeHash = new() { 40615 };
+
+        /// <summary>
+        /// Lunipyati
+        /// Slabber
+        /// Tank buster
+        /// </summary>
+        public static readonly HashSet<uint> Slabber = new() { 40619 };
+
 
         /// <summary>
         /// Lunipyati
