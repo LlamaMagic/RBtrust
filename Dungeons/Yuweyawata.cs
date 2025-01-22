@@ -34,13 +34,13 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.YuweyawataFieldStation;
 
+    private static uint reprisal = 7535;
+    private static uint rampart = 7531;
+
     private AvoidInfo craterAvoid = default;
 
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
-    {
-        EnemyAction.DarkII, EnemyAction.BoulderDance,
-    };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.BoulderDance, };
 
     private static readonly Dictionary<ClassJobType, uint> TankInvul = new()
     {
@@ -62,6 +62,34 @@ public class YuweyawataFieldStation : AbstractDungeon
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
+        // Boss 2: Dark II
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SoulCenter,
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.DarkII,
+            leashPointProducer: () => ArenaCenter.OverseerKanilokka,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 30.0f);
+
+        AvoidanceManager.AddAvoidUnitCone<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SoulCenter && !EnemyAction.DarkIIHash.IsCasting(),
+            objectSelector: (bc) => bc.CastingSpellId is EnemyAction.DarkII2,
+            leashPointProducer: () => ArenaCenter.OverseerKanilokka,
+            leashRadius: 40.0f,
+            rotationDegrees: 0.0f,
+            radius: 40.0f,
+            arcDegrees: 30.0f);
+
+        // Boss 2: Phantom Flood
+        AvoidanceHelpers.AddAvoidDonut<BattleCharacter>(
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SoulCenter,
+            objectSelector: c => c.CastingSpellId == EnemyAction.PhantomFlood,
+            outerRadius: 40.0f,
+            innerRadius: 5.0F,
+            priority: AvoidancePriority.Medium);
+
+
         // Boss Arenas
         AvoidanceHelpers.AddAvoidDonut(
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.CrystalQuarry,
@@ -74,7 +102,7 @@ public class YuweyawataFieldStation : AbstractDungeon
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.SoulCenter,
             () => ArenaCenter.OverseerKanilokka,
             outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerRadius: 15.0f,
             priority: AvoidancePriority.High);
 
         AvoidanceHelpers.AddAvoidDonut(
@@ -103,7 +131,7 @@ public class YuweyawataFieldStation : AbstractDungeon
             SidestepPlugin.Enabled = true;
         }
 
-        if (WorldManager.SubZoneId != (uint)SubZoneId.TheDustYoke)
+        if (craterAvoid != default && WorldManager.SubZoneId != (uint)SubZoneId.TheDustYoke)
         {
             AvoidanceManager.RemoveAvoid(craterAvoid);
         }
@@ -156,11 +184,18 @@ public class YuweyawataFieldStation : AbstractDungeon
 
         if (EnemyAction.DarkSouls.IsCasting())
         {
-            if (!Core.Me.HasAura(PlayerAura.Rampart) && ActionManager.CanCast(7531, Core.Player))
+            if (!Core.Me.HasAura(PlayerAura.Rampart) && ActionManager.CanCast(rampart, Core.Player))
             {
-                SpellData action = DataManager.GetSpellData(7531);
+                SpellData action = DataManager.GetSpellData(rampart);
                 Logger.Information($"Casting {action.Name} ({action.Id})");
                 ActionManager.DoAction(action, Core.Player);
+                await Coroutine.Sleep(1_500);
+            }
+            if (!Core.Me.HasAura(PlayerAura.Rampart) && ActionManager.CanCast(reprisal, Core.Player.CurrentTarget))
+            {
+                SpellData action = DataManager.GetSpellData(rampart);
+                Logger.Information($"Casting {action.Name} ({action.Id})");
+                ActionManager.DoAction(action, Core.Player.CurrentTarget);
                 await Coroutine.Sleep(1_500);
             }
         }
@@ -173,7 +208,7 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// </summary>
     private async Task<bool> Lunipyati()
     {
-        if (EnemyAction.CraterCarve.IsCasting())
+        if (EnemyAction.CraterCarve.IsCasting() && craterAvoid == default)
         {
             craterAvoid = AvoidanceHelpers.AddAvoidDonut(
                 () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDustYoke,
@@ -261,6 +296,13 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// </summary>
         public const uint Soulweave = 40641;
 
+        /// <summary>
+        /// Overseer Kanilokka
+        /// Soulweave
+        /// Lots of swords everywhere
+        /// </summary>
+        public const uint Soulweave2 = 40642;
+
         public static readonly HashSet<uint> SoulweaveHash = new() { 40641, 40642 };
 
         /// <summary>
@@ -268,14 +310,23 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// Dark II
         /// Follow
         /// </summary>
-        public const uint DarkII = 40657;
+        public const uint DarkII = 40656;
+
+        public static readonly HashSet<uint> DarkIIHash = new() { 40656 };
 
         /// <summary>
         /// Overseer Kanilokka
-        /// Soulweave
-        /// Lots of swords everywhere
+        /// Dark II
+        /// Follow
         /// </summary>
-        public const uint Soulweave2 = 40642;
+        public const uint DarkII2 = 40657;
+
+        /// <summary>
+        /// Overseer Kanilokka
+        /// Phantom Flood
+        /// Floods the room with blood
+        /// </summary>
+        public const uint PhantomFlood = 40643;
 
         /// <summary>
         /// Overseer Kanilokka
@@ -296,7 +347,7 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// UnnamedLines
         /// Follow to dodge these
         /// </summary>
-        public static readonly HashSet<uint> UnnamedLines = new() { 40661,40662 };
+        public static readonly HashSet<uint> UnnamedLines = new() { 40661, 40662 };
 
         /// <summary>
         /// Lunipyati
