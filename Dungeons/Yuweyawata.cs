@@ -3,6 +3,7 @@ using Clio.Common;
 using Clio.Utilities;
 using ff14bot;
 using ff14bot.Behavior;
+using ff14bot.Enums;
 using ff14bot.Managers;
 using ff14bot.Navigation;
 using ff14bot.Objects;
@@ -33,17 +34,31 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// <inheritdoc/>
     public override DungeonId DungeonId => DungeonId.YuweyawataFieldStation;
 
+    private AvoidInfo craterAvoid = default;
+
     /// <inheritdoc/>
-    protected override HashSet<uint> SpellsToFollowDodge { get; } = new() { EnemyAction.Soulweave, EnemyAction.Soulweave2 };
+    protected override HashSet<uint> SpellsToFollowDodge { get; } = new()
+    {
+        EnemyAction.DarkII, EnemyAction.BoulderDance,
+    };
+
+    private static readonly Dictionary<ClassJobType, uint> TankInvul = new()
+    {
+        { ClassJobType.Warrior, 43 }, // Holmgang
+        { ClassJobType.Paladin, 30 }, // Hallowed Ground
+        { ClassJobType.DarkKnight, 3638 }, // Living Dead
+        { ClassJobType.Gunbreaker, 16152 }, // Superbolide
+    };
 
     public override Task<bool> OnEnterDungeonAsync()
     {
         AvoidanceManager.AvoidInfos.Clear();
 
         // Boss 1: Lightning Storm
+        // Boss 3: Jagged Edge
         AvoidanceManager.AddAvoidObject<BattleCharacter>(
-            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CrystalQuarry or (uint)SubZoneId.SoulCenter,
-            objectSelector: bc => bc.CastingSpellId is EnemyAction.LightningBolt or EnemyAction.TelltaleTears && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
+            canRun: () => Core.Player.InCombat && WorldManager.SubZoneId is (uint)SubZoneId.CrystalQuarry or (uint)SubZoneId.SoulCenter or (uint)SubZoneId.TheDustYoke,
+            objectSelector: bc => bc.CastingSpellId is EnemyAction.LightningBolt or EnemyAction.TelltaleTears or EnemyAction.JaggedEdge && bc.SpellCastInfo.TargetId != Core.Player.ObjectId,
             radiusProducer: bc => bc.SpellCastInfo.SpellData.Radius * 1.05f,
             locationProducer: bc => GameObjectManager.GetObjectByObjectId(bc.SpellCastInfo.TargetId)?.Location ?? bc.SpellCastInfo.CastLocation);
 
@@ -66,7 +81,7 @@ public class YuweyawataFieldStation : AbstractDungeon
             () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDustYoke,
             () => ArenaCenter.Lunipyati,
             outerRadius: 90.0f,
-            innerRadius: 19.0f,
+            innerRadius: 15.0f,
             priority: AvoidancePriority.High);
 
         return Task.FromResult(false);
@@ -78,6 +93,20 @@ public class YuweyawataFieldStation : AbstractDungeon
         await FollowDodgeSpells();
 
         SubZoneId currentSubZoneId = (SubZoneId)WorldManager.SubZoneId;
+
+        if (WorldManager.SubZoneId is (uint)SubZoneId.SoulCenter or (uint)SubZoneId.TheDustYoke)
+        {
+            SidestepPlugin.Enabled = false;
+        }
+        else
+        {
+            SidestepPlugin.Enabled = true;
+        }
+
+        if (WorldManager.SubZoneId != (uint)SubZoneId.TheDustYoke)
+        {
+            AvoidanceManager.RemoveAvoid(craterAvoid);
+        }
 
         bool result = currentSubZoneId switch
         {
@@ -105,15 +134,34 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// </summary>
     private async Task<bool> OverseerKanilokka()
     {
-        var RroneekSpawned = GameObjectManager.GameObjects.Where(r => r.NpcId == 13588 && r.IsTargetable && r.IsVisible && r.Distance2D(new Vector3(326.5609f, -16.566069f, -308.4478f)) < 10);
-
-        if (EnemyAction.Necrohazard.IsCasting())
+        if (EnemyAction.SoulweaveHash.IsCasting() && !EnemyAction.TelltaleTearsHash.IsCasting())
         {
-            while (Core.Player.Location.Distance(ArenaCenter.SoulCenterSafeSpot) > 1.5f)
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 4_500, "Doing boss mechanics");
+            await MovementHelpers.GetClosestAlly.Follow(1f);
+        }
+
+        if (Core.Me.HasAura(PlayerAura.TemporaryMisdirection) && Core.Me.GetAuraById(PlayerAura.TemporaryMisdirection).TimeLeft < 5)
+        {
+            if (TankInvul.TryGetValue(Core.Player.CurrentJob, out uint actionId))
             {
-                Logger.Information("Moving to dodge Necrohazard");
-                Navigator.PlayerMover.MoveTowards(ArenaCenter.SoulCenterSafeSpot);
-                await Coroutine.Yield();
+                SpellData action = DataManager.GetSpellData(actionId);
+                if (ActionManager.CanCast(actionId, Core.Player) && Core.Me.HasAura(PlayerAura.TemporaryMisdirection))
+                {
+                    Logger.Information($"Casting {action.Name} ({action.Id})");
+                    ActionManager.DoAction(action, Core.Player);
+                    await Coroutine.Sleep(1_500);
+                }
+            }
+        }
+
+        if (EnemyAction.DarkSouls.IsCasting())
+        {
+            if (!Core.Me.HasAura(PlayerAura.Rampart) && ActionManager.CanCast(7531, Core.Player))
+            {
+                SpellData action = DataManager.GetSpellData(7531);
+                Logger.Information($"Casting {action.Name} ({action.Id})");
+                ActionManager.DoAction(action, Core.Player);
+                await Coroutine.Sleep(1_500);
             }
         }
 
@@ -125,6 +173,24 @@ public class YuweyawataFieldStation : AbstractDungeon
     /// </summary>
     private async Task<bool> Lunipyati()
     {
+        if (EnemyAction.CraterCarve.IsCasting())
+        {
+            craterAvoid = AvoidanceHelpers.AddAvoidDonut(
+                () => Core.Player.InCombat && WorldManager.SubZoneId == (uint)SubZoneId.TheDustYoke,
+                () => ArenaCenter.Lunipyati,
+                outerRadius: 12.5f,
+                innerRadius: 0.0f,
+                priority: AvoidancePriority.High);
+
+            AvoidanceManager.AddAvoid(craterAvoid);
+        }
+
+        if (EnemyAction.RagingClaw.IsCasting() || EnemyAction.TuraliStoneIV.IsCasting() || EnemyAction.BeastlyRoar.IsCasting() || EnemyAction.UnnamedLines.IsCasting())
+        {
+            CapabilityManager.Update(CapabilityHandle, CapabilityFlags.Movement, 4_500, "Doing boss mechanics");
+            await MovementHelpers.GetClosestAlly.Follow(useMesh: true, followDistance: 1f);
+        }
+
         return false;
     }
 
@@ -186,12 +252,23 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// </summary>
         public const uint TelltaleTears = 40649;
 
+        public static readonly HashSet<uint> TelltaleTearsHash = new() { 40649 };
+
         /// <summary>
         /// Overseer Kanilokka
         /// Soulweave
         /// Lots of swords everywhere
         /// </summary>
         public const uint Soulweave = 40641;
+
+        public static readonly HashSet<uint> SoulweaveHash = new() { 40641, 40642 };
+
+        /// <summary>
+        /// Overseer Kanilokka
+        /// Dark II
+        /// Follow
+        /// </summary>
+        public const uint DarkII = 40657;
 
         /// <summary>
         /// Overseer Kanilokka
@@ -206,9 +283,73 @@ public class YuweyawataFieldStation : AbstractDungeon
         /// Plants blood on the ground with a confusion hand over your head
         /// </summary>
         public static readonly HashSet<uint> Necrohazard = new() { 40646 };
+
+        /// <summary>
+        /// Overseer Kanilokka
+        /// Dark Souls
+        /// Tank Buster, use rampart
+        /// </summary>
+        public static readonly HashSet<uint> DarkSouls = new() { 40658 };
+
+        /// <summary>
+        /// Lunipyati
+        /// UnnamedLines
+        /// Follow to dodge these
+        /// </summary>
+        public static readonly HashSet<uint> UnnamedLines = new() { 40661,40662 };
+
+        /// <summary>
+        /// Lunipyati
+        /// RagingClaw
+        /// Straight line aoe
+        /// </summary>
+        public static readonly HashSet<uint> RagingClaw = new() { 40612 };
+
+        /// <summary>
+        /// Lunipyati
+        /// Boulder Dance
+        /// Boss makes lines where a bolder will fall and then it falls there
+        /// </summary>
+        public const uint BoulderDance = 40608;
+
+        /// <summary>
+        /// Lunipyati
+        /// Beastly Roar
+        /// Proximity based damage
+        /// </summary>
+        public static readonly HashSet<uint> BeastlyRoar = new() { 40608, 40610 };
+
+        /// <summary>
+        /// Lunipyati
+        /// Jagged Edge
+        /// Spread
+        /// </summary>
+        public const uint JaggedEdge = 40615;
+
+        /// <summary>
+        /// Lunipyati
+        /// Turali Stone IV
+        /// Stack
+        /// </summary>
+        public static readonly HashSet<uint> TuraliStoneIV = new() { 40616 };
+
+        /// <summary>
+        /// Lunipyati
+        /// Crater Carve
+        /// Carves a big hole in the middle of the battlefield
+        /// </summary>
+        public static readonly HashSet<uint> CraterCarve = new() { 40604, 40605 };
     }
 
     private static class PlayerAura
     {
+        /// <summary>
+        /// Overseer Kanilokka
+        /// Aura Name: Temporary Misdirection, Aura Id: 3909
+        /// Causes loss of control of your character
+        /// </summary>
+        public const uint TemporaryMisdirection = 3909;
+
+        public const uint Rampart = 1191;
     }
 }
